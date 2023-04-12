@@ -24,7 +24,7 @@ jobs:
             ~/.cargo/git
             ~/.cargo/registry
             target
-          key: "PC ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles(Cargo.lock)}}"
+          key: "PC ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
       - run: cargo test --all-features -p m3-pc -p m3-models
         env:
           RUST_BACKTRACE: 1
@@ -43,7 +43,7 @@ jobs:
             ~/.cargo/git
             ~/.cargo/registry
             target
-          key: "Pybadge ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles(Cargo.lock)}}"
+          key: "Pybadge ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
       - run: cargo check --all-features --target thumbv7em-none-eabihf -p m3-models
         env:
           RUST_BACKTRACE: 1
