@@ -1,0 +1,8 @@
+[package]
+workspace = ".."
+name = "m3-pybadge"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]

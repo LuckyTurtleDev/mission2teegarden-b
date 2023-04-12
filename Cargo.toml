@@ -1,0 +1,2 @@
+[workspace]
+members = ["pybadge", "pc", "models"]
