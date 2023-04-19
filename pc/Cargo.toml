@@ -6,3 +6,5 @@ edition = "2021"
 publish = false
 
 [dependencies]
+tetra = "0.8.0"
+vek = { version = "0.15.10", default-features = false }
