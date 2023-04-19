@@ -16,7 +16,7 @@ fn extract_file(zip: &ZipArchive, file: &str) {
 		.expect(&format!("can not found {file} in zip"));
 	let mut reader = zip.read(entry).expect("failed to create zip reader");
 	let output_path = PathBuf::from(file);
-	let output_path = output_path.file_name().unwrap();
+	let output_path: PathBuf = PathBuf::from("../").join(output_path.file_name().unwrap());
 	let mut save_to =
 		File::create(output_path).expect(&format!("failed to create file {file}"));
 	io::copy(&mut reader, &mut save_to).expect(&format!("failed to write file {file}"));
