@@ -1,13 +1,13 @@
-//#[cfg(target_os = "windows")]
+#[cfg(target_os = "windows")]
 use attohttpc::get;
-//#[cfg(target_os = "windows")]
+#[cfg(target_os = "windows")]
 use piz::read::ZipArchive;
-//#[cfg(target_os = "windows")]
+#[cfg(target_os = "windows")]
 use std::path::{Path, PathBuf};
-//#[cfg(target_os = "windows")]
+#[cfg(target_os = "windows")]
 use std::{fs::File, io};
 
-//#[cfg(target_os = "windows")]
+#[cfg(target_os = "windows")]
 fn extract_file(zip: &ZipArchive, file: &str) {
 	let entry = zip
 		.entries()
@@ -25,7 +25,7 @@ fn extract_file(zip: &ZipArchive, file: &str) {
 
 fn main() {
 	//download SDL2 to working directory
-	//#[cfg(target_os = "windows")]
+	#[cfg(target_os = "windows")]
 	{
 		let files = [
 			"SDL2-2.26.5/README-SDL.txt",
