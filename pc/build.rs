@@ -21,7 +21,7 @@ fn extract_file(zip: &ZipArchive, file: &str) {
 
 fn main() {
 	//download SDL2 to working directory
-	#[cfg(target_os = "window")]
+	#[cfg(target_os = "windows")]
 	if !Path::new("SDL2.dll").exists() {
 		// Download zip archive
 		let bytes = get("https://github.com/libsdl-org/SDL/releases/download/release-2.26.5/SDL2-2.26.5-win32-x64.zip")
