@@ -17,7 +17,8 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install SDL2
+      - name: Install SDL2 Linux
+        if:  ${{ matrix.os == 'ubuntu' }}
         run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
       - uses: dtolnay/rust-toolchain@stable
         id: "rust-toolchain"
