@@ -29,7 +29,13 @@ jobs:
             ~/.cargo/registry
             target
           key: "PC ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
-      - run: cargo test --all-features -p m3-pc -p m3-models
+      - name: cargo test models
+        run: cargo test --all-features -p m3-models
+        env:
+          RUST_BACKTRACE: 1
+      - name: cargo test pc
+        run: cargo test --all-features
+        working-directory: pc
         env:
           RUST_BACKTRACE: 1
          
@@ -49,10 +55,12 @@ jobs:
             ~/.cargo/registry
             target
           key: "Pybadge ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
-      - run: cargo check --all-features --target thumbv7em-none-eabihf -p m3-models
+      - name: cargo check models
+        run: cargo check --all-features --target thumbv7em-none-eabihf -p m3-models
         env:
           RUST_BACKTRACE: 1
-      - run: cargo check --all-features -p m3-pybadge
+      - name: cargo check pybadge
+        run: cargo check --all-features -p m3-pybadge
         working-directory: pybadge
         env:
           RUST_BACKTRACE: 1
@@ -74,6 +82,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Install SDL2
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
       - uses: dtolnay/rust-toolchain@stable
       - uses: msrd0/cargo-publish-action@v1
         with: 
