@@ -1,6 +1,6 @@
-#[cfg(target_os = "window")]
+#[cfg(target_os = "windows")]
 use attohttpc::get;
-#[cfg(target_os = "window")]
+#[cfg(target_os = "windows")]
 use piz::read::ZipArchive;
 #[cfg(target_os = "windows")]
 use std::path::Path;
@@ -28,7 +28,9 @@ fn main() {
     		.send()
     		.expect("failed to download SDL2")
     		.error_for_status()
-    		.expect("failed to download SDL2").bytes().unwrap();
+    		.expect("failed to download SDL2")
+    		.bytes()
+    		.unwrap();
 		let zip = ZipArchive::new(&bytes).expect("failed to read zip archive");
 		extract_file(&zip, "README-SDL.txt");
 		extract_file(&zip, "SDL2.dll");
