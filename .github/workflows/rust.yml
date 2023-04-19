@@ -20,9 +20,6 @@ jobs:
       - name: Install SDL2 Linux
         if:  ${{ matrix.os == 'ubuntu' }}
         run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
-      - name: Install SDL2 Win
-        if:  ${{ matrix.os == 'windows' }}
-        run: curl "https://github.com/libsdl-org/SDL/releases/download/release-2.26.5/SDL2-2.26.5-win32-x64.zip" -o sdl2.zip
       - uses: dtolnay/rust-toolchain@stable
         id: "rust-toolchain"
       - uses: actions/cache@v3
