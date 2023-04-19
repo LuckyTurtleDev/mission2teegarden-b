@@ -31,7 +31,7 @@ fn main() {
 			"SDL2-2.26.5/lib/x86/SDL2.dll",
 			"SDL2-2.26.5/lib/x86/SDL2.lib"
 		];
-		if files.iter().any(|f| !Path::new(f).exists() ) {
+		if files.iter().any(|f| !Path::new(f).exists()) {
 			// Download zip archive
 			let bytes = get("https://github.com/libsdl-org/SDL/releases/download/release-2.26.5/SDL2-devel-2.26.5-VC.zip")
     		.send()
@@ -41,7 +41,7 @@ fn main() {
     		.bytes()
     		.unwrap();
 			let zip = ZipArchive::new(&bytes).expect("failed to read zip archive");
-			for file in files{
+			for file in files {
 				extract_file(&zip, file)
 			}
 		}
