@@ -39,6 +39,7 @@ mod tests {
 	use tetra::ContextBuilder;
 
 	#[test]
+	#[ignore] //can only run if gui is aviable. Ignore it, so ci does not fail
 	///verify that all image files are valid and supported
 	fn texture_init() {
 		let mut ctx = ContextBuilder::new("test", 640, 480).build().unwrap();
