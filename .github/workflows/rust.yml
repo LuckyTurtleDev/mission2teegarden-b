@@ -60,6 +60,7 @@ jobs:
           RUST_BACKTRACE: 1
       - name: cargo check pybadge
         run: cargo check --all-features -p m3-pybadge
+        working-directory: pybadge
         env:
           RUST_BACKTRACE: 1
 
