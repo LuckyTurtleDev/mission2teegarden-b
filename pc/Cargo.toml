@@ -5,10 +5,15 @@ version = "0.1.0"
 edition = "2021"
 publish = false
 
+[features]
+default = []
+sdl2_static_link = ["tetra/sdl2_static_link"]
+sdl2_bundled = ["tetra/sdl2_bundled"]
+
 [dependencies]
 tetra = "0.8.0"
 vek = { version = "0.15.10", default-features = false }
 
-[target.'cfg(windows)'.build-dependencies]
+[target.'cfg(windows)'.dependencies]
 attohttpc = { version = "0.25.0", default-features = false, features = ["tls-rustls-webpki-roots"] }
 piz = "0.5.1"
