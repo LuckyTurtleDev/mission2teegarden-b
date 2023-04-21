@@ -3,6 +3,8 @@ use attohttpc::get;
 #[cfg(target_os = "windows")]
 use piz::read::ZipArchive;
 #[cfg(target_os = "windows")]
+use std::env;
+#[cfg(target_os = "windows")]
 use std::path::{Path, PathBuf};
 #[cfg(target_os = "windows")]
 use std::{fs::File, io};
