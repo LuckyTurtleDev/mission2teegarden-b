@@ -3,7 +3,9 @@ use attohttpc::get;
 #[cfg(target_os = "windows")]
 use piz::read::ZipArchive;
 #[cfg(target_os = "windows")]
-use std::path::{Path, PathBuf};
+use std::env;
+#[cfg(target_os = "windows")]
+use std::path::PathBuf;
 #[cfg(target_os = "windows")]
 use std::{fs::File, io};
 
@@ -15,12 +17,15 @@ fn extract_file(zip: &ZipArchive, file: &str) {
 		.find(|f| f.path.as_str() == file)
 		.expect(&format!("can not found {file} in zip"));
 	let mut reader = zip.read(entry).expect("failed to create zip reader");
-	let output_path = PathBuf::from(file);
-	let output_path: PathBuf =
-		PathBuf::from("../").join(output_path.file_name().unwrap());
-	let mut save_to =
-		File::create(output_path).expect(&format!("failed to create file {file}"));
+	let mut save_to = File::create(get_output_path(&file))
+		.expect(&format!("failed to create file {file}"));
 	io::copy(&mut reader, &mut save_to).expect(&format!("failed to write file {file}"));
+}
+
+#[cfg(target_os = "windows")]
+fn get_output_path(file: &str) -> PathBuf {
+	let output_path = PathBuf::from(file);
+	PathBuf::from(env::var("OUT_DIR").unwrap()).join(output_path.file_name().unwrap())
 }
 
 fn main() {
@@ -32,7 +37,7 @@ fn main() {
 			"SDL2-2.26.5/lib/x86/SDL2.dll",
 			"SDL2-2.26.5/lib/x86/SDL2.lib"
 		];
-		if files.iter().any(|f| !Path::new(f).exists()) {
+		if files.iter().any(|f| !get_output_path(f).exists()) {
 			// Download zip archive
 			let bytes = get("https://github.com/libsdl-org/SDL/releases/download/release-2.26.5/SDL2-devel-2.26.5-VC.zip")
     		.send()
