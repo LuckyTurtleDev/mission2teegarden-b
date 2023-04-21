@@ -29,18 +29,15 @@ jobs:
             ~/.cargo/registry
             target
           key: "PC ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
-      - name: cargo test models
-        run: cargo test --all-features -p m3-models
+      - run: cargo test --all-features -p m3-models
         env:
           RUST_BACKTRACE: 1
-      - name: cargo check pc
+      - run: cargo test --features sdl2_bundled -p m3-pc
         if:  ${{ matrix.os == 'windows' }}
-        run: cargo check --all-features -p m3-pc
         env:
           RUST_BACKTRACE: 1
-      - name: cargo test pc
+      - run: cargo test -p m3-pc
         if:  ${{ matrix.os != 'windows' }}
-        run: cargo test --all-features -p m3-pc
         env:
           RUST_BACKTRACE: 1
          
