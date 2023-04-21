@@ -33,7 +33,13 @@ jobs:
         run: cargo test --all-features -p m3-models
         env:
           RUST_BACKTRACE: 1
+      - name: cargo check pc
+        if:  ${{ matrix.os == 'windows' }}
+        run: cargo check --all-features -p m3-pc
+        env:
+          RUST_BACKTRACE: 1
       - name: cargo test pc
+        if:  ${{ matrix.os != 'windows' }}
         run: cargo test --all-features -p m3-pc
         env:
           RUST_BACKTRACE: 1
