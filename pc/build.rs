@@ -5,7 +5,7 @@ use piz::read::ZipArchive;
 #[cfg(target_os = "windows")]
 use std::env;
 #[cfg(target_os = "windows")]
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 #[cfg(target_os = "windows")]
 use std::{fs::File, io};
 
