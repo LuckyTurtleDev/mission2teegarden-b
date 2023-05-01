@@ -8,7 +8,7 @@ use tiles::{InvalidTileID, MapBaseTile};
 pub struct Map {
 	pub width: u8,
 	pub height: u8,
-	pub base_layer: Vec<Vec<MapBaseTile>>
+	base_layer: Vec<Vec<MapBaseTile>>
 }
 
 #[derive(Error, Debug)]
@@ -64,7 +64,7 @@ impl Map {
 		})
 	}
 
-	pub fn iter_map(&self) -> impl Iterator<Item = (u8, u8, &MapBaseTile)> {
+	pub fn iter_base_layer(&self) -> impl Iterator<Item = (u8, u8, &MapBaseTile)> {
 		self.base_layer.iter().enumerate().flat_map(|(y, x_vec)| {
 			x_vec
 				.iter()
