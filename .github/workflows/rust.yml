@@ -28,7 +28,6 @@ jobs:
         env:
           RUST_BACKTRACE: 1
       - run: cargo check --all-features
-        working-directory: pybadge
         env:
           RUST_BACKTRACE: 1
 
