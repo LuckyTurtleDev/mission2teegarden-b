@@ -207,6 +207,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "lab2"
+version = "0.1.0"
+dependencies = [
+ "embedded-graphics",
+ "heapless",
+ "pybadge-high",
+]
+
+[[package]]
 name = "lock_api"
 version = "0.4.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -214,15 +223,6 @@ checksum = "435011366fe56583b16cf956f9df0095b405b82d76425bc8981c0e22e60ec4df"
 dependencies = [
  "autocfg",
  "scopeguard",
-]
-
-[[package]]
-name = "m3"
-version = "0.1.0"
-dependencies = [
- "embedded-graphics",
- "heapless",
- "pybadge-high",
 ]
 
 [[package]]

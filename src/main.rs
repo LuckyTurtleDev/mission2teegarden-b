@@ -1,8 +1,27 @@
+#![allow(clippy::tabs_in_doc_comments)]
+
 //! Folgende Zeiten wurden durch die eine 120-fps-Kamera erhoben:
-//! 	- Zeit zwischen Neopixel und ersten grünen Pixel auf dem Display: 1 Frame = 8 ms
-//! 	- Zeit zwischen Neopixel und einem komplett grünen Display: 7 Frames = 58 ms
+//! * Zeit zwischen Neopixel und ersten grünen Pixel auf dem Display: 1 Frame = 8 ms
+//! * Zeit zwischen Neopixel und einem komplett grünen Display: 7 Frames = 58 ms
 //!
 //! Die Zeit, welche von im Microcontroller eingebauten Timer erhoben wurden, beträgt 40 ms
+//!
+//! # Setup
+//! #### Installation
+//! * Install rustup.
+//! I recommand to use the [package manger](https://repology.org/project/rustup/versions) of your operation system.
+//! Alternative you can install it from <https://www.rust-lang.org/tools/install>
+//! * install the rust thumbv7em-none-eabihf target. (the architecture of the micronctroller)
+//! ```bash
+//! rustup target install thumbv7em-none-eabihf
+//! ```
+//! * install the [hf2-cli](https://crates.io/crates/hf2-cli) flasher
+//!
+//! #### Flashing
+//! ```bash
+//! cargo run --release --locked
+//! ```
+
 
 #![no_std]
 #![no_main]
