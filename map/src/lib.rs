@@ -64,45 +64,12 @@ impl Map {
 		})
 	}
 
-	pub fn iter_map(&self) -> MapIter {
-		let mut row_iter = self.base_layer.iter();
-		let column_iter = row_iter.next().unwrap().iter();
-		MapIter {
-			row_iter,
-			column_iter,
-			x_pos: 0,
-			y_pos: 0
-		}
-	}
-}
-
-pub struct MapIter<'a> {
-	row_iter: Iter<'a, Vec<MapBaseTile>>,
-	column_iter: Iter<'a, MapBaseTile>,
-	x_pos: u8,
-	y_pos: u8
-}
-
-//this is very ugly
-impl<'a> Iterator for MapIter<'a> {
-	type Item = (u8, u8, &'a MapBaseTile);
-	fn next(&mut self) -> Option<Self::Item> {
-		match self.column_iter.next() {
-			Some(item) => {
-				let x_pos = self.x_pos;
-				self.x_pos += 1;
-				Some((x_pos, self.y_pos, item))
-			},
-			None => match self.row_iter.next() {
-				Some(row) => {
-					self.column_iter = row.iter();
-					self.x_pos = 0;
-					let y_pos = self.y_pos;
-					self.y_pos += 1;
-					Some((self.x_pos, y_pos, self.column_iter.next().unwrap()))
-				},
-				None => None
-			}
-		}
+	pub fn iter_map(&self) -> impl Iterator<Item = (u8, u8, &MapBaseTile)> {
+		self.base_layer.iter().enumerate().flat_map(|(y, x_vec)| {
+			x_vec
+				.iter()
+				.enumerate()
+				.map(move |(x, item)| (x as u8, y as u8, item))
+		})
 	}
 }
