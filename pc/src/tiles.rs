@@ -1,4 +1,5 @@
-use num_enum::TryFromPrimitive;
+use crate::GetTexture;
+pub use m3_map::tiles::MapBaseTile;
 use tetra::{graphics::Texture, Context};
 
 ///Store all Textures
@@ -19,17 +20,9 @@ impl Textures {
 	}
 }
 
-///Store all Tiles, with can be used at the map background
-#[derive(Clone, Copy, Debug, Eq, PartialEq, TryFromPrimitive)]
-#[repr(u8)]
-pub enum MapBaseTiles {
-	//numbers must match them from the Tiled tilesets
-	Grass = 1
-}
-
-impl MapBaseTiles {
+impl<'a> GetTexture<'a> for MapBaseTile {
 	///get Texture assioated with this Tile
-	pub fn texture<'a>(&'a self, textures: &'a Textures) -> &Texture {
+	fn texture(&self, textures: &'a Textures) -> &'a Texture {
 		match self {
 			Self::Grass => &textures.grass
 		}

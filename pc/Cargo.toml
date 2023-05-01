@@ -11,6 +11,7 @@ sdl2_static_link = ["tetra/sdl2_static_link"]
 sdl2_bundled = ["tetra/sdl2_bundled"]
 
 [dependencies]
+m3-map = { version = "0.1.0", path = "../map" }
 num_enum = "0.6.1"
 tetra = "0.8.0"
 vek = { version = "0.15.10", default-features = false }
