@@ -1,10 +1,9 @@
-use num_enum::TryFromPrimitive;
 use thiserror::Error;
-use tiled::{Error, LayerType, Loader, TileLayer};
+use tiled::{LayerType, Loader};
 pub mod tiles;
-use std::slice::Iter;
 use tiles::{InvalidTileID, MapBaseTile};
 
+#[derive(Debug)]
 pub struct Map {
 	pub width: u8,
 	pub height: u8,
@@ -37,7 +36,7 @@ impl Map {
 		let mut base_layer = Vec::with_capacity(height as usize);
 		for (i, layer) in map.layers().enumerate() {
 			match i {
-				1 => match layer.layer_type() {
+				0 => match layer.layer_type() {
 					LayerType::Tiles(tile_layer) => {
 						for x in 0..width {
 							let mut column = Vec::with_capacity(width as usize);
@@ -50,7 +49,6 @@ impl Map {
 							}
 							base_layer.push(column);
 						}
-						todo!()
 					},
 					_ => return Err(MapError::WrongLayer(i, "TileLayer".to_owned()))
 				},
@@ -64,6 +62,7 @@ impl Map {
 		})
 	}
 
+	/// return an iterator over all BasteTiles and its x and y postion
 	pub fn iter_base_layer(&self) -> impl Iterator<Item = (u8, u8, &MapBaseTile)> {
 		self.base_layer.iter().enumerate().flat_map(|(y, x_vec)| {
 			x_vec
