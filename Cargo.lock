@@ -225,6 +225,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f11ea1a0346b94ef188834a65c068a03aec181c94896d481d7a0a40d85b0ce95"
 dependencies = [
  "bincode_derive",
+ "serde",
 ]
 
 [[package]]
@@ -1194,10 +1195,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "m3-macro"
+version = "0.1.0"
+dependencies = [
+ "bincode",
+ "m3-map",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.15",
+]
+
+[[package]]
 name = "m3-map"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "bincode",
  "clap",
  "num_enum 0.6.1",
  "thiserror",

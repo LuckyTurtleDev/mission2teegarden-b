@@ -1,0 +1,17 @@
+[package]
+workspace = ".."
+name = "m3-macro"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+
+[lib]
+proc-macro = true
+
+[dependencies]
+bincode = { version = "2.0.0-rc.3", features = ["derive"] }
+m3-map = { version = "0.1.0", path = "../map" }
+proc-macro2 = "1.0.56"
+quote = "1.0.26"
+syn = "2.0.15"

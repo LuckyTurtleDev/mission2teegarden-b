@@ -1,8 +1,9 @@
 use num_enum::TryFromPrimitive;
 use thiserror::Error;
+use bincode::{Decode, Encode};
 
 ///Store all Tiles, with can be used at the map background
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Clone, Copy, Debug, Decode, Encode, Default, Eq, PartialEq, TryFromPrimitive)]
 #[repr(u8)]
 pub enum MapBaseTile {
 	//numbers must match them from the Tiled tilesets

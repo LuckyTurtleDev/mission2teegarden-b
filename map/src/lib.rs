@@ -1,9 +1,12 @@
 use thiserror::Error;
 use tiled::{LayerType, Loader};
+use bincode::{Decode, Encode};
+
 pub mod tiles;
 use tiles::{InvalidTileID, MapBaseTile};
 
-#[derive(Debug)]
+
+#[derive(Debug, Decode, Encode)]
 pub struct Map {
 	pub width: u8,
 	pub height: u8,
