@@ -32,7 +32,7 @@ jobs:
       - run: cargo test --all-features -p m3-models
         env:
           RUST_BACKTRACE: 1
-      - run: cargo test --features sdl2_bundled -p m3-pc m3-map m3-macro
+      - run: cargo test --features sdl2_bundled -p m3-pc -p m3-map -p m3-macro
         if:  ${{ matrix.os == 'windows' }}
         env:
           RUST_BACKTRACE: 1
