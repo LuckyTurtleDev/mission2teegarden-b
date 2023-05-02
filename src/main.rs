@@ -22,7 +22,6 @@
 //! cargo run --release --locked
 //! ```
 
-
 #![no_std]
 #![no_main]
 
