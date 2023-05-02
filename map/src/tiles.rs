@@ -1,9 +1,11 @@
 use num_enum::TryFromPrimitive;
+use self_rust_tokenize::SelfRustTokenize;
 use thiserror::Error;
-use bincode::{Decode, Encode};
 
 ///Store all Tiles, with can be used at the map background
-#[derive(Clone, Copy, Debug, Decode, Encode, Default, Eq, PartialEq, TryFromPrimitive)]
+#[derive(
+	Clone, Copy, Debug, Default, Eq, SelfRustTokenize, PartialEq, TryFromPrimitive,
+)]
 #[repr(u8)]
 pub enum MapBaseTile {
 	//numbers must match them from the Tiled tilesets

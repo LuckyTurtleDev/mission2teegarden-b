@@ -1,16 +1,15 @@
+use self_rust_tokenize::SelfRustTokenize;
 use thiserror::Error;
 use tiled::{LayerType, Loader};
-use bincode::{Decode, Encode};
 
 pub mod tiles;
 use tiles::{InvalidTileID, MapBaseTile};
 
-
-#[derive(Debug, Decode, Encode)]
+#[derive(Debug, SelfRustTokenize)]
 pub struct Map {
 	pub width: u8,
 	pub height: u8,
-	base_layer: Vec<Vec<MapBaseTile>>
+	pub base_layer: Vec<Vec<MapBaseTile>>
 }
 
 #[derive(Error, Debug)]

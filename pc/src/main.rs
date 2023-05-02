@@ -1,5 +1,8 @@
 use tetra::{graphics, graphics::Color, Context, ContextBuilder, State};
 type Vec2 = vek::vec::repr_c::vec2::Vec2<f32>;
+use m3_macro::include_map;
+use m3_map::Map;
+use once_cell::sync::Lazy;
 use tetra::{
 	graphics::{DrawParams, Texture},
 	time::get_delta_time
@@ -10,6 +13,9 @@ use tiles::{MapBaseTile, Textures};
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
+
+static LEVELS: Lazy<Vec<Map>> =
+	Lazy::new(|| vec![include_map!("pc/assets/level/001.tmx")]);
 
 trait GetTexture<'a> {
 	fn texture(&self, textures: &'a Textures) -> &'a Texture;

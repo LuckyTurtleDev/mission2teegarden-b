@@ -699,6 +699,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7fcaabb2fef8c910e7f4c7ce9f67a1283a1715879a7c230ca9d6d1ae31f16d91"
 
 [[package]]
+name = "either_n"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4c91ae510829160d5cfb19eb4ae7b6e01d44b767ca8f727c6cee936e53cc9ae5"
+
+[[package]]
 name = "embedded-graphics"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1202,6 +1208,7 @@ dependencies = [
  "m3-map",
  "proc-macro2",
  "quote",
+ "self-rust-tokenize",
  "syn 2.0.15",
 ]
 
@@ -1210,9 +1217,9 @@ name = "m3-map"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "bincode",
  "clap",
  "num_enum 0.6.1",
+ "self-rust-tokenize",
  "thiserror",
  "tiled",
 ]
@@ -1231,8 +1238,10 @@ name = "m3-pc"
 version = "0.1.0"
 dependencies = [
  "attohttpc",
+ "m3-macro",
  "m3-map",
  "num_enum 0.6.1",
+ "once_cell",
  "piz",
  "tetra",
  "vek",
@@ -1517,6 +1526,9 @@ name = "once_cell"
 version = "1.17.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b7e5500299e16ebb147ae15a00a942af264cf3688f47923b8fc2cd5858f23ad3"
+dependencies = [
+ "parking_lot_core",
+]
 
 [[package]]
 name = "owned_ttf_parser"
@@ -1879,6 +1891,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "self-rust-tokenize"
+version = "0.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "235c30ffb76b003dc69cc556d0d5ab8bb561a40572b1710fd641c69a3d6c4078"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "self-rust-tokenize-derive",
+]
+
+[[package]]
+name = "self-rust-tokenize-derive"
+version = "0.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9e075556adeec065f185a7811a9808f8523c1299aa7e318b3dd7d1eb72417f6b"
+dependencies = [
+ "syn 1.0.109",
+ "syn-helpers",
+]
+
+[[package]]
 name = "semver"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2065,6 +2098,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "syn-helpers"
+version = "0.4.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "872f211f0299a39fff932355b2e304ef0e95a486a8147244fa8d477c1b0acfce"
+dependencies = [
+ "either_n",
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
 ]
 
 [[package]]

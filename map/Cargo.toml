@@ -6,8 +6,8 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.71"
-bincode = { version = "2.0.0-rc.3", features = ["derive"] }
 clap = { version = "4.2.5", features = ["derive"] }
 num_enum = "0.6.1"
+self-rust-tokenize = "0.3.3"
 thiserror = "1.0.40"
 tiled = "0.11.0"
