@@ -26,7 +26,8 @@ trait GetTexture<'a> {
 struct GameState {
 	textures: Textures,
 	grass_postion: Vec2,
-	grass_rotation: f32
+	grass_rotation: f32,
+	level: Option<Map>
 }
 
 impl GameState {
@@ -36,6 +37,7 @@ impl GameState {
 			textures,
 			grass_postion: Vec2::default(),
 			grass_rotation: 0.0
+			level: Some(LEVELS.first().unwrap())
 		})
 	}
 }
@@ -44,6 +46,15 @@ impl State for GameState {
 	//draw the current state
 	fn draw(&mut self, ctx: &mut Context) -> tetra::Result {
 		graphics::clear(ctx, Color::rgb(0.0, 0.0, 0.0));
+
+		match self.level {
+			None => todo!(),
+			Some(map) => {
+				for base_tile in map.iter_base_layer(){
+
+				}
+			}
+		}
 
 		//moving sprite
 		MapBaseTile::Grass
