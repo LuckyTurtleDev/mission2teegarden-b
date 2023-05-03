@@ -1,8 +1,11 @@
+use crate::GetTexture;
+pub use m3_map::tiles::MapBaseTile;
 use tetra::{graphics::Texture, Context};
 
 ///Store all Textures
 pub struct Textures {
-	grass: Texture
+	grass: Texture,
+	puddle: Texture
 }
 
 impl Textures {
@@ -11,24 +14,24 @@ impl Textures {
 		Textures {
 			grass: Texture::from_encoded(
 				ctx,
-				include_bytes!("../assets/img/map-tiles/grass.png")
+				include_bytes!("../assets/img/BaseTiles/grass.png")
+			)
+			.unwrap(),
+			puddle: Texture::from_encoded(
+				ctx,
+				include_bytes!("../assets/img/BaseTiles/puddle.png")
 			)
 			.unwrap()
 		}
 	}
 }
 
-///Store all Tiles, with can be used at the map background
-#[derive(Clone, Copy, Debug)]
-pub enum MapTiles {
-	Grass
-}
-
-impl MapTiles {
+impl<'a> GetTexture<'a> for MapBaseTile {
 	///get Texture assioated with this Tile
-	pub fn texture<'a>(&'a self, textures: &'a Textures) -> &Texture {
+	fn texture(&self, textures: &'a Textures) -> &'a Texture {
 		match self {
-			Self::Grass => &textures.grass
+			Self::Grass => &textures.grass,
+			Self::Puddle => &textures.puddle
 		}
 	}
 }

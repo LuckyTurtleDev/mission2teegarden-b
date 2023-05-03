@@ -1,5 +1,5 @@
 [workspace]
-members = ["pybadge", "pc", "models"]
+members = ["pybadge", "pc", "models", "map", "macro"]
 resolver = "2"
 
 # To enable optimizations in debug mode for Tetra only (requires Rust 1.41):

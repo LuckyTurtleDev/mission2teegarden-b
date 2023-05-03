@@ -1,12 +1,25 @@
 use tetra::{graphics, graphics::Color, Context, ContextBuilder, State};
 type Vec2 = vek::vec::repr_c::vec2::Vec2<f32>;
-use tetra::{graphics::DrawParams, time::get_delta_time};
+use m3_macro::include_map;
+use m3_map::Map;
+use once_cell::sync::Lazy;
+use tetra::{
+	graphics::{DrawParams, Texture},
+	time::get_delta_time
+};
 
 mod tiles;
-use tiles::{MapTiles, Textures};
+use tiles::{MapBaseTile, Textures};
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
+
+static LEVELS: Lazy<Vec<Map>> =
+	Lazy::new(|| vec![include_map!("pc/assets/level/001.tmx")]);
+
+trait GetTexture<'a> {
+	fn texture(&self, textures: &'a Textures) -> &'a Texture;
+}
 
 //https://tetra.seventeencups.net/tutorial
 
@@ -33,17 +46,17 @@ impl State for GameState {
 		graphics::clear(ctx, Color::rgb(0.0, 0.0, 0.0));
 
 		//moving sprite
-		MapTiles::Grass
+		MapBaseTile::Grass
 			.texture(&self.textures)
 			.draw(ctx, self.grass_postion);
 
 		//rotating sprite
-		MapTiles::Grass.texture(&self.textures).draw(
+		MapBaseTile::Grass.texture(&self.textures).draw(
 			ctx,
 			DrawParams::new()
 				.origin(Vec2::new(
-					(MapTiles::Grass.texture(&self.textures).width() / 2) as f32,
-					(MapTiles::Grass.texture(&self.textures).height() / 2) as f32
+					(MapBaseTile::Grass.texture(&self.textures).width() / 2) as f32,
+					(MapBaseTile::Grass.texture(&self.textures).height() / 2) as f32
 				)) //set origion to center, to rotate at the middle (this does also effect postion())
 				.rotation(self.grass_rotation)
 				.position(Vec2::new(100.0, 100.0))
@@ -65,6 +78,7 @@ impl State for GameState {
 }
 
 fn main() -> tetra::Result {
+	println!("{:?}", LEVELS[0]);
 	ContextBuilder::new(format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"), 640, 480)
 		.quit_on_escape(true)
 		.multisampling(8) //anti-aliasing
