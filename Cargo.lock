@@ -1205,6 +1205,7 @@ name = "m3-macro"
 version = "0.1.0"
 dependencies = [
  "bincode",
+ "glob",
  "m3-map",
  "proc-macro2",
  "quote",

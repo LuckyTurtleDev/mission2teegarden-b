@@ -1,4 +1,5 @@
 use self_rust_tokenize::SelfRustTokenize;
+use std::path::Path;
 use thiserror::Error;
 use tiled::{LayerType, Loader};
 
@@ -31,7 +32,7 @@ pub enum MapError {
 }
 
 impl Map {
-	pub fn from_tmx(path: &str) -> Result<Self, MapError> {
+	pub fn from_tmx(path: impl AsRef<Path>) -> Result<Self, MapError> {
 		let map = Loader::new().load_tmx_map(path)?;
 		let width: u8 = map.width.try_into().map_err(|_| MapError::ToWidth)?;
 		let height: u8 = map.height.try_into().map_err(|_| MapError::ToHight)?;
