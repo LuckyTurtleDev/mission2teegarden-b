@@ -36,8 +36,8 @@ impl GameState {
 		Ok(GameState {
 			textures,
 			grass_postion: Vec2::default(),
-			grass_rotation: 0.0
-			level: Some(LEVELS.first().unwrap())
+			grass_rotation: 0.0,
+			level: Some(*(LEVELS.first()).unwrap())
 		})
 	}
 }
@@ -50,8 +50,9 @@ impl State for GameState {
 		match self.level {
 			None => todo!(),
 			Some(map) => {
-				for base_tile in map.iter_base_layer(){
-
+				for (x,y, tile) in map.iter_base_layer(){
+					let texture = tile.texture(&self.textures);
+					
 				}
 			}
 		}
