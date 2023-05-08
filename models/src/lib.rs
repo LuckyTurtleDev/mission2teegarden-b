@@ -9,7 +9,7 @@ pub enum MessageToPc {
 	ConnectionResponse
 }
 
-#[derive(Debug, Clone, Decode, Encode)]
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum MessageToPyBadge {
 	ConnectionRequest,
 	ConnectionConfirmation,

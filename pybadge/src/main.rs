@@ -1,10 +1,10 @@
 #![no_std]
 #![no_main]
 
-use bincode::{decode_from_slice, encode_into_slice, error::DecodeError, Encode};
-use heapless::{Deque, Vec};
+use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
+use heapless::Vec;
 use m3_models::{MessageToPc, MessageToPyBadge};
-use pybadge::PyBadge;
+use pybadge::{Delay, PyBadge};
 use pybadge_high as pybadge;
 use pybadge_high::prelude::*;
 
@@ -19,12 +19,14 @@ fn read_events(usb_data: &mut Vec<u8, 128>) -> Vec<MessageToPyBadge, 10> {
 	for _ in 0..10 {
 		match decode_from_slice(usb_data.as_slice(), bincode::config::standard()) {
 			Ok((event, len)) => {
-				events.push(event);
+				events.push(event).unwrap();
 				//remove readed bytes
 				let remaining_data: Vec<u8, 128> =
-					usb_data[..len].iter().map(|f| (*f)).collect();
+					usb_data[..len].iter().copied().collect();
 				usb_data.clear();
-				usb_data.extend_from_slice(remaining_data.as_slice());
+				usb_data
+					.extend_from_slice(remaining_data.as_slice())
+					.unwrap();
 			},
 			Err(err) => {
 				match err {
@@ -39,29 +41,31 @@ fn read_events(usb_data: &mut Vec<u8, 128>) -> Vec<MessageToPyBadge, 10> {
 }
 
 fn send_event(event: MessageToPc) {
-	let array = [0_u8; 128];
-	let len = event.encode_into_slice(&mut array).unwrap();
-	usb::read(array[..len]).unwrap();
+	let mut buf = [0_u8; 128];
+	let len = encode_into_slice(event, &mut buf, bincode::config::standard()).unwrap();
+	usb::wirte(&buf[..len]);
 }
 
 /// wait for the pc to start handshake
 /// Return err, if pc need more the 5s to finish handshake after starting shake
-fn connect(usb_data: Vec<u8, 128>) -> Result<(), ()> {
-	while read_events(&mut usb_data)
+fn connect(usb_data: &mut Vec<u8, 128>, delay: &mut Delay) -> Result<(), ()> {
+	while read_events(usb_data)
 		.iter()
-		.any(|f| f == MessageToPyBadge::ConnectionRequest)
+		.any(|f| f == &MessageToPyBadge::ConnectionRequest)
 	{
-		pybadge.delay.delay_ms(50_u16);
+		delay.delay_ms(50_u16);
+		usb::read(usb_data);
 	}
 	send_event(MessageToPc::ConnectionResponse);
 	//timeout after 5 seconds
 	for _ in 0..100 {
-		pybadge.delay.delay_ms(50_u16);
-		if read_events(&mut usb_data)
+		delay.delay_ms(50_u16);
+		usb::read(usb_data);
+		if read_events(usb_data)
 			.iter()
-			.any(|f| f == MessageToPyBadge::ConnectionConfirmation)
+			.any(|f| f == &MessageToPyBadge::ConnectionConfirmation)
 		{
-			Ok(())
+			return Ok(());
 		}
 	}
 	Err(())
@@ -73,8 +77,9 @@ fn main() -> ! {
 	let mut pybadge = PyBadge::take().unwrap();
 	usb::init(pybadge.usb_builder);
 	//wait for connection with pc;
-	while let Err(_) = connect(&mut usb_data) {}
+	while connect(&mut usb_data, &mut pybadge.delay).is_err() {}
 	loop {
+		usb::read(&mut usb_data);
 		pybadge.red_led.on().unwrap();
 		pybadge.delay.delay_ms(1000_u16);
 		pybadge.red_led.off().unwrap();

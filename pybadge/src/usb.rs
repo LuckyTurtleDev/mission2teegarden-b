@@ -1,5 +1,5 @@
-use crate::{CARGO_PKG_NAME, CARGO_PKG_VERSION};
-use heapless::{Deque, Vec};
+use crate::CARGO_PKG_NAME;
+use heapless::Vec;
 use pybadge_high::{
 	cortex_m::interrupt,
 	usb::{Usb, UsbBuilder}
@@ -13,15 +13,13 @@ fn interupt() {
 	let usb_dev = unsafe { USB_DEV.as_mut().unwrap() };
 	if let Ok(len) = usb_dev.read(&mut read_data) {
 		unsafe {
-			USB_DATA_IN.extend_from_slice(&read_data[..len]);
+			USB_DATA_IN.extend_from_slice(&read_data[..len]).unwrap();
 		}
 	}
 }
 
 pub(crate) fn init(builder: UsbBuilder) {
-	let mut usb = builder
-		.product(stringify!("{CARGO_PKG_NAME}-{CARGO_CARGO_PKG_VERSION}"))
-		.build();
+	let mut usb = builder.product(CARGO_PKG_NAME).build();
 	usb.set_interrupt(interupt);
 	unsafe {
 		USB_DEV = Some(usb);
