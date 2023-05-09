@@ -5,7 +5,7 @@ use tetra::{graphics::Texture, Context};
 ///Store all Textures
 pub struct Textures {
 	grass: Texture,
-	puddle: Texture
+	stone: Texture
 }
 
 impl Textures {
@@ -17,9 +17,9 @@ impl Textures {
 				include_bytes!("../assets/img/BaseTiles/grass.png")
 			)
 			.unwrap(),
-			puddle: Texture::from_encoded(
+			stone: Texture::from_encoded(
 				ctx,
-				include_bytes!("../assets/img/BaseTiles/puddle.png")
+				include_bytes!("../assets/img/BaseTiles/stone.png")
 			)
 			.unwrap()
 		}
@@ -31,7 +31,7 @@ impl<'a> GetTexture<'a> for MapBaseTile {
 	fn texture(&self, textures: &'a Textures) -> &'a Texture {
 		match self {
 			Self::Grass => &textures.grass,
-			Self::Puddle => &textures.puddle
+			Self::Stone => &textures.stone
 		}
 	}
 }

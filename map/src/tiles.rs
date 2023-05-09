@@ -10,8 +10,8 @@ use thiserror::Error;
 pub enum MapBaseTile {
 	//numbers must match them from the Tiled tilesets
 	#[default]
-	Grass = 1,
-	Puddle = 2
+	Grass = 0,
+	Stone = 1
 }
 
 #[derive(Debug, Copy, Clone, Error)]
