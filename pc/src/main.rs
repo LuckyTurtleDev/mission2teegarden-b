@@ -1,6 +1,6 @@
 use tetra::{
-	graphics::{self, text, Color},
-	window::{get_current_monitor_height, get_current_monitor_width, get_size},
+	graphics::{self, Color},
+	window::get_size,
 	Context, ContextBuilder, State
 };
 type Vec2 = vek::vec::repr_c::vec2::Vec2<f32>;
@@ -13,7 +13,7 @@ use tetra::{
 };
 
 mod tiles;
-use tiles::{MapBaseTile, Textures};
+use tiles::Textures;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
