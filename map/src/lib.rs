@@ -67,8 +67,16 @@ impl Map {
 
 	/// return an iterator over all BasteTiles and its x and y postion
 	pub fn iter_base_layer(&self) -> impl Iterator<Item = (u8, u8, &MapBaseTile)> {
+<<<<<<< HEAD
 		self.base_layer.iter().enumerate().flat_map(|(x, y_vec)| {
 			y_vec
+||||||| parent of 1c5301d (add missing clone; fix iterator)
+		self.base_layer.iter().enumerate().flat_map(|(y, x_vec)| {
+			x_vec
+=======
+		self.base_layer.iter().enumerate().flat_map(|(x, x_vec)| {
+			x_vec
+>>>>>>> 1c5301d (add missing clone; fix iterator)
 				.iter()
 				.enumerate()
 				.map(move |(y, item)| (x as u8, y as u8, item))
