@@ -59,8 +59,8 @@ impl State for GameState {
 			None => todo!(),
 			Some(map) => {
 				for (x,y, tile) in map.iter_base_layer(){
-					let x_pos: f32 = y.into(); // x and y are swapped in iterator
-					let y_pos: f32 = x.into();
+					let x_pos: f32 = x.into(); // x and y are swapped in iterator
+					let y_pos: f32 = y.into();
 					let texture = tile.texture(&self.textures);
 					texture.draw(ctx,
 					DrawParams::new()
