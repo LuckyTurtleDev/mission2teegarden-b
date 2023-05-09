@@ -18,12 +18,6 @@ use tiles::{MapBaseTile, Textures};
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
 
-const TEXTURE_WIDTH: f32 = 128.0;
-const TEXTURE_HEIGHT: f32 = 128.0;
-
-const MAP_WIDTH: f32 = 16.0;
-const MAP_HEIGTH: f32 = 9.0;
-
 static LEVELS: Lazy<Vec<Map>> =
 	Lazy::new(|| vec![include_map!("pc/assets/level/001.tmx")]);
 
@@ -57,14 +51,14 @@ impl State for GameState {
 	fn draw(&mut self, ctx: &mut Context) -> tetra::Result {
 		graphics::clear(ctx, Color::rgb(0.0, 0.0, 0.0));
 		let window_size = get_size(ctx);
-		let ratio = Vec2::new(
-			(window_size.0 as f32) / MAP_WIDTH,
-			(window_size.1 as f32) / MAP_HEIGTH
-		);
 
 		match &self.level {
 			None => todo!(),
 			Some(map) => {
+				let ratio = Vec2::new(
+					(window_size.0 / map.width as i32) as f32,
+					(window_size.1 / map.height as i32) as f32
+				);
 				for (x, y, tile) in map.iter_base_layer() {
 					let x_pos: f32 = y.into();
 					let y_pos: f32 = x.into();
@@ -73,13 +67,13 @@ impl State for GameState {
 						ctx,
 						DrawParams::new()
 							.scale(Vec2::new(
-								ratio.x / TEXTURE_WIDTH,
-								ratio.y / TEXTURE_HEIGHT
+								ratio.x / texture.width() as f32,
+								ratio.y / texture.height() as f32
 							))
 							.position(Vec2::new(x_pos * ratio.x, y_pos * ratio.y))
 					);
 				}
-			},
+			}
 		}
 
 		//see https://docs.rs/tetra/latest/tetra/graphics/struct.DrawParams.html
