@@ -1,4 +1,4 @@
-use tetra::{graphics, graphics::Color, Context, ContextBuilder, State, window::{get_current_monitor_width, get_current_monitor_height, get_size}};
+use tetra::{graphics::{self, text}, graphics::Color, Context, ContextBuilder, State, window::{get_current_monitor_width, get_current_monitor_height, get_size}};
 type Vec2 = vek::vec::repr_c::vec2::Vec2<f32>;
 use m3_macro::include_map;
 use m3_map::Map;
@@ -13,6 +13,12 @@ use tiles::{MapBaseTile, Textures};
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
+
+const TEXTURE_WIDTH: f32 = 128.0;
+const TEXTURE_HEIGHT: f32 = 128.0;
+
+const MAP_WIDTH: f32 = 16.0;
+const MAP_HEIGTH: f32 = 9.0;
 
 static LEVELS: Lazy<Vec<Map>> =
 	Lazy::new(|| vec![include_map!("pc/assets/level/001.tmx")]);
@@ -47,20 +53,20 @@ impl State for GameState {
 	fn draw(&mut self, ctx: &mut Context) -> tetra::Result {
 		graphics::clear(ctx, Color::rgb(0.0, 0.0, 0.0));
 		let window_size = get_size(ctx);
-		let scale = Vec2::new((window_size.0 as f32) / 16.0 / 128.0, (window_size.1 as f32) / 9.0 / 128.0);
+		let ratio = Vec2::new((window_size.0 as f32) / MAP_WIDTH, (window_size.1 as f32) / MAP_HEIGTH);
 
 		match &self.level {
 			None => todo!(),
 			Some(map) => {
 				for (x,y, tile) in map.iter_base_layer(){
-					let x_pos: f32 = x.into();
-					let y_pos: f32 = y.into();
+					let x_pos: f32 = y.into(); // x and y are swapped in iterator
+					let y_pos: f32 = x.into();
 					let texture = tile.texture(&self.textures);
 					texture.draw(ctx,
 					DrawParams::new()
-						.scale(scale)
-						.position(Vec2::new(x_pos * scale.x * texture.width() as f32, y_pos * scale.y * texture.height() as f32))
-					)
+						.scale(Vec2::new(ratio.x / TEXTURE_WIDTH, ratio.y / TEXTURE_HEIGHT))
+						.position(Vec2::new(x_pos * ratio.x, y_pos * ratio.y))
+					);
 				}
 			}
 		}
@@ -82,7 +88,7 @@ impl State for GameState {
 
 fn main() -> tetra::Result {
 	println!("{:?}", LEVELS[0]);
-	ContextBuilder::new(format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"), 640, 360)
+	ContextBuilder::new(format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"), 1280, 720)
 		.quit_on_escape(true)
 		.multisampling(8) //anti-aliasing
 		.stencil_buffer(true)
