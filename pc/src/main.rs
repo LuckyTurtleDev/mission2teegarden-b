@@ -1,11 +1,15 @@
-use tetra::{graphics::{self, text}, graphics::Color, Context, ContextBuilder, State, window::{get_current_monitor_width, get_current_monitor_height, get_size}};
+use tetra::{
+	graphics::{self, text, Color},
+	window::{get_current_monitor_height, get_current_monitor_width, get_size},
+	Context, ContextBuilder, State
+};
 type Vec2 = vek::vec::repr_c::vec2::Vec2<f32>;
 use m3_macro::include_map;
 use m3_map::Map;
 use once_cell::sync::Lazy;
 use tetra::{
 	graphics::{DrawParams, Texture},
-	time::get_delta_time,
+	time::get_delta_time
 };
 
 mod tiles;
@@ -53,22 +57,29 @@ impl State for GameState {
 	fn draw(&mut self, ctx: &mut Context) -> tetra::Result {
 		graphics::clear(ctx, Color::rgb(0.0, 0.0, 0.0));
 		let window_size = get_size(ctx);
-		let ratio = Vec2::new((window_size.0 as f32) / MAP_WIDTH, (window_size.1 as f32) / MAP_HEIGTH);
+		let ratio = Vec2::new(
+			(window_size.0 as f32) / MAP_WIDTH,
+			(window_size.1 as f32) / MAP_HEIGTH
+		);
 
 		match &self.level {
 			None => todo!(),
 			Some(map) => {
-				for (x,y, tile) in map.iter_base_layer(){
-					let x_pos: f32 = x.into(); // x and y are swapped in iterator
-					let y_pos: f32 = y.into();
+				for (x, y, tile) in map.iter_base_layer() {
+					let x_pos: f32 = y.into();
+					let y_pos: f32 = x.into();
 					let texture = tile.texture(&self.textures);
-					texture.draw(ctx,
-					DrawParams::new()
-						.scale(Vec2::new(ratio.x / TEXTURE_WIDTH, ratio.y / TEXTURE_HEIGHT))
-						.position(Vec2::new(x_pos * ratio.x, y_pos * ratio.y))
+					texture.draw(
+						ctx,
+						DrawParams::new()
+							.scale(Vec2::new(
+								ratio.x / TEXTURE_WIDTH,
+								ratio.y / TEXTURE_HEIGHT
+							))
+							.position(Vec2::new(x_pos * ratio.x, y_pos * ratio.y))
 					);
 				}
-			}
+			},
 		}
 
 		//see https://docs.rs/tetra/latest/tetra/graphics/struct.DrawParams.html
