@@ -11,6 +11,8 @@ use tetra::{
 mod tiles;
 use tiles::{MapBaseTile, Textures};
 
+mod usb;
+
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
 
@@ -78,7 +80,7 @@ impl State for GameState {
 }
 
 fn main() -> tetra::Result {
-	println!("{:?}", LEVELS[0]);
+	usb::init();
 	ContextBuilder::new(format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"), 640, 480)
 		.quit_on_escape(true)
 		.multisampling(8) //anti-aliasing
