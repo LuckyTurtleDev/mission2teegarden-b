@@ -6,7 +6,7 @@ use tiled::{LayerType, Loader};
 pub mod tiles;
 use tiles::{InvalidTileID, MapBaseTile};
 
-#[derive(Debug, SelfRustTokenize)]
+#[derive(Clone, Debug, SelfRustTokenize)]
 pub struct Map {
 	pub width: u8,
 	pub height: u8,
