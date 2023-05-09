@@ -60,8 +60,6 @@ impl State for GameState {
 					(window_size.1 / map.height as i32) as f32
 				);
 				for (x, y, tile) in map.iter_base_layer() {
-					let x_pos: f32 = y.into();
-					let y_pos: f32 = x.into();
 					let texture = tile.texture(&self.textures);
 					texture.draw(
 						ctx,
@@ -70,7 +68,7 @@ impl State for GameState {
 								ratio.x / texture.width() as f32,
 								ratio.y / texture.height() as f32
 							))
-							.position(Vec2::new(x_pos * ratio.x, y_pos * ratio.y))
+							.position(Vec2::new(x as f32 * ratio.x, y as f32 * ratio.y))
 					);
 				}
 			}
