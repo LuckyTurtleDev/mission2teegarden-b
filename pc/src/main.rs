@@ -11,6 +11,7 @@ use tetra::{
 	graphics::{DrawParams, Texture},
 	time::get_delta_time
 };
+use log::{info};
 
 mod tiles;
 use tiles::Textures;
@@ -90,7 +91,8 @@ impl State for GameState {
 }
 
 fn main() -> tetra::Result {
-	println!("{:?}", LEVELS[0]);
+	my_env_logger_style::just_log();
+	info!("{:?}", LEVELS[0]);
 	ContextBuilder::new(format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"), 1280, 720)
 		.quit_on_escape(true)
 		.multisampling(8) //anti-aliasing
