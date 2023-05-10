@@ -2,11 +2,10 @@
 #![no_main]
 
 use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
+use embedded_graphics::{draw_target::DrawTarget, prelude::*};
 use heapless::Vec;
 use m3_models::{MessageToPc, MessageToPyBadge};
-use pybadge::{Delay, PyBadge};
-use pybadge_high as pybadge;
-use pybadge_high::prelude::*;
+use pybadge_high::{prelude::*, Color, Delay, PyBadge};
 
 mod usb;
 
@@ -75,6 +74,8 @@ fn connect(usb_data: &mut Vec<u8, 128>, delay: &mut Delay) -> Result<(), ()> {
 fn main() -> ! {
 	let mut usb_data = Vec::<u8, 128>::new();
 	let mut pybadge = PyBadge::take().unwrap();
+	let mut display = pybadge.display;
+	display.clear(Color::BLACK).unwrap();
 	usb::init(pybadge.usb_builder);
 	//wait for connection with pc;
 	while connect(&mut usb_data, &mut pybadge.delay).is_err() {}

@@ -1343,8 +1343,10 @@ name = "m3-pc"
 version = "0.1.0"
 dependencies = [
  "attohttpc",
+ "bincode",
  "m3-macro",
  "m3-map",
+ "m3-models",
  "num_enum 0.6.1",
  "once_cell",
  "piz",
@@ -1358,6 +1360,7 @@ name = "m3-pybadge"
 version = "0.1.0"
 dependencies = [
  "bincode",
+ "embedded-graphics",
  "heapless",
  "m3-models",
  "pybadge-high",
@@ -1763,15 +1766,16 @@ dependencies = [
 
 [[package]]
 name = "pybadge-high"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6ae80aa0f3a5fa2e204d6d10e59a140832ee25b3dbfaeae88c1ee337311bb71b"
+checksum = "f2f2c9332909ab814ee70bc30d20e83079587b64a420722014da6fd412d5dc33"
 dependencies = [
  "cortex-m",
  "cortex-m-rt",
  "document-features",
  "edgebadge",
  "embedded-graphics",
+ "heapless",
  "rustc_version 0.4.0",
  "st7735-lcd",
  "usb-device",

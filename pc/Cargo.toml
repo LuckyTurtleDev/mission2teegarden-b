@@ -11,8 +11,10 @@ sdl2_static_link = ["tetra/sdl2_static_link"]
 sdl2_bundled = ["tetra/sdl2_bundled"]
 
 [dependencies]
+bincode = { version = "2.0.0-rc.3", features = ["derive"] }
 m3-macro = { version = "0.1.0", path = "../macro" }
 m3-map = { version = "0.1.0", path = "../map" }
+m3-models = { version = "0.1.0", path = "../models" }
 num_enum = "0.6.1"
 once_cell = { version = "1.17.1", features = ["parking_lot"] }
 serialport = "4.2.0"

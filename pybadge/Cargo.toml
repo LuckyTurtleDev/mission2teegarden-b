@@ -7,9 +7,10 @@ publish = false
 
 [dependencies]
 bincode = { version = "2.0.0-rc.3", default-features = false, features = ["derive"] }
+embedded-graphics = "0.7.1"
 heapless = "0.7.16"
 m3-models = { version = "0.1.0", path = "../models" }
-pybadge-high = { version = "0.1.1", features = ["usb", "time"] }
+pybadge-high = { version = "0.1.2", features = ["usb", "time"] }
 
 
 [profile.release]
