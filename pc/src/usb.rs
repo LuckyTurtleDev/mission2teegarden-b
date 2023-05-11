@@ -16,7 +16,6 @@ pub(crate) fn init() {
 		)
 		.unwrap();
 		port.write_all(&data).unwrap();
-		let mut data = [0_u8; 1024];
 		println!("{data:?}");
 	}
 }
