@@ -29,7 +29,7 @@ pub(crate) fn init(builder: UsbBuilder) {
 
 pub(crate) fn read(data: &mut Vec<u8, 128>) {
 	interrupt::free(|_| unsafe {
-		data.clone_from_slice(&USB_DATA_IN);
+		data.clone_from(&USB_DATA_IN);
 		USB_DATA_IN.clear();
 	});
 }
