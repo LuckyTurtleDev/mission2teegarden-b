@@ -2,6 +2,12 @@ use num_enum::TryFromPrimitive;
 use self_rust_tokenize::SelfRustTokenize;
 use thiserror::Error;
 
+pub enum MapTiles {
+	MapBaseTile(MapBaseTile),
+	MapObjectTile(ObjectTile),
+	PlayerTile(PlayerTile)
+}
+
 #[derive(Debug, Copy, Clone, Error)]
 pub enum InvalidTileID {
 	#[error("invalid tiel id {0}")]
