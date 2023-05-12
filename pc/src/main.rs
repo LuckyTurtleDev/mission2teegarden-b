@@ -4,6 +4,7 @@ use tetra::{
 	Context, ContextBuilder, State
 };
 type Vec2 = vek::vec::repr_c::vec2::Vec2<f32>;
+use log::info;
 use m3_macro::include_map;
 use m3_map::Map;
 use once_cell::sync::Lazy;
@@ -11,7 +12,6 @@ use tetra::{
 	graphics::{DrawParams, Texture},
 	time::get_delta_time
 };
-use log::{info};
 
 mod tiles;
 use tiles::Textures;
@@ -60,7 +60,7 @@ impl State for GameState {
 					(window_size.0 / map.width as i32) as f32,
 					(window_size.1 / map.height as i32) as f32
 				);
-				for (x, y, tile) in map.iter_base_layer() {
+				for (x, y, tile) in map.iter_all() {
 					let texture = tile.texture(&self.textures);
 					texture.draw(
 						ctx,
