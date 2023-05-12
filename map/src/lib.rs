@@ -4,14 +4,25 @@ use thiserror::Error;
 use tiled::{LayerType, Loader};
 
 pub mod tiles;
-use tiles::{InvalidTileID, MapBaseTile, ObjectTile};
+use tiles::{InvalidTileID, MapBaseTile, ObjectTile, PlayerTile};
+
+#[derive(Clone, Debug, SelfRustTokenize)]
+pub struct Player {
+	start: (u8, u8),
+	goal: Option<(u8, u8)>
+}
 
 #[derive(Clone, Debug, SelfRustTokenize)]
 pub struct Map {
 	pub width: u8,
 	pub height: u8,
 	pub base_layer: Vec<Vec<MapBaseTile>>,
-	pub object_layer: Vec<Vec<Option<ObjectTile>>>
+	pub object_layer: Vec<Vec<Option<ObjectTile>>>,
+	pub global_goal: Option<(u8, u8)>,
+	pub player_1: Option<Player>,
+	pub player_2: Option<Player>,
+	pub player_3: Option<Player>,
+	pub player_4: Option<Player>
 }
 
 #[derive(Error, Debug)]
@@ -40,6 +51,11 @@ impl Map {
 		let height: u8 = map.height.try_into().map_err(|_| MapError::ToHight)?;
 		let mut base_layer = Vec::with_capacity(height as usize);
 		let mut object_layer = Vec::with_capacity(height as usize);
+		let mut global_goal = None;
+		let mut player_1 = None;
+		let mut player_2 = None;
+		let mut player_3 = None;
+		let mut player_4 = None;
 		for (i, layer) in map.layers().enumerate() {
 			match i {
 				0 => match layer.layer_type() {
@@ -74,6 +90,49 @@ impl Map {
 					},
 					_ => return Err(MapError::WrongLayer(i, "TileLayer".to_owned()))
 				},
+				2 => match layer.layer_type() {
+					LayerType::Tiles(tile_layer) => {
+						for x in 0..width {
+							for y in 0..height {
+								if let Some(tile) =
+									tile_layer.get_tile(x.into(), y.into())
+								{
+									let tile = PlayerTile::try_from(tile.id())?;
+									match tile {
+										PlayerTile::Car1 => {
+											player_1 = Some(Player {
+												start: (x, y),
+												goal: None
+											})
+										},
+										PlayerTile::Car2 => {
+											player_2 = Some(Player {
+												start: (x, y),
+												goal: None
+											})
+										},
+										PlayerTile::Car3 => {
+											player_3 = Some(Player {
+												start: (x, y),
+												goal: None
+											})
+										},
+										PlayerTile::Car4 => {
+											player_4 = Some(Player {
+												start: (x, y),
+												goal: None
+											})
+										},
+										PlayerTile::GlobalGoal => {
+											global_goal = Some((x, y))
+										},
+									}
+								}
+							}
+						}
+					},
+					_ => return Err(MapError::WrongLayer(i, "TileLayer".to_owned()))
+				},
 				_ => return Err(MapError::ToManyLayers)
 			}
 		}
@@ -81,7 +140,12 @@ impl Map {
 			width,
 			height,
 			base_layer,
-			object_layer
+			object_layer,
+			global_goal,
+			player_1,
+			player_2,
+			player_3,
+			player_4
 		})
 	}
 

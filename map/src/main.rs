@@ -8,12 +8,12 @@ pub struct Opt {
 
 fn main() {
 	let opt = Opt::parse();
-	let result = Map::from_tmx(&opt.file);
+	let result = Map::from_tmx(opt.file);
 	match result {
 		Err(err) => {
 			eprintln!("ERROR: {err}");
 			std::process::exit(1);
 		},
-		Ok(map) => println!("{map:#?}")
+		Ok(map) => println!("{map:#?}\nmap is valid")
 	}
 }
