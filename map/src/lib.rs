@@ -42,7 +42,7 @@ pub enum MapError {
 	#[error("{0}")]
 	InvalidTileId(#[from] InvalidTileID),
 	#[error("Map needs at least one player")]
-	NoPlayer,
+	NoPlayer
 }
 
 impl Map {
@@ -187,7 +187,9 @@ impl Map {
 		let objects = self
 			.iter_object_layer()
 			.map(|(x, y, tile)| (x, y, MapTiles::MapObjectTile(tile.to_owned())));
-		let goals = self.iter_player_goals().map(|(x, y, tile)| (x, y, MapTiles::PlayerTile(tile)));
+		let goals = self
+			.iter_player_goals()
+			.map(|(x, y, tile)| (x, y, MapTiles::PlayerTile(tile)));
 		base.chain(objects).chain(goals)
 	}
 }
