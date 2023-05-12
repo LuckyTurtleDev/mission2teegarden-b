@@ -30,6 +30,8 @@ pub fn include_map(input: TokenStream) -> TokenStream {
 		{
 		use m3_map::Map;
 		use m3_map::tiles::MapBaseTile;
+		use m3_map::Player;
+		use m3_map::tiles::ObjectTile;
 		// include the bytes so that the compiler knows to recompile when the
 		// map or tilesets changes
 		const _: &[u8] = ::core::include_bytes!(#path);

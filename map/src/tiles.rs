@@ -2,7 +2,7 @@ use num_enum::TryFromPrimitive;
 use self_rust_tokenize::SelfRustTokenize;
 use thiserror::Error;
 
-pub enum MapTiles {
+pub enum Tile {
 	MapBaseTile(MapBaseTile),
 	MapObjectTile(ObjectTile),
 	PlayerTile(PlayerTile)

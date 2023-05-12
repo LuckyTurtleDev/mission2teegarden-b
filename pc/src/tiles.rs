@@ -1,6 +1,6 @@
 use crate::GetTexture;
 pub use m3_map::tiles::MapBaseTile;
-use m3_map::tiles::{ObjectTile, PlayerTile, Tiles};
+use m3_map::tiles::{ObjectTile, PlayerTile, Tile};
 use tetra::{graphics::Texture, Context};
 
 ///Store all Textures
@@ -11,7 +11,7 @@ pub struct Textures {
 	player2_car: Texture,
 	player3_car: Texture,
 	player4_car: Texture,
-	global_goal: Texture,
+	global_goal: Texture
 }
 
 impl Textures {
@@ -31,15 +31,18 @@ impl Textures {
 			player1_car: Texture::from_encoded(
 				ctx,
 				include_bytes!("../assets/img/Player/player1_car.png")
-			).unwrap(),
+			)
+			.unwrap(),
 			player2_car: Texture::from_encoded(
 				ctx,
 				include_bytes!("../assets/img/Player/player2_car.png")
-			).unwrap(),
+			)
+			.unwrap(),
 			player3_car: Texture::from_encoded(
 				ctx,
 				include_bytes!("../assets/img/Player/player3_car.png")
-			).unwrap(),
+			)
+			.unwrap(),
 			player4_car: Texture::from_encoded(
 				ctx,
 				include_bytes!("../assets/img/Player/player4_car.png")
@@ -50,7 +53,6 @@ impl Textures {
 				include_bytes!("../assets/img/Player/goal.png")
 			)
 			.unwrap()
-			
 		}
 	}
 }
@@ -81,13 +83,19 @@ impl<'a> GetTexture<'a> for PlayerTile {
 			Self::Car2 => &textures.player1_car,
 			Self::Car3 => &textures.player1_car,
 			Self::Car4 => &textures.player1_car,
-			Self::GlobalGoal => &textures.global_goal,
+			Self::GlobalGoal => &textures.global_goal
 		}
 	}
 }
 
 impl<'a> GetTexture<'a> for Tile {
-	match Tile
+	fn texture(&self, textures: &'a Textures) -> &'a Texture {
+		match self {
+			Tile::MapBaseTile(tile) => tile.texture(textures),
+			Tile::MapObjectTile(tile) => tile.texture(textures),
+			Tile::PlayerTile(tile) => tile.texture(textures)
+		}
+	}
 }
 
 #[cfg(test)]

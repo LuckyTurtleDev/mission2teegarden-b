@@ -4,12 +4,12 @@ use thiserror::Error;
 use tiled::{LayerType, Loader};
 
 pub mod tiles;
-use tiles::{InvalidTileID, MapBaseTile, MapTiles, ObjectTile, PlayerTile};
+use tiles::{InvalidTileID, MapBaseTile, ObjectTile, PlayerTile, Tile};
 
 #[derive(Clone, Debug, SelfRustTokenize)]
 pub struct Player {
-	start: (u8, u8),
-	goal: Option<(u8, u8)>
+	pub start: (u8, u8),
+	pub goal: Option<(u8, u8)>
 }
 
 #[derive(Clone, Debug, SelfRustTokenize)]
@@ -180,16 +180,16 @@ impl Map {
 
 	/// return an iterator over all static Tiles and its x and y postion.
 	/// starting from the lowest layer
-	pub fn iter_all(&self) -> impl Iterator<Item = (u8, u8, MapTiles)> + '_ {
+	pub fn iter_all(&self) -> impl Iterator<Item = (u8, u8, Tile)> + '_ {
 		let base = self
 			.iter_base_layer()
-			.map(|(x, y, tile)| (x, y, MapTiles::MapBaseTile(tile.to_owned())));
+			.map(|(x, y, tile)| (x, y, Tile::MapBaseTile(tile.to_owned())));
 		let objects = self
 			.iter_object_layer()
-			.map(|(x, y, tile)| (x, y, MapTiles::MapObjectTile(tile.to_owned())));
+			.map(|(x, y, tile)| (x, y, Tile::MapObjectTile(tile.to_owned())));
 		let goals = self
 			.iter_player_goals()
-			.map(|(x, y, tile)| (x, y, MapTiles::PlayerTile(tile)));
+			.map(|(x, y, tile)| (x, y, Tile::PlayerTile(tile)));
 		base.chain(objects).chain(goals)
 	}
 }

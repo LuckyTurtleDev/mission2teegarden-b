@@ -60,7 +60,7 @@ impl State for GameState {
 					(window_size.0 / map.width as i32) as f32,
 					(window_size.1 / map.height as i32) as f32
 				);
-				for (x, y, tile) in map.iter_base_layer() {
+				for (x, y, tile) in map.iter_all() {
 					let texture = tile.texture(&self.textures);
 					texture.draw(
 						ctx,
