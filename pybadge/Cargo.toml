@@ -10,7 +10,7 @@ bincode = { version = "2.0.0-rc.3", default-features = false, features = ["deriv
 embedded-graphics = "0.7.1"
 heapless = "0.7.16"
 m3-models = { version = "0.1.0", path = "../models" }
-pybadge-high = { version = "0.1.2", features = ["usb", "time"] }
+pybadge-high = { version = "0.1.3", features = ["usb", "time", "bluescreen", "bluescreen-message-nightly"] }
 
 
 [profile.release]

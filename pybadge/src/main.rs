@@ -31,7 +31,7 @@ fn read_events(usb_data: &mut Vec<u8, 128>) -> Vec<MessageToPyBadge, 10> {
 				match err {
 					//we need to wait for more data first
 					DecodeError::UnexpectedEnd { .. } => break,
-					_ => panic!()
+					_ => panic!("Could not decode message\n  {}", err)
 				}
 			}
 		};
