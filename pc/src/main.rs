@@ -15,6 +15,7 @@ use tetra::{
 
 mod tiles;
 use tiles::Textures;
+mod cards;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");

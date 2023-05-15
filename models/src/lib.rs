@@ -11,3 +11,4 @@ pub enum MessageToPc {}
 pub enum MessageToPyBadge {
 	NewLevel(AvailableCards)
 }
+
