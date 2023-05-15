@@ -1352,8 +1352,10 @@ dependencies = [
 name = "m3-pc"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "attohttpc",
  "bincode",
+ "log",
  "m3-macro",
  "m3-map",
  "m3-models",
