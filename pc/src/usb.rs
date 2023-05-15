@@ -60,13 +60,15 @@ impl Players {
 				loop {
 					match receiver_to_pydage.try_recv() {
 						Err(err) => match err {
-							TryRecvError::Empty => {}
-							TryRecvError::Disconnected => panic!("channel disconnected") //or should I just break?
+							TryRecvError::Empty => {},
+							TryRecvError::Disconnected => panic!("channel disconnected") /* or should I just break and close the thread? */
 						},
 						Ok(message) => pybadge.write(&message)
 					}
 					if let Some(message) = pybadge.try_next_event() {
-						sender_to_pc.send(Ok(message));
+						if message != MessageToPc::KeepAlive {
+							sender_to_pc.send(Ok(message));
+						}
 					}
 				}
 			});
@@ -119,7 +121,8 @@ impl Pybadge {
 		};
 		let mut buffer = [0_u8; 16];
 		let len = self.port.read(&mut buffer).unwrap();
-		if len != 0 { //if it even possibel to get len 0? Since it does blocking wait for messages
+		if len != 0 {
+			//if it even possibel to get len 0? Since it does blocking wait for messages
 			let mut new_data: Vec<u8> =
 				buffer[..len].iter().map(|f| f.to_owned()).collect();
 			println!("recieve data: {new_data:?}");
