@@ -4,8 +4,8 @@
 use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
 use embedded_graphics::{draw_target::DrawTarget, prelude::*};
 use heapless::Vec;
-use m3_models::{MessageToPc, MessageToPyBadge};
-use pybadge_high::{prelude::*, Color, Delay, PyBadge};
+use m3_models::{MessageToPc, MessageToPyBadge, ToPcProtocol, ToPybadgeProtocol};
+use pybadge_high::{prelude::*, Color, PyBadge};
 
 mod usb;
 
@@ -49,18 +49,19 @@ fn send_event(event: MessageToPc) {
 fn main() -> ! {
 	let mut usb_data = Vec::<u8, 128>::new();
 	let mut pybadge = PyBadge::take().unwrap();
+	let mut delay = pybadge.delay;
 	let mut display = pybadge.display;
 	display.clear(Color::BLACK).unwrap();
 	usb::init(pybadge.usb_builder);
 	//wait for connection with pc;
 	while read_events(&mut usb_data)
 		.iter()
-		.any(|f| f == &MessageToPyBadge::ConnectionRequest)
+		.any(|f| f == &MessageToPyBadge::Protocol(ToPybadgeProtocol::ConnectionRequest))
 	{
 		delay.delay_ms(50_u16);
 		usb::read(&mut usb_data);
 	}
-	send_event(MessageToPc::ConnectionResponse);
+	send_event(MessageToPc::Protocol(ToPcProtocol::ConnectionResponse));
 	//Todo: do not throw away event, wihich are directly send after ConnectionRequest
 	loop {
 		send_event(MessageToPc::KeepAlive);
