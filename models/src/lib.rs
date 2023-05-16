@@ -8,15 +8,22 @@ pub use cards::*;
 // new structure
 // event + game + keep alive message
 
-#[derive(Debug, Clone, Decode, Encode)]
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
+pub enum Key {
+    Start
+}
+
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum ToPcProtocol {
 	ConnectionResponse
 }
 
-#[derive(Debug, Clone, Decode, Encode)]
-pub enum ToPcGameEvent {}
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
+pub enum ToPcGameEvent {
+	KeyPressed(Key)
+}
 
-#[derive(Debug, Clone, Decode, Encode)]
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum MessageToPc {
 	Protocol(ToPcProtocol),
 	GameEvent(ToPcGameEvent),
@@ -24,13 +31,13 @@ pub enum MessageToPc {
 	KeepAlive
 }
 
-#[derive(Debug, Clone, Decode, Encode)]
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum ToPybadgeProtocol {
 	ConnectionRequest,
 	ConnectionConfirmation
 }
 
-#[derive(Debug, Clone, Decode, Encode)]
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum ToPypadeGameEvent {
 	NewLevel(AvailableCards)
 }
