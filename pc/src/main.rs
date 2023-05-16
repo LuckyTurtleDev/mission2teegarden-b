@@ -80,7 +80,7 @@ impl State for GameState {
 }
 
 fn main() -> tetra::Result {
-	usb::init();
+	let players = usb::Players::init();
 	ContextBuilder::new(format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"), 640, 480)
 		.quit_on_escape(true)
 		.multisampling(8) //anti-aliasing
