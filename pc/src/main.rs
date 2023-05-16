@@ -1,5 +1,10 @@
-use tetra::{graphics, graphics::Color, Context, ContextBuilder, State};
+use tetra::{
+	graphics::{self, Color},
+	window::get_size,
+	Context, ContextBuilder, State
+};
 type Vec2 = vek::vec::repr_c::vec2::Vec2<f32>;
+use log::info;
 use m3_macro::include_map;
 use m3_map::Map;
 use once_cell::sync::Lazy;
@@ -28,7 +33,8 @@ trait GetTexture<'a> {
 struct GameState {
 	textures: Textures,
 	grass_postion: Vec2,
-	grass_rotation: f32
+	grass_rotation: f32,
+	level: Option<Map>
 }
 
 impl GameState {
@@ -37,7 +43,8 @@ impl GameState {
 		Ok(GameState {
 			textures,
 			grass_postion: Vec2::default(),
-			grass_rotation: 0.0
+			grass_rotation: 0.0,
+			level: Some(LEVELS.first().unwrap().to_owned())
 		})
 	}
 }
@@ -46,23 +53,29 @@ impl State for GameState {
 	//draw the current state
 	fn draw(&mut self, ctx: &mut Context) -> tetra::Result {
 		graphics::clear(ctx, Color::rgb(0.0, 0.0, 0.0));
+		let window_size = get_size(ctx);
 
-		//moving sprite
-		MapBaseTile::Grass
-			.texture(&self.textures)
-			.draw(ctx, self.grass_postion);
-
-		//rotating sprite
-		MapBaseTile::Grass.texture(&self.textures).draw(
-			ctx,
-			DrawParams::new()
-				.origin(Vec2::new(
-					(MapBaseTile::Grass.texture(&self.textures).width() / 2) as f32,
-					(MapBaseTile::Grass.texture(&self.textures).height() / 2) as f32
-				)) //set origion to center, to rotate at the middle (this does also effect postion())
-				.rotation(self.grass_rotation)
-				.position(Vec2::new(100.0, 100.0))
-		);
+		match &self.level {
+			None => todo!(),
+			Some(map) => {
+				let ratio = Vec2::new(
+					(window_size.0 / map.width as i32) as f32,
+					(window_size.1 / map.height as i32) as f32
+				);
+				for (x, y, tile) in map.iter_all() {
+					let texture = tile.texture(&self.textures);
+					texture.draw(
+						ctx,
+						DrawParams::new()
+							.scale(Vec2::new(
+								ratio.x / texture.width() as f32,
+								ratio.y / texture.height() as f32
+							))
+							.position(Vec2::new(x as f32 * ratio.x, y as f32 * ratio.y))
+					);
+				}
+			}
+		}
 
 		//see https://docs.rs/tetra/latest/tetra/graphics/struct.DrawParams.html
 		Ok(())
@@ -81,7 +94,9 @@ impl State for GameState {
 
 fn main() -> tetra::Result {
 	let players = usb::Players::init();
-	ContextBuilder::new(format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"), 640, 480)
+	my_env_logger_style::just_log();
+	info!("{:?}", LEVELS[0]);
+	ContextBuilder::new(format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"), 1280, 720)
 		.quit_on_escape(true)
 		.multisampling(8) //anti-aliasing
 		.stencil_buffer(true)

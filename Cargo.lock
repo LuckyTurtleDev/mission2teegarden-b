@@ -813,6 +813,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "env_logger"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "85cdab6a89accf66733ad5a1693a4dcced6aeff64602b634530dd73c1f3ee9f0"
+dependencies = [
+ "humantime",
+ "is-terminal",
+ "log",
+ "termcolor",
+]
+
+[[package]]
 name = "errno"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1006,6 +1018,12 @@ dependencies = [
  "fnv",
  "itoa",
 ]
+
+[[package]]
+name = "humantime"
+version = "2.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9a3a5bfb195931eeb336b2a7b4d761daec841b97f947d34394601737a7bba5e4"
 
 [[package]]
 name = "iana-time-zone"
@@ -1354,11 +1372,21 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "attohttpc",
+<<<<<<< HEAD
  "bincode",
  "log",
+||||||| 20867de
+=======
+ "log",
+>>>>>>> main
  "m3-macro",
  "m3-map",
+<<<<<<< HEAD
  "m3-models",
+||||||| 20867de
+=======
+ "my-env-logger-style",
+>>>>>>> main
  "num_enum 0.6.1",
  "once_cell",
  "piz",
@@ -1470,6 +1498,17 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "my-env-logger-style"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d14c19e713a80f4e9f2d13d511b6279f71fe915dd56449c5249ec6f040ce2a67"
+dependencies = [
+ "env_logger",
+ "log",
+ "rustc_version 0.4.0",
 ]
 
 [[package]]
