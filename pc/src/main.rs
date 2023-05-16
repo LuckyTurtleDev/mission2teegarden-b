@@ -15,6 +15,7 @@ use tetra::{
 
 mod tiles;
 use tiles::{MapBaseTile, Textures};
+use usb::Players;
 
 mod usb;
 
@@ -34,7 +35,8 @@ struct GameState {
 	textures: Textures,
 	grass_postion: Vec2,
 	grass_rotation: f32,
-	level: Option<Map>
+	level: Option<Map>,
+	players: Players
 }
 
 impl GameState {
@@ -44,7 +46,8 @@ impl GameState {
 			textures,
 			grass_postion: Vec2::default(),
 			grass_rotation: 0.0,
-			level: Some(LEVELS.first().unwrap().to_owned())
+			level: Some(LEVELS.first().unwrap().to_owned()),
+			players: usb::Players::init()
 		})
 	}
 }
@@ -84,6 +87,7 @@ impl State for GameState {
 	//update the current state.
 	//is called 60 time pro seconds (alsong framerated does not drop)
 	fn update(&mut self, ctx: &mut Context) -> tetra::Result<()> {
+		let player_events = self.players.get_events();
 		//use delta time, to avoid that the logic is effected by frame drops
 		let time = get_delta_time(ctx); //use time
 		self.grass_postion.x += 0.1 * time.as_millis() as f32;
@@ -93,7 +97,6 @@ impl State for GameState {
 }
 
 fn main() -> tetra::Result {
-	let players = usb::Players::init();
 	my_env_logger_style::just_log();
 	info!("{:?}", LEVELS[0]);
 	ContextBuilder::new(format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"), 1280, 720)

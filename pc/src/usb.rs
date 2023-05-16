@@ -1,9 +1,11 @@
 use anyhow::Context;
 use bincode::error::DecodeError;
-use m3_models::{MessageToPc, MessageToPyBadge, ToPcGameEvent};
-use serialport::{available_ports, SerialPort, SerialPortInfo, ClearBuffer};
+use log::{debug, info, trace};
+use m3_models::{
+	MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPcProtocol, ToPybadgeProtocol
+};
+use serialport::{available_ports, ClearBuffer, SerialPort, SerialPortInfo};
 use std::{
-	iter,
 	sync::mpsc::{Receiver, Sender, TryRecvError},
 	thread,
 	time::Duration
@@ -17,19 +19,21 @@ struct Player {
 
 #[derive(Default)]
 pub(crate) struct Players {
-	players: [Option<Player>;4],
+	players: [Option<Player>; 4],
 	///uart devices, wich where not classificated as pybadge yets
 	possible_players: Vec<Player>
 }
 
 impl Players {
-
 	pub(crate) fn init() -> Players {
 		let players = Players::default();
 		let mut ports = available_ports().unwrap();
 		println!("avaibale ports: {ports:?}");
 		ports.retain(|port| {
-			!players.players.iter().flatten()
+			!players
+				.players
+				.iter()
+				.flatten()
 				.any(|player| player.port_name == port.port_name)
 		});
 		let mut possible_players: Vec<Player> = Vec::new();
@@ -45,9 +49,9 @@ impl Players {
 			thread::spawn(move || {
 				let sender_to_pc: Sender<MessageToPc> = sender_to_pc;
 				let receiver_to_pydage: Receiver<MessageToPyBadge> = receiver_to_pydage;
-				let mut  pybadge = Pybadge::init(port).unwrap();
+				let mut pybadge = Pybadge::init(port).unwrap();
 				//clean connection
-				pybadge.port.clear(ClearBuffer::All);
+				pybadge.port.clear(ClearBuffer::All).unwrap();
 				loop {
 					match receiver_to_pydage.try_recv() {
 						Err(err) => match err {
@@ -58,14 +62,14 @@ impl Players {
 					}
 					if let Some(message) = pybadge.try_next_event() {
 						if message != MessageToPc::KeepAlive {
-							sender_to_pc.send(message);
+							sender_to_pc.send(message).unwrap();
 						}
 					}
 				}
 			});
 		}
 		Players {
-			players: [None,None,None,None],
+			players: [None, None, None, None],
 			possible_players
 		}
 	}
@@ -73,23 +77,35 @@ impl Players {
 	///get aviable player events.
 	///Element i of return value repsent player i.
 	///ELement is None if no pybade is connected for player i.
-	fn get_events(&mut self) -> [Option<Vec<ToPcGameEvent>>;4] {
+	pub fn get_events(&mut self) -> [Option<Vec<ToPcGameEvent>>; 4] {
 		if self.players.iter().any(|f| f.is_none()) {
-			!todo!()
+			//check if some of the serial ports a pybadge and it as player
+			let mut i: usize = 0;
+			for possible_player in self.possible_players.iter() {
+				if MessageToPc::Protocol(m3_models::ToPcProtocol::ConnectionResponse)
+					== possible_player.receiver.try_recv().unwrap()
+				{
+					break;
+				}
+				i += 1;
+			}
+			let new_player = self.possible_players.remove(i);
+			info!("connected with player at port {}", new_player.port_name);
+			*self.players.iter_mut().find(|f| f.is_some()).unwrap() = Some(new_player);
 		}
 		let mut events = [None, None, None, None];
-		for (i, player) in self.players.iter().enumerate(){
+		for (i, player) in self.players.iter().enumerate() {
 			if let Some(player) = player {
 				let mut events_of_player = Vec::new();
-				match player.receiver.try_recv(){
-					Ok(event) => match event{
+				match player.receiver.try_recv() {
+					Ok(event) => match event {
 						MessageToPc::GameEvent(event) => events_of_player.push(event),
-						MessageToPc::Protocol(protocol) => todo!(),
-						MessageToPc::KeepAlive => {},
+						MessageToPc::Protocol(_protocol) => todo!(),
+						MessageToPc::KeepAlive => {}
 					},
-					Err(err) => todo!(),
+					Err(err) => panic!("{err}")
 				}
-				events[i]= Some(events_of_player);
+				events[i] = Some(events_of_player);
 			}
 		}
 		events
@@ -98,17 +114,20 @@ impl Players {
 
 pub(crate) struct Pybadge {
 	port: Box<dyn SerialPort>,
+	port_name: String,
 	buf: Vec<u8>
 }
 
 impl Pybadge {
 	fn init(port: SerialPortInfo) -> anyhow::Result<Self> {
+		let port_name = port.port_name.clone();
 		let port = serialport::new(port.port_name, 960)
 			.timeout(Duration::from_secs(1))
 			.open()
 			.with_context(|| "Failed to open port")?;
 		Ok(Pybadge {
 			port,
+			port_name,
 			buf: Vec::new()
 		})
 	}
@@ -117,6 +136,7 @@ impl Pybadge {
 		match bincode::decode_from_slice(&self.buf, bincode::config::standard()) {
 			Ok((event, len)) => {
 				self.buf.drain(..len);
+				debug!("recieve message form {:?} {event:?}", self.port_name);
 				return event;
 			},
 			Err(err) => {
@@ -133,15 +153,16 @@ impl Pybadge {
 			//if it even possibel to get len 0? Since it does blocking wait for messages
 			let mut new_data: Vec<u8> =
 				buffer[..len].iter().map(|f| f.to_owned()).collect();
-			println!("recieve data: {new_data:?}");
+			trace!("recieve  data    form {:?} {new_data:?}", self.port_name);
 			self.buf.append(&mut new_data);
 		}
 		None
 	}
 
 	fn write(&mut self, message: &MessageToPyBadge) {
+		debug!("send message to {:?} {:?}", &self.port_name, &message);
 		let data = bincode::encode_to_vec(message, bincode::config::standard()).unwrap();
-		println!("send {data:?}");
+		trace!("send  data   to {:?} {:?}", &self.port_name, data);
 		self.port.write_all(&data).unwrap();
 	}
 }

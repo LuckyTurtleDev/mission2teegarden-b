@@ -10,7 +10,7 @@ pub use cards::*;
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum Key {
-    Start
+	Start
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
@@ -33,8 +33,7 @@ pub enum MessageToPc {
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum ToPybadgeProtocol {
-	ConnectionRequest,
-	ConnectionConfirmation
+	ConnectionRequest
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
