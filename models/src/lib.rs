@@ -4,10 +4,50 @@ use bincode::{Decode, Encode};
 mod cards;
 pub use cards::*;
 
-#[derive(Debug, Clone, Decode, Encode)]
-pub enum MessageToPc {}
+//todo:
+// new structure
+// event + game + keep alive message
 
-#[derive(Debug, Clone, Decode, Encode)]
-pub enum MessageToPyBadge {
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
+pub enum Key {
+	A,
+	B,
+	Up,
+	Down,
+	Left,
+	Right
+}
+
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
+pub enum ToPcProtocol {
+	ConnectionResponse
+}
+
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
+pub enum ToPcGameEvent {
+	KeyPressed(Key)
+}
+
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
+pub enum MessageToPc {
+	Protocol(ToPcProtocol),
+	GameEvent(ToPcGameEvent),
+	///pybadge is still connected and work
+	KeepAlive
+}
+
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
+pub enum ToPybadgeProtocol {
+	ConnectionRequest
+}
+
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
+pub enum ToPypadeGameEvent {
 	NewLevel(AvailableCards)
+}
+
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
+pub enum MessageToPyBadge {
+	Protocol(ToPybadgeProtocol),
+	GameEvent(ToPypadeGameEvent)
 }
