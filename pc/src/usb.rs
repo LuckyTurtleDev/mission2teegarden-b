@@ -63,7 +63,7 @@ impl Players {
 								TryRecvError::Empty => {},
 								TryRecvError::Disconnected => {
 									panic!("channel disconnected")
-								}, /* or should I just break and close the thread? */
+								} /* or should I just break and close the thread? */
 							},
 							Ok(message) => pybadge.write(&message)
 						}
