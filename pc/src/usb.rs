@@ -1,9 +1,7 @@
 use anyhow::Context;
 use bincode::error::DecodeError;
 use log::{debug, info, trace};
-use m3_models::{
-	MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPcProtocol, ToPybadgeProtocol
-};
+use m3_models::{MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPybadgeProtocol};
 use serialport::{available_ports, ClearBuffer, SerialPort, SerialPortInfo};
 use std::{
 	io,
@@ -47,30 +45,36 @@ impl Players {
 				port_name: port.port_name.clone()
 			};
 			possible_players.push(possible_player);
-			thread::spawn(move || {
-				let sender_to_pc: Sender<MessageToPc> = sender_to_pc;
-				let receiver_to_pydage: Receiver<MessageToPyBadge> = receiver_to_pydage;
-				let mut pybadge = Pybadge::init(port).unwrap();
-				//clean connection
-				pybadge.port.clear(ClearBuffer::All).unwrap();
-				pybadge.write(&MessageToPyBadge::Protocol(
-					ToPybadgeProtocol::ConnectionRequest
-				));
-				loop {
-					match receiver_to_pydage.try_recv() {
-						Err(err) => match err {
-							TryRecvError::Empty => {},
-							TryRecvError::Disconnected => panic!("channel disconnected") /* or should I just break and close the thread? */
-						},
-						Ok(message) => pybadge.write(&message)
-					}
-					if let Some(message) = pybadge.try_next_event() {
-						if message != MessageToPc::KeepAlive {
-							sender_to_pc.send(message).unwrap();
+			thread::Builder::new()
+				.name(port.port_name.clone())
+				.spawn(move || {
+					let sender_to_pc: Sender<MessageToPc> = sender_to_pc;
+					let receiver_to_pydage: Receiver<MessageToPyBadge> =
+						receiver_to_pydage;
+					let mut pybadge = Pybadge::init(port).unwrap();
+					//clean connection
+					pybadge.port.clear(ClearBuffer::All).unwrap();
+					pybadge.write(&MessageToPyBadge::Protocol(
+						ToPybadgeProtocol::ConnectionRequest
+					));
+					loop {
+						match receiver_to_pydage.try_recv() {
+							Err(err) => match err {
+								TryRecvError::Empty => {},
+								TryRecvError::Disconnected => {
+									panic!("channel disconnected")
+								}, /* or should I just break and close the thread? */
+							},
+							Ok(message) => pybadge.write(&message)
+						}
+						if let Some(message) = pybadge.try_next_event() {
+							if message != MessageToPc::KeepAlive {
+								sender_to_pc.send(message).unwrap();
+							}
 						}
 					}
-				}
-			});
+				})
+				.unwrap();
 		}
 		Players {
 			players: [None, None, None, None],
@@ -102,7 +106,7 @@ impl Players {
 			}
 			if found_player {
 				let new_player = self.possible_players.remove(i);
-				info!("connected with player at port {}", new_player.port_name);
+				info!("player join from port {}", new_player.port_name);
 				*self.players.iter_mut().find(|f| f.is_none()).unwrap() =
 					Some(new_player);
 			}
@@ -153,7 +157,12 @@ impl Pybadge {
 		match bincode::decode_from_slice(&self.buf, bincode::config::standard()) {
 			Ok((event, len)) => {
 				self.buf.drain(..len);
-				debug!("recieve message form {:?} {event:?}", self.port_name);
+				if event == MessageToPc::KeepAlive {
+					//do not spam debug log full
+					trace!("recieve message form {:?} {event:?}", self.port_name);
+				} else {
+					debug!("recieve message form {:?} {event:?}", self.port_name);
+				};
 				return Some(event);
 			},
 			Err(err) => {

@@ -4,8 +4,10 @@
 use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
 use embedded_graphics::{draw_target::DrawTarget, prelude::*};
 use heapless::Vec;
-use m3_models::{MessageToPc, MessageToPyBadge, ToPcProtocol, ToPybadgeProtocol};
-use pybadge_high::{prelude::*, Color, PyBadge};
+use m3_models::{
+	Key, MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPcProtocol, ToPybadgeProtocol
+};
+use pybadge_high::{prelude::*, Buttons, Color, PyBadge};
 
 use embedded_graphics::{
 	mono_font::{ascii::FONT_6X10, MonoTextStyle},
@@ -51,6 +53,29 @@ fn send_event(event: MessageToPc) {
 	usb::wirte(&buf[..len]);
 }
 
+fn send_button_state(buttons: &Buttons) {
+	if buttons.a_pressed() {
+		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::A)));
+	}
+	if buttons.b_pressed() {
+		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::B)));
+	}
+	if buttons.up_pressed() {
+		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::Up)));
+	}
+	if buttons.down_pressed() {
+		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::Down)));
+	}
+	if buttons.left_pressed() {
+		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::Left)));
+	}
+	if buttons.right_pressed() {
+		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(
+			Key::Right
+		)));
+	}
+}
+
 #[entry]
 fn main() -> ! {
 	let text_style = MonoTextStyle::new(&FONT_6X10, Color::WHITE);
@@ -61,7 +86,7 @@ fn main() -> ! {
 	let mut buttons = pybadge.buttons;
 	display.clear(Color::BLACK).unwrap();
 	Text::new(
-		"Please connect pybadge to \n  pc and start the game",
+		"Please connect pybadge to \n  pc then start the game",
 		Point::new(5, 50),
 		text_style
 	)
@@ -95,6 +120,8 @@ fn main() -> ! {
 	//Todo: do not throw away event, wihich are directly send after ConnectionRequest
 	loop {
 		send_event(MessageToPc::KeepAlive);
+		buttons.update();
+		send_button_state(&buttons);
 		usb::read(&mut usb_data);
 		delay.delay_ms(1000_u16);
 	}

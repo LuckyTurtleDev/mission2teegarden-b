@@ -10,7 +10,12 @@ pub use cards::*;
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum Key {
-	Start
+	A,
+	B,
+	Up,
+	Down,
+	Left,
+	Right
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
