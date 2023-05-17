@@ -7,6 +7,12 @@ use heapless::Vec;
 use m3_models::{MessageToPc, MessageToPyBadge, ToPcProtocol, ToPybadgeProtocol};
 use pybadge_high::{prelude::*, Color, PyBadge};
 
+use embedded_graphics::{
+	mono_font::{ascii::FONT_6X10, MonoTextStyle},
+	prelude::*,
+	text::Text
+};
+
 mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
@@ -47,24 +53,49 @@ fn send_event(event: MessageToPc) {
 
 #[entry]
 fn main() -> ! {
+	let text_style = MonoTextStyle::new(&FONT_6X10, Color::WHITE);
 	let mut usb_data = Vec::<u8, 128>::new();
 	let mut pybadge = PyBadge::take().unwrap();
 	let mut delay = pybadge.delay;
 	let mut display = pybadge.display;
+	let mut buttons = pybadge.buttons;
 	display.clear(Color::BLACK).unwrap();
+	Text::new(
+		"Please connect pybadge to \n  pc and start the game",
+		Point::new(5, 50),
+		text_style
+	)
+	.draw(&mut display)
+	.ok();
 	usb::init(pybadge.usb_builder);
 	//wait for connection with pc;
-	while read_events(&mut usb_data)
+	while !read_events(&mut usb_data)
 		.iter()
 		.any(|f| f == &MessageToPyBadge::Protocol(ToPybadgeProtocol::ConnectionRequest))
 	{
 		delay.delay_ms(50_u16);
 		usb::read(&mut usb_data);
 	}
+	display.clear(Color::BLACK).unwrap();
+	Text::new(
+		"Press anykey to \n join the game",
+		Point::new(35, 50),
+		text_style
+	)
+	.draw(&mut display)
+	.ok();
+	while !buttons.some_pressed() {
+		buttons.update();
+	}
 	send_event(MessageToPc::Protocol(ToPcProtocol::ConnectionResponse));
+	display.clear(Color::BLACK).unwrap();
+	Text::new("look at the pc screen", Point::new(15, 50), text_style)
+		.draw(&mut display)
+		.ok();
 	//Todo: do not throw away event, wihich are directly send after ConnectionRequest
 	loop {
 		send_event(MessageToPc::KeepAlive);
 		usb::read(&mut usb_data);
+		delay.delay_ms(1000_u16);
 	}
 }
