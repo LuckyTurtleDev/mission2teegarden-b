@@ -1,3 +1,4 @@
+use my_env_logger_style::TimestampPrecision;
 use tetra::{
 	graphics::{self, Color},
 	window::get_size,
@@ -97,9 +98,10 @@ impl State for GameState {
 }
 
 fn main() -> tetra::Result {
+	my_env_logger_style::set_timestamp_precision(TimestampPrecision::Disable);
 	my_env_logger_style::just_log();
-	info!("{CARGO_PKG_NAME}  v{CARGO_PKG_VERSION}");
-	debug!("{:?}", LEVELS[0]);
+	info!("🚗 {CARGO_PKG_NAME}  v{CARGO_PKG_VERSION} 🚗");
+	debug!("load level{:#?}", LEVELS[0]);
 	ContextBuilder::new(format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"), 1280, 720)
 		.quit_on_escape(true)
 		.multisampling(8) //anti-aliasing
