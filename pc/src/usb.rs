@@ -154,7 +154,7 @@ impl Pybadge {
 			Ok((event, len)) => {
 				self.buf.drain(..len);
 				debug!("recieve message form {:?} {event:?}", self.port_name);
-				return event;
+				return Some(event);
 			},
 			Err(err) => {
 				match err {
