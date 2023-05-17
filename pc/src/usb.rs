@@ -6,6 +6,7 @@ use m3_models::{
 };
 use serialport::{available_ports, ClearBuffer, SerialPort, SerialPortInfo};
 use std::{
+	io,
 	sync::mpsc::{Receiver, Sender, TryRecvError},
 	thread,
 	time::Duration
@@ -28,7 +29,7 @@ impl Players {
 	pub(crate) fn init() -> Players {
 		let players = Players::default();
 		let mut ports = available_ports().unwrap();
-		println!("avaibale ports: {ports:?}");
+		debug!("avaibale ports: {ports:?}");
 		ports.retain(|port| {
 			!players
 				.players
@@ -52,6 +53,9 @@ impl Players {
 				let mut pybadge = Pybadge::init(port).unwrap();
 				//clean connection
 				pybadge.port.clear(ClearBuffer::All).unwrap();
+				pybadge.write(&MessageToPyBadge::Protocol(
+					ToPybadgeProtocol::ConnectionRequest
+				));
 				loop {
 					match receiver_to_pydage.try_recv() {
 						Err(err) => match err {
@@ -81,17 +85,27 @@ impl Players {
 		if self.players.iter().any(|f| f.is_none()) {
 			//check if some of the serial ports a pybadge and it as player
 			let mut i: usize = 0;
+			let mut found_player = false;
 			for possible_player in self.possible_players.iter() {
 				if MessageToPc::Protocol(m3_models::ToPcProtocol::ConnectionResponse)
-					== possible_player.receiver.try_recv().unwrap()
-				{
+					== match possible_player.receiver.try_recv() {
+						Ok(value) => value,
+						Err(err) => match err {
+							TryRecvError::Empty => continue,
+							TryRecvError::Disconnected => panic!("channel disconnected")
+						}
+					} {
+					found_player = true;
 					break;
 				}
 				i += 1;
 			}
-			let new_player = self.possible_players.remove(i);
-			info!("connected with player at port {}", new_player.port_name);
-			*self.players.iter_mut().find(|f| f.is_some()).unwrap() = Some(new_player);
+			if found_player {
+				let new_player = self.possible_players.remove(i);
+				info!("connected with player at port {}", new_player.port_name);
+				*self.players.iter_mut().find(|f| f.is_none()).unwrap() =
+					Some(new_player);
+			}
 		}
 		let mut events = [None, None, None, None];
 		for (i, player) in self.players.iter().enumerate() {
@@ -103,7 +117,10 @@ impl Players {
 						MessageToPc::Protocol(_protocol) => todo!(),
 						MessageToPc::KeepAlive => {}
 					},
-					Err(err) => panic!("{err}")
+					Err(err) => match err {
+						TryRecvError::Empty => continue,
+						TryRecvError::Disconnected => panic!("channel disconnected")
+					}
 				}
 				events[i] = Some(events_of_player);
 			}
@@ -148,9 +165,14 @@ impl Pybadge {
 			}
 		};
 		let mut buffer = [0_u8; 16];
-		let len = self.port.read(&mut buffer).unwrap();
+		let len = match self.port.read(&mut buffer) {
+			Ok(value) => value,
+			Err(err) => match err.kind() {
+				io::ErrorKind::TimedOut => 0,
+				_ => panic!("{err}")
+			}
+		};
 		if len != 0 {
-			//if it even possibel to get len 0? Since it does blocking wait for messages
 			let mut new_data: Vec<u8> =
 				buffer[..len].iter().map(|f| f.to_owned()).collect();
 			trace!("recieve  data    form {:?} {new_data:?}", self.port_name);
