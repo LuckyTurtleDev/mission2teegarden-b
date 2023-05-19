@@ -43,7 +43,9 @@ impl GameState {
 			Some(map) => {
 				let dest_size = (screen_width / map.width as f32)
 					.min(screen_height / map.height as f32);
-				//TODO: calculate an offset, so the balack space is on both sides
+				//center map, by using offset
+				let offset_x = (screen_width - dest_size * map.width as f32) / 2.0;
+				let offset_y = (screen_height - dest_size * map.height as f32) / 2.0;
 				for (x, y, tile) in map.iter_all() {
 					let texture = tile.texture(&TEXTURES);
 					let draw_params = DrawTextureParams {
@@ -52,8 +54,8 @@ impl GameState {
 					};
 					draw_texture_ex(
 						texture.clone(),
-						x as f32 * dest_size,
-						y as f32 * dest_size,
+						x as f32 * dest_size + offset_x,
+						y as f32 * dest_size + offset_y,
 						//This param can filter colors.
 						//Set every value to 1 to keep all colors, by using WHITE
 						WHITE,
