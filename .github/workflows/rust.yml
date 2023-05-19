@@ -17,9 +17,6 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install SDL2 Linux
-        if:  ${{ matrix.os == 'ubuntu' }}
-        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
       - uses: dtolnay/rust-toolchain@stable
         id: "rust-toolchain"
       - uses: actions/cache@v3
@@ -32,12 +29,10 @@ jobs:
       - run: cargo test --all-features -p m3-models
         env:
           RUST_BACKTRACE: 1
-      - run: cargo test --features sdl2_bundled -p m3-pc -p m3-map -p m3-macro
-        if:  ${{ matrix.os == 'windows' }}
+      - run: cargo test --all-features -p m3-map
         env:
           RUST_BACKTRACE: 1
-      - run: cargo test -p m3-pc
-        if:  ${{ matrix.os != 'windows' }}
+      - run: cargo test --all-features -p m3-pc
         env:
           RUST_BACKTRACE: 1
          
