@@ -1,7 +1,7 @@
 use self_rust_tokenize::SelfRustTokenize;
 use std::{iter, path::Path};
 use thiserror::Error;
-use tiled::{LayerType, Loader};
+use tiled::{LayerTile, LayerType, Loader};
 
 pub mod tiles;
 use tiles::{InvalidTileID, MapBaseTile, ObjectTile, PlayerTile, Tile};
@@ -9,6 +9,7 @@ use tiles::{InvalidTileID, MapBaseTile, ObjectTile, PlayerTile, Tile};
 #[derive(Clone, Debug, SelfRustTokenize)]
 pub struct Player {
 	pub start: (u8, u8),
+	pub orientation: Orientation,
 	pub goal: Option<(u8, u8)>
 }
 
@@ -23,6 +24,42 @@ pub struct Map {
 	pub player_2: Option<Player>,
 	pub player_3: Option<Player>,
 	pub player_4: Option<Player>
+}
+
+#[derive(Clone, Copy, Debug, SelfRustTokenize)]
+pub enum Orientation {
+	North,
+	South,
+	East,
+	West
+}
+
+#[derive(Error, Debug)]
+#[error("Invalid Tile Oritation (horizontally flip: {}, vertically flip: {}, diagonally flip: {})\nKeep in mind that only rotation is supported", .filp_h, .filp_v, .filp_d)]
+pub struct InvalidOritation {
+	///Whether this tile is flipped on its Y axis (horizontally).
+	filp_h: bool,
+	///Whether this tile is flipped on its X axis (vertically).
+	filp_v: bool,
+	///Whether this tile is flipped diagonally.
+	filp_d: bool
+}
+
+impl TryFrom<&LayerTile<'_>> for Orientation {
+	type Error = InvalidOritation;
+	fn try_from(value: &LayerTile) -> Result<Self, Self::Error> {
+		match (value.flip_h, value.flip_v, value.flip_d) {
+			(false, false, false) => Ok(Orientation::North),
+			(true, true, false) => Ok(Orientation::South),
+			(true, false, true) => Ok(Orientation::East),
+			(false, true, true) => Ok(Orientation::West),
+			_ => Err(InvalidOritation {
+				filp_h: value.flip_h,
+				filp_v: value.flip_v,
+				filp_d: value.flip_d
+			})
+		}
+	}
 }
 
 #[derive(Error, Debug)]
@@ -42,7 +79,9 @@ pub enum MapError {
 	#[error("{0}")]
 	InvalidTileId(#[from] InvalidTileID),
 	#[error("Map needs at least one player")]
-	NoPlayer
+	NoPlayer,
+	#[error("{0}")]
+	InvalidOritation(#[from] InvalidOritation)
 }
 
 impl Map {
@@ -99,31 +138,25 @@ impl Map {
 								if let Some(tile) =
 									tile_layer.get_tile(x.into(), y.into())
 								{
+									let orientation = Orientation::try_from(&tile)?;
 									let tile = PlayerTile::try_from(tile.id())?;
+									let player = Some(Player {
+										start: (x,y),
+										orientation,
+										goal: None,
+									});
 									match tile {
 										PlayerTile::Car1 => {
-											player_1 = Some(Player {
-												start: (x, y),
-												goal: None
-											})
+											player_1 = player
 										},
 										PlayerTile::Car2 => {
-											player_2 = Some(Player {
-												start: (x, y),
-												goal: None
-											})
+											player_2 = player
 										},
 										PlayerTile::Car3 => {
-											player_3 = Some(Player {
-												start: (x, y),
-												goal: None
-											})
+											player_3 = player
 										},
 										PlayerTile::Car4 => {
-											player_4 = Some(Player {
-												start: (x, y),
-												goal: None
-											})
+											player_4 = player
 										},
 										PlayerTile::GlobalGoal => {
 											global_goal = Some((x, y))
