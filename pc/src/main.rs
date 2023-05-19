@@ -1,21 +1,13 @@
-use my_env_logger_style::TimestampPrecision;
-use tetra::{
-	graphics::{self, Color},
-	window::get_size,
-	Context, ContextBuilder, State
-};
-type Vec2 = vek::vec::repr_c::vec2::Vec2<f32>;
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::Map;
+use macroquad::{math::Vec2, prelude::*, window, Window};
+use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
-use tetra::{
-	graphics::{DrawParams, Texture},
-	time::get_delta_time
-};
+use tiles::GetTexture;
 
 mod tiles;
-use tiles::{MapBaseTile, Textures};
+use tiles::TEXTURES;
 use usb::Players;
 
 mod usb;
@@ -26,87 +18,80 @@ const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
 static LEVELS: Lazy<Vec<Map>> =
 	Lazy::new(|| vec![include_map!("pc/assets/level/001.tmx")]);
 
-trait GetTexture<'a> {
-	fn texture(&self, textures: &'a Textures) -> &'a Texture;
-}
-
-//https://tetra.seventeencups.net/tutorial
-
 struct GameState {
-	textures: Textures,
-	grass_postion: Vec2,
-	grass_rotation: f32,
 	level: Option<Map>,
 	players: Players
 }
 
 impl GameState {
-	fn new(ctx: &mut Context) -> tetra::Result<GameState> {
-		let textures = Textures::init(ctx);
-		Ok(GameState {
-			textures,
-			grass_postion: Vec2::default(),
-			grass_rotation: 0.0,
+	fn new() -> GameState {
+		Lazy::force(&TEXTURES);
+		GameState {
 			level: Some(LEVELS.first().unwrap().to_owned()),
 			players: usb::Players::init()
-		})
+		}
 	}
-}
 
-impl State for GameState {
-	//draw the current state
-	fn draw(&mut self, ctx: &mut Context) -> tetra::Result {
-		graphics::clear(ctx, Color::rgb(0.0, 0.0, 0.0));
-		let window_size = get_size(ctx);
+	///draw the current game state
+	async fn draw(&self) {
+		clear_background(BLACK);
+		let screen_width = screen_width();
+		let screen_height = screen_height();
 
 		match &self.level {
 			None => todo!(),
 			Some(map) => {
-				let ratio = Vec2::new(
-					(window_size.0 / map.width as i32) as f32,
-					(window_size.1 / map.height as i32) as f32
-				);
+				let dest_size = (screen_width / map.width as f32)
+					.min(screen_height / map.height as f32);
+				//TODO: calculate an offset, so the balack space is on both sides
 				for (x, y, tile) in map.iter_all() {
-					let texture = tile.texture(&self.textures);
-					texture.draw(
-						ctx,
-						DrawParams::new()
-							.scale(Vec2::new(
-								ratio.x / texture.width() as f32,
-								ratio.y / texture.height() as f32
-							))
-							.position(Vec2::new(x as f32 * ratio.x, y as f32 * ratio.y))
+					let texture = tile.texture(&TEXTURES);
+					let draw_params = DrawTextureParams {
+						dest_size: Some(Vec2::new(dest_size, dest_size)),
+						..Default::default()
+					};
+					draw_texture_ex(
+						texture.clone(),
+						x as f32 * dest_size,
+						y as f32 * dest_size,
+						//This param can filter colors.
+						//Set every value to 1 to keep all colors, by using WHITE
+						WHITE,
+						draw_params
 					);
 				}
 			}
 		}
-
-		//see https://docs.rs/tetra/latest/tetra/graphics/struct.DrawParams.html
-		Ok(())
 	}
 
-	//update the current state.
-	//is called 60 time pro seconds (alsong framerated does not drop)
-	fn update(&mut self, ctx: &mut Context) -> tetra::Result<()> {
+	///update the current state.
+	async fn update(&mut self) {
 		let player_events = self.players.get_events();
 		//use delta time, to avoid that the logic is effected by frame drops
-		let time = get_delta_time(ctx); //use time
-		self.grass_postion.x += 0.1 * time.as_millis() as f32;
-		self.grass_rotation += 0.001 * time.as_millis() as f32;
-		Ok(())
 	}
 }
 
-fn main() -> tetra::Result {
+async fn run_game() {
+	let mut game_state = GameState::new();
+	loop {
+		game_state.update().await;
+		game_state.draw().await;
+		next_frame().await
+	}
+}
+
+fn main() {
 	my_env_logger_style::set_timestamp_precision(TimestampPrecision::Disable);
 	my_env_logger_style::just_log();
 	info!("🚗 {CARGO_PKG_NAME}  v{CARGO_PKG_VERSION} 🚗");
 	debug!("load level{:#?}", LEVELS[0]);
-	ContextBuilder::new(format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"), 1280, 720)
-		.quit_on_escape(true)
-		.multisampling(8) //anti-aliasing
-		.stencil_buffer(true)
-		.build()
-		.expect("error building context")
-		.run(GameState::new)
+	Window::from_config(
+		window::Conf {
+			sample_count: 8, //anti-aliasing
+			window_title: format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"),
+			high_dpi: true,
+			..Default::default()
+		},
+		run_game()
+	);
 }

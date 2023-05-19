@@ -62,7 +62,7 @@ impl Players {
 							Err(err) => match err {
 								TryRecvError::Empty => {},
 								TryRecvError::Disconnected => {
-									panic!("channel disconnected")
+									//panic!("channel disconnected") TODO: check why cannel get disconnected now
 								} /* or should I just break and close the thread? */
 							},
 							Ok(message) => pybadge.write(&message)
