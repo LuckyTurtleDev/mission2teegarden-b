@@ -90,6 +90,8 @@ fn main() {
 			sample_count: 8, //anti-aliasing
 			window_title: format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"),
 			high_dpi: true,
+			#[cfg(not(debug_assertions))]
+			fullscreen: true,
 			..Default::default()
 		},
 		run_game()
