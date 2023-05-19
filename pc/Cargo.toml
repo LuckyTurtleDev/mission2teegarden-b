@@ -21,6 +21,7 @@ num_enum = "0.6.1"
 once_cell = { version = "1.17.1", features = ["parking_lot"] }
 serialport = "4.2.0"
 
-[target.'cfg(windows)'.dependencies]
-attohttpc = { version = "0.25.0", default-features = false, features = ["tls-rustls-webpki-roots"] }
-piz = "0.5.1"
+
+# Enable optimizations in debug mode for macroquad only (requires Rust 1.41):
+[profile.dev.package.macroquad]
+opt-level = 3
