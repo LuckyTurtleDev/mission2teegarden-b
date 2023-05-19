@@ -1,1 +1,3 @@
 Cargo.lock linguist-generated
+*.tmx linguist-vendored
+*.tsx linguist-vendored

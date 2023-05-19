@@ -141,23 +141,15 @@ impl Map {
 									let orientation = Orientation::try_from(&tile)?;
 									let tile = PlayerTile::try_from(tile.id())?;
 									let player = Some(Player {
-										start: (x,y),
+										start: (x, y),
 										orientation,
-										goal: None,
+										goal: None
 									});
 									match tile {
-										PlayerTile::Car1 => {
-											player_1 = player
-										},
-										PlayerTile::Car2 => {
-											player_2 = player
-										},
-										PlayerTile::Car3 => {
-											player_3 = player
-										},
-										PlayerTile::Car4 => {
-											player_4 = player
-										},
+										PlayerTile::Car1 => player_1 = player,
+										PlayerTile::Car2 => player_2 = player,
+										PlayerTile::Car3 => player_3 = player,
+										PlayerTile::Car4 => player_4 = player,
 										PlayerTile::GlobalGoal => {
 											global_goal = Some((x, y))
 										},
