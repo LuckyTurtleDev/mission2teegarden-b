@@ -1,15 +1,17 @@
 use m3_models::Card;
-use m3_models::Card::*;
 
 
 
+
+#[derive(Debug, PartialEq)]
 pub enum CarAction {
     TurnLeft,
     TurnRight,
-    DriveForward,
-    Nothing
+    DriveForward
 }
-pub struct CardChanges<'a> {
+
+#[derive(Clone, Debug)]
+pub struct CardStatus<'a> {
     /// Position of card in vector
     card_pos: usize,
     /// Relative y-position to former position
@@ -18,8 +20,7 @@ pub struct CardChanges<'a> {
     cards: &'a Vec<Card>
 }
 
-
-impl<'a> Iterator for CardChanges<'a> {
+impl<'a> Iterator for CardStatus<'a> {
     type Item = Option<CarAction>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -28,7 +29,7 @@ impl<'a> Iterator for CardChanges<'a> {
                 if self.driving {
                    Some(Some(CarAction::DriveForward))
                 } else {
-                    Some(Some(CarAction::Nothing))
+                    Some(None)
                 }
             }
             Some(card) => {
@@ -38,30 +39,34 @@ impl<'a> Iterator for CardChanges<'a> {
                         self.driving = true;
                         Some(Some(CarAction::TurnLeft))
                     }
-                    Right => {
+                    Card::Right => {
                         self.card_pos += 1;
                         self.driving = true;
                         Some(Some(CarAction::TurnRight))
                     }
-                    Wait(i) => {
-                        if self.wait_counter < *i {
+                    Card::Wait(i) => {
+                        if self.wait_counter < (*i)-1 {
                             self.wait_counter += 1;
                             if self.driving {
                                 Some(Some(CarAction::DriveForward))
                             } else {
-                                Some(Some(CarAction::Nothing))
+                                Some(None)
                             }
                         } else {
-                            Some(Some(CarAction::Nothing))
+                            self.wait_counter = 0;
+                            self.card_pos += 1;
+                            Some(Some(CarAction::DriveForward))
                         }
                     }
-                    MotorOn => {
+                    Card::MotorOn => {
+                        self.card_pos += 1;
                         self.driving = true;
-                        Some(Some(CarAction::Nothing))
+                        Some(None)
                     }
-                    MotorOff => {
+                    Card::MotorOff => {
+                        self.card_pos += 1;
                         self.driving = false;
-                        Some(Some(CarAction::Nothing))
+                        Some(None)
                     }
                 }
             }
@@ -69,6 +74,35 @@ impl<'a> Iterator for CardChanges<'a> {
     }
 }
 
-pub fn evaluateCards(cards:&Vec<Card>) -> CardChanges{
-    CardChanges { card_pos: 0, wait_counter: 0, driving: true, cards: cards }
+pub fn evaluate_cards(cards:&Vec<Card>) -> CardStatus{
+    CardStatus { card_pos: 0, wait_counter: 0, driving: true, cards: cards }
+}
+
+#[cfg(test)]
+mod tests {
+    use m3_models::Card::{
+        Wait,
+        MotorOn,
+        MotorOff,
+        Left
+    };
+
+    use crate::cards::evaluate_cards;
+    use crate::cards::CarAction::*;
+    #[test]
+    fn test_card_evaluation() {
+        let cards = vec![MotorOn, Wait(3), Left, Wait(2), MotorOff];
+        let card_status = evaluate_cards(&cards).take(6);
+        let correct_actions = vec![None, Some(DriveForward), Some(DriveForward), Some(DriveForward), Some(TurnLeft), Some(DriveForward), Some(DriveForward), None];
+        for (i, card) in card_status.enumerate() {
+            assert!(
+                card == *(correct_actions.get(i).unwrap()),
+                "Action: `{:?}`, Solution: `{:?}`", card, *(correct_actions.get(i).unwrap())
+            );
+        }
+        /*assert!(
+            card_status.clone().eq(correct_actions),
+            "Evaluation: `{:?}`", card_status
+        );*/
+    }
 }
