@@ -1,20 +1,69 @@
-use self_rust_tokenize::SelfRustTokenize;
+use log::debug;
+use m3_models::AvailableCards;
+use serde::{
+	ser::{SerializeMap, Serializer},
+	Deserialize, Serialize,
+	__private::ser::FlatMapSerializeStructVariantAsMapValue
+};
 use std::{iter, path::Path};
 use thiserror::Error;
-use tiled::{LayerTile, LayerType, Loader};
+use tiled::{LayerTile, LayerType, Loader, Properties};
 
 pub mod tiles;
 use tiles::{InvalidTileID, MapBaseTile, ObjectTile, PlayerTile, Tile};
 
-#[derive(Clone, Debug, SelfRustTokenize)]
+/// allow Serialization of MapProporties
+struct PropertiesSerde(Properties);
+impl Serialize for PropertiesSerde {
+	fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+	where
+		S: Serializer
+	{
+		let mut map = serializer.serialize_map(Some(self.0.len()))?;
+		for (key, value) in self.0.clone() {
+			match value {
+				tiled::PropertyValue::IntValue(value) => {
+					map.serialize_entry(&key, &value)
+				},
+				tiled::PropertyValue::BoolValue(value) => {
+					map.serialize_entry(&key, &value)
+				},
+				tiled::PropertyValue::FileValue(value) => {
+					map.serialize_entry(&key, &value)
+				},
+				tiled::PropertyValue::FloatValue(value) => {
+					map.serialize_entry(&key, &value)
+				},
+				tiled::PropertyValue::ColorValue(_) => Ok(()), /* should I return an error instead? */
+				tiled::PropertyValue::ObjectValue(value) => {
+					map.serialize_entry(&key, &value)
+				},
+				tiled::PropertyValue::StringValue(value) => {
+					map.serialize_entry(&key, &value)
+				},
+			}?;
+		}
+		map.end()
+	}
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct MapProperties {
+	#[serde(flatten)]
+	cards: AvailableCards,
+	name: Option<String>
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Player {
 	pub start: (u8, u8),
 	pub orientation: Orientation,
 	pub goal: Option<(u8, u8)>
 }
 
-#[derive(Clone, Debug, SelfRustTokenize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Map {
+	pub name: String,
 	pub width: u8,
 	pub height: u8,
 	pub base_layer: Vec<Vec<MapBaseTile>>,
@@ -23,10 +72,11 @@ pub struct Map {
 	pub player_1: Player,
 	pub player_2: Option<Player>,
 	pub player_3: Option<Player>,
-	pub player_4: Option<Player>
+	pub player_4: Option<Player>,
+	pub cards: AvailableCards
 }
 
-#[derive(Clone, Copy, Debug, SelfRustTokenize)]
+#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
 pub enum Orientation {
 	North,
 	South,
@@ -81,15 +131,33 @@ pub enum MapError {
 	#[error("Map needs at least one player")]
 	NoPlayer,
 	#[error("{0}")]
-	InvalidOritation(#[from] InvalidOritation)
+	InvalidOritation(#[from] InvalidOritation),
+	#[error("Failed to load Map Properties:\n{}\n{}", .str, .err)]
+	MapProperty { str: String, err: serde_json::Error }
 }
 
 impl Map {
-	// this is ugly. Should i refactor this?
 	pub fn from_tmx(path: impl AsRef<Path>) -> Result<Self, MapError> {
+		let path = path.as_ref();
 		let map = Loader::new().load_tmx_map(path)?;
 		let width: u8 = map.width.try_into().map_err(|_| MapError::ToWidth)?;
 		let height: u8 = map.height.try_into().map_err(|_| MapError::ToHight)?;
+		let map_properties =
+			serde_json::to_string_pretty(&PropertiesSerde(map.properties.clone()))
+				.unwrap();
+		debug!("load Map Properties: {map_properties}");
+		//Do I really need to convert this to json and back?
+		//Is their no serde intern format, which I can use?
+		//Why can I not use ron for this https://github.com/ron-rs/ron/issues/456 ?
+		let map_properties: MapProperties = serde_json::from_str(&map_properties)
+			.map_err(|err| MapError::MapProperty {
+				str: map_properties,
+				err
+			})?;
+		let cards = map_properties.cards;
+		let name = map_properties
+			.name
+			.unwrap_or_else(|| path.to_string_lossy().into());
 		let mut base_layer = Vec::with_capacity(height as usize);
 		let mut object_layer = Vec::with_capacity(height as usize);
 		let mut global_goal = None;
@@ -98,6 +166,7 @@ impl Map {
 		let mut player_3 = None;
 		let mut player_4 = None;
 		for (i, layer) in map.layers().enumerate() {
+			// this is ugly. Should i refactor this?
 			match i {
 				0 => match layer.layer_type() {
 					LayerType::Tiles(tile_layer) => {
@@ -165,6 +234,7 @@ impl Map {
 		}
 		let player_1 = player_1.ok_or(MapError::NoPlayer)?;
 		Ok(Map {
+			name,
 			width,
 			height,
 			base_layer,
@@ -173,7 +243,8 @@ impl Map {
 			player_1,
 			player_2,
 			player_3,
-			player_4
+			player_4,
+			cards
 		})
 	}
 

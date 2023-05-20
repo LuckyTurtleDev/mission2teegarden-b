@@ -1,4 +1,5 @@
 use bincode::{Decode, Encode};
+use serde::{Deserialize, Serialize};
 use strum_macros::{AsRefStr, EnumIter};
 
 #[derive(AsRefStr, Clone, Copy, Debug, EnumIter)]
@@ -19,7 +20,7 @@ impl Card {
 }
 
 /// count of cards, witch are avaibale for the player
-#[derive(Clone, Debug, Decode, Default, Encode, PartialEq)]
+#[derive(Clone, Debug, Decode, Default, Deserialize, Encode, PartialEq, Serialize)]
 pub struct AvailableCards {
 	pub left: u8,
 	pub right: u8
