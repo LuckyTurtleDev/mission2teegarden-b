@@ -3,15 +3,14 @@ use m3_models::AvailableCards;
 use ron::error::SpannedError;
 use serde::{
 	ser::{SerializeMap, Serializer},
-	Deserialize, Serialize,
-	__private::ser::FlatMapSerializeStructVariantAsMapValue
+	Deserialize, Serialize
 };
-use std::{iter, path::Path};
+use std::{iter, os::unix::net::UnixStream, path::Path};
 use thiserror::Error;
 use tiled::{LayerTile, LayerType, Loader, Properties};
 
 pub mod tiles;
-use tiles::{InvalidTileID, MapBaseTile, ObjectTile, PlayerTile, Tile};
+use tiles::{InvalidTileID, MapBaseTile, ObjectTile, Passable, PlayerTile, Tile};
 
 /// allow Serialization of MapProporties
 struct PropertiesSerde(Properties);
@@ -138,6 +137,18 @@ pub enum MapError {
 }
 
 impl Map {
+	///return if all static tiles at x,y postion are passable
+	pub fn passable(&self, x: u8, y: u8) -> bool {
+		if x > self.width || y > self.height {
+			//car can leave the map an drive away (game over)
+			return true;
+		}
+		self.base_layer[x as usize][y as usize].passable()
+			&& self.object_layer[x as usize][y as usize]
+				.map(|obejct| obejct.passable())
+				.unwrap_or(true)
+	}
+
 	///Load map from String.
 	///Allowing to load map from binary format
 	pub fn from_string(str: &str) -> Result<Self, SpannedError> {
