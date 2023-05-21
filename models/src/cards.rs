@@ -22,7 +22,9 @@ impl Card {
 /// count of cards, witch are avaibale for the player
 #[derive(Clone, Debug, Decode, Default, Deserialize, Encode, PartialEq, Serialize)]
 pub struct AvailableCards {
+	#[serde(default)]
 	pub left: u8,
+	#[serde(default)]
 	pub right: u8
 }
 

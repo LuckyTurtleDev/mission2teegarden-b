@@ -23,7 +23,9 @@ mod usb;
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
 
-static LEVELS: Lazy<Vec<Map>> =
+///store maps as String binary format
+///call `Map::from_str()`
+static LEVELS: Lazy<Vec<&str>> =
 	Lazy::new(|| vec![include_map!("pc/assets/level/001.tmx")]);
 
 trait GetTexture<'a> {
@@ -43,11 +45,12 @@ struct GameState {
 impl GameState {
 	fn new(ctx: &mut Context) -> tetra::Result<GameState> {
 		let textures = Textures::init(ctx);
+		let level = Map::from_string(LEVELS.first().unwrap()).unwrap(); //tests check if map is vaild
 		Ok(GameState {
 			textures,
 			grass_postion: Vec2::default(),
 			grass_rotation: 0.0,
-			level: Some(LEVELS.first().unwrap().to_owned()),
+			level: Some(level),
 			players: usb::Players::init()
 		})
 	}
@@ -109,4 +112,16 @@ fn main() -> tetra::Result {
 		.build()
 		.expect("error building context")
 		.run(GameState::new)
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+	#[test]
+	fn test_bundeld_maps() {
+		for (i, map) in LEVELS.iter().enumerate() {
+			//test if map can be deserialize
+			Map::from_string(map).expect("map with index {i} is not valid");
+		}
+	}
 }

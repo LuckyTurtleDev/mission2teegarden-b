@@ -1,5 +1,6 @@
 use log::debug;
 use m3_models::AvailableCards;
+use ron::error::SpannedError;
 use serde::{
 	ser::{SerializeMap, Serializer},
 	Deserialize, Serialize,
@@ -137,6 +138,17 @@ pub enum MapError {
 }
 
 impl Map {
+	///Load map from String.
+	///Allowing to load map from binary format
+	pub fn from_string(str: &str) -> Result<Self, SpannedError> {
+		ron::from_str(str)
+	}
+
+	///Convert map to String, to be used as binary file format
+	pub fn to_string(&self) -> String {
+		ron::to_string(self).unwrap()
+	}
+
 	pub fn from_tmx(path: impl AsRef<Path>) -> Result<Self, MapError> {
 		let path = path.as_ref();
 		let map = Loader::new().load_tmx_map(path)?;
