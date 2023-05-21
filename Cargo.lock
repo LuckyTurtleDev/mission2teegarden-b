@@ -420,12 +420,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "either_n"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4c91ae510829160d5cfb19eb4ae7b6e01d44b767ca8f727c6cee936e53cc9ae5"
-
-[[package]]
 name = "embedded-graphics"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -784,7 +778,6 @@ name = "m3-models"
 version = "0.1.0"
 dependencies = [
  "bincode",
- "self-rust-tokenize",
  "serde",
  "strum",
  "strum_macros",
@@ -1278,27 +1271,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
 
 [[package]]
-name = "self-rust-tokenize"
-version = "0.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "235c30ffb76b003dc69cc556d0d5ab8bb561a40572b1710fd641c69a3d6c4078"
-dependencies = [
- "proc-macro2",
- "quote",
- "self-rust-tokenize-derive",
-]
-
-[[package]]
-name = "self-rust-tokenize-derive"
-version = "0.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9e075556adeec065f185a7811a9808f8523c1299aa7e318b3dd7d1eb72417f6b"
-dependencies = [
- "syn 1.0.109",
- "syn-helpers",
-]
-
-[[package]]
 name = "semver"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1480,18 +1452,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
-]
-
-[[package]]
-name = "syn-helpers"
-version = "0.4.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "872f211f0299a39fff932355b2e304ef0e95a486a8147244fa8d477c1b0acfce"
-dependencies = [
- "either_n",
- "proc-macro2",
- "quote",
- "syn 1.0.109",
 ]
 
 [[package]]
