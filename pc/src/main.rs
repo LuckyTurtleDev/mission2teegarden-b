@@ -1,4 +1,3 @@
-use my_env_logger_style::TimestampPrecision;
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::Map;
@@ -102,6 +101,10 @@ fn main() {
 		},
 		run_game()
 	);
+}
+
+#[cfg(test)]
+mod tests {
 	use super::*;
 	#[test]
 	fn test_bundeld_maps() {
