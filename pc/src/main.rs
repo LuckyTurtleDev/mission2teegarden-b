@@ -1,10 +1,9 @@
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::Map;
-use macroquad::{math::Vec2, prelude::*, window, Window};
+use macroquad::{prelude::*, window, Window};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
-use tiles::GetTexture;
 
 mod tiles;
 use tiles::TEXTURES;
