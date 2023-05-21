@@ -36,8 +36,11 @@ pub struct AvailableCards {
 	pub left: u8,
 	#[cfg_attr(feature = "serde", serde(default))]
 	pub right: u8,
+	#[cfg_attr(feature = "serde", serde(default))]
 	pub wait: u8,
+	#[cfg_attr(feature = "serde", serde(default))]
 	pub motor_on: u8,
+	#[cfg_attr(feature = "serde", serde(default))]
 	pub motor_off: u8
 }
 
