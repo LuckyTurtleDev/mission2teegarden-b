@@ -7,20 +7,21 @@ publish = false
 
 [features]
 default = []
-sdl2_static_link = ["tetra/sdl2_static_link"]
-sdl2_bundled = ["tetra/sdl2_bundled"]
 
 [dependencies]
+anyhow = "1.0.71"
+bincode = { version = "2.0.0-rc.3", features = ["derive"] }
 log = "0.4.17"
 m3-macro = { version = "0.1.0", path = "../macro" }
 m3-map = { version = "0.1.0", path = "../map" }
 m3-models = { version = "0.1.0", path = "../models" }
+macroquad = { version = "0.3.25", features = ["log-rs"] }
 my-env-logger-style = "0.1.0"
 num_enum = "0.6.1"
 once_cell = { version = "1.17.1", features = ["parking_lot"] }
-tetra = "0.8.0"
-vek = { version = "0.15.10", default-features = false }
+serialport = "4.2.0"
 
-[target.'cfg(windows)'.dependencies]
-attohttpc = { version = "0.25.0", default-features = false, features = ["tls-rustls-webpki-roots"] }
-piz = "0.5.1"
+
+# Enable optimizations in debug mode for macroquad only (requires Rust 1.41):
+[profile.dev.package.macroquad]
+opt-level = 3
