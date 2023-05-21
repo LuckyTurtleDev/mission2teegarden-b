@@ -5,7 +5,7 @@ use serde::{
 	ser::{SerializeMap, Serializer},
 	Deserialize, Serialize
 };
-use std::{iter, os::unix::net::UnixStream, path::Path};
+use std::{iter, path::Path};
 use thiserror::Error;
 use tiled::{LayerTile, LayerType, Loader, Properties};
 
