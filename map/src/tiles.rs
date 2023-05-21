@@ -2,6 +2,11 @@ use num_enum::TryFromPrimitive;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
+pub trait Passable {
+	///return when car can boss ofer this object
+	fn passable(&self) -> bool;
+}
+
 pub enum Tile {
 	MapBaseTile(MapBaseTile),
 	MapObjectTile(ObjectTile),
@@ -25,6 +30,14 @@ pub enum MapBaseTile {
 	Grass = 0
 }
 
+impl Passable for MapBaseTile {
+	fn passable(&self) -> bool {
+		match self {
+			Self::Grass => true
+		}
+	}
+}
+
 impl TryFrom<u32> for MapBaseTile {
 	type Error = InvalidTileID;
 	fn try_from(value: u32) -> Result<MapBaseTile, Self::Error> {
@@ -41,6 +54,14 @@ impl TryFrom<u32> for MapBaseTile {
 pub enum ObjectTile {
 	//numbers must match them from the Tiled tilesets
 	Stone = 1
+}
+
+impl Passable for ObjectTile {
+	fn passable(&self) -> bool {
+		match self {
+			Self::Stone => false
+		}
+	}
 }
 
 impl TryFrom<u32> for ObjectTile {
