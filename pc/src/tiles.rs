@@ -17,7 +17,11 @@ pub struct Textures {
 	player2_car: Texture2D,
 	player3_car: Texture2D,
 	player4_car: Texture2D,
-	global_goal: Texture2D
+	global_goal: Texture2D,
+	player1_goal: Texture2D,
+	player2_goal: Texture2D,
+	player3_goal: Texture2D,
+	player4_goal: Texture2D
 }
 
 impl Textures {
@@ -51,6 +55,22 @@ impl Textures {
 			global_goal: Texture2D::from_file_with_format(
 				include_bytes!("../assets/img/Player/goal.png"),
 				Some(ImageFormat::Png)
+			),
+			player1_goal: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/Player/player1_goal.png"),
+				Some(ImageFormat::Png)
+			),
+			player2_goal: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/Player/player2_goal.png"),
+				Some(ImageFormat::Png)
+			),
+			player3_goal: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/Player/player3_goal.png"),
+				Some(ImageFormat::Png)
+			),
+			player4_goal: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/Player/player4_goal.png"),
+				Some(ImageFormat::Png)
 			)
 		}
 	}
@@ -82,7 +102,11 @@ impl GetTexture for PlayerTile {
 			Self::Car2 => textures.player1_car,
 			Self::Car3 => textures.player1_car,
 			Self::Car4 => textures.player1_car,
-			Self::GlobalGoal => textures.global_goal
+			Self::GlobalGoal => textures.global_goal,
+			Self::Goal1 => textures.player1_goal,
+			Self::Goal2 => textures.player2_goal,
+			Self::Goal3 => textures.player3_goal,
+			Self::Goal4 => textures.player4_goal
 		}
 	}
 }

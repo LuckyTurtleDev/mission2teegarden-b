@@ -18,8 +18,13 @@ const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 ///store maps as String binary format
 ///call `Map::from_str()`
-static LEVELS: Lazy<Vec<&str>> =
-	Lazy::new(|| vec![include_map!("pc/assets/level/001.tmx")]);
+static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
+	vec![
+		include_map!("pc/assets/level/001.tmx"),
+		include_map!("pc/assets/level/002.tmx"),
+		include_map!("pc/assets/level/003.tmx"),
+	]
+});
 
 struct GameState {
 	level: Option<Map>,
@@ -29,7 +34,7 @@ struct GameState {
 impl GameState {
 	fn new() -> GameState {
 		Lazy::force(&TEXTURES);
-		let level = Map::from_string(LEVELS.first().unwrap()).unwrap(); //tests check if map is vaild
+		let level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		GameState {
 			level: Some(level),
 			players: usb::Players::init()
@@ -71,7 +76,7 @@ mod tests {
 	fn test_bundeld_maps() {
 		for (i, map) in LEVELS.iter().enumerate() {
 			//test if map can be deserialize
-			Map::from_string(map).expect("map with index {i} is not valid");
+			Map::from_string(map).expect(&format!("map with index {i} is not valid"));
 		}
 	}
 }
