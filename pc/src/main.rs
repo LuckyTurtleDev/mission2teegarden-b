@@ -1,15 +1,16 @@
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::Map;
-use macroquad::{math::Vec2, prelude::*, window, Window};
+use macroquad::{prelude::*, window, Window};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
-use tiles::GetTexture;
 
 mod tiles;
 use tiles::TEXTURES;
 use usb::Players;
 
+mod draw;
+mod update;
 mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
@@ -33,46 +34,6 @@ impl GameState {
 			level: Some(level),
 			players: usb::Players::init()
 		}
-	}
-
-	///draw the current game state
-	async fn draw(&self) {
-		clear_background(BLACK);
-		let screen_width = screen_width();
-		let screen_height = screen_height();
-
-		match &self.level {
-			None => todo!(),
-			Some(map) => {
-				let dest_size = (screen_width / map.width as f32)
-					.min(screen_height / map.height as f32);
-				//center map, by using offset
-				let offset_x = (screen_width - dest_size * map.width as f32) / 2.0;
-				let offset_y = (screen_height - dest_size * map.height as f32) / 2.0;
-				for (x, y, tile) in map.iter_all() {
-					let texture = tile.texture(&TEXTURES);
-					let draw_params = DrawTextureParams {
-						dest_size: Some(Vec2::new(dest_size, dest_size)),
-						..Default::default()
-					};
-					draw_texture_ex(
-						texture.clone(),
-						x as f32 * dest_size + offset_x,
-						y as f32 * dest_size + offset_y,
-						//This param can filter colors.
-						//Set every value to 1 to keep all colors, by using WHITE
-						WHITE,
-						draw_params
-					);
-				}
-			}
-		}
-	}
-
-	///update the current state.
-	async fn update(&mut self) {
-		let player_events = self.players.get_events();
-		//use delta time, to avoid that the logic is effected by frame drops
 	}
 }
 
