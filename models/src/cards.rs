@@ -1,4 +1,6 @@
 use bincode::{Decode, Encode};
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
 use strum_macros::{AsRefStr, EnumIter};
 
 #[derive(AsRefStr, Clone, Copy, Debug, EnumIter)]
@@ -28,11 +30,17 @@ impl Card {
 
 /// count of cards, witch are avaibale for the player
 #[derive(Clone, Debug, Decode, Default, Encode, PartialEq)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub struct AvailableCards {
+	#[cfg_attr(feature = "serde", serde(default))]
 	pub left: u8,
+	#[cfg_attr(feature = "serde", serde(default))]
 	pub right: u8,
+	#[cfg_attr(feature = "serde", serde(default))]
 	pub wait: u8,
+	#[cfg_attr(feature = "serde", serde(default))]
 	pub motor_on: u8,
+	#[cfg_attr(feature = "serde", serde(default))]
 	pub motor_off: u8
 }
 

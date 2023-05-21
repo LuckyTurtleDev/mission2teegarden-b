@@ -1,5 +1,5 @@
 use num_enum::TryFromPrimitive;
-use self_rust_tokenize::SelfRustTokenize;
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 pub enum Tile {
@@ -16,7 +16,7 @@ pub enum InvalidTileID {
 
 ///Store all Tiles, with can be used at the map background
 #[derive(
-	Clone, Copy, Debug, Default, Eq, SelfRustTokenize, PartialEq, TryFromPrimitive,
+	Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize, TryFromPrimitive,
 )]
 #[repr(u8)]
 pub enum MapBaseTile {
@@ -36,7 +36,7 @@ impl TryFrom<u32> for MapBaseTile {
 }
 
 ///Store all Tiles, with can be place the layer above the background
-#[derive(Clone, Copy, Debug, Eq, SelfRustTokenize, PartialEq, TryFromPrimitive)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize, TryFromPrimitive)]
 #[repr(u8)]
 pub enum ObjectTile {
 	//numbers must match them from the Tiled tilesets
@@ -54,7 +54,7 @@ impl TryFrom<u32> for ObjectTile {
 }
 
 ///Store all Tiles, with can be place the layer above the background
-#[derive(Clone, Copy, Debug, Eq, SelfRustTokenize, PartialEq, TryFromPrimitive)]
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize, TryFromPrimitive)]
 #[repr(u8)]
 pub enum PlayerTile {
 	//numbers must match them from the Tiled tilesets
