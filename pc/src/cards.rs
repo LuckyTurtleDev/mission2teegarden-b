@@ -105,9 +105,5 @@ mod tests {
 				*(correct_actions.get(i).unwrap())
 			);
 		}
-		/*assert!(
-			card_status.clone().eq(correct_actions),
-			"Evaluation: `{:?}`", card_status
-		);*/
 	}
 }
