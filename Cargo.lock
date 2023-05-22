@@ -755,7 +755,6 @@ dependencies = [
  "m3-map",
  "proc-macro2",
  "quote",
- "syn 2.0.16",
 ]
 
 [[package]]

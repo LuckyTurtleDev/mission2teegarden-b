@@ -160,6 +160,7 @@ impl Map {
 	}
 
 	///Convert map to String, to be used as binary file format
+	#[allow(clippy::inherent_to_string)]
 	pub fn to_string(&self) -> String {
 		ron::to_string(self).unwrap()
 	}

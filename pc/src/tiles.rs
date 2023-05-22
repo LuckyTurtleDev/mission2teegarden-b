@@ -3,6 +3,7 @@ use m3_map::tiles::{ObjectTile, PlayerTile, Tile};
 use macroquad::{prelude::ImageFormat, texture::Texture2D};
 use once_cell::sync::Lazy;
 
+#[allow(clippy::redundant_closure)] //false positive?
 pub static TEXTURES: Lazy<Textures> = Lazy::new(|| Textures::init());
 
 pub trait GetTexture {
