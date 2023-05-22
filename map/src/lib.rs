@@ -69,6 +69,10 @@ pub struct Map {
 	pub base_layer: Vec<Vec<MapBaseTile>>,
 	pub object_layer: Vec<Vec<Option<ObjectTile>>>,
 	pub global_goal: Option<(u8, u8)>,
+	//this was a stupid idea
+	//now I must impl everything 4 times
+	//I should refactor this to `[Option<Player>;4]`, if I have time.
+	//Or add at leat an interator over all Players.
 	pub player_1: Player,
 	pub player_2: Option<Player>,
 	pub player_3: Option<Player>,
@@ -225,6 +229,10 @@ impl Map {
 				},
 				2 => match layer.layer_type() {
 					LayerType::Tiles(tile_layer) => {
+						let mut player1_goal = None;
+						let mut player2_goal = None;
+						let mut player3_goal = None;
+						let mut player4_goal = None;
 						for x in 0..width {
 							for y in 0..height {
 								if let Some(tile) =
@@ -237,18 +245,39 @@ impl Map {
 										orientation,
 										goal: None
 									});
+									let goal = Some((x, y));
 									match tile {
 										PlayerTile::Car1 => player_1 = player,
 										PlayerTile::Car2 => player_2 = player,
 										PlayerTile::Car3 => player_3 = player,
 										PlayerTile::Car4 => player_4 = player,
-										PlayerTile::GlobalGoal => {
-											global_goal = Some((x, y))
-										},
+										PlayerTile::Goal1 => player1_goal = goal,
+										PlayerTile::Goal2 => player2_goal = goal,
+										PlayerTile::Goal3 => player3_goal = goal,
+										PlayerTile::Goal4 => player4_goal = goal,
+										PlayerTile::GlobalGoal => global_goal = goal
 									}
 								}
 							}
 						}
+						//this has become ugly; Mabye I should store the players in another way
+						//maybe an arry of [player;4]
+						player_1 = player_1.map(|mut f| {
+							f.goal = player1_goal;
+							f
+						});
+						player_2 = player_2.map(|mut f| {
+							f.goal = player2_goal;
+							f
+						});
+						player_3 = player_3.map(|mut f| {
+							f.goal = player3_goal;
+							f
+						});
+						player_4 = player_4.map(|mut f| {
+							f.goal = player4_goal;
+							f
+						});
 					},
 					_ => return Err(MapError::WrongLayer(i, "TileLayer".to_owned()))
 				},
@@ -294,7 +323,31 @@ impl Map {
 	/// return an iterator over all player goals tiles and its x and y postion
 	pub fn iter_player_goals(&self) -> impl Iterator<Item = (u8, u8, PlayerTile)> + '_ {
 		iter::once(self.global_goal)
-			.flat_map(|goal| goal.map(|(x, y)| (x, y, PlayerTile::GlobalGoal)))
+			.flatten()
+			.map(|(x, y)| (x, y, PlayerTile::GlobalGoal))
+			.chain(
+				iter::once(&self.player_1)
+					.filter_map(|player| player.goal)
+					.map(|(x, y)| (x, y, PlayerTile::Goal1))
+			)
+			.chain(
+				iter::once(&self.player_2)
+					.flatten()
+					.filter_map(|player| player.goal)
+					.map(|(x, y)| (x, y, PlayerTile::Goal2))
+			)
+			.chain(
+				iter::once(&self.player_3)
+					.flatten()
+					.filter_map(|player| player.goal)
+					.map(|(x, y)| (x, y, PlayerTile::Goal3))
+			)
+			.chain(
+				iter::once(&self.player_4)
+					.flatten()
+					.filter_map(|player| player.goal)
+					.map(|(x, y)| (x, y, PlayerTile::Goal4))
+			)
 	}
 
 	/// return an iterator over all static Tiles and its x and y postion.

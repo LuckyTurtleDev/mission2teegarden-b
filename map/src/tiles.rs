@@ -83,8 +83,12 @@ pub enum PlayerTile {
 	Car2 = 1,
 	Car3 = 2,
 	Car4 = 3,
-	//goal, which can be used by all players
-	GlobalGoal = 4
+	/// goal, which can be used by all players
+	GlobalGoal = 4,
+	Goal1 = 5,
+	Goal2 = 6,
+	Goal3 = 7,
+	Goal4 = 8
 }
 
 impl TryFrom<u32> for PlayerTile {
