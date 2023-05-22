@@ -15,4 +15,3 @@ glob = "0.3.1"
 m3-map = { version = "0.1.0", path = "../map" }
 proc-macro2 = "1.0.56"
 quote = "1.0.26"
-syn = "2.0.15"

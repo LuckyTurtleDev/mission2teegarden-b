@@ -23,7 +23,7 @@ impl GameState {
 						..Default::default()
 					};
 					draw_texture_ex(
-						texture.clone(),
+						texture,
 						x as f32 * dest_size + offset_x,
 						y as f32 * dest_size + offset_y,
 						//This param can filter colors.
