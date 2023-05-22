@@ -2,23 +2,27 @@
 #![no_main]
 
 use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
-use embedded_graphics::{draw_target::DrawTarget, prelude::*};
+use embedded_graphics::{
+	draw_target::DrawTarget,
+	mono_font::{ascii::FONT_6X10, MonoTextStyle},
+	pixelcolor::Rgb565,
+	prelude::*,
+	primitives::{PrimitiveStyleBuilder, Rectangle},
+	text::Text
+};
 use heapless::Vec;
 use m3_models::{
 	Key, MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPcProtocol, ToPybadgeProtocol
 };
 use pybadge_high::{prelude::*, Buttons, Color, PyBadge};
 
-use embedded_graphics::{
-	mono_font::{ascii::FONT_6X10, MonoTextStyle},
-	prelude::*,
-	text::Text
-};
-
 mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
+
+const DISPLAY_WIDHT: u16 = 160;
+const DISPLAY_HIGHT: u16 = 128;
 
 fn read_events(usb_data: &mut Vec<u8, 128>) -> Vec<MessageToPyBadge, 10> {
 	let mut events = Vec::<MessageToPyBadge, 10>::new();
@@ -118,6 +122,17 @@ fn main() -> ! {
 		.draw(&mut display)
 		.ok();
 	//Todo: do not throw away event, wihich are directly send after ConnectionRequest
+
+	let style = PrimitiveStyleBuilder::new()
+		.stroke_color(Rgb565::RED)
+		.stroke_width(3)
+		.fill_color(Rgb565::GREEN)
+		.build();
+
+	Rectangle::new(Point::new(30, 20), Size::new(24, 36))
+		.into_styled(style)
+		.draw(&mut display)
+		.unwrap();
 	loop {
 		send_event(MessageToPc::KeepAlive);
 		buttons.update();
