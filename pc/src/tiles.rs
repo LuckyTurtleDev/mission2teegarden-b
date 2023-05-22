@@ -99,9 +99,9 @@ impl GetTexture for PlayerTile {
 	fn texture(&self, textures: &Textures) -> Texture2D {
 		match self {
 			Self::Car1 => textures.player1_car,
-			Self::Car2 => textures.player1_car,
-			Self::Car3 => textures.player1_car,
-			Self::Car4 => textures.player1_car,
+			Self::Car2 => textures.player2_car,
+			Self::Car3 => textures.player3_car,
+			Self::Car4 => textures.player4_car,
 			Self::GlobalGoal => textures.global_goal,
 			Self::Goal1 => textures.player1_goal,
 			Self::Goal2 => textures.player2_goal,

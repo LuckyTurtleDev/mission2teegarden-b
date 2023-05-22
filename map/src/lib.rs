@@ -69,6 +69,10 @@ pub struct Map {
 	pub base_layer: Vec<Vec<MapBaseTile>>,
 	pub object_layer: Vec<Vec<Option<ObjectTile>>>,
 	pub global_goal: Option<(u8, u8)>,
+	//this was a stupid idea
+	//now I must impl everything 4 times
+	//I should refactor this to `[Option<Player>;4]`, if I have time.
+	//Or add at leat an interator over all Players.
 	pub player_1: Player,
 	pub player_2: Option<Player>,
 	pub player_3: Option<Player>,
@@ -319,11 +323,31 @@ impl Map {
 	/// return an iterator over all player goals tiles and its x and y postion
 	pub fn iter_player_goals(&self) -> impl Iterator<Item = (u8, u8, PlayerTile)> + '_ {
 		iter::once(self.global_goal)
-			.chain(iter::once(self.player_1.goal))
-			.chain(iter::once(self.player_2.as_ref().map(|f| f.goal)).flatten())
-			.chain(iter::once(self.player_3.as_ref().map(|f| f.goal)).flatten())
-			.chain(iter::once(self.player_4.as_ref().map(|f| f.goal)).flatten())
-			.flat_map(|goal| goal.map(|(x, y)| (x, y, PlayerTile::GlobalGoal)))
+			.flatten()
+			.map(|(x, y)| (x, y, PlayerTile::GlobalGoal))
+			.chain(
+				iter::once(&self.player_1)
+					.filter_map(|player| player.goal)
+					.map(|(x, y)| (x, y, PlayerTile::Goal1))
+			)
+			.chain(
+				iter::once(&self.player_2)
+					.flatten()
+					.filter_map(|player| player.goal)
+					.map(|(x, y)| (x, y, PlayerTile::Goal2))
+			)
+			.chain(
+				iter::once(&self.player_3)
+					.flatten()
+					.filter_map(|player| player.goal)
+					.map(|(x, y)| (x, y, PlayerTile::Goal3))
+			)
+			.chain(
+				iter::once(&self.player_4)
+					.flatten()
+					.filter_map(|player| player.goal)
+					.map(|(x, y)| (x, y, PlayerTile::Goal4))
+			)
 	}
 
 	/// return an iterator over all static Tiles and its x and y postion.

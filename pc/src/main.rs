@@ -35,6 +35,7 @@ impl GameState {
 	fn new() -> GameState {
 		Lazy::force(&TEXTURES);
 		let level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
+		debug!("load level{:#?}", level);
 		GameState {
 			level: Some(level),
 			players: usb::Players::init()
@@ -55,7 +56,6 @@ fn main() {
 	my_env_logger_style::set_timestamp_precision(TimestampPrecision::Disable);
 	my_env_logger_style::just_log();
 	info!("🚗 {CARGO_PKG_NAME}  v{CARGO_PKG_VERSION} 🚗");
-	debug!("load level{:#?}", LEVELS[0]);
 	Window::from_config(
 		window::Conf {
 			sample_count: 8, //anti-aliasing
