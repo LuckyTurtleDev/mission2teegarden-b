@@ -1,21 +1,15 @@
-use crate::{State, DISPLAY_HIGHT};
-use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
+use crate::{State};
+
 use embedded_graphics::{
-	draw_target::DrawTarget,
-	mono_font::{ascii::FONT_6X10, MonoTextStyle},
-	pixelcolor::Rgb565,
-	prelude::*,
-	primitives::{PrimitiveStyleBuilder, Rectangle},
-	text::Text
+	prelude::*
 };
-use embedded_sprites::{image::Image, include_image, sprite, sprite::Sprite};
-use heapless::Vec;
+use embedded_sprites::{image::Image, include_image, sprite::Sprite};
+
 use konst::result::unwrap_ctx;
 use m3_models::{
-	AvailableCards, Card, CardIter, Key, MessageToPc, MessageToPyBadge, ToPcGameEvent,
-	ToPcProtocol, ToPybadgeProtocol
+	Card
 };
-use pybadge_high::{prelude::*, Buttons, Color, Display, PyBadge};
+use pybadge_high::{Color};
 use strum::IntoEnumIterator;
 
 #[include_image]
