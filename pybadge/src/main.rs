@@ -1,6 +1,7 @@
 #![no_std]
 #![no_main]
 
+use activitys::Activity;
 use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
 use embedded_graphics::{
 	draw_target::DrawTarget,
@@ -10,12 +11,17 @@ use embedded_graphics::{
 	primitives::{PrimitiveStyleBuilder, Rectangle},
 	text::Text
 };
+use embedded_sprites::{image::Image, include_image, sprite, sprite::Sprite};
 use heapless::Vec;
+use konst::result::unwrap_ctx;
 use m3_models::{
-	Key, MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPcProtocol, ToPybadgeProtocol
+	AvailableCards, Card, CardIter, Key, MessageToPc, MessageToPyBadge, ToPcGameEvent,
+	ToPcProtocol, ToPybadgeProtocol
 };
-use pybadge_high::{prelude::*, Buttons, Color, PyBadge};
+use pybadge_high::{prelude::*, Buttons, Color, Display, PyBadge};
+use strum::IntoEnumIterator;
 
+mod activitys;
 mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
@@ -80,6 +86,23 @@ fn send_button_state(buttons: &Buttons) {
 	}
 }
 
+struct State {
+	display: Display,
+	buttons: Buttons,
+	avaiable_cards: AvailableCards,
+	activity: Activity
+}
+
+impl State {
+	fn init_activity(&mut self) {
+		match self.activity {
+			Activity::Waiting => {},
+			Activity::Selecter => activitys::card_selecter::init(self)
+		}
+	}
+	fn update_draw(&mut self) {}
+}
+
 #[entry]
 fn main() -> ! {
 	let text_style = MonoTextStyle::new(&FONT_6X10, Color::WHITE);
@@ -122,22 +145,28 @@ fn main() -> ! {
 		.draw(&mut display)
 		.ok();
 	//Todo: do not throw away event, wihich are directly send after ConnectionRequest
-
-	let style = PrimitiveStyleBuilder::new()
-		.stroke_color(Rgb565::RED)
-		.stroke_width(3)
-		.fill_color(Rgb565::GREEN)
-		.build();
-
-	Rectangle::new(Point::new(30, 20), Size::new(24, 36))
-		.into_styled(style)
-		.draw(&mut display)
-		.unwrap();
+	let mut avaiable_cards = AvailableCards {
+		left: 3,
+		right: 2,
+		..Default::default()
+	};
+	let mut state = State {
+		display,
+		buttons,
+		avaiable_cards,
+		activity: Activity::Selecter
+	};
+	let mut last_activity = Activity::Waiting;
 	loop {
 		send_event(MessageToPc::KeepAlive);
-		buttons.update();
-		send_button_state(&buttons);
 		usb::read(&mut usb_data);
+		state.buttons.update();
+		send_button_state(&state.buttons);
+		if last_activity != state.activity {
+			state.init_activity();
+			last_activity = state.activity;
+		}
+		state.update_draw();
 		delay.delay_ms(1000_u16);
 	}
 }
