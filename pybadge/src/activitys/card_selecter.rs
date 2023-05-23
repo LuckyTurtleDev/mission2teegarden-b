@@ -1,15 +1,11 @@
-use crate::{State};
+use crate::State;
 
-use embedded_graphics::{
-	prelude::*
-};
+use embedded_graphics::prelude::*;
 use embedded_sprites::{image::Image, include_image, sprite::Sprite};
 
 use konst::result::unwrap_ctx;
-use m3_models::{
-	Card
-};
-use pybadge_high::{Color};
+use m3_models::Card;
+use pybadge_high::Color;
 use strum::IntoEnumIterator;
 
 #[include_image]
@@ -38,9 +34,26 @@ fn get_card_image(card: Card) -> Image<'static, Color> {
 }
 
 pub(crate) fn init(state: &mut State) {
+	state.display.clear(Color::BLACK).unwrap();
 	for (i, card) in Card::iter().enumerate() {
 		Sprite::new(Point::new((26 * i + 2) as i32, 91), &get_card_image(card))
 			.draw(&mut state.display)
 			.unwrap();
 	}
+	state.cursor = (0, 1);
+}
+
+pub(crate) fn update(state: &mut State) {
+	if state.buttons.right_pressed() {
+		state.cursor.0 += 1;
+	}
+	if state.buttons.left_pressed() {
+		state.cursor.0 -= 1;
+	}
+	Sprite::new(
+		Point::new((26 * state.cursor.0 + 2) as i32, 91),
+		&IMG_CARD_SELETED
+	)
+	.draw(&mut state.display)
+	.unwrap();
 }

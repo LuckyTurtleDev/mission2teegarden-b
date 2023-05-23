@@ -13,10 +13,10 @@ use embedded_graphics::{
 use heapless::Vec;
 
 use m3_models::{
-	AvailableCards, Key, MessageToPc, MessageToPyBadge, ToPcGameEvent,
-	ToPcProtocol, ToPybadgeProtocol
+	AvailableCards, Key, MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPcProtocol,
+	ToPybadgeProtocol
 };
-use pybadge_high::{prelude::*, Buttons, Color, Display, PyBadge};
+use pybadge_high::{prelude::*, time::uptime, Buttons, Color, Display, PyBadge};
 use strum::IntoEnumIterator;
 
 mod activitys;
@@ -88,7 +88,8 @@ struct State {
 	display: Display,
 	buttons: Buttons,
 	avaiable_cards: AvailableCards,
-	activity: Activity
+	activity: Activity,
+	cursor: (u8, u8)
 }
 
 impl State {
@@ -98,7 +99,12 @@ impl State {
 			Activity::Selecter => activitys::card_selecter::init(self)
 		}
 	}
-	fn update_draw(&mut self) {}
+	fn update_draw(&mut self) {
+		match self.activity {
+			Activity::Waiting => {},
+			Activity::Selecter => activitys::card_selecter::update(self)
+		}
+	}
 }
 
 #[entry]
@@ -152,10 +158,13 @@ fn main() -> ! {
 		display,
 		buttons,
 		avaiable_cards,
-		activity: Activity::Selecter
+		activity: Activity::Selecter,
+		cursor: (0, 0)
 	};
 	let mut last_activity = Activity::Waiting;
+	let mut timestamp;
 	loop {
+		timestamp = uptime();
 		send_event(MessageToPc::KeepAlive);
 		usb::read(&mut usb_data);
 		state.buttons.update();
@@ -165,6 +174,7 @@ fn main() -> ! {
 			last_activity = state.activity;
 		}
 		state.update_draw();
-		delay.delay_ms(1000_u16);
+		//60fps
+		delay.delay_ms((16 - (uptime().0 - timestamp.0)).min(0));
 	}
 }

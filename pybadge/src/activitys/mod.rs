@@ -1,8 +1,3 @@
-
-
-
-
-
 pub(crate) mod card_selecter;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
