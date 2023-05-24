@@ -1,7 +1,9 @@
 use anyhow::Context;
 use bincode::error::DecodeError;
 use log::{debug, info, trace};
-use m3_models::{MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPybadgeProtocol};
+use m3_models::{
+	MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPybadgeProtocol, ToPypadeGameEvent
+};
 use serialport::{available_ports, ClearBuffer, SerialPort, SerialPortInfo};
 use std::{
 	io,
@@ -14,6 +16,14 @@ struct Player {
 	receiver: Receiver<MessageToPc>,
 	sender: Sender<MessageToPyBadge>,
 	port_name: String
+}
+
+impl Player {
+	pub(crate) fn get_events(&self, game_event: ToPypadeGameEvent) {
+		self.sender
+			.send(MessageToPyBadge::GameEvent(game_event))
+			.expect("pybdage communication was closed");
+	}
 }
 
 #[derive(Default)]
