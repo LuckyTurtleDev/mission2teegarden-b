@@ -1,7 +1,7 @@
-use m3_models::CardIter;
 use m3_map::Orientation;
 
-use crate::{GameState, PlayerState};
+
+use crate::{GameState, PlayerState, cards::CarAction};
 
 impl GameState {
 	///update the current state.
@@ -20,12 +20,12 @@ impl GameState {
     });
 }*/
 
-	pub fn play_game(&mut self) {
+	pub fn next_move(&mut self) {
 		loop {
-			match self.game_run {
+			match &self.game_run {
 				None => !todo!(),
-				Some(mut round) => {
-					for (i, state) in round.player_states {
+				Some(round) => {
+					for state in round.player_states {
                         let new_state = getRelativeXY(state);
 						//round.player_states.get(i).unwrap().position = ;
 					}
@@ -33,36 +33,26 @@ impl GameState {
 			}
 		}
 	}
-
 }
 
 
-fn getRelativeXY<CarAction>(player_state: PlayerState) ->(i8, i8, Orientation){
-    match player_state.next_action {
-        None => (0, 0, player_state.orientation),
-        TurnLeft => {
-            match player_state.orientation {
-                North => (-1, -1, Orientation::West),
-                South => (1, 1, Orientation::East),
-                West => (-1, 1, Orientation::South),
-                East => (1, -1, Orientation::North)
-            }
-        },
-        TurnRight => {
-            match player_state.orientation {
-                North => (-1, 1, Orientation::East),
-                South => (-1, 1, Orientation::West),
-                West => (-1, -1, Orientation::North),
-                East => (1, 1, Orientation::South)
-            }
-        },
-        DriveForward => {
-            match player_state.orientation {
-                North => (0, -1, Orientation::North),
-                South => (0, Orientation::South),
-                West => (-1, Orientation::West),
-                East => (1, Orientation::East)
-            }
+fn getRelativeXY(player_state: PlayerState) ->(i8, i8, Orientation){
+
+
+    let new_orientations = match player_state.next_action {
+        None => [Orientation::North, Orientation::South, Orientation::West, Orientation::East],
+        Some(car_action) =>
+        match car_action {
+            CarAction::TurnLeft => [Orientation::West, Orientation::East, Orientation::South, Orientation::North],
+            CarAction::TurnRight => [Orientation::East, Orientation::West, Orientation::North, Orientation::South],
+            CarAction::DriveForward => [Orientation::North, Orientation::South, Orientation::West, Orientation::East]
         }
+    };
+
+    match player_state.orientation {
+        Orientation::North => (-0, -1, new_orientations[0]),
+        Orientation::South => (0, 1, new_orientations[1]),
+        Orientation::West => (-1, 0, new_orientations[2]),
+        Orientation::East => (1, 0, new_orientations[3])
     }
 }

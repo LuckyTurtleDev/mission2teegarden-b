@@ -66,7 +66,7 @@ impl GameState {
 
 		GameState {
 			game_run: Some(game_run),
-			input: usb::Players::init()
+			input_players: usb::Players::init()
 		}
 	}
 }
