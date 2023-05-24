@@ -521,9 +521,9 @@ dependencies = [
 
 [[package]]
 name = "embedded-sprites"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "561ece29ef44e07c607c9c16616d3c376bdb4f994c946b5dd962ba26205cb78e"
+checksum = "7e5b6dfad791ad57177ebd82bcdec81af641951c3391a1d5e8781bb21f0ec6da"
 dependencies = [
  "embedded-graphics",
  "embedded-sprites-proc-macro",
@@ -531,9 +531,9 @@ dependencies = [
 
 [[package]]
 name = "embedded-sprites-proc-macro"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c95b90ab037c7944c5dbd248344031b6e880b52b3f12ac59b7dc5b93407c6f6b"
+checksum = "fee7ec8cbbaff359794d2cbf682856b0e389c3eda7c66526bc2d4310121a107e"
 dependencies = [
  "embedded-graphics",
  "image",
