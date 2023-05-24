@@ -5,7 +5,7 @@ use embedded_sprites::{image::Image, include_image, sprite::Sprite};
 
 use konst::result::unwrap_ctx;
 use m3_models::Card;
-use pybadge_high::Color;
+use pybadge_high::{Color, buttons::{Event, Button}};
 use strum::IntoEnumIterator;
 
 #[include_image]
@@ -44,11 +44,14 @@ pub(crate) fn init(state: &mut State) {
 }
 
 pub(crate) fn update(state: &mut State) {
-	if state.buttons.right_pressed() {
-		state.cursor.0 += 1;
-	}
-	if state.buttons.left_pressed() {
-		state.cursor.0 -= 1;
+	for event in state.buttons.events(){
+		if let Event::Pressed(button) = event {
+			match button {
+				Button::Right => state.cursor.0 += 1,
+				Button::Left =>  state.cursor.0 -= 1,
+				_ => {}
+			}
+		}
 	}
 	Sprite::new(
 		Point::new((26 * state.cursor.0 + 2) as i32, 91),
