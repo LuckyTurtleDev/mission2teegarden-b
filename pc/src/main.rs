@@ -7,6 +7,8 @@ use once_cell::sync::Lazy;
 use m3_models::CardIter;
 
 mod tiles;
+mod cards;
+use cards::CarAction;
 use tiles::TEXTURES;
 use usb::Players;
 
@@ -27,7 +29,7 @@ static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 	]
 });
 
-struct PlayerState <CarAction>{
+struct PlayerState {
 	position: (u8, u8),
 	orientation: Orientation,
 	next_action: Option<CarAction>,
@@ -41,7 +43,7 @@ struct GameRun {
 
 struct GameState {
 	game_run: Option<GameRun>,
-	input: Players
+	input_players: Players
 }
 
 impl GameState {

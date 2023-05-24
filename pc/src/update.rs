@@ -1,12 +1,13 @@
 use m3_models::CardIter;
 use m3_map::Orientation;
 
-use crate::GameState;
+use crate::{GameState, PlayerState};
 
 impl GameState {
 	///update the current state.
 	pub async fn update(&mut self) {
-		let _player_events = self.players.get_events();
+		let _player_events = self.input_players.get_events();
+        
 		//use delta time, to avoid that the logic is effected by frame drops
 	}
 
@@ -23,9 +24,10 @@ impl GameState {
 		loop {
 			match self.game_run {
 				None => !todo!(),
-				Some(mut run) => {
-					for (i, player) in run.level.iter_mut_player().enumerate() {
-						run.player_states.get(i).position = getRelativeXY(run.player_states.get(i).run.player_states.get(i).orientation);
+				Some(mut round) => {
+					for (i, state) in round.player_states {
+                        let new_state = getRelativeXY(state);
+						//round.player_states.get(i).unwrap().position = ;
 					}
 				}
 			}
@@ -35,11 +37,11 @@ impl GameState {
 }
 
 
-fn getRelativeXY<CarAction>(car_action: Option<CarAction>, orientation: Orientation) ->(i8, u8, Orientation){
-    match car_action {
-        None => (0, 0, orientation),
+fn getRelativeXY<CarAction>(player_state: PlayerState) ->(i8, i8, Orientation){
+    match player_state.next_action {
+        None => (0, 0, player_state.orientation),
         TurnLeft => {
-            match orientation {
+            match player_state.orientation {
                 North => (-1, -1, Orientation::West),
                 South => (1, 1, Orientation::East),
                 West => (-1, 1, Orientation::South),
@@ -47,7 +49,7 @@ fn getRelativeXY<CarAction>(car_action: Option<CarAction>, orientation: Orientat
             }
         },
         TurnRight => {
-            match orientation {
+            match player_state.orientation {
                 North => (-1, 1, Orientation::East),
                 South => (-1, 1, Orientation::West),
                 West => (-1, -1, Orientation::North),
@@ -55,7 +57,7 @@ fn getRelativeXY<CarAction>(car_action: Option<CarAction>, orientation: Orientat
             }
         },
         DriveForward => {
-            match orientation {
+            match player_state.orientation {
                 North => (0, -1, Orientation::North),
                 South => (0, Orientation::South),
                 West => (-1, Orientation::West),
