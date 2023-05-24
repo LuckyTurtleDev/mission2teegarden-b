@@ -82,7 +82,7 @@ pub fn evaluate_cards(cards: &Vec<Card>) -> CardIter {
 mod tests {
 	use m3_models::Card::{Left, MotorOff, MotorOn, Wait};
 
-	use crate::cards::{evaluate_cards, CarAction::*};
+	use crate::cards_ev::{evaluate_cards, CarAction::*};
 	#[test]
 	fn test_card_evaluation() {
 		let cards = vec![MotorOn, Wait(3), Left, Wait(2), MotorOff];
