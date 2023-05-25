@@ -80,6 +80,7 @@ jobs:
           with:
             token: ${{ secrets.GITHUB_TOKEN }}
             deny: warnings
+            working-directory: pc
 
 
   rustfmt:
