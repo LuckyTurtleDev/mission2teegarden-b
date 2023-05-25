@@ -70,9 +70,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test_pc, check_pybadge]
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - run: rustup component add clippy
-      - uses: actions-rs/clippy-check@v1
+      - uses: ructions/clippy-check@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-features
