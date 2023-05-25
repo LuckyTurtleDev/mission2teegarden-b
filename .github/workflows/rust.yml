@@ -70,6 +70,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test_pc, check_pybadge]
     steps:
+        - name: Install alsa, libudev
+          run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev
         - uses: actions/checkout@v2
         - uses: dtolnay/rust-toolchain@stable
           with:
