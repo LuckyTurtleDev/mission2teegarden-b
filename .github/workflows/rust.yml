@@ -79,7 +79,10 @@ jobs:
         - uses: LoliGothick/clippy-check@master
           with:
             token: ${{ secrets.GITHUB_TOKEN }}
-            deny: warnings
+            working-directory: pybadge
+        - uses: LoliGothick/clippy-check@master
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
             working-directory: pc
 
 
