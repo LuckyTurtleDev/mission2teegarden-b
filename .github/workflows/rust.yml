@@ -74,8 +74,16 @@ jobs:
           run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev
         - uses: actions/checkout@v2
         - uses: dtolnay/rust-toolchain@stable
+          id: "rust-toolchain"
           with:
             components: clippy
+        - uses: actions/cache@v3
+          with:
+            path: |
+              ~/.cargo/git
+              ~/.cargo/registry
+              target
+            key: "Clippy ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
         - uses: LoliGothick/clippy-check@master
           with:
             token: ${{ secrets.GITHUB_TOKEN }}
