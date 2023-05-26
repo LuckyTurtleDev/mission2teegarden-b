@@ -5,16 +5,17 @@ use activitys::Activity;
 use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
 use embedded_graphics::{
 	draw_target::DrawTarget,
-	mono_font::{ascii::FONT_6X10, MonoTextStyle},
+	mono_font::{
+		ascii::{FONT_6X10, FONT_9X15},
+		MonoTextStyle
+	},
 	prelude::*,
 	text::Text
 };
-
 use heapless::Vec;
-
 use m3_models::{
-	AvailableCards, Key, MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPcProtocol,
-	ToPybadgeProtocol
+	AvailableCards, Card, Key, MessageToPc, MessageToPyBadge, ToPcGameEvent,
+	ToPcProtocol, ToPybadgeProtocol
 };
 use pybadge_high::{buttons::Buttons, prelude::*, time::uptime, Color, Display, PyBadge};
 use strum::IntoEnumIterator;
@@ -84,21 +85,31 @@ fn send_button_state(buttons: &Buttons) {
 	}
 }
 
-struct State {
+struct State<'a> {
 	display: Display,
 	buttons: Buttons,
+	/// initinal avaibale cards
+	init_avaiable_cards: AvailableCards,
+	/// count of different card types
+	card_type_count: u8,
+	/// count of cards, which are still be able to select
 	avaiable_cards: AvailableCards,
 	activity: Activity,
-	cursor: (u8, u8)
+	cursor: (u8, u8),
+	text_style: MonoTextStyle<'a, Color>,
+	text_style_large: MonoTextStyle<'a, Color>,
+	text_style_large_black: MonoTextStyle<'a, Color>
 }
 
-impl State {
+impl State<'_> {
+	/// clear and draw the hole activity
 	fn init_activity(&mut self) {
 		match self.activity {
 			Activity::Waiting => {},
 			Activity::Selecter => activitys::card_selecter::init(self)
 		}
 	}
+	/// only partional update the display, to improve fps
 	fn update_draw(&mut self) {
 		match self.activity {
 			Activity::Waiting => {},
@@ -151,15 +162,22 @@ fn main() -> ! {
 	//Todo: do not throw away event, wihich are directly send after ConnectionRequest
 	let avaiable_cards = AvailableCards {
 		left: 3,
-		right: 2,
+		wait: 2,
 		..Default::default()
 	};
 	let mut state = State {
 		display,
 		buttons,
+		init_avaiable_cards: avaiable_cards.clone(),
+		card_type_count: Card::iter()
+			.filter(|f| avaiable_cards.card_count(f) != 0)
+			.count() as u8,
 		avaiable_cards,
 		activity: Activity::Selecter,
-		cursor: (0, 0)
+		cursor: (0, 0),
+		text_style,
+		text_style_large: MonoTextStyle::new(&FONT_9X15, Color::WHITE),
+		text_style_large_black: MonoTextStyle::new(&FONT_9X15, Color::BLACK)
 	};
 	let mut last_activity = Activity::Waiting;
 	let mut timestamp;

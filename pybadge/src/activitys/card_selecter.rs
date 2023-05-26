@@ -1,15 +1,15 @@
 use crate::State;
-
-use embedded_graphics::prelude::*;
+use core::fmt::Write;
+use embedded_graphics::{prelude::*, text::Text};
 use embedded_sprites::{image::Image, include_image, sprite::Sprite};
-
+use heapless::{String, Vec};
 use konst::result::unwrap_ctx;
 use m3_models::Card;
 use pybadge_high::{
 	buttons::{Button, Event},
 	Color
 };
-use strum::IntoEnumIterator;
+use strum::{EnumCount, IntoEnumIterator};
 
 #[include_image]
 const IMG_CARD_LEFT: Image<Color> = "pybadge/img/Left.png";
@@ -40,10 +40,40 @@ fn get_card_image(card: Card) -> Image<'static, Color> {
 
 pub(crate) fn init(state: &mut State) {
 	state.display.clear(Color::BLACK).unwrap();
-	for (i, card) in Card::iter().enumerate() {
+	let mut count_str = String::<3>::new();
+	//draw only cards, which are aviable for this level
+	for (i, (count, card)) in Card::iter()
+		.filter_map(|card| {
+			let count = state.avaiable_cards.card_count(&card);
+			if count == 0 {
+				None
+			} else {
+				Some((count, card))
+			}
+		})
+		.enumerate()
+	{
 		Sprite::new(Point::new((26 * i + 2) as i32, 91), &get_card_image(card))
 			.draw(&mut state.display)
 			.unwrap();
+		if let Card::Wait(_) = card {
+			Text::new(
+				"i",
+				Point::new((26 * i + 9) as i32, 106),
+				state.text_style_large_black
+			)
+			.draw(&mut state.display)
+			.unwrap();
+		}
+		count_str.clear();
+		write!(count_str, "{count}");
+		Text::new(
+			&count_str,
+			Point::new((26 * i + 9) as i32, 86),
+			state.text_style_large
+		)
+		.draw(&mut state.display)
+		.unwrap();
 	}
 	state.cursor = (0, 1);
 }
@@ -60,24 +90,27 @@ pub(crate) fn update(state: &mut State) {
 				}
 			}
 		}
-		if state.cursor.0 > 100 {
-			state.cursor.0 = 4 //TODO: do not hardcode this
+		if state.cursor.0 == u8::MAX {
+			state.cursor.0 = state.card_type_count - 1;
 		}
-		if state.cursor.0 > 4 {
+		if state.cursor.0 >= state.card_type_count {
 			//TODO: do not hardcode this
-			state.cursor.0 = 0
+			state.cursor.0 = 0;
 		}
-		Sprite::new(
-			Point::new((26 * last_cursor_pos.0 + 2) as i32, 91),
-			&IMG_CARD_FRAME
-		)
-		.draw(&mut state.display)
-		.unwrap();
-		Sprite::new(
-			Point::new((26 * state.cursor.0 + 2) as i32, 91),
-			&IMG_CARD_SELETED
-		)
-		.draw(&mut state.display)
-		.unwrap();
+		if last_cursor_pos != state.cursor {
+			let number = String::<2>::new();
+			Sprite::new(
+				Point::new((26 * last_cursor_pos.0 + 2) as i32, 91),
+				&IMG_CARD_FRAME
+			)
+			.draw(&mut state.display)
+			.unwrap();
+			Sprite::new(
+				Point::new((26 * state.cursor.0 + 2) as i32, 91),
+				&IMG_CARD_SELETED
+			)
+			.draw(&mut state.display)
+			.unwrap();
+		}
 	}
 }

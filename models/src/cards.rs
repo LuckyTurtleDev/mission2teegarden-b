@@ -1,9 +1,9 @@
 use bincode::{Decode, Encode};
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
-use strum_macros::{AsRefStr, EnumIter};
+use strum_macros::{AsRefStr, EnumCount, EnumIter};
 
-#[derive(AsRefStr, Clone, Copy, Debug, EnumIter)]
+#[derive(AsRefStr, Clone, Copy, Debug, EnumCount, EnumIter)]
 pub enum Card {
 	/// Turn Left
 	Left,
@@ -46,7 +46,7 @@ pub struct AvailableCards {
 
 impl AvailableCards {
 	///return how many cards are avaible from the requested variant `card`
-	pub fn card_count(&self, card: Card) -> u8 {
+	pub fn card_count(&self, card: &Card) -> u8 {
 		match card {
 			Card::Left => self.left,
 			Card::Right => self.right,
