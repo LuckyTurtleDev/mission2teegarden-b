@@ -5,7 +5,10 @@ use embedded_sprites::{image::Image, include_image, sprite::Sprite};
 
 use konst::result::unwrap_ctx;
 use m3_models::Card;
-use pybadge_high::{Color, buttons::{Event, Button}};
+use pybadge_high::{
+	buttons::{Button, Event},
+	Color
+};
 use strum::IntoEnumIterator;
 
 #[include_image]
@@ -20,6 +23,8 @@ const IMG_CARD_STOP: Image<Color> = "pybadge/img/Stop.png";
 const IMG_CARD_WAIT: Image<Color> = "pybadge/img/Wait.png";
 #[include_image]
 const IMG_CARD_SELETED: Image<Color> = "pybadge/img/CardSelected.png";
+#[include_image]
+const IMG_CARD_FRAME: Image<Color> = "pybadge/img/CardFrame.png";
 const IMG_EMPTY: Image<Color> =
 	unwrap_ctx!(Image::new(&[Color::new(0, 0, 0)], &[1, 1], 1, 1));
 
@@ -44,19 +49,35 @@ pub(crate) fn init(state: &mut State) {
 }
 
 pub(crate) fn update(state: &mut State) {
-	for event in state.buttons.events(){
-		if let Event::Pressed(button) = event {
-			match button {
-				Button::Right => state.cursor.0 += 1,
-				Button::Left =>  state.cursor.0 -= 1,
-				_ => {}
+	if state.buttons.some_pressed() {
+		let last_cursor_pos = state.cursor;
+		for event in state.buttons.events() {
+			if let Event::Pressed(button) = event {
+				match button {
+					Button::Right => state.cursor.0 += 1,
+					Button::Left => state.cursor.0 -= 1,
+					_ => {}
+				}
 			}
 		}
+		if state.cursor.0 > 100 {
+			state.cursor.0 = 4 //TODO: do not hardcode this
+		}
+		if state.cursor.0 > 4 {
+			//TODO: do not hardcode this
+			state.cursor.0 = 0
+		}
+		Sprite::new(
+			Point::new((26 * last_cursor_pos.0 + 2) as i32, 91),
+			&IMG_CARD_FRAME
+		)
+		.draw(&mut state.display)
+		.unwrap();
+		Sprite::new(
+			Point::new((26 * state.cursor.0 + 2) as i32, 91),
+			&IMG_CARD_SELETED
+		)
+		.draw(&mut state.display)
+		.unwrap();
 	}
-	Sprite::new(
-		Point::new((26 * state.cursor.0 + 2) as i32, 91),
-		&IMG_CARD_SELETED
-	)
-	.draw(&mut state.display)
-	.unwrap();
 }

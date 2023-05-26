@@ -16,7 +16,7 @@ use m3_models::{
 	AvailableCards, Key, MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPcProtocol,
 	ToPybadgeProtocol
 };
-use pybadge_high::{prelude::*, time::uptime, buttons::Buttons, Color, Display, PyBadge};
+use pybadge_high::{buttons::Buttons, prelude::*, time::uptime, Color, Display, PyBadge};
 use strum::IntoEnumIterator;
 
 mod activitys;
@@ -176,7 +176,7 @@ fn main() -> ! {
 		state.update_draw();
 		//60fps
 		let frame_time = uptime().0 - timestamp.0;
-		if frame_time < 16{
+		if frame_time < 16 {
 			delay.delay_ms(16 - frame_time);
 		}
 	}
