@@ -94,6 +94,8 @@ struct State<'a> {
 	card_type_count: u8,
 	/// count of cards, which are still be able to select
 	avaiable_cards: AvailableCards,
+	/// solution created by the player
+	solution: Vec<Card, 20>,
 	activity: Activity,
 	cursor: (u8, u8),
 	text_style: MonoTextStyle<'a, Color>,
@@ -173,6 +175,7 @@ fn main() -> ! {
 			.filter(|f| avaiable_cards.card_count(f) != 0)
 			.count() as u8,
 		avaiable_cards,
+		solution: Vec::new(),
 		activity: Activity::Selecter,
 		cursor: (0, 0),
 		text_style,

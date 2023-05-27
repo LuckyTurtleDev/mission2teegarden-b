@@ -4,7 +4,7 @@ use embedded_graphics::{prelude::*, text::Text};
 use embedded_sprites::{image::Image, include_image, sprite::Sprite};
 use heapless::{String, Vec};
 use konst::result::unwrap_ctx;
-use m3_models::Card;
+use m3_models::{AvailableCards, Card};
 use pybadge_high::{
 	buttons::{Button, Event},
 	Color
@@ -44,11 +44,10 @@ pub(crate) fn init(state: &mut State) {
 	//draw only cards, which are aviable for this level
 	for (i, (count, card)) in Card::iter()
 		.filter_map(|card| {
-			let count = state.avaiable_cards.card_count(&card);
-			if count == 0 {
+			if state.init_avaiable_cards.card_count(&card) == 0 {
 				None
 			} else {
-				Some((count, card))
+				Some((state.avaiable_cards.card_count(&card), card))
 			}
 		})
 		.enumerate()
@@ -81,9 +80,16 @@ pub(crate) fn init(state: &mut State) {
 pub(crate) fn update(state: &mut State) {
 	if state.buttons.some_pressed() {
 		let last_cursor_pos = state.cursor;
+		let mut add_card = false;
 		for event in state.buttons.events() {
 			if let Event::Pressed(button) = event {
 				match button {
+					/// cursor pos was eventuell changed and is now invalid
+					/// we need to make it valid again first
+					Button::A => add_card = true,
+					Button::B => {
+						state.solution.pop();
+					},
 					Button::Right => state.cursor.0 += 1,
 					Button::Left => state.cursor.0 -= 1,
 					_ => {}
@@ -94,8 +100,21 @@ pub(crate) fn update(state: &mut State) {
 			state.cursor.0 = state.card_type_count - 1;
 		}
 		if state.cursor.0 >= state.card_type_count {
-			//TODO: do not hardcode this
 			state.cursor.0 = 0;
+		}
+		if add_card {
+			for (i, (count, card)) in Card::iter()
+				.filter_map(|card| {
+					if state.init_avaiable_cards.card_count(&card) == 0 {
+						None
+					} else {
+						Some((state.avaiable_cards.card_count(&card), card))
+					}
+				})
+				.enumerate()
+			{
+				todo!()
+			}
 		}
 		if last_cursor_pos != state.cursor {
 			let number = String::<2>::new();
