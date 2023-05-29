@@ -103,17 +103,29 @@ pub(crate) fn update(state: &mut State) {
 			state.cursor.0 = 0;
 		}
 		if add_card {
-			for (i, (count, card)) in Card::iter()
-				.filter_map(|card| {
-					if state.init_avaiable_cards.card_count(&card) == 0 {
-						None
-					} else {
-						Some((state.avaiable_cards.card_count(&card), card))
-					}
-				})
+			//update card state
+			for (i, card) in Card::iter()
+				.filter(|card| state.init_avaiable_cards.card_count(&card) != 0)
 				.enumerate()
 			{
-				todo!()
+				// the card below the cursor
+				if i as u8 == state.cursor.0 {
+					let count: &mut u8 = state.avaiable_cards.card_count_mut(&card);
+					if count == &0_u8 {
+						continue;
+					}
+					*count -= 1;
+					state.solution.push();
+				}
+			}
+			//draw new card
+			if let Some(card) = state.solution.last()
+			//solution can be added
+			{
+				let len = state.solution.len();
+				Sprite::new(Point::new((26 * len + 2) as i32, 2), &get_card_image(card))
+					.draw(&mut state.display)
+					.unwrap();
 			}
 		}
 		if last_cursor_pos != state.cursor {
