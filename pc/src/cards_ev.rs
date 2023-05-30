@@ -8,16 +8,16 @@ pub enum CarAction {
 }
 
 #[derive(Clone, Debug)]
-pub struct CardIter<'a> {
+pub struct CardIter {
 	/// Position of card in vector
 	card_pos: usize,
 	/// Relative y-position to former position
 	wait_counter: u8,
 	driving: bool,
-	cards: &'a Vec<Card>
+	cards: Vec<Card>
 }
 
-impl<'a> Iterator for CardIter<'a> {
+impl<'a> Iterator for CardIter {
 	type Item = Option<CarAction>;
 
 	fn next(&mut self) -> Option<Self::Item> {
@@ -69,7 +69,7 @@ impl<'a> Iterator for CardIter<'a> {
 	}
 }
 
-pub fn evaluate_cards(cards: &Vec<Card>) -> CardIter {
+pub fn evaluate_cards(cards: Vec<Card>) -> CardIter {
 	CardIter {
 		card_pos: 0,
 		wait_counter: 0,
@@ -86,7 +86,7 @@ mod tests {
 	#[test]
 	fn test_card_evaluation() {
 		let cards = vec![MotorOn, Wait(3), Left, Wait(2), MotorOff];
-		let card_iter = evaluate_cards(&cards).take(6);
+		let card_iter = evaluate_cards(cards).take(6);
 		let correct_actions = vec![
 			None,
 			Some(DriveForward),

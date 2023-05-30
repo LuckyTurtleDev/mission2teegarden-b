@@ -4,13 +4,15 @@ use m3_map::{Map, Orientation};
 use macroquad::{prelude::*, window, Window};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
-use m3_models::CardIter;
+//use m3_models::CardIter;
 
 mod tiles;
 mod cards_ev;
 use cards_ev::CarAction;
 use tiles::TEXTURES;
 use usb::Players;
+
+use crate::cards_ev::evaluate_cards;
 
 mod draw;
 mod update;
@@ -30,10 +32,18 @@ static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 });
 
 struct PlayerState {
-	position: (i8, i8),
+	position: (u8, u8),
 	orientation: Orientation,
 	next_action: Option<CarAction>,
-	card_iter: CardIter
+	card_iter: cards_ev::CardIter
+}
+
+impl PlayerState {
+	fn change_state(&mut self, new_pos: (u8, u8), new_orientation: Orientation) {
+		self.position = new_pos;
+		self.orientation = new_orientation;
+		self.next_action = self.card_iter.next().unwrap();
+	}
 }
 
 struct GameRun {
@@ -48,18 +58,19 @@ struct GameState {
 
 impl GameState {
 	fn new() -> GameState {
+		let mut cards = vec![];
 		Lazy::force(&TEXTURES);
 		let level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		debug!("load level{:#?}", level);
-		let player_states = level.iter_player().map(|f|
+		let mut player_states = level.iter_player().map(|f|
 			PlayerState{
 				position: f.position,
 				orientation: f.orientation,
 				next_action: None,
-				card_iter: todo!()
+				card_iter: evaluate_cards(cards.clone())
 			}
 		).collect();
-		let game_run = GameRun {
+		let mut game_run = GameRun {
 			level,
 			player_states
 		};
