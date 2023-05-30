@@ -122,8 +122,8 @@ pub(crate) fn update(state: &mut State) {
 			if let Some(card) = state.solution.last()
 			//solution can be added
 			{
-				let len = state.solution.len();
-				Sprite::new(Point::new((26 * len + 2) as i32, 2), &get_card_image(card))
+				let i = state.solution.len() - 1;
+				Sprite::new(Point::new((26 * i + 2) as i32, 2), &get_card_image(card))
 					.draw(&mut state.display)
 					.unwrap();
 			}
