@@ -55,7 +55,7 @@ impl AvailableCards {
 			Card::MotorOff => self.motor_off
 		}
 	}
-	
+
 	pub fn card_count_mut(&mut self, card: &Card) -> &mut u8 {
 		match card {
 			Card::Left => &mut self.left,
