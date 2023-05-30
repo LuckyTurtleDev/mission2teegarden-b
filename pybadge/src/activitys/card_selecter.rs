@@ -28,7 +28,7 @@ const IMG_CARD_FRAME: Image<Color> = "pybadge/img/CardFrame.png";
 const IMG_EMPTY: Image<Color> =
 	unwrap_ctx!(Image::new(&[Color::new(0, 0, 0)], &[1, 1], 1, 1));
 
-fn get_card_image(card: Card) -> Image<'static, Color> {
+fn get_card_image(card: &Card) -> Image<'static, Color> {
 	match card {
 		Card::Left => IMG_CARD_LEFT,
 		Card::Right => IMG_CARD_RIGHT,
@@ -52,7 +52,7 @@ pub(crate) fn init(state: &mut State) {
 		})
 		.enumerate()
 	{
-		Sprite::new(Point::new((26 * i + 2) as i32, 91), &get_card_image(card))
+		Sprite::new(Point::new((26 * i + 2) as i32, 91), &get_card_image(&card))
 			.draw(&mut state.display)
 			.unwrap();
 		if let Card::Wait(_) = card {
@@ -115,7 +115,7 @@ pub(crate) fn update(state: &mut State) {
 						continue;
 					}
 					*count -= 1;
-					state.solution.push();
+					state.solution.push(card.into());
 				}
 			}
 			//draw new card

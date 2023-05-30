@@ -3,7 +3,7 @@ use bincode::{Decode, Encode};
 use serde::{Deserialize, Serialize};
 use strum_macros::{AsRefStr, EnumCount, EnumIter};
 
-#[derive(AsRefStr, Clone, Copy, Debug, EnumCount, EnumIter)]
+#[derive(AsRefStr, Clone, Debug, EnumCount, EnumIter)]
 pub enum Card {
 	/// Turn Left
 	Left,
