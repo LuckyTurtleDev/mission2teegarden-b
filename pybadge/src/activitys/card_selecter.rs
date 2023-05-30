@@ -1,13 +1,13 @@
 use crate::State;
 use core::fmt::Write;
-use embedded_graphics::{prelude::*, text::Text};
+use embedded_graphics::{mono_font::MonoTextStyle, prelude::*, text::Text};
 use embedded_sprites::{image::Image, include_image, sprite::Sprite};
 use heapless::{String, Vec};
 use konst::result::unwrap_ctx;
 use m3_models::{AvailableCards, Card};
 use pybadge_high::{
 	buttons::{Button, Event},
-	Color
+	Color, Display
 };
 use strum::{EnumCount, IntoEnumIterator};
 
@@ -38,6 +38,16 @@ fn get_card_image(card: &Card) -> Image<'static, Color> {
 	}
 }
 
+/// draw the number of avaibale cards above a card type
+fn draw_count(i: u8, count: u8, display: &mut Display, text_style: MonoTextStyle<Color>) {
+	let mut count_str = String::<3>::new();
+	write!(count_str, "{count}");
+	//clean old number
+	Text::new(&count_str, Point::new((26 * i + 9) as i32, 86), text_style)
+		.draw(display)
+		.unwrap();
+}
+
 pub(crate) fn init(state: &mut State) {
 	state.display.clear(Color::BLACK).unwrap();
 	let mut count_str = String::<3>::new();
@@ -64,15 +74,7 @@ pub(crate) fn init(state: &mut State) {
 			.draw(&mut state.display)
 			.unwrap();
 		}
-		count_str.clear();
-		write!(count_str, "{count}");
-		Text::new(
-			&count_str,
-			Point::new((26 * i + 9) as i32, 86),
-			state.text_style_large
-		)
-		.draw(&mut state.display)
-		.unwrap();
+		draw_count(i as u8, count, &mut state.display, state.text_style_large);
 	}
 	state.cursor = (0, 1);
 }
@@ -115,6 +117,13 @@ pub(crate) fn update(state: &mut State) {
 						continue;
 					}
 					*count -= 1;
+					//draw new card count
+					draw_count(
+						i as u8,
+						*count,
+						&mut state.display,
+						state.text_style_large
+					);
 					state.solution.push(card.into());
 				}
 			}

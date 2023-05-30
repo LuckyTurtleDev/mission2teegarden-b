@@ -10,7 +10,7 @@ use embedded_graphics::{
 		MonoTextStyle
 	},
 	prelude::*,
-	text::Text
+	text::{renderer::CharacterStyle, Text}
 };
 use heapless::Vec;
 use m3_models::{
@@ -167,6 +167,8 @@ fn main() -> ! {
 		wait: 2,
 		..Default::default()
 	};
+	let mut text_style_large = MonoTextStyle::new(&FONT_9X15, Color::WHITE);
+	text_style_large.set_background_color(Some(Color::BLACK));
 	let mut state = State {
 		display,
 		buttons,
@@ -179,7 +181,7 @@ fn main() -> ! {
 		activity: Activity::Selecter,
 		cursor: (0, 0),
 		text_style,
-		text_style_large: MonoTextStyle::new(&FONT_9X15, Color::WHITE),
+		text_style_large,
 		text_style_large_black: MonoTextStyle::new(&FONT_9X15, Color::BLACK)
 	};
 	let mut last_activity = Activity::Waiting;
