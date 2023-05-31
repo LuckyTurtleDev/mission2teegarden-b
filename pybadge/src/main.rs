@@ -1,7 +1,6 @@
 #![no_std]
 #![no_main]
-
-use core::num::NonZeroU8;
+#![deny(unused_must_use)]
 
 use activitys::Activity;
 use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
@@ -32,10 +31,10 @@ mod activitys;
 mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
-const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
+const _CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
 
-const DISPLAY_WIDHT: u16 = 160;
-const DISPLAY_HIGHT: u16 = 128;
+const _DISPLAY_WIDHT: u16 = 160;
+const _DISPLAY_HIGHT: u16 = 128;
 
 fn read_events(usb_data: &mut Vec<u8, 128>) -> Vec<MessageToPyBadge, 10> {
 	let mut events = Vec::<MessageToPyBadge, 10>::new();

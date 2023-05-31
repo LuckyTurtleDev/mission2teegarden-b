@@ -1,8 +1,6 @@
 use crate::{send_event, State};
 use core::fmt::Write;
-use embedded_graphics::{
-	mono_font::MonoTextStyle, prelude::*, primitives::StrokeAlignment, text::Text
-};
+use embedded_graphics::{mono_font::MonoTextStyle, prelude::*, text::Text};
 use embedded_sprites::{image::Image, include_image, sprite::Sprite};
 use heapless::String;
 use m3_models::{Card, MessageToPc, ToPcGameEvent};
@@ -67,13 +65,13 @@ fn draw_card(
 				(26 * (i % CARD_LINE_LENGTH) + 2) as i32,
 				(y + 38 * (i / CARD_LINE_LENGTH)) as i32
 			),
-			&get_card_image(&card)
+			&get_card_image(card)
 		)
 		.draw(display)
 		.unwrap();
 		if let Card::Wait(wait_count) = card {
 			let mut wait_count_str = String::<3>::new();
-			write!(wait_count_str, "{}", wait_count);
+			write!(wait_count_str, "{}", wait_count).unwrap();
 			Text::new(
 				&wait_count_str,
 				Point::new(
@@ -209,7 +207,7 @@ pub(crate) fn update(state: &mut State) {
 				draw_card(
 					i,
 					1,
-					Some(&card),
+					Some(card),
 					&mut state.display,
 					state.text_style_on_card
 				);
