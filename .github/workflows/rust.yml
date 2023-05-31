@@ -12,13 +12,16 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu, windows]
-    name: "test ${{ matrix.os }}"
+        rust_version: [stable, 1.64]
+    name: "test pc ${{ matrix.os }} ${{ matrix.rust_version }}"
     continue-on-error: true
     runs-on: ${{ matrix.os }}-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@master
         id: "rust-toolchain"
+        with:
+          toolchain: ${{ matrix.rust_version }}
       - name: Install alsa, libudev
         if:  ${{ matrix.os == 'ubuntu' }}
         run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev
@@ -42,13 +45,17 @@ jobs:
          
   check_pybadge:
     runs-on: ubuntu-latest
-    name: "check pybadge"
+    strategy:
+      matrix:
+        rust_version: [stable, nightly, 1.64]
+    name: "check pybadge ${{ matrix.rust_version }}"
     steps:
       - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@master
         id: "rust-toolchain"
         with:
           targets: thumbv7em-none-eabihf
+          toolchain: ${{ matrix.rust_version }}
       - uses: actions/cache@v3
         with:
           path: |
