@@ -1,6 +1,11 @@
 use crate::{send_event, State};
-use core::fmt::Write;
-use embedded_graphics::{mono_font::MonoTextStyle, prelude::*, text::Text};
+use core::{fmt::Write, mem};
+use embedded_graphics::{
+	mono_font::MonoTextStyle,
+	prelude::*,
+	primitives::{PrimitiveStyleBuilder, Rectangle},
+	text::Text
+};
 use embedded_sprites::{image::Image, include_image, sprite::Sprite};
 use heapless::String;
 use m3_models::{Card, MessageToPc, ToPcGameEvent};
@@ -27,6 +32,7 @@ const IMG_CARD_FRAME: Image<'_, Color> = "pybadge/img/CardFrame.png";
 
 /// max count of card per line
 const CARD_LINE_LENGTH: u8 = 6;
+const CARD_SELECTION_HIGHT: u8 = 91;
 
 fn get_card_image(card: &Card) -> Image<'static, Color> {
 	match card {
@@ -64,16 +70,14 @@ fn draw_card(
 	display: &mut Display,
 	text_style_on_card: MonoTextStyle<'_, Color>
 ) {
+	let top_left = Point::new(
+		(26 * (i % CARD_LINE_LENGTH) + 2) as i32,
+		(y + 38 * (i / CARD_LINE_LENGTH)) as i32
+	);
 	if let Some(card) = card {
-		Sprite::new(
-			Point::new(
-				(26 * (i % CARD_LINE_LENGTH) + 2) as i32,
-				(y + 38 * (i / CARD_LINE_LENGTH)) as i32
-			),
-			&get_card_image(card)
-		)
-		.draw(display)
-		.unwrap();
+		Sprite::new(top_left, &get_card_image(card))
+			.draw(display)
+			.unwrap();
 		if let Card::Wait(wait_count) = card {
 			let mut wait_count_str = String::<3>::new();
 			write!(wait_count_str, "{}", wait_count).unwrap();
@@ -89,7 +93,15 @@ fn draw_card(
 			.unwrap();
 		}
 	} else {
-		todo!()
+		// clear the postion of the card by filling it with black
+		Rectangle::with_corners(top_left, top_left + Point::new(25, 36))
+			.into_styled(
+				PrimitiveStyleBuilder::new()
+					.fill_color(Color::BLACK)
+					.build()
+			)
+			.draw(display)
+			.unwrap();
 	}
 }
 
@@ -116,7 +128,7 @@ pub(crate) fn init(state: &mut State<'_>) {
 		};
 		draw_card(
 			i as u8,
-			91,
+			CARD_SELECTION_HIGHT,
 			Some(&card),
 			&mut state.display,
 			state.text_style_on_card
@@ -138,9 +150,39 @@ pub(crate) fn update(state: &mut State<'_>) {
 					// cursor pos was eventuell changed and is now invalid
 					// we need to make it valid again first
 					Button::A => a_pressed = true,
-					//Button::B => {
-					//	state.solution.pop();
-					//},
+					Button::B => {
+						if let Some(card) = state.solution.pop() {
+							let i = state.solution.len() as u8;
+							let new_count = state.avaiable_cards.card_count(&card) + 1;
+							state.avaiable_cards.set_card_count_mut(&card, new_count);
+							draw_card(
+								i,
+								1,
+								None,
+								&mut state.display,
+								state.text_style_on_card
+							);
+							for (i, card_iter) in Card::iter()
+								.filter(|card| {
+									state.init_avaiable_cards.card_count(card) != 0
+								})
+								.enumerate()
+							{
+								//compare the type of enum, without the field; see https://doc.rust-lang.org/std/mem/fn.discriminant.html
+								if mem::discriminant(&card)
+									== mem::discriminant(&card_iter)
+								{
+									let count = state.avaiable_cards.card_count(&card);
+									draw_count(
+										i as u8,
+										count,
+										&mut state.display,
+										state.text_style_large
+									)
+								}
+							}
+						}
+					},
 					Button::Right => state.cursor.0 += 1,
 					Button::Left => state.cursor.0 -= 1,
 					Button::Up => state.wait_count += 1,
@@ -222,7 +264,7 @@ pub(crate) fn update(state: &mut State<'_>) {
 			if let Some(wait_card_pos) = state.wait_card_index {
 				draw_card(
 					wait_card_pos,
-					91,
+					CARD_SELECTION_HIGHT,
 					Some(&Card::Wait(last_wait_count)),
 					&mut state.display,
 					state.text_style_on_card
@@ -231,7 +273,10 @@ pub(crate) fn update(state: &mut State<'_>) {
 		}
 		if last_cursor_pos != state.cursor {
 			Sprite::new(
-				Point::new((26 * last_cursor_pos.0 + 2) as i32, 91),
+				Point::new(
+					(26 * last_cursor_pos.0 + 2) as i32,
+					CARD_SELECTION_HIGHT as i32
+				),
 				&IMG_CARD_FRAME
 			)
 			.draw(&mut state.display)
@@ -240,7 +285,10 @@ pub(crate) fn update(state: &mut State<'_>) {
 		//                         updating wait count, does override the cursor, so it must be redrawn
 		if last_cursor_pos != state.cursor || last_wait_count != state.wait_count {
 			Sprite::new(
-				Point::new((26 * state.cursor.0 + 2) as i32, 91),
+				Point::new(
+					(26 * state.cursor.0 + 2) as i32,
+					CARD_SELECTION_HIGHT as i32
+				),
 				&IMG_CARD_SELETED
 			)
 			.draw(&mut state.display)
