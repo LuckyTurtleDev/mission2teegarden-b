@@ -1,6 +1,7 @@
+#![warn(rust_2018_idioms, unreachable_pub)]
+#![deny(unused_must_uses)]
 #![no_std]
 #![no_main]
-#![deny(unused_must_use)]
 
 use activitys::Activity;
 use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
