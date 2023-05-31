@@ -1,3 +1,6 @@
+#![warn(rust_2018_idioms, unreachable_pub)]
+#![deny(unused_must_use, unsafe_code)]
+
 use log::debug;
 use m3_models::AvailableCards;
 use ron::error::SpannedError;
