@@ -56,7 +56,7 @@ struct MapProperties {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Player {
-	pub start: (u8, u8),
+	pub position: (u8, u8),
 	pub orientation: Orientation,
 	pub goal: Option<(u8, u8)>
 }
@@ -242,7 +242,7 @@ impl Map {
 									let orientation = Orientation::try_from(&tile)?;
 									let tile = PlayerTile::try_from(tile.id())?;
 									let player = Some(Player {
-										start: (x, y),
+										position: (x, y),
 										orientation,
 										goal: None
 									});
@@ -299,6 +299,13 @@ impl Map {
 			player_4,
 			cards
 		})
+	}
+
+	pub fn iter_player(&self) -> impl Iterator<Item = &Player> {
+		iter::once(&self.player_1)
+			.chain(iter::once(&self.player_2).flatten())
+			.chain(iter::once(&self.player_3).flatten())
+			.chain(iter::once(&self.player_4).flatten())
 	}
 
 	/// return an iterator over all BasteTiles and its x and y postion

@@ -8,15 +8,17 @@ impl GameState {
 		let screen_width = screen_width();
 		let screen_height = screen_height();
 
-		match &self.level {
+		match &self.game_run {
 			None => todo!(),
-			Some(map) => {
-				let dest_size = (screen_width / map.width as f32)
-					.min(screen_height / map.height as f32);
+			Some(game_run) => {
+				let dest_size = (screen_width / game_run.level.width as f32)
+					.min(screen_height / game_run.level.height as f32);
 				//center map, by using offset
-				let offset_x = (screen_width - dest_size * map.width as f32) / 2.0;
-				let offset_y = (screen_height - dest_size * map.height as f32) / 2.0;
-				for (x, y, tile) in map.iter_all() {
+				let offset_x =
+					(screen_width - dest_size * game_run.level.width as f32) / 2.0;
+				let offset_y =
+					(screen_height - dest_size * game_run.level.height as f32) / 2.0;
+				for (x, y, tile) in game_run.level.iter_all() {
 					let texture = tile.texture(&TEXTURES);
 					let draw_params = DrawTextureParams {
 						dest_size: Some(Vec2::new(dest_size, dest_size)),

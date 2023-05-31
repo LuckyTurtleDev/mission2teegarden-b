@@ -8,16 +8,16 @@ pub enum CarAction {
 }
 
 #[derive(Clone, Debug)]
-pub struct CardStatus<'a> {
+pub struct CardIter {
 	/// Position of card in vector
 	card_pos: usize,
 	/// Relative y-position to former position
 	wait_counter: u8,
 	driving: bool,
-	cards: &'a Vec<Card>
+	cards: Vec<Card>
 }
 
-impl<'a> Iterator for CardStatus<'a> {
+impl<'a> Iterator for CardIter {
 	type Item = Option<CarAction>;
 
 	fn next(&mut self) -> Option<Self::Item> {
@@ -69,8 +69,8 @@ impl<'a> Iterator for CardStatus<'a> {
 	}
 }
 
-pub fn evaluate_cards(cards: &Vec<Card>) -> CardStatus {
-	CardStatus {
+pub fn evaluate_cards(cards: Vec<Card>) -> CardIter {
+	CardIter {
 		card_pos: 0,
 		wait_counter: 0,
 		driving: true,
@@ -82,11 +82,11 @@ pub fn evaluate_cards(cards: &Vec<Card>) -> CardStatus {
 mod tests {
 	use m3_models::Card::{Left, MotorOff, MotorOn, Wait};
 
-	use crate::cards::{evaluate_cards, CarAction::*};
+	use crate::cards_ev::{evaluate_cards, CarAction::*};
 	#[test]
 	fn test_card_evaluation() {
 		let cards = vec![MotorOn, Wait(3), Left, Wait(2), MotorOff];
-		let card_status = evaluate_cards(&cards).take(6);
+		let card_iter = evaluate_cards(cards).take(6);
 		let correct_actions = vec![
 			None,
 			Some(DriveForward),
@@ -97,7 +97,7 @@ mod tests {
 			Some(DriveForward),
 			None,
 		];
-		for (i, card) in card_status.enumerate() {
+		for (i, card) in card_iter.enumerate() {
 			assert!(
 				card == *(correct_actions.get(i).unwrap()),
 				"Action: `{:?}`, Solution: `{:?}`",
@@ -105,9 +105,5 @@ mod tests {
 				*(correct_actions.get(i).unwrap())
 			);
 		}
-		/*assert!(
-			card_status.clone().eq(correct_actions),
-			"Evaluation: `{:?}`", card_status
-		);*/
 	}
 }

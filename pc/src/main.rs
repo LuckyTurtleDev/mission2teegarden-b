@@ -1,13 +1,18 @@
 use log::{debug, info};
 use m3_macro::include_map;
-use m3_map::Map;
+use m3_map::{Map, Orientation};
 use macroquad::{prelude::*, window, Window};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
+//use m3_models::CardIter;
 
+mod cards_ev;
 mod tiles;
+use cards_ev::CarAction;
 use tiles::TEXTURES;
 use usb::Players;
+
+use crate::cards_ev::evaluate_cards;
 
 mod draw;
 mod update;
@@ -26,19 +31,46 @@ static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 	]
 });
 
+struct PlayerState {
+	position: (u8, u8),
+	orientation: Orientation,
+	next_action: Option<CarAction>,
+	card_iter: cards_ev::CardIter
+}
+
+struct GameRun {
+	level: Map,
+	player_states: Vec<PlayerState>
+}
+
 struct GameState {
-	level: Option<Map>,
-	players: Players
+	game_run: Option<GameRun>,
+	input_players: Players
 }
 
 impl GameState {
 	fn new() -> GameState {
+		let cards = vec![];
 		Lazy::force(&TEXTURES);
 		let level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		debug!("load level{:#?}", level);
+		let player_states = level
+			.iter_player()
+			.map(|f| PlayerState {
+				position: f.position,
+				orientation: f.orientation,
+				next_action: None,
+				card_iter: evaluate_cards(cards.clone())
+			})
+			.collect();
+		let game_run = GameRun {
+			level,
+			player_states
+		};
+
 		GameState {
-			level: Some(level),
-			players: usb::Players::init()
+			game_run: Some(game_run),
+			input_players: usb::Players::init()
 		}
 	}
 }
