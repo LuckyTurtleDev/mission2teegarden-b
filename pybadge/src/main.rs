@@ -95,7 +95,7 @@ struct State<'a> {
 	/// count of cards, which are still be able to select
 	avaiable_cards: AvailableCards,
 	/// solution created by the player
-	solution: Vec<Card, 16>,
+	solution: Vec<Card, 12>,
 	activity: Activity,
 	cursor: (u8, u8),
 	text_style: MonoTextStyle<'a, Color>,
@@ -164,7 +164,10 @@ fn main() -> ! {
 	//Todo: do not throw away event, wihich are directly send after ConnectionRequest
 	let avaiable_cards = AvailableCards {
 		left: 3,
-		wait: 2,
+		right: 3,
+		motor_on: 2,
+		motor_off: 2,
+		wait: 9,
 		..Default::default()
 	};
 	let mut text_style_large = MonoTextStyle::new(&FONT_9X15, Color::WHITE);

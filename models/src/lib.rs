@@ -30,7 +30,7 @@ pub enum ToPcGameEvent {
 	// currently heapless::vec is not supported by bincode,
 	// so use Array<Option> as workaround.
 	// see https://github.com/bincode-org/bincode/issues/643
-	Solution([Option<Card>; 16])
+	Solution([Option<Card>; 12])
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]

@@ -78,13 +78,14 @@ pub(crate) fn init(state: &mut State) {
 pub(crate) fn update(state: &mut State) {
 	if state.buttons.some_pressed() {
 		let last_cursor_pos = state.cursor;
-		let mut add_card = false;
+		// ad a card, if a is pressed
+		let mut a_pressed = false;
 		for event in state.buttons.events() {
 			if let Event::Pressed(button) = event {
 				match button {
 					// cursor pos was eventuell changed and is now invalid
 					// we need to make it valid again first
-					Button::A => add_card = true,
+					Button::A => a_pressed = true,
 					//Button::B => {
 					//	state.solution.pop();
 					//},
@@ -92,7 +93,7 @@ pub(crate) fn update(state: &mut State) {
 					Button::Left => state.cursor.0 -= 1,
 					Button::Start => {
 						// can not use [None;16], because "the trait `core::marker::Copy` is not implemented for `Card`"
-						let mut solution = [0; 16].map(|_| None);
+						let mut solution = [0; 12].map(|_| None);
 						for (i, card) in state.solution.iter().enumerate() {
 							//array has the same length as the vec, so this shoud never panic
 							solution[i] = Some(card.clone());
@@ -111,7 +112,7 @@ pub(crate) fn update(state: &mut State) {
 		if state.cursor.0 >= state.card_type_count {
 			state.cursor.0 = 0;
 		}
-		if add_card {
+		if a_pressed && state.solution.len() < 12 {
 			//update card state
 			for (i, card) in Card::iter()
 				.filter(|card| state.init_avaiable_cards.card_count(card) != 0)
