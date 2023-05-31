@@ -3,6 +3,8 @@ workspace = ".."
 name = "m3-map"
 version = "0.1.0"
 edition = "2021"
+rust-version = "1.64"
+publish = false
 
 [dependencies]
 clap = { version = "4.2.5", features = ["derive"] }

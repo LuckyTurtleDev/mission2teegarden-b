@@ -3,6 +3,7 @@ workspace = ".."
 name = "m3-models"
 version = "0.1.0"
 edition = "2021"
+rust-version = "1.64"
 publish = false
 
 [features]
