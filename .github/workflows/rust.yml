@@ -13,7 +13,7 @@ jobs:
       matrix:
         os: [ubuntu, windows]
         rust_version: [stable, 1.64]
-    name: "${{ matrix.os }} ${{ matrix.rust_version }}"
+    name: "test pc ${{ matrix.os }} ${{ matrix.rust_version }}"
     continue-on-error: true
     runs-on: ${{ matrix.os }}-latest
     steps:
@@ -48,7 +48,7 @@ jobs:
     strategy:
       matrix:
         rust_version: [stable, nightly, 1.64]
-    name: "${{ matrix.rust_version }}"
+    name: "check pybadge ${{ matrix.rust_version }}"
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@master
