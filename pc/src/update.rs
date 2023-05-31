@@ -1,16 +1,37 @@
 use m3_map::Orientation;
 use macroquad::prelude::*;
 
-use crate::{cards_ev::CarAction, GameState, PlayerState};
+use crate::{cards_ev::CarAction, GameState, PlayerState, RotationPoint};
 
 impl GameState {
 	///update the current state.
 	pub async fn update(&mut self) {
 		let _player_events = self.input_players.get_events();
-        println!("{}", get_frame_time());
+        if self.delta_time >= self.movement_time {
+            self.delta_time -= self.movement_time;
+            self.next_move();
+        }
+        self.delta_time += get_frame_time();
+
+        
 
 		//use delta time, to avoid that the logic is effected by frame drops
 	}
+
+    pub fn update_player_positions(&mut self) {
+        let game_run = match &self.game_run {
+            None => !todo!(),
+            Some(round) => {
+                for (x, player) in round.level.iter_player().enumerate() {
+                    if round.player_states[x].next_rotation_point != RotationPoint::NoRotation {
+                        todo!()
+                    }
+        
+                }
+            }
+        };
+        
+    }
 
 	pub fn next_move(&mut self) {
 		match &mut self.game_run {
@@ -27,6 +48,7 @@ impl GameState {
 							position: (new_x as u8, new_y as u8),
 							orientation: new_values.2,
 							next_action: state.card_iter.next().unwrap(),
+                            next_rotation_point: new_values.3,
 							card_iter: state.card_iter.clone()
 						};
 						*state = new_state;
@@ -37,35 +59,43 @@ impl GameState {
 	}
 }
 
-fn getRelativeXY(player_state: &PlayerState) -> (i8, i8, Orientation) {
+fn getRelativeXY(player_state: &PlayerState) -> (i8, i8, Orientation, RotationPoint) {
 	match &player_state.next_action {
-		None => (0, 0, player_state.orientation),
+		None => (0, 0, player_state.orientation, RotationPoint::NoRotation),
 		Some(car_action) => {
+            let mut rotation_points = [RotationPoint::NoRotation, RotationPoint::NoRotation, RotationPoint::NoRotation, RotationPoint::NoRotation];
 			let new_orientations = match car_action {
-				CarAction::TurnLeft => [
-					Orientation::West,
-					Orientation::East,
-					Orientation::South,
-					Orientation::North
-				],
-				CarAction::TurnRight => [
-					Orientation::East,
-					Orientation::West,
-					Orientation::North,
-					Orientation::South
-				],
-				CarAction::DriveForward => [
-					Orientation::North,
-					Orientation::South,
-					Orientation::West,
-					Orientation::East
-				]
+				CarAction::TurnLeft => {
+                    rotation_points = [RotationPoint::TopLeft, RotationPoint::BottomRight, RotationPoint::BottomLeft, RotationPoint::TopRight];
+                    [
+                        Orientation::West,
+                        Orientation::East,
+                        Orientation::South,   
+                        Orientation::North
+				    ]
+                },
+				CarAction::TurnRight => {
+                    rotation_points = [RotationPoint::TopRight, RotationPoint::BottomLeft, RotationPoint::BottomRight, RotationPoint::TopLeft];
+                    [
+                        Orientation::East,
+                        Orientation::West,
+                        Orientation::North,
+                        Orientation::South
+				    ]
+                },
+				CarAction::DriveForward =>
+                    [
+                        Orientation::North,
+                        Orientation::South,
+                        Orientation::West,
+                        Orientation::East
+                    ]
 			};
 			match player_state.orientation {
-				Orientation::North => (-0, -1, new_orientations[0]),
-				Orientation::South => (0, 1, new_orientations[1]),
-				Orientation::West => (-1, 0, new_orientations[2]),
-				Orientation::East => (1, 0, new_orientations[3])
+				Orientation::North => (-0, -1, new_orientations[0], rotation_points[0]),
+				Orientation::South => (0, 1, new_orientations[1], rotation_points[1]),
+				Orientation::West => (-1, 0, new_orientations[2], rotation_points[2]),
+				Orientation::East => (1, 0, new_orientations[3], rotation_points[3])
 			}
 		}
 	}
