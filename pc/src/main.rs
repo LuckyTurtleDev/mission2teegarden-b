@@ -45,7 +45,9 @@ struct GameRun {
 
 struct GameState {
 	game_run: Option<GameRun>,
-	input_players: Players
+	input_players: Players,
+	delta_time: f32,
+	movement_time: f32
 }
 
 impl GameState {
@@ -70,7 +72,9 @@ impl GameState {
 
 		GameState {
 			game_run: Some(game_run),
-			input_players: usb::Players::init()
+			input_players: usb::Players::init(),
+			delta_time: 0.0,
+			movement_time: 2.0
 		}
 	}
 }

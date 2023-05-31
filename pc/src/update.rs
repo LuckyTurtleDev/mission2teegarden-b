@@ -1,4 +1,5 @@
 use m3_map::Orientation;
+use macroquad::prelude::*;
 
 use crate::{cards_ev::CarAction, GameState, PlayerState};
 
@@ -6,6 +7,7 @@ impl GameState {
 	///update the current state.
 	pub async fn update(&mut self) {
 		let _player_events = self.input_players.get_events();
+        println!("{}", get_frame_time());
 
 		//use delta time, to avoid that the logic is effected by frame drops
 	}
