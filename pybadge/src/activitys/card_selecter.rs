@@ -265,7 +265,7 @@ pub(crate) fn update(state: &mut State<'_>) {
 				draw_card(
 					wait_card_pos,
 					CARD_SELECTION_HIGHT,
-					Some(&Card::Wait(last_wait_count)),
+					Some(&Card::Wait(state.wait_count)),
 					&mut state.display,
 					state.text_style_on_card
 				);
