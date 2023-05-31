@@ -11,19 +11,19 @@ use pybadge_high::{
 use strum::IntoEnumIterator;
 
 #[include_image]
-const IMG_CARD_LEFT: Image<Color> = "pybadge/img/Left.png";
+const IMG_CARD_LEFT: Image<'_, Color> = "pybadge/img/Left.png";
 #[include_image]
-const IMG_CARD_RIGHT: Image<Color> = "pybadge/img/Right.png";
+const IMG_CARD_RIGHT: Image<'_, Color> = "pybadge/img/Right.png";
 #[include_image]
-const IMG_CARD_MOVE: Image<Color> = "pybadge/img/Move.png";
+const IMG_CARD_MOVE: Image<'_, Color> = "pybadge/img/Move.png";
 #[include_image]
-const IMG_CARD_STOP: Image<Color> = "pybadge/img/Stop.png";
+const IMG_CARD_STOP: Image<'_, Color> = "pybadge/img/Stop.png";
 #[include_image]
-const IMG_CARD_WAIT: Image<Color> = "pybadge/img/Wait.png";
+const IMG_CARD_WAIT: Image<'_, Color> = "pybadge/img/Wait.png";
 #[include_image]
-const IMG_CARD_SELETED: Image<Color> = "pybadge/img/CardSelected.png";
+const IMG_CARD_SELETED: Image<'_, Color> = "pybadge/img/CardSelected.png";
 #[include_image]
-const IMG_CARD_FRAME: Image<Color> = "pybadge/img/CardFrame.png";
+const IMG_CARD_FRAME: Image<'_, Color> = "pybadge/img/CardFrame.png";
 
 /// max count of card per line
 const CARD_LINE_LENGTH: u8 = 6;
@@ -40,7 +40,12 @@ fn get_card_image(card: &Card) -> Image<'static, Color> {
 
 /// draw the number of avaibale cards above a card type
 /// The number is drawn at line postion i at the heigh y.
-fn draw_count(i: u8, count: u8, display: &mut Display, text_style: MonoTextStyle<Color>) {
+fn draw_count(
+	i: u8,
+	count: u8,
+	display: &mut Display,
+	text_style: MonoTextStyle<'_, Color>
+) {
 	let mut count_str = String::<3>::new();
 	write!(count_str, "{count}").unwrap();
 	//clean old number
@@ -57,7 +62,7 @@ fn draw_card(
 	y: u8,
 	card: Option<&Card>,
 	display: &mut Display,
-	text_style_on_card: MonoTextStyle<Color>
+	text_style_on_card: MonoTextStyle<'_, Color>
 ) {
 	if let Some(card) = card {
 		Sprite::new(
@@ -88,7 +93,7 @@ fn draw_card(
 	}
 }
 
-pub(crate) fn init(state: &mut State) {
+pub(crate) fn init(state: &mut State<'_>) {
 	state.wait_card_index = None;
 	state.display.clear(Color::BLACK).unwrap();
 	//draw only cards, which are aviable for this level
@@ -121,7 +126,7 @@ pub(crate) fn init(state: &mut State) {
 	state.cursor = (0, 1);
 }
 
-pub(crate) fn update(state: &mut State) {
+pub(crate) fn update(state: &mut State<'_>) {
 	if state.buttons.some_pressed() {
 		let last_cursor_pos = state.cursor;
 		let last_wait_count = state.wait_count;
