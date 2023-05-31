@@ -301,7 +301,7 @@ impl Map {
 		})
 	}
 
-	pub fn iter_player(&self) -> impl Iterator<Item = &Player>{
+	pub fn iter_player(&self) -> impl Iterator<Item = &Player> {
 		iter::once(&self.player_1)
 			.chain(iter::once(&self.player_2).flatten())
 			.chain(iter::once(&self.player_3).flatten())

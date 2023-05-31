@@ -38,7 +38,6 @@ struct PlayerState {
 	card_iter: cards_ev::CardIter
 }
 
-
 struct GameRun {
 	level: Map,
 	player_states: Vec<PlayerState>

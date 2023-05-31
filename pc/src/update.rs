@@ -30,7 +30,7 @@ impl GameState {
 						*state = new_state;
 					}
 				}
-			}
+			},
 		}
 	}
 }
