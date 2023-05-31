@@ -1,5 +1,6 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
-#![deny(unused_must_use, unsafe_code)]
+#![deny(unsafe_code)]
+#![forbid(unused_must_use)]
 
 use glob::glob;
 use m3_map::Map;
