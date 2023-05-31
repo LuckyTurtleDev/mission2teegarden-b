@@ -12,12 +12,13 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu, windows]
-    name: "test ${{ matrix.os }}"
+        rust_version: [stable, 1.64]
+    name: "${{ matrix.os }} ${{ matrix.rust_version }}"
     continue-on-error: true
     runs-on: ${{ matrix.os }}-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@${{ matrix.rust_version }}
         id: "rust-toolchain"
       - name: Install alsa, libudev
         if:  ${{ matrix.os == 'ubuntu' }}
@@ -42,10 +43,13 @@ jobs:
          
   check_pybadge:
     runs-on: ubuntu-latest
-    name: "check pybadge"
+    strategy:
+      matrix:
+        rust_version: [stable, nightly, 1.64]
+    name: "${{ matrix.rust_version }}"
     steps:
       - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@${{ matrix.rust_version }}
         id: "rust-toolchain"
         with:
           targets: thumbv7em-none-eabihf
