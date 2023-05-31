@@ -1,24 +1,33 @@
 #![no_std]
 #![no_main]
 
+use activitys::Activity;
 use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
-use embedded_graphics::{draw_target::DrawTarget, prelude::*};
+use embedded_graphics::{
+	draw_target::DrawTarget,
+	mono_font::{
+		ascii::{FONT_6X10, FONT_9X15},
+		MonoTextStyle
+	},
+	prelude::*,
+	text::{renderer::CharacterStyle, Text}
+};
 use heapless::Vec;
 use m3_models::{
-	Key, MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPcProtocol, ToPybadgeProtocol
+	AvailableCards, Card, Key, MessageToPc, MessageToPyBadge, ToPcGameEvent,
+	ToPcProtocol, ToPybadgeProtocol
 };
-use pybadge_high::{prelude::*, Buttons, Color, PyBadge};
+use pybadge_high::{buttons::Buttons, prelude::*, time::uptime, Color, Display, PyBadge};
+use strum::IntoEnumIterator;
 
-use embedded_graphics::{
-	mono_font::{ascii::FONT_6X10, MonoTextStyle},
-	prelude::*,
-	text::Text
-};
-
+mod activitys;
 mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
+
+const DISPLAY_WIDHT: u16 = 160;
+const DISPLAY_HIGHT: u16 = 128;
 
 fn read_events(usb_data: &mut Vec<u8, 128>) -> Vec<MessageToPyBadge, 10> {
 	let mut events = Vec::<MessageToPyBadge, 10>::new();
@@ -76,11 +85,46 @@ fn send_button_state(buttons: &Buttons) {
 	}
 }
 
+struct State<'a> {
+	display: Display,
+	buttons: Buttons,
+	/// initinal avaibale cards
+	init_avaiable_cards: AvailableCards,
+	/// count of different card types
+	card_type_count: u8,
+	/// count of cards, which are still be able to select
+	avaiable_cards: AvailableCards,
+	/// solution created by the player
+	solution: Vec<Card, 12>,
+	activity: Activity,
+	cursor: (u8, u8),
+	text_style: MonoTextStyle<'a, Color>,
+	text_style_large: MonoTextStyle<'a, Color>,
+	text_style_large_black: MonoTextStyle<'a, Color>
+}
+
+impl State<'_> {
+	/// clear and draw the hole activity
+	fn init_activity(&mut self) {
+		match self.activity {
+			Activity::Waiting => {},
+			Activity::Selecter => activitys::card_selecter::init(self)
+		}
+	}
+	/// only partional update the display, to improve fps
+	fn update_draw(&mut self) {
+		match self.activity {
+			Activity::Waiting => {},
+			Activity::Selecter => activitys::card_selecter::update(self)
+		}
+	}
+}
+
 #[entry]
 fn main() -> ! {
 	let text_style = MonoTextStyle::new(&FONT_6X10, Color::WHITE);
 	let mut usb_data = Vec::<u8, 128>::new();
-	let mut pybadge = PyBadge::take().unwrap();
+	let pybadge = PyBadge::take().unwrap();
 	let mut delay = pybadge.delay;
 	let mut display = pybadge.display;
 	let mut buttons = pybadge.buttons;
@@ -118,11 +162,48 @@ fn main() -> ! {
 		.draw(&mut display)
 		.ok();
 	//Todo: do not throw away event, wihich are directly send after ConnectionRequest
+	let avaiable_cards = AvailableCards {
+		left: 3,
+		right: 3,
+		motor_on: 2,
+		motor_off: 2,
+		wait: 9,
+		..Default::default()
+	};
+	let mut text_style_large = MonoTextStyle::new(&FONT_9X15, Color::WHITE);
+	text_style_large.set_background_color(Some(Color::BLACK));
+	let mut state = State {
+		display,
+		buttons,
+		init_avaiable_cards: avaiable_cards.clone(),
+		card_type_count: Card::iter()
+			.filter(|f| avaiable_cards.card_count(f) != 0)
+			.count() as u8,
+		avaiable_cards,
+		solution: Vec::new(),
+		activity: Activity::Selecter,
+		cursor: (0, 0),
+		text_style,
+		text_style_large,
+		text_style_large_black: MonoTextStyle::new(&FONT_9X15, Color::BLACK)
+	};
+	let mut last_activity = Activity::Waiting;
+	let mut timestamp;
 	loop {
+		timestamp = uptime();
 		send_event(MessageToPc::KeepAlive);
-		buttons.update();
-		send_button_state(&buttons);
 		usb::read(&mut usb_data);
-		delay.delay_ms(1000_u16);
+		state.buttons.update();
+		send_button_state(&state.buttons);
+		if last_activity != state.activity {
+			state.init_activity();
+			last_activity = state.activity;
+		}
+		state.update_draw();
+		//60fps
+		let frame_time = uptime().0 - timestamp.0;
+		if frame_time < 16 {
+			delay.delay_ms(16 - frame_time);
+		}
 	}
 }

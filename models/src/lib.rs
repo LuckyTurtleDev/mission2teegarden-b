@@ -25,7 +25,12 @@ pub enum ToPcProtocol {
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum ToPcGameEvent {
-	KeyPressed(Key)
+	KeyPressed(Key),
+	/// The solution which the player has created for this level
+	// currently heapless::vec is not supported by bincode,
+	// so use Array<Option> as workaround.
+	// see https://github.com/bincode-org/bincode/issues/643
+	Solution([Option<Card>; 12])
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
