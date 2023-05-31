@@ -15,7 +15,9 @@ pub enum Key {
 	Up,
 	Down,
 	Left,
-	Right
+	Right,
+	Start,
+	Select
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]

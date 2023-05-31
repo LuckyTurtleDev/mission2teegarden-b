@@ -17,7 +17,13 @@ use m3_models::{
 	AvailableCards, Card, Key, MessageToPc, MessageToPyBadge, ToPcGameEvent,
 	ToPcProtocol, ToPybadgeProtocol
 };
-use pybadge_high::{buttons::Buttons, prelude::*, time::uptime, Color, Display, PyBadge};
+use pybadge_high::{
+	buttons,
+	buttons::{Button, Buttons},
+	prelude::*,
+	time::uptime,
+	Color, Display, PyBadge
+};
 use strum::IntoEnumIterator;
 
 mod activitys;
@@ -62,26 +68,27 @@ fn send_event(event: MessageToPc) {
 	usb::wirte(&buf[..len]);
 }
 
+/// convert keys of `pybadge-high` crate, to the keys of the `m3-models` crate.
+fn convert_keys(button: pybadge_high::buttons::Button) -> Key {
+	match button {
+		Button::B => Key::B,
+		Button::A => Key::A,
+		Button::Up => Key::Up,
+		Button::Left => Key::Left,
+		Button::Down => Key::Down,
+		Button::Right => Key::Right,
+		Button::Start => Key::Start,
+		Button::Sesect => Key::Select
+	}
+}
+
 fn send_button_state(buttons: &Buttons) {
-	if buttons.a_pressed() {
-		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::A)));
-	}
-	if buttons.b_pressed() {
-		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::B)));
-	}
-	if buttons.up_pressed() {
-		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::Up)));
-	}
-	if buttons.down_pressed() {
-		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::Down)));
-	}
-	if buttons.left_pressed() {
-		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::Left)));
-	}
-	if buttons.right_pressed() {
-		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(
-			Key::Right
-		)));
+	for event in buttons.events() {
+		if let buttons::Event::Pressed(key) = event {
+			send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(
+				convert_keys(key)
+			)));
+		}
 	}
 }
 
