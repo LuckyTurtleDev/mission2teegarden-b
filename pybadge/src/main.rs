@@ -95,7 +95,7 @@ struct State<'a> {
 	/// count of cards, which are still be able to select
 	avaiable_cards: AvailableCards,
 	/// solution created by the player
-	solution: Vec<Card, 20>,
+	solution: Vec<Card, 16>,
 	activity: Activity,
 	cursor: (u8, u8),
 	text_style: MonoTextStyle<'a, Color>,

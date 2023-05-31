@@ -1,9 +1,9 @@
-use crate::State;
+use crate::{send_event, State};
 use core::fmt::Write;
 use embedded_graphics::{mono_font::MonoTextStyle, prelude::*, text::Text};
 use embedded_sprites::{image::Image, include_image, sprite::Sprite};
 use heapless::String;
-use m3_models::Card;
+use m3_models::{Card, MessageToPc, ToPcGameEvent};
 use pybadge_high::{
 	buttons::{Button, Event},
 	Color, Display
@@ -85,11 +85,22 @@ pub(crate) fn update(state: &mut State) {
 					// cursor pos was eventuell changed and is now invalid
 					// we need to make it valid again first
 					Button::A => add_card = true,
-					Button::B => {
-						state.solution.pop();
-					},
+					//Button::B => {
+					//	state.solution.pop();
+					//},
 					Button::Right => state.cursor.0 += 1,
 					Button::Left => state.cursor.0 -= 1,
+					Button::Start => {
+						// can not use [None;16], because "the trait `core::marker::Copy` is not implemented for `Card`"
+						let mut solution = [0; 16].map(|_| None);
+						for (i, card) in state.solution.iter().enumerate() {
+							//array has the same length as the vec, so this shoud never panic
+							solution[i] = Some(card.clone());
+						}
+						send_event(MessageToPc::GameEvent(ToPcGameEvent::Solution(
+							solution
+						)));
+					},
 					_ => {}
 				}
 			}
@@ -120,6 +131,13 @@ pub(crate) fn update(state: &mut State) {
 						&mut state.display,
 						state.text_style_large
 					);
+					// selection the wait time is currently not supported by gui,
+					// so hardcode 1 for now
+					let card = if let Card::Wait(_) = card {
+						Card::Wait(1)
+					} else {
+						card
+					};
 					state.solution.push(card).unwrap();
 				}
 			}
