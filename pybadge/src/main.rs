@@ -1,6 +1,8 @@
 #![no_std]
 #![no_main]
 
+use core::num::NonZeroU8;
+
 use activitys::Activity;
 use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
 use embedded_graphics::{
@@ -105,9 +107,12 @@ struct State<'a> {
 	solution: Vec<Card, 12>,
 	activity: Activity,
 	cursor: (u8, u8),
+	wait_count: u8,
+	/// positon of the wait card to allow faster update
+	wait_card_index: Option<u8>,
 	text_style: MonoTextStyle<'a, Color>,
 	text_style_large: MonoTextStyle<'a, Color>,
-	text_style_large_black: MonoTextStyle<'a, Color>
+	text_style_on_card: MonoTextStyle<'a, Color>
 }
 
 impl State<'_> {
@@ -190,9 +195,11 @@ fn main() -> ! {
 		solution: Vec::new(),
 		activity: Activity::Selecter,
 		cursor: (0, 0),
+		wait_count: 1,
+		wait_card_index: None,
 		text_style,
 		text_style_large,
-		text_style_large_black: MonoTextStyle::new(&FONT_9X15, Color::BLACK)
+		text_style_on_card: MonoTextStyle::new(&FONT_9X15, Color::BLACK)
 	};
 	let mut last_activity = Activity::Waiting;
 	let mut timestamp;
