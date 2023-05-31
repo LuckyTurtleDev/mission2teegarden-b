@@ -65,6 +65,16 @@ impl AvailableCards {
 			Card::MotorOff => &mut self.motor_off
 		}
 	}
+
+	pub fn set_card_count_mut(&mut self, card: &Card, count: u8) {
+		match card {
+			Card::Left => self.left = count,
+			Card::Right => self.right = count,
+			Card::Wait(_i) => self.wait = count,
+			Card::MotorOn => self.motor_on = count,
+			Card::MotorOff => self.motor_off = count
+		}
+	}
 }
 
 #[cfg(test)]

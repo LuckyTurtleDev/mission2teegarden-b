@@ -1,5 +1,5 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
-#![forbid(unused_must_uses)]
+#![forbid(unused_must_use)]
 #![no_std]
 #![no_main]
 
