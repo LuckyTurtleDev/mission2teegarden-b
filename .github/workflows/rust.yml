@@ -18,8 +18,10 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@${{ matrix.rust_version }}
+      - uses: dtolnay/rust-toolchain@master
         id: "rust-toolchain"
+        with:
+          toolchain: ${{ matrix.rust_version }}
       - name: Install alsa, libudev
         if:  ${{ matrix.os == 'ubuntu' }}
         run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev
@@ -49,10 +51,11 @@ jobs:
     name: "${{ matrix.rust_version }}"
     steps:
       - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@${{ matrix.rust_version }}
+      - uses: dtolnay/rust-toolchain@master
         id: "rust-toolchain"
         with:
           targets: thumbv7em-none-eabihf
+          toolchain: ${{ matrix.rust_version }}
       - uses: actions/cache@v3
         with:
           path: |
