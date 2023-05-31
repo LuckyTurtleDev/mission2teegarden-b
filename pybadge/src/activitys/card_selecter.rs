@@ -25,6 +25,9 @@ const IMG_CARD_SELETED: Image<Color> = "pybadge/img/CardSelected.png";
 #[include_image]
 const IMG_CARD_FRAME: Image<Color> = "pybadge/img/CardFrame.png";
 
+/// max count of card per line
+const CARD_LINE_LENGTH: u8 = 6;
+
 fn get_card_image(card: &Card) -> Image<'static, Color> {
 	match card {
 		Card::Left => IMG_CARD_LEFT,
@@ -36,16 +39,57 @@ fn get_card_image(card: &Card) -> Image<'static, Color> {
 }
 
 /// draw the number of avaibale cards above a card type
+/// The number is drawn at line postion i at the heigh y.
 fn draw_count(i: u8, count: u8, display: &mut Display, text_style: MonoTextStyle<Color>) {
 	let mut count_str = String::<3>::new();
 	write!(count_str, "{count}").unwrap();
 	//clean old number
-	Text::new(&count_str, Point::new((26 * i + 9) as i32, 86), text_style)
+	Text::new(&count_str, Point::new((26 * i + 9) as i32, 87), text_style)
 		.draw(display)
 		.unwrap();
 }
 
+/// draw a card or clearr field is None.
+/// The card is drawn at postion i at the line which start the heigh y,
+/// with build in line break
+fn draw_card(
+	i: u8,
+	y: u8,
+	card: Option<&Card>,
+	display: &mut Display,
+	text_style_on_card: MonoTextStyle<Color>
+) {
+	if let Some(card) = card {
+		Sprite::new(
+			Point::new(
+				(26 * (i % CARD_LINE_LENGTH) + 2) as i32,
+				(y + 38 * (i / CARD_LINE_LENGTH)) as i32
+			),
+			&get_card_image(card)
+		)
+		.draw(display)
+		.unwrap();
+		if let Card::Wait(wait_count) = card {
+			let mut wait_count_str = String::<3>::new();
+			write!(wait_count_str, "{}", wait_count).unwrap();
+			Text::new(
+				&wait_count_str,
+				Point::new(
+					(26 * (i % CARD_LINE_LENGTH) + 9) as i32,
+					(y + 15 + 38 * (i / CARD_LINE_LENGTH)) as i32
+				),
+				text_style_on_card
+			)
+			.draw(display)
+			.unwrap();
+		}
+	} else {
+		todo!()
+	}
+}
+
 pub(crate) fn init(state: &mut State) {
+	state.wait_card_index = None;
 	state.display.clear(Color::BLACK).unwrap();
 	//draw only cards, which are aviable for this level
 	for (i, (count, card)) in Card::iter()
@@ -58,18 +102,20 @@ pub(crate) fn init(state: &mut State) {
 		})
 		.enumerate()
 	{
-		Sprite::new(Point::new((26 * i + 2) as i32, 91), &get_card_image(&card))
-			.draw(&mut state.display)
-			.unwrap();
-		if let Card::Wait(_) = card {
-			Text::new(
-				"i",
-				Point::new((26 * i + 9) as i32, 106),
-				state.text_style_large_black
-			)
-			.draw(&mut state.display)
-			.unwrap();
-		}
+		//wait count must be set for wait cards
+		let card = if let Card::Wait(_) = card {
+			state.wait_card_index = Some(i as u8);
+			Card::Wait(state.wait_count)
+		} else {
+			card
+		};
+		draw_card(
+			i as u8,
+			91,
+			Some(&card),
+			&mut state.display,
+			state.text_style_on_card
+		);
 		draw_count(i as u8, count, &mut state.display, state.text_style_large);
 	}
 	state.cursor = (0, 1);
@@ -78,6 +124,7 @@ pub(crate) fn init(state: &mut State) {
 pub(crate) fn update(state: &mut State) {
 	if state.buttons.some_pressed() {
 		let last_cursor_pos = state.cursor;
+		let last_wait_count = state.wait_count;
 		// ad a card, if a is pressed
 		let mut a_pressed = false;
 		for event in state.buttons.events() {
@@ -91,6 +138,8 @@ pub(crate) fn update(state: &mut State) {
 					//},
 					Button::Right => state.cursor.0 += 1,
 					Button::Left => state.cursor.0 -= 1,
+					Button::Up => state.wait_count += 1,
+					Button::Down => state.wait_count -= 1,
 					Button::Start => {
 						// can not use [None;16], because "the trait `core::marker::Copy` is not implemented for `Card`"
 						let mut solution = [0; 12].map(|_| None);
@@ -106,12 +155,21 @@ pub(crate) fn update(state: &mut State) {
 				}
 			}
 		}
+		//check if all params are still in a valid range
+		//and fix them if not
 		if state.cursor.0 == u8::MAX {
 			state.cursor.0 = state.card_type_count - 1;
 		}
 		if state.cursor.0 >= state.card_type_count {
 			state.cursor.0 = 0;
 		}
+		if state.wait_count == 0 {
+			state.wait_count = 9
+		}
+		if state.wait_count > 9 {
+			state.wait_count = 1
+		}
+		// add a card to solutios
 		if a_pressed && state.solution.len() < 12 {
 			//update card state
 			for (i, card) in Card::iter()
@@ -132,10 +190,9 @@ pub(crate) fn update(state: &mut State) {
 						&mut state.display,
 						state.text_style_large
 					);
-					// selection the wait time is currently not supported by gui,
-					// so hardcode 1 for now
+					// card wait count must be set to the curren value in state
 					let card = if let Card::Wait(_) = card {
-						Card::Wait(1)
+						Card::Wait(state.wait_count)
 					} else {
 						card
 					};
@@ -146,10 +203,25 @@ pub(crate) fn update(state: &mut State) {
 			if let Some(card) = state.solution.last()
 			//solution can be added
 			{
-				let i = state.solution.len() - 1;
-				Sprite::new(Point::new((26 * i + 2) as i32, 2), &get_card_image(card))
-					.draw(&mut state.display)
-					.unwrap();
+				let i = (state.solution.len() - 1) as u8;
+				draw_card(
+					i,
+					1,
+					Some(card),
+					&mut state.display,
+					state.text_style_on_card
+				);
+			}
+		}
+		if last_wait_count != state.wait_count {
+			if let Some(wait_card_pos) = state.wait_card_index {
+				draw_card(
+					wait_card_pos,
+					91,
+					Some(&Card::Wait(last_wait_count)),
+					&mut state.display,
+					state.text_style_on_card
+				);
 			}
 		}
 		if last_cursor_pos != state.cursor {
@@ -159,6 +231,9 @@ pub(crate) fn update(state: &mut State) {
 			)
 			.draw(&mut state.display)
 			.unwrap();
+		}
+		//                         updating wait count, does override the cursor, so it must be redrawn
+		if last_cursor_pos != state.cursor || last_wait_count != state.wait_count {
 			Sprite::new(
 				Point::new((26 * state.cursor.0 + 2) as i32, 91),
 				&IMG_CARD_SELETED
