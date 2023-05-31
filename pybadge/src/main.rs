@@ -179,8 +179,7 @@ fn main() -> ! {
 		right: 3,
 		motor_on: 2,
 		motor_off: 2,
-		wait: 9,
-		..Default::default()
+		wait: 9
 	};
 	let mut text_style_large = MonoTextStyle::new(&FONT_9X15, Color::WHITE);
 	text_style_large.set_background_color(Some(Color::BLACK));
