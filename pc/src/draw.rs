@@ -14,8 +14,10 @@ impl GameState {
 				let dest_size = (screen_width / game_run.level.width as f32)
 					.min(screen_height / game_run.level.height as f32);
 				//center map, by using offset
-				let offset_x = (screen_width - dest_size * game_run.level.width as f32) / 2.0;
-				let offset_y = (screen_height - dest_size * game_run.level.height as f32) / 2.0;
+				let offset_x =
+					(screen_width - dest_size * game_run.level.width as f32) / 2.0;
+				let offset_y =
+					(screen_height - dest_size * game_run.level.height as f32) / 2.0;
 				for (x, y, tile) in game_run.level.iter_all() {
 					let texture = tile.texture(&TEXTURES);
 					let draw_params = DrawTextureParams {

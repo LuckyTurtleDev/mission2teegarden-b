@@ -6,8 +6,8 @@ use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
 //use m3_models::CardIter;
 
-mod tiles;
 mod cards_ev;
+mod tiles;
 use cards_ev::CarAction;
 use tiles::TEXTURES;
 use usb::Players;
@@ -38,13 +38,6 @@ struct PlayerState {
 	card_iter: cards_ev::CardIter
 }
 
-impl PlayerState {
-	fn change_state(&mut self, new_pos: (u8, u8), new_orientation: Orientation) {
-		self.position = new_pos;
-		self.orientation = new_orientation;
-		self.next_action = self.card_iter.next().unwrap();
-	}
-}
 
 struct GameRun {
 	level: Map,
@@ -58,19 +51,20 @@ struct GameState {
 
 impl GameState {
 	fn new() -> GameState {
-		let mut cards = vec![];
+		let cards = vec![];
 		Lazy::force(&TEXTURES);
 		let level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		debug!("load level{:#?}", level);
-		let mut player_states = level.iter_player().map(|f|
-			PlayerState{
+		let player_states = level
+			.iter_player()
+			.map(|f| PlayerState {
 				position: f.position,
 				orientation: f.orientation,
 				next_action: None,
 				card_iter: evaluate_cards(cards.clone())
-			}
-		).collect();
-		let mut game_run = GameRun {
+			})
+			.collect();
+		let game_run = GameRun {
 			level,
 			player_states
 		};
