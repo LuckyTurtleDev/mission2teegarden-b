@@ -17,7 +17,7 @@ use embedded_graphics::{
 use heapless::Vec;
 use m3_models::{
 	AvailableCards, Card, Key, MessageToPc, MessageToPyBadge, ToPcGameEvent,
-	ToPcProtocol, ToPybadgeProtocol
+	ToPcProtocol, ToPybadgeProtocol, ToPypadeGameEvent
 };
 use pybadge_high::{
 	buttons,
@@ -120,14 +120,18 @@ impl State<'_> {
 	fn init_activity(&mut self) {
 		match self.activity {
 			Activity::Waiting => {},
-			Activity::Selecter => activitys::card_selecter::init(self)
+			Activity::Selecter => activitys::card_selecter::init(self),
+			Activity::GameOver(game_over_type) => {
+				activitys::game_over::init(self, &game_over_type.clone())
+			},
 		}
 	}
 	/// only partional update the display, to improve fps
 	fn update_draw(&mut self) {
 		match self.activity {
 			Activity::Waiting => {},
-			Activity::Selecter => activitys::card_selecter::update(self)
+			Activity::Selecter => activitys::card_selecter::update(self),
+			Activity::GameOver(_) => {}
 		}
 	}
 }
@@ -205,12 +209,24 @@ fn main() -> ! {
 	loop {
 		timestamp = uptime();
 		send_event(MessageToPc::KeepAlive);
-		usb::read(&mut usb_data);
 		state.buttons.update();
 		send_button_state(&state.buttons);
+		usb::read(&mut usb_data);
+		let events = read_events(&mut usb_data);
+		for event in events {
+			match event {
+				MessageToPyBadge::Protocol(_) => {},
+				MessageToPyBadge::GameEvent(event) => match event {
+					ToPypadeGameEvent::NewLevel(_) => todo!(),
+					ToPypadeGameEvent::GameOver(game_over_type) => {
+						state.activity = Activity::GameOver(game_over_type)
+					},
+				}
+			}
+		}
 		if last_activity != state.activity {
 			state.init_activity();
-			last_activity = state.activity;
+			last_activity = state.activity.clone();
 		}
 		state.update_draw();
 		//60fps
