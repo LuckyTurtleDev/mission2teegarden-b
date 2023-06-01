@@ -64,7 +64,10 @@ pub enum ToPybadgeProtocol {
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum ToPypadeGameEvent {
 	NewLevel(AvailableCards),
-	GameOver(GameOver)
+	GameOver(GameOver),
+	/// Retry the current level,
+	/// with out clearing the solution of the player
+	Retry
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]

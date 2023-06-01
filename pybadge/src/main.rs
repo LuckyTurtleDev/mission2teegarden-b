@@ -218,6 +218,7 @@ fn main() -> ! {
 				MessageToPyBadge::Protocol(_) => {},
 				MessageToPyBadge::GameEvent(event) => match event {
 					ToPypadeGameEvent::NewLevel(_) => todo!(),
+					ToPypadeGameEvent::Retry => state.activity = Activity::Selecter,
 					ToPypadeGameEvent::GameOver(game_over_type) => {
 						state.activity = Activity::GameOver(game_over_type)
 					},
