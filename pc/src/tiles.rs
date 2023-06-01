@@ -75,6 +75,15 @@ impl Textures {
 			)
 		}
 	}
+
+	pub fn get_player_textures(&self) -> Vec<Texture2D> {
+		vec![
+			self.player1_car,
+			self.player2_car,
+			self.player3_car,
+			self.player4_car
+		]
+	}
 }
 
 impl GetTexture for MapBaseTile {

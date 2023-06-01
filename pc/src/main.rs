@@ -62,7 +62,7 @@ struct GameState {
 
 impl GameState {
 	fn new() -> GameState {
-		let cards = vec![];
+		let cards = vec![];	//TODO: load cards from pybadge
 		Lazy::force(&TEXTURES);
 		let level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		debug!("load level{:#?}", level);

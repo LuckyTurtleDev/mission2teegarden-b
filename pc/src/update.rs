@@ -1,7 +1,9 @@
-use m3_map::Orientation;
+use std::borrow::BorrowMut;
+
+use m3_map::{Orientation, Player};
 use macroquad::prelude::*;
 
-use crate::{cards_ev::CarAction, GameState, PlayerState, RotationPoint};
+use crate::{cards_ev::CarAction, GameState, PlayerState, RotationPoint, tiles::{TEXTURES, GetTexture, Textures}};
 
 impl GameState {
 	///update the current state.
@@ -19,18 +21,23 @@ impl GameState {
 	}
 
     pub fn update_player_positions(&mut self) {
-        let game_run = match &self.game_run {
+        match &mut self.game_run {
             None => !todo!(),
-            Some(round) => {
-                for (x, player) in round.level.iter_player().enumerate() {
+            Some(ref mut round) => {
+                let player_textures = TEXTURES.get_player_textures();
+                for (x, player) in &mut round.level.iter_player().enumerate() {
+                    // update player position
                     if round.player_states[x].next_rotation_point != RotationPoint::NoRotation {
+                        let offset_x = (round.player_states[x].position.0 - player.position.0) as f32 / (self.movement_time/self.delta_time);
+                        let offset_y = (round.player_states[x].position.1 - player.position.1) as f32 / (self.movement_time/self.delta_time);
+                        let new_position = (player.position.0 + offset_x.round() as u8, player.position.1 + offset_y.round() as u8);
+                        player.position = new_position;
+                    } else {
                         todo!()
                     }
-        
                 }
             }
-        };
-        
+        }; 
     }
 
 	pub fn next_move(&mut self) {

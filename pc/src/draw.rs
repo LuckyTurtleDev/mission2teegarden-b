@@ -1,4 +1,4 @@
-use crate::{tiles::GetTexture, GameState, TEXTURES};
+use crate::{tiles::GetTexture, GameState, TEXTURES, RotationPoint};
 use macroquad::{math::Vec2, prelude::*};
 
 impl GameState {
@@ -34,6 +34,26 @@ impl GameState {
 						draw_params
 					);
 				}
+
+				//draw players
+				let player_textures = TEXTURES.get_player_textures();
+                for (x, player) in game_run.level.iter_player().enumerate() {
+                    if game_run.player_states[x].next_rotation_point != RotationPoint::NoRotation {
+                        let texture = player_textures[x];
+                        let draw_params = DrawTextureParams {
+							dest_size: Some(Vec2::new(dest_size, dest_size)),
+							..Default::default()
+						};
+                        draw_texture_ex(
+                            texture,
+                        	player.position.0.into(),
+                            player.position.1.into(),
+                            WHITE,
+                            draw_params
+                        );
+                    }
+        
+                }
 			}
 		}
 	}
