@@ -3,7 +3,7 @@ use std::borrow::BorrowMut;
 use m3_map::{Orientation, Player};
 use macroquad::prelude::*;
 
-use crate::{cards_ev::CarAction, GameState, PlayerState, RotationPoint, tiles::{TEXTURES, GetTexture, Textures}};
+use crate::{cards_ev::CarAction, GameState, PlayerState, Rotation, RotationPoint, tiles::{TEXTURES, GetTexture, Textures}};
 
 impl GameState {
 	///update the current state.
@@ -27,7 +27,6 @@ impl GameState {
 			Some(ref mut game_run) => {
                 // update player position
                 for (x, player) in &mut game_run.level.iter_mut_player().enumerate() {
-                    //print!(" | Player {} position: {:?}\n", x, player.position);
                     player.position = game_run.player_states[x].position;
                     player.orientation = game_run.player_states[x].orientation;
                 }
@@ -45,26 +44,27 @@ impl GameState {
 							position: (new_x as u8, new_y as u8),
 							orientation: new_values.2,
 							next_action: state.card_iter.next().unwrap(),
-                            next_rotation_point: new_values.3,
+                            rotation: new_values.3,
 							card_iter: state.card_iter.clone()
 						};
 						*state = new_state;
 					}
 				}
-                println!("####################");
 			},
 		}
 	}
 }
 
-fn getRelativeXY(player_state: &PlayerState) -> (i8, i8, Orientation, RotationPoint) {
+fn getRelativeXY(player_state: &PlayerState) -> (i8, i8, Orientation, Rotation) {
 	match &player_state.next_action {
-		None => (0, 0, player_state.orientation, RotationPoint::NoRotation),
+		None => (0, 0, player_state.orientation, Rotation { pivot: RotationPoint::NoRotation, sign: 1 }),
 		Some(car_action) => {
-            let mut rotation_points = [RotationPoint::NoRotation, RotationPoint::NoRotation, RotationPoint::NoRotation, RotationPoint::NoRotation];
-			let new_orientations = match car_action {
+            let mut rotation_pivots = [RotationPoint::NoRotation, RotationPoint::NoRotation, RotationPoint::NoRotation, RotationPoint::NoRotation];
+			let mut rotation_sign = 1;
+            let new_orientations = match car_action {
 				CarAction::TurnLeft => {
-                    rotation_points = [RotationPoint::TopLeft, RotationPoint::BottomRight, RotationPoint::BottomLeft, RotationPoint::TopRight];
+                    rotation_pivots = [RotationPoint::TopLeft, RotationPoint::BottomRight, RotationPoint::BottomLeft, RotationPoint::TopRight];
+                    rotation_sign = -1;
                     [
                         Orientation::West,
                         Orientation::East,
@@ -73,7 +73,7 @@ fn getRelativeXY(player_state: &PlayerState) -> (i8, i8, Orientation, RotationPo
 				    ]
                 },
 				CarAction::TurnRight => {
-                    rotation_points = [RotationPoint::TopRight, RotationPoint::BottomLeft, RotationPoint::BottomRight, RotationPoint::TopLeft];
+                    rotation_pivots = [RotationPoint::TopRight, RotationPoint::BottomLeft, RotationPoint::BottomRight, RotationPoint::TopLeft];
                     [
                         Orientation::East,
                         Orientation::West,
@@ -90,10 +90,10 @@ fn getRelativeXY(player_state: &PlayerState) -> (i8, i8, Orientation, RotationPo
                     ]
 			};
 			match player_state.orientation {
-				Orientation::North => (0, -1, new_orientations[0], rotation_points[0]),
-				Orientation::South => (0, 1, new_orientations[1], rotation_points[1]),
-				Orientation::West => (-1, 0, new_orientations[2], rotation_points[2]),
-				Orientation::East => (1, 0, new_orientations[3], rotation_points[3])
+				Orientation::North => (0, -1, new_orientations[0], Rotation { pivot: rotation_pivots[0], sign: rotation_sign }),
+				Orientation::South => (0, 1, new_orientations[1], Rotation { pivot: rotation_pivots[1], sign: rotation_sign }),
+				Orientation::West => (-1, 0, new_orientations[2], Rotation { pivot: rotation_pivots[2], sign: rotation_sign }),
+				Orientation::East => (1, 0, new_orientations[3], Rotation { pivot: rotation_pivots[3], sign: rotation_sign }),
 			}
 		}
 	}

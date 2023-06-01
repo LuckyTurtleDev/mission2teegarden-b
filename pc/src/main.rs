@@ -32,7 +32,7 @@ static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 	]
 });
 
-#[derive(PartialEq, Clone, Copy)]
+#[derive(PartialEq, Clone, Copy, Debug)]
 pub enum RotationPoint {
 	TopLeft,
 	TopRight,
@@ -41,11 +41,16 @@ pub enum RotationPoint {
 	NoRotation
 }
 
+struct Rotation {
+	pivot: RotationPoint,
+	sign: i8
+}
+
 struct PlayerState {
 	position: (u8, u8),
 	orientation: Orientation,
 	next_action: Option<CarAction>,
-	next_rotation_point: RotationPoint,
+	rotation: Rotation,
 	card_iter: cards_ev::CardIter
 }
 
@@ -73,7 +78,10 @@ impl GameState {
 				position: f.position,
 				orientation: f.orientation,
 				next_action: None,
-				next_rotation_point: RotationPoint::NoRotation,
+				rotation: Rotation {
+					pivot: RotationPoint::NoRotation,
+					sign: 1
+				},
 				card_iter: evaluate_cards(cards.clone())
 			})
 			.collect();
