@@ -108,6 +108,7 @@ fn draw_card(
 pub(crate) fn init(state: &mut State<'_>) {
 	state.wait_card_index = None;
 	state.display.clear(Color::BLACK).unwrap();
+	//draw cards witch can be selected
 	//draw only cards, which are aviable for this level
 	for (i, (count, card)) in Card::iter()
 		.filter_map(|card| {
@@ -119,7 +120,8 @@ pub(crate) fn init(state: &mut State<'_>) {
 		})
 		.enumerate()
 	{
-		//wait count must be set for wait cards
+		//wait count must be manual set for wait cards,
+		//because `strum::IntoEnumIterator` does always use default (0)
 		let card = if let Card::Wait(_) = card {
 			state.wait_card_index = Some(i as u8);
 			Card::Wait(state.wait_count)
