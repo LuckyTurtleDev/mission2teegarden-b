@@ -21,33 +21,17 @@ impl GameState {
 		//use delta time, to avoid that the logic is effected by frame drops
 	}
 
-    /*pub fn update_player_positions(&mut self) {
-        match &mut self.game_run {
-            None => !todo!(),
-            Some(ref mut round) => {
-                let player_textures = TEXTURES.get_player_textures();
-                for (x, player) in &mut round.level.iter_player().enumerate() {
-                    // update player position
-                    if round.player_states[x].next_rotation_point != RotationPoint::NoRotation {
-                        
-                        player.position = new_position;
-                    } else {
-                        todo!()
-                    }
-                }
-            }
-        }; 
-    }*/
-
 	pub fn next_move(&mut self) {
 		match &mut self.game_run {
 			None => !todo!(),
 			Some(ref mut game_run) => {
                 // update player position
-                for (x, player) in &mut game_run.level.iter_player().enumerate() {
-                    (*player).position = game_run.player_states[x].position;
+                for (x, player) in &mut game_run.level.iter_mut_player().enumerate() {
+                    //print!(" | Player {} position: {:?}\n", x, player.position);
+                    player.position = game_run.player_states[x].position;
                     player.orientation = game_run.player_states[x].orientation;
                 }
+                
                 //update next state
 				for state in &mut game_run.player_states {
 					let new_values = getRelativeXY(state);
@@ -56,6 +40,7 @@ impl GameState {
 					if new_x < 0 || new_y < 0 {
 						todo!()
 					} else {
+                        
 						let new_state = PlayerState {
 							position: (new_x as u8, new_y as u8),
 							orientation: new_values.2,
@@ -66,6 +51,7 @@ impl GameState {
 						*state = new_state;
 					}
 				}
+                println!("####################");
 			},
 		}
 	}
@@ -104,7 +90,7 @@ fn getRelativeXY(player_state: &PlayerState) -> (i8, i8, Orientation, RotationPo
                     ]
 			};
 			match player_state.orientation {
-				Orientation::North => (-0, -1, new_orientations[0], rotation_points[0]),
+				Orientation::North => (0, -1, new_orientations[0], rotation_points[0]),
 				Orientation::South => (0, 1, new_orientations[1], rotation_points[1]),
 				Orientation::West => (-1, 0, new_orientations[2], rotation_points[2]),
 				Orientation::East => (1, 0, new_orientations[3], rotation_points[3])
