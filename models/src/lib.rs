@@ -11,6 +11,16 @@ pub use cards::*;
 // new structure
 // event + game + keep alive message
 
+#[derive(Debug, Clone, Copy, Decode, Encode, PartialEq, Eq)]
+pub enum GameOver {
+	/// Player has drive outside the map.
+	DriveAway,
+	/// Player has not reach goal in time.
+	TimeOut,
+	/// Player has crash.
+	Crash
+}
+
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum Key {
 	A,
@@ -53,7 +63,11 @@ pub enum ToPybadgeProtocol {
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum ToPypadeGameEvent {
-	NewLevel(AvailableCards)
+	NewLevel(AvailableCards),
+	GameOver(GameOver),
+	/// Retry the current level,
+	/// with out clearing the solution of the player
+	Retry
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
