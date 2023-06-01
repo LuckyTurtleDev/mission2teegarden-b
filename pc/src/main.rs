@@ -31,7 +31,7 @@ static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 	]
 });
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone, Copy)]
 pub enum RotationPoint {
 	TopLeft,
 	TopRight,

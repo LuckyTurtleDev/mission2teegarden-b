@@ -38,23 +38,50 @@ impl GameState {
 				//draw players
 				let player_textures = TEXTURES.get_player_textures();
                 for (x, player) in game_run.level.iter_player().enumerate() {
+					let texture = player_textures[x];
+					// Car drives forward
                     if game_run.player_states[x].next_rotation_point != RotationPoint::NoRotation {
-                        let texture = player_textures[x];
+						let offset_x = (game_run.player_states[x].position.0 - player.position.0) as f32 / (self.movement_time/self.delta_time);
+                        let offset_y = (game_run.player_states[x].position.1 - player.position.1) as f32 / (self.movement_time/self.delta_time);
                         let draw_params = DrawTextureParams {
 							dest_size: Some(Vec2::new(dest_size, dest_size)),
 							..Default::default()
 						};
                         draw_texture_ex(
                             texture,
-                        	player.position.0.into(),
-                            player.position.1.into(),
+                        	player.position.0 as f32 + offset_x,
+                            player.position.1 as f32 + offset_y,
                             WHITE,
                             draw_params
                         );
-                    }
-        
-                }
+					// Car makes a turn	
+                    } else {
+						let pivotXY = match game_run.player_states[x].next_rotation_point {
+							RotationPoint::TopLeft => Vec2::new(player.position.0 as f32, player.position.1 as f32),
+							RotationPoint::TopRight => Vec2::new(player.position.0 as f32 + dest_size, player.position.1 as f32),
+							RotationPoint::BottomLeft => Vec2::new(player.position.0 as f32, player.position.1 as f32 + dest_size),
+							RotationPoint::BottomRight => Vec2::new(player.position.0 as f32 + dest_size, player.position.1 as f32 + dest_size),
+							// Never happens
+							RotationPoint::NoRotation => Vec2::new(0.0, 0.0)
+						};
+						let angle = 90.0 / (self.movement_time/self.delta_time);
+						let draw_params = DrawTextureParams {
+							dest_size: Some(Vec2::new(dest_size, dest_size)),
+							rotation: angle,
+							pivot: Some(pivotXY),
+							..Default::default()
+						};
+						draw_texture_ex(
+							texture,
+							player.position.0 as f32,
+							player.position.1 as f32,
+							WHITE,
+							draw_params
+						);
+					}
+				}
 			}
 		}
+        
 	}
 }

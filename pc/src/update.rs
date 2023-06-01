@@ -11,6 +11,7 @@ impl GameState {
 		let _player_events = self.input_players.get_events();
         if self.delta_time >= self.movement_time {
             self.delta_time -= self.movement_time;
+
             self.next_move();
         }
         self.delta_time += get_frame_time();
@@ -20,7 +21,7 @@ impl GameState {
 		//use delta time, to avoid that the logic is effected by frame drops
 	}
 
-    pub fn update_player_positions(&mut self) {
+    /*pub fn update_player_positions(&mut self) {
         match &mut self.game_run {
             None => !todo!(),
             Some(ref mut round) => {
@@ -28,9 +29,7 @@ impl GameState {
                 for (x, player) in &mut round.level.iter_player().enumerate() {
                     // update player position
                     if round.player_states[x].next_rotation_point != RotationPoint::NoRotation {
-                        let offset_x = (round.player_states[x].position.0 - player.position.0) as f32 / (self.movement_time/self.delta_time);
-                        let offset_y = (round.player_states[x].position.1 - player.position.1) as f32 / (self.movement_time/self.delta_time);
-                        let new_position = (player.position.0 + offset_x.round() as u8, player.position.1 + offset_y.round() as u8);
+                        
                         player.position = new_position;
                     } else {
                         todo!()
@@ -38,13 +37,19 @@ impl GameState {
                 }
             }
         }; 
-    }
+    }*/
 
 	pub fn next_move(&mut self) {
 		match &mut self.game_run {
 			None => !todo!(),
-			Some(ref mut round) => {
-				for state in &mut round.player_states {
+			Some(ref mut game_run) => {
+                // update player position
+                for (x, player) in &mut game_run.level.iter_player().enumerate() {
+                    (*player).position = game_run.player_states[x].position;
+                    player.orientation = game_run.player_states[x].orientation;
+                }
+                //update next state
+				for state in &mut game_run.player_states {
 					let new_values = getRelativeXY(state);
 					let new_x = state.position.0 as i8 + new_values.0;
 					let new_y = state.position.1 as i8 + new_values.1;
