@@ -105,7 +105,13 @@ fn draw_card(
 	}
 }
 
+/// initial draw of this activity.
+/// Some values like `init_avaiable_cards`, `vaiable_cards`, `solution` must be iniziled outside this function.
+/// Some other value like `card_type_count`, `wait_card_index` are derivative from the values above and auto init here.
 pub(crate) fn init(state: &mut State<'_>) {
+	state.card_type_count = Card::iter()
+		.filter(|f| state.avaiable_cards.card_count(f) != 0)
+		.count() as u8;
 	state.wait_card_index = None;
 	state.display.clear(Color::BLACK).unwrap();
 	//draw cards witch can be selected

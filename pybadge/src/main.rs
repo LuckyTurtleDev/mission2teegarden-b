@@ -178,25 +178,16 @@ fn main() -> ! {
 		.draw(&mut display)
 		.ok();
 	//Todo: do not throw away event, wihich are directly send after ConnectionRequest
-	let avaiable_cards = AvailableCards {
-		left: 3,
-		right: 3,
-		motor_on: 2,
-		motor_off: 2,
-		wait: 9
-	};
 	let mut text_style_large = MonoTextStyle::new(&FONT_9X15, Color::WHITE);
 	text_style_large.set_background_color(Some(Color::BLACK));
 	let mut state = State {
 		display,
 		buttons,
-		init_avaiable_cards: avaiable_cards.clone(),
-		card_type_count: Card::iter()
-			.filter(|f| avaiable_cards.card_count(f) != 0)
-			.count() as u8,
-		avaiable_cards,
+		init_avaiable_cards: AvailableCards::default(),
+		card_type_count: 0,
+		avaiable_cards: AvailableCards::default(),
 		solution: Vec::new(),
-		activity: Activity::Selecter,
+		activity: Activity::Waiting,
 		cursor: (0, 0),
 		wait_count: 1,
 		wait_card_index: None,
@@ -204,8 +195,9 @@ fn main() -> ! {
 		text_style_large,
 		text_style_on_card: MonoTextStyle::new(&FONT_9X15, Color::BLACK)
 	};
-	let mut last_activity = Activity::Waiting;
+	let mut last_activity = Activity::GameOver(m3_models::GameOver::Crash);
 	let mut timestamp;
+	//let mut init = false;
 	loop {
 		timestamp = uptime();
 		send_event(MessageToPc::KeepAlive);
@@ -213,11 +205,27 @@ fn main() -> ! {
 		send_button_state(&state.buttons);
 		usb::read(&mut usb_data);
 		let events = read_events(&mut usb_data);
+		/* //uncommend this to thest the card selector, without working pc game
+		if !init {
+		events
+			.push(MessageToPyBadge::GameEvent(ToPypadeGameEvent::NewLevel(
+				AvailableCards {
+					left: 3,
+					right: 3,
+					motor_on: 2,
+					motor_off: 2,
+					wait: 9
+				}
+			)))
+			.unwrap();
+			init = true;
+		}*/
 		for event in events {
 			match event {
 				MessageToPyBadge::Protocol(_) => {},
 				MessageToPyBadge::GameEvent(event) => match event {
 					ToPypadeGameEvent::NewLevel(available_cards) => {
+						state.activity = Activity::Selecter;
 						state.solution.clear();
 						state.avaiable_cards = available_cards.clone();
 						state.init_avaiable_cards = available_cards;
