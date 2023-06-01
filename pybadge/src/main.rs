@@ -217,7 +217,11 @@ fn main() -> ! {
 			match event {
 				MessageToPyBadge::Protocol(_) => {},
 				MessageToPyBadge::GameEvent(event) => match event {
-					ToPypadeGameEvent::NewLevel(_) => todo!(),
+					ToPypadeGameEvent::NewLevel(available_cards) => {
+						state.solution.clear();
+						state.avaiable_cards = available_cards.clone();
+						state.init_avaiable_cards = available_cards;
+					},
 					ToPypadeGameEvent::Retry => state.activity = Activity::Selecter,
 					ToPypadeGameEvent::GameOver(game_over_type) => {
 						state.activity = Activity::GameOver(game_over_type)

@@ -142,7 +142,7 @@ pub(crate) fn init(state: &mut State<'_>) {
 	// (if this is a retry the player has still a solution from the last attempt)
 	for (i, card) in state.solution.iter().enumerate() {
 		draw_card(
-			i,
+			i as u8,
 			1,
 			Some(card),
 			&mut state.display,
