@@ -94,7 +94,7 @@ impl GameState {
 			game_run: Some(game_run),
 			input_players: usb::Players::init(),
 			delta_time: 0.0,
-			movement_time: 1.0
+			movement_time: 0.5
 		}
 	}
 }

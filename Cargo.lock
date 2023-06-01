@@ -764,6 +764,7 @@ dependencies = [
  "clap",
  "log",
  "m3-models",
+ "macroquad",
  "num_enum",
  "ron",
  "serde",
