@@ -81,7 +81,7 @@ impl Textures {
 			self.player1_car,
 			self.player2_car,
 			self.player3_car,
-			self.player4_car
+			self.player4_car,
 		]
 	}
 }
