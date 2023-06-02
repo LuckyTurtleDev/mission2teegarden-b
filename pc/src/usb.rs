@@ -31,8 +31,9 @@ pub(crate) struct Players {
 	/// found players. Might can become `Some` later,
 	/// if a new player does join.
 	///
-	/// The connection establishment is already finish and message can be send to player,
-	/// if vaule is `Some`.
+	/// The connection establishment is already finish
+	/// and message can be send/receive to/from player,
+	/// if entry is `Some`.
 	players: [Option<Player>; 4],
 	///uart devices, wich where not classificated as pybadge yet
 	possible_players: Vec<Player>
