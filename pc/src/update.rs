@@ -1,13 +1,7 @@
-use std::borrow::BorrowMut;
-
-use m3_map::{Orientation, Player};
+use m3_map::Orientation;
 use macroquad::prelude::*;
 
-use crate::{
-	cards_ev::CarAction,
-	tiles::{GetTexture, Textures, TEXTURES},
-	GameState, PlayerState, Rotation
-};
+use crate::{cards_ev::CarAction, GameState, PlayerState, Rotation};
 
 impl GameState {
 	///update the current state.
@@ -35,7 +29,7 @@ impl GameState {
 
 				//update next state
 				for state in &mut game_run.player_states {
-					let new_values = getRelativeXY(state);
+					let new_values = get_relative_xy(state);
 					let new_x = state.position.0 as i8 + new_values.0;
 					let new_y = state.position.1 as i8 + new_values.1;
 					if new_x < 0 || new_y < 0 {
@@ -56,15 +50,15 @@ impl GameState {
 	}
 }
 
-fn getRelativeXY(player_state: &PlayerState) -> (i8, i8, Orientation, Rotation) {
-    let mut rotation = Rotation::NoRotation;
+fn get_relative_xy(player_state: &PlayerState) -> (i8, i8, Orientation, Rotation) {
+	let mut rotation = Rotation::NoRotation;
 	match &player_state.next_action {
 		None => (0, 0, player_state.orientation, rotation),
 		Some(car_action) => {
-            let mut relative_pos = (0, 0);
+			let mut relative_pos = (0, 0);
 			let new_orientations = match car_action {
 				CarAction::RotateLeft => {
-                    rotation = Rotation::RotateLeft;
+					rotation = Rotation::RotateLeft;
 					[
 						Orientation::West,
 						Orientation::East,
@@ -82,25 +76,45 @@ fn getRelativeXY(player_state: &PlayerState) -> (i8, i8, Orientation, Rotation) 
 					]
 				},
 				CarAction::DriveForward => {
-                    relative_pos = match player_state.orientation {
-                        Orientation::North => (0, -1),
-                        Orientation::South => (0, 1),
-                        Orientation::West => (-1, 0),
-                        Orientation::East => (1, 0)
-                    };
-                    [
-                        Orientation::North,
-                        Orientation::South,
-                        Orientation::West,
-                        Orientation::East
-                    ]
-                }
+					relative_pos = match player_state.orientation {
+						Orientation::North => (0, -1),
+						Orientation::South => (0, 1),
+						Orientation::West => (-1, 0),
+						Orientation::East => (1, 0)
+					};
+					[
+						Orientation::North,
+						Orientation::South,
+						Orientation::West,
+						Orientation::East
+					]
+				}
 			};
 			match player_state.orientation {
-				Orientation::North => (relative_pos.0, relative_pos.1, new_orientations[0], rotation),
-				Orientation::South => (relative_pos.0, relative_pos.1, new_orientations[1], rotation),
-				Orientation::West => (relative_pos.0, relative_pos.1, new_orientations[2], rotation),
-				Orientation::East => (relative_pos.0, relative_pos.1, new_orientations[3], rotation)
+				Orientation::North => (
+					relative_pos.0,
+					relative_pos.1,
+					new_orientations[0],
+					rotation
+				),
+				Orientation::South => (
+					relative_pos.0,
+					relative_pos.1,
+					new_orientations[1],
+					rotation
+				),
+				Orientation::West => (
+					relative_pos.0,
+					relative_pos.1,
+					new_orientations[2],
+					rotation
+				),
+				Orientation::East => (
+					relative_pos.0,
+					relative_pos.1,
+					new_orientations[3],
+					rotation
+				)
 			}
 		}
 	}

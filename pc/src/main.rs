@@ -97,6 +97,17 @@ impl GameState {
 
 async fn run_game() {
 	let mut game_state = GameState::new();
+	let mut events = game_state.input_players.get_events();
+	let mut no_player = true;
+	while no_player {
+		events = game_state.input_players.get_events();
+		for event in &events {
+			println!("{:?}", event);
+			 if event.is_some() {
+				no_player = false;
+			 }
+		}
+	}
 	loop {
 		game_state.update().await;
 		game_state.draw().await;

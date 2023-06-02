@@ -40,9 +40,7 @@ impl GameState {
 				for (x, player) in game_run.level.iter_player().enumerate() {
 					let texture = player_textures[x];
 					// Car drives forward
-					if game_run.player_states[x].rotation
-						== Rotation::NoRotation
-					{
+					if game_run.player_states[x].rotation == Rotation::NoRotation {
 						let relative_pos_x = (game_run.player_states[x].position.0
 							as f32 - player.position.0 as f32)
 							* dest_size / (self.movement_time
@@ -84,8 +82,8 @@ impl GameState {
 							Orientation::South => 180.0,
 							Orientation::West => 270.0
 						};
-						let angle: f32 = (90.0 / (self.movement_time / self.delta_time) + angle_offset)
-							* sign;
+						let angle: f32 = (90.0 / (self.movement_time / self.delta_time)
+							+ angle_offset) * sign;
 						let draw_params = DrawTextureParams {
 							dest_size: Some(Vec2::new(dest_size, dest_size)),
 							rotation: angle.to_radians(),
