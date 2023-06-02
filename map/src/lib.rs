@@ -311,6 +311,13 @@ impl Map {
 			.chain(iter::once(&self.player_4).flatten())
 	}
 
+	pub fn iter_mut_player(&mut self) -> impl Iterator<Item = &mut Player> {
+		iter::once(&mut self.player_1)
+			.chain(iter::once(&mut self.player_2).flatten())
+			.chain(iter::once(&mut self.player_3).flatten())
+			.chain(iter::once(&mut self.player_4).flatten())
+	}
+
 	/// return an iterator over all BasteTiles and its x and y postion
 	pub fn iter_base_layer(&self) -> impl Iterator<Item = (u8, u8, &MapBaseTile)> {
 		self.base_layer.iter().enumerate().flat_map(|(x, y_vec)| {

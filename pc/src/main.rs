@@ -17,6 +17,7 @@ use usb::Players;
 
 use crate::cards_ev::evaluate_cards;
 
+use m3_models::Card;
 mod draw;
 mod update;
 mod usb;
@@ -34,10 +35,25 @@ static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 	]
 });
 
+#[derive(PartialEq, Clone, Copy, Debug)]
+pub enum RotationPoint {
+	TopLeft,
+	TopRight,
+	BottomLeft,
+	BottomRight,
+	NoRotation
+}
+
+struct Rotation {
+	pivot: RotationPoint,
+	sign: i8
+}
+
 struct PlayerState {
 	position: (u8, u8),
 	orientation: Orientation,
 	next_action: Option<CarAction>,
+	rotation: Rotation,
 	card_iter: cards_ev::CardIter
 }
 
@@ -48,12 +64,20 @@ struct GameRun {
 
 struct GameState {
 	game_run: Option<GameRun>,
-	input_players: Players
+	input_players: Players,
+	delta_time: f32,
+	movement_time: f32
 }
 
 impl GameState {
 	fn new() -> GameState {
-		let cards = vec![];
+		let cards = vec![
+			Card::MotorOn,
+			Card::Wait(3),
+			Card::Left,
+			Card::Wait(2),
+			Card::MotorOff,
+		]; //TODO: load cards from pybadge
 		Lazy::force(&TEXTURES);
 		let level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		debug!("load level{:#?}", level);
@@ -63,6 +87,10 @@ impl GameState {
 				position: f.position,
 				orientation: f.orientation,
 				next_action: None,
+				rotation: Rotation {
+					pivot: RotationPoint::NoRotation,
+					sign: 1
+				},
 				card_iter: evaluate_cards(cards.clone())
 			})
 			.collect();
@@ -73,7 +101,9 @@ impl GameState {
 
 		GameState {
 			game_run: Some(game_run),
-			input_players: usb::Players::init()
+			input_players: usb::Players::init(),
+			delta_time: 0.0,
+			movement_time: 0.5
 		}
 	}
 }
