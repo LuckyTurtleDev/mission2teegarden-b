@@ -177,7 +177,6 @@ fn main() -> ! {
 	Text::new("look at the pc screen", Point::new(15, 50), text_style)
 		.draw(&mut display)
 		.ok();
-	//Todo: do not throw away event, wihich are directly send after ConnectionRequest
 	let mut text_style_large = MonoTextStyle::new(&FONT_9X15, Color::WHITE);
 	text_style_large.set_background_color(Some(Color::BLACK));
 	let mut state = State {
