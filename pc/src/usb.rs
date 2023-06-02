@@ -19,7 +19,8 @@ struct Player {
 }
 
 impl Player {
-	pub(crate) fn get_events(&self, game_event: ToPypadeGameEvent) {
+	/// send a game event to the player
+	pub(crate) fn send_events(&self, game_event: ToPypadeGameEvent) {
 		self.sender
 			.send(MessageToPyBadge::GameEvent(game_event))
 			.expect("pybdage communication was closed");
@@ -101,7 +102,7 @@ impl Players {
 	///get aviable player events.
 	///Element i of return value repsent player i.
 	///ELement is None if no pybade is connected for player i.
-	pub fn get_events(&mut self) -> [Option<Vec<ToPcGameEvent>>; 4] {
+	pub(crate) fn get_events(&mut self) -> [Option<Vec<ToPcGameEvent>>; 4] {
 		if self.players.iter().any(|f| f.is_none()) {
 			//check if some of the serial ports a pybadge and it as player
 			let mut i: usize = 0;
