@@ -2,6 +2,23 @@
 #![forbid(unused_must_use, unsafe_code)]
 #![no_std]
 
+//! This create store models and protcoll data,
+//! which is used by the communication between pybadeg and pc.
+//!
+//! # Protocol:
+//! Every message is neither a Protocoll message or a Gamevent.
+//! The [`KeepAlive`](`MessageToPc::KeepAlive) is also definded at toplevel, to make it only one byte big,
+//! because it is send very frequently to pc.
+//! The pc assume that the [`KeepAlive`](`MessageToPc::KeepAlive) message is send at least once every second.
+//! Otherwise the pc assume that the pypbadge was disconnected.
+//!
+//! ### Connection Establishment
+//! The pc search for seriell devices at start and does send an [`ConnectionRequest`](ToPybadgeProtocol::ConnectionRequest)
+//! to each Seriell devices.
+//! The pybadge responds with [`ConnectionResponse`](ToPcProtocol::ConnectionResponse).
+//! After sending an [`ConnectionResponse`](ToPcProtocol::ConnectionResponse)
+//! the pybadge start listen to other incomming message too.
+
 use bincode::{Decode, Encode};
 
 mod cards;
