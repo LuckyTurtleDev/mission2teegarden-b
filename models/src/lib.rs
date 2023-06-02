@@ -1,4 +1,7 @@
+#![warn(rust_2018_idioms, unreachable_pub)]
+#![forbid(unused_must_use, unsafe_code)]
 #![no_std]
+
 use bincode::{Decode, Encode};
 
 mod cards;
@@ -8,6 +11,16 @@ pub use cards::*;
 // new structure
 // event + game + keep alive message
 
+#[derive(Debug, Clone, Copy, Decode, Encode, PartialEq, Eq)]
+pub enum GameOver {
+	/// Player has drive outside the map.
+	DriveAway,
+	/// Player has not reach goal in time.
+	TimeOut,
+	/// Player has crash.
+	Crash
+}
+
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum Key {
 	A,
@@ -15,7 +28,9 @@ pub enum Key {
 	Up,
 	Down,
 	Left,
-	Right
+	Right,
+	Start,
+	Select
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
@@ -25,7 +40,12 @@ pub enum ToPcProtocol {
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum ToPcGameEvent {
-	KeyPressed(Key)
+	KeyPressed(Key),
+	/// The solution which the player has created for this level
+	// currently heapless::vec is not supported by bincode,
+	// so use Array<Option> as workaround.
+	// see https://github.com/bincode-org/bincode/issues/643
+	Solution([Option<Card>; 12])
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
@@ -43,7 +63,11 @@ pub enum ToPybadgeProtocol {
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum ToPypadeGameEvent {
-	NewLevel(AvailableCards)
+	NewLevel(AvailableCards),
+	GameOver(GameOver),
+	/// Retry the current level,
+	/// with out clearing the solution of the player
+	Retry
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
