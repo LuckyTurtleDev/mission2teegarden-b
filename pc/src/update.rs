@@ -6,7 +6,7 @@ use macroquad::prelude::*;
 use crate::{
 	cards_ev::CarAction,
 	tiles::{GetTexture, Textures, TEXTURES},
-	GameState, PlayerState, Rotation, RotationPoint
+	GameState, PlayerState, Rotation
 };
 
 impl GameState {
@@ -57,28 +57,14 @@ impl GameState {
 }
 
 fn getRelativeXY(player_state: &PlayerState) -> (i8, i8, Orientation, Rotation) {
+    let mut rotation = Rotation::NoRotation;
 	match &player_state.next_action {
-		None => (0, 0, player_state.orientation, Rotation {
-			pivot: RotationPoint::NoRotation,
-			sign: 1
-		}),
+		None => (0, 0, player_state.orientation, rotation),
 		Some(car_action) => {
-			let mut rotation_pivots = [
-				RotationPoint::NoRotation,
-				RotationPoint::NoRotation,
-				RotationPoint::NoRotation,
-				RotationPoint::NoRotation
-			];
-			let mut rotation_sign = 1;
+            let mut relative_pos = (0, 0);
 			let new_orientations = match car_action {
-				CarAction::TurnLeft => {
-					rotation_pivots = [
-						RotationPoint::TopLeft,
-						RotationPoint::BottomRight,
-						RotationPoint::BottomLeft,
-						RotationPoint::TopRight
-					];
-					rotation_sign = -1;
+				CarAction::RotateLeft => {
+                    rotation = Rotation::RotateLeft;
 					[
 						Orientation::West,
 						Orientation::East,
@@ -86,13 +72,8 @@ fn getRelativeXY(player_state: &PlayerState) -> (i8, i8, Orientation, Rotation) 
 						Orientation::North
 					]
 				},
-				CarAction::TurnRight => {
-					rotation_pivots = [
-						RotationPoint::TopRight,
-						RotationPoint::BottomLeft,
-						RotationPoint::BottomRight,
-						RotationPoint::TopLeft
-					];
+				CarAction::RotateRight => {
+					rotation = Rotation::RotateRight;
 					[
 						Orientation::East,
 						Orientation::West,
@@ -100,30 +81,26 @@ fn getRelativeXY(player_state: &PlayerState) -> (i8, i8, Orientation, Rotation) 
 						Orientation::South
 					]
 				},
-				CarAction::DriveForward => [
-					Orientation::North,
-					Orientation::South,
-					Orientation::West,
-					Orientation::East
-				]
+				CarAction::DriveForward => {
+                    relative_pos = match player_state.orientation {
+                        Orientation::North => (0, -1),
+                        Orientation::South => (0, 1),
+                        Orientation::West => (-1, 0),
+                        Orientation::East => (1, 0)
+                    };
+                    [
+                        Orientation::North,
+                        Orientation::South,
+                        Orientation::West,
+                        Orientation::East
+                    ]
+                }
 			};
 			match player_state.orientation {
-				Orientation::North => (0, -1, new_orientations[0], Rotation {
-					pivot: rotation_pivots[0],
-					sign: rotation_sign
-				}),
-				Orientation::South => (0, 1, new_orientations[1], Rotation {
-					pivot: rotation_pivots[1],
-					sign: rotation_sign
-				}),
-				Orientation::West => (-1, 0, new_orientations[2], Rotation {
-					pivot: rotation_pivots[2],
-					sign: rotation_sign
-				}),
-				Orientation::East => (1, 0, new_orientations[3], Rotation {
-					pivot: rotation_pivots[3],
-					sign: rotation_sign
-				})
+				Orientation::North => (relative_pos.0, relative_pos.1, new_orientations[0], rotation),
+				Orientation::South => (relative_pos.0, relative_pos.1, new_orientations[1], rotation),
+				Orientation::West => (relative_pos.0, relative_pos.1, new_orientations[2], rotation),
+				Orientation::East => (relative_pos.0, relative_pos.1, new_orientations[3], rotation)
 			}
 		}
 	}

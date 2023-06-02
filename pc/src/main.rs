@@ -33,17 +33,10 @@ static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 });
 
 #[derive(PartialEq, Clone, Copy, Debug)]
-pub enum RotationPoint {
-	TopLeft,
-	TopRight,
-	BottomLeft,
-	BottomRight,
+pub enum Rotation {
+	RotateLeft,
+	RotateRight,
 	NoRotation
-}
-
-struct Rotation {
-	pivot: RotationPoint,
-	sign: i8
 }
 
 struct PlayerState {
@@ -70,7 +63,7 @@ impl GameState {
 	fn new() -> GameState {
 		let cards = vec![
 			Card::MotorOn,
-			Card::Wait(3),
+			Card::Wait(4),
 			Card::Left,
 			Card::Wait(2),
 			Card::MotorOff,
@@ -84,10 +77,7 @@ impl GameState {
 				position: f.position,
 				orientation: f.orientation,
 				next_action: None,
-				rotation: Rotation {
-					pivot: RotationPoint::NoRotation,
-					sign: 1
-				},
+				rotation: Rotation::NoRotation,
 				card_iter: evaluate_cards(cards.clone())
 			})
 			.collect();

@@ -5,9 +5,9 @@ use strum_macros::{AsRefStr, EnumIter};
 
 #[derive(AsRefStr, Clone, Copy, Debug, EnumIter)]
 pub enum Card {
-	/// Turn Left
+	/// Rotate Left
 	Left,
-	/// Turn Right
+	/// Rotate Right
 	Right,
 	/// Keep doing current action
 	Wait(u8),

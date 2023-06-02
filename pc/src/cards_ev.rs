@@ -2,8 +2,8 @@ use m3_models::Card;
 
 #[derive(Debug, PartialEq)]
 pub enum CarAction {
-	TurnLeft,
-	TurnRight,
+	RotateLeft,
+	RotateRight,
 	DriveForward
 }
 
@@ -32,13 +32,11 @@ impl<'a> Iterator for CardIter {
 			Some(card) => match card {
 				Card::Left => {
 					self.card_pos += 1;
-					self.driving = true;
-					Some(Some(CarAction::TurnLeft))
+					Some(Some(CarAction::RotateLeft))
 				},
 				Card::Right => {
 					self.card_pos += 1;
-					self.driving = true;
-					Some(Some(CarAction::TurnRight))
+					Some(Some(CarAction::RotateRight))
 				},
 				Card::Wait(i) => {
 					if self.wait_counter < (*i) - 1 {
@@ -92,7 +90,7 @@ mod tests {
 			Some(DriveForward),
 			Some(DriveForward),
 			Some(DriveForward),
-			Some(TurnLeft),
+			Some(RotateLeft),
 			Some(DriveForward),
 			Some(DriveForward),
 			None,
