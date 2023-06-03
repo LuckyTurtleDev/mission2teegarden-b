@@ -1,9 +1,11 @@
-use glob::glob;
-use std::path::PathBuf;
+#![warn(rust_2018_idioms, unreachable_pub)]
+#![forbid(unused_must_use, unsafe_code)]
 
+use glob::glob;
 use m3_map::Map;
 use proc_macro::TokenStream;
 use quote::quote;
+use std::path::PathBuf;
 
 #[proc_macro]
 pub fn include_map(input: TokenStream) -> TokenStream {

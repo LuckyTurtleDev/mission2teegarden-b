@@ -1,24 +1,41 @@
+#![warn(rust_2018_idioms, unreachable_pub)]
+#![forbid(unused_must_use)]
 #![no_std]
 #![no_main]
 
+use activitys::Activity;
 use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
-use embedded_graphics::{draw_target::DrawTarget, prelude::*};
+use embedded_graphics::{
+	draw_target::DrawTarget,
+	mono_font::{
+		ascii::{FONT_6X10, FONT_9X15},
+		MonoTextStyle
+	},
+	prelude::*,
+	text::{renderer::CharacterStyle, Text}
+};
 use heapless::Vec;
 use m3_models::{
-	Key, MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPcProtocol, ToPybadgeProtocol
+	AvailableCards, Card, Key, MessageToPc, MessageToPyBadge, ToPcGameEvent,
+	ToPcProtocol, ToPybadgeProtocol, ToPypadeGameEvent
 };
-use pybadge_high::{prelude::*, Buttons, Color, PyBadge};
-
-use embedded_graphics::{
-	mono_font::{ascii::FONT_6X10, MonoTextStyle},
+use pybadge_high::{
+	buttons,
+	buttons::{Button, Buttons},
 	prelude::*,
-	text::Text
+	time::uptime,
+	Color, Display, PyBadge
 };
+use strum::IntoEnumIterator;
 
+mod activitys;
 mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
-const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
+const _CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
+
+const _DISPLAY_WIDHT: u16 = 160;
+const _DISPLAY_HIGHT: u16 = 128;
 
 fn read_events(usb_data: &mut Vec<u8, 128>) -> Vec<MessageToPyBadge, 10> {
 	let mut events = Vec::<MessageToPyBadge, 10>::new();
@@ -53,26 +70,69 @@ fn send_event(event: MessageToPc) {
 	usb::wirte(&buf[..len]);
 }
 
+/// convert keys of `pybadge-high` crate, to the keys of the `m3-models` crate.
+fn convert_keys(button: pybadge_high::buttons::Button) -> Key {
+	match button {
+		Button::B => Key::B,
+		Button::A => Key::A,
+		Button::Up => Key::Up,
+		Button::Left => Key::Left,
+		Button::Down => Key::Down,
+		Button::Right => Key::Right,
+		Button::Start => Key::Start,
+		Button::Sesect => Key::Select
+	}
+}
+
 fn send_button_state(buttons: &Buttons) {
-	if buttons.a_pressed() {
-		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::A)));
+	for event in buttons.events() {
+		if let buttons::Event::Pressed(key) = event {
+			send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(
+				convert_keys(key)
+			)));
+		}
 	}
-	if buttons.b_pressed() {
-		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::B)));
+}
+
+struct State<'a> {
+	display: Display,
+	buttons: Buttons,
+	/// initinal avaibale cards
+	init_avaiable_cards: AvailableCards,
+	/// count of different card types
+	card_type_count: u8,
+	/// count of cards, which are still be able to select
+	avaiable_cards: AvailableCards,
+	/// solution created by the player
+	solution: Vec<Card, 12>,
+	activity: Activity,
+	cursor: (u8, u8),
+	wait_count: u8,
+	/// positon of the wait card to allow faster update
+	wait_card_index: Option<u8>,
+	text_style: MonoTextStyle<'a, Color>,
+	text_style_large: MonoTextStyle<'a, Color>,
+	text_style_on_card: MonoTextStyle<'a, Color>
+}
+
+impl State<'_> {
+	/// clear and draw the hole activity
+	fn init_activity(&mut self) {
+		match self.activity {
+			Activity::Waiting => {},
+			Activity::Selecter => activitys::card_selecter::init(self),
+			Activity::GameOver(game_over_type) => {
+				activitys::game_over::init(self, &game_over_type.clone())
+			},
+		}
 	}
-	if buttons.up_pressed() {
-		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::Up)));
-	}
-	if buttons.down_pressed() {
-		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::Down)));
-	}
-	if buttons.left_pressed() {
-		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(Key::Left)));
-	}
-	if buttons.right_pressed() {
-		send_event(MessageToPc::GameEvent(ToPcGameEvent::KeyPressed(
-			Key::Right
-		)));
+	/// only partional update the display, to improve fps
+	fn update_draw(&mut self) {
+		match self.activity {
+			Activity::Waiting => {},
+			Activity::Selecter => activitys::card_selecter::update(self),
+			Activity::GameOver(_) => {}
+		}
 	}
 }
 
@@ -80,7 +140,7 @@ fn send_button_state(buttons: &Buttons) {
 fn main() -> ! {
 	let text_style = MonoTextStyle::new(&FONT_6X10, Color::WHITE);
 	let mut usb_data = Vec::<u8, 128>::new();
-	let mut pybadge = PyBadge::take().unwrap();
+	let pybadge = PyBadge::take().unwrap();
 	let mut delay = pybadge.delay;
 	let mut display = pybadge.display;
 	let mut buttons = pybadge.buttons;
@@ -117,12 +177,74 @@ fn main() -> ! {
 	Text::new("look at the pc screen", Point::new(15, 50), text_style)
 		.draw(&mut display)
 		.ok();
-	//Todo: do not throw away event, wihich are directly send after ConnectionRequest
+	let mut text_style_large = MonoTextStyle::new(&FONT_9X15, Color::WHITE);
+	text_style_large.set_background_color(Some(Color::BLACK));
+	let mut state = State {
+		display,
+		buttons,
+		init_avaiable_cards: AvailableCards::default(),
+		card_type_count: 0,
+		avaiable_cards: AvailableCards::default(),
+		solution: Vec::new(),
+		activity: Activity::Waiting,
+		cursor: (0, 0),
+		wait_count: 1,
+		wait_card_index: None,
+		text_style,
+		text_style_large,
+		text_style_on_card: MonoTextStyle::new(&FONT_9X15, Color::BLACK)
+	};
+	let mut last_activity = Activity::GameOver(m3_models::GameOver::Crash);
+	let mut timestamp;
+	//let mut init = false;
 	loop {
+		timestamp = uptime();
 		send_event(MessageToPc::KeepAlive);
-		buttons.update();
-		send_button_state(&buttons);
+		state.buttons.update();
+		send_button_state(&state.buttons);
 		usb::read(&mut usb_data);
-		delay.delay_ms(1000_u16);
+		let events = read_events(&mut usb_data);
+		/* //uncommend this to thest the card selector, without working pc game
+		if !init {
+		events
+			.push(MessageToPyBadge::GameEvent(ToPypadeGameEvent::NewLevel(
+				AvailableCards {
+					left: 3,
+					right: 3,
+					motor_on: 2,
+					motor_off: 2,
+					wait: 9
+				}
+			)))
+			.unwrap();
+			init = true;
+		}*/
+		for event in events {
+			match event {
+				MessageToPyBadge::Protocol(_) => {},
+				MessageToPyBadge::GameEvent(event) => match event {
+					ToPypadeGameEvent::NewLevel(available_cards) => {
+						state.activity = Activity::Selecter;
+						state.solution.clear();
+						state.avaiable_cards = available_cards.clone();
+						state.init_avaiable_cards = available_cards;
+					},
+					ToPypadeGameEvent::Retry => state.activity = Activity::Selecter,
+					ToPypadeGameEvent::GameOver(game_over_type) => {
+						state.activity = Activity::GameOver(game_over_type)
+					},
+				}
+			}
+		}
+		if last_activity != state.activity {
+			state.init_activity();
+			last_activity = state.activity.clone();
+		}
+		state.update_draw();
+		//60fps
+		let frame_time = uptime().0 - timestamp.0;
+		if frame_time < 16 {
+			delay.delay_ms(16 - frame_time);
+		}
 	}
 }

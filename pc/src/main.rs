@@ -1,8 +1,11 @@
+#![warn(rust_2018_idioms, unreachable_pub)]
+#![forbid(unused_must_use, unsafe_code)]
+
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::{Map, Orientation};
 use macroquad::{prelude::*, window, Window};
-use my_env_logger_style::TimestampPrecision;
+use my_env_logger_style::{TimestampPrecision, env_logger::init};
 use once_cell::sync::Lazy;
 //use m3_models::CardIter;
 
@@ -38,7 +41,6 @@ pub enum Rotation {
 	RotateRight,
 	NoRotation
 }
-
 struct PlayerState {
 	position: (u8, u8),
 	orientation: Orientation,
@@ -62,11 +64,7 @@ struct GameState {
 impl GameState {
 	fn new() -> GameState {
 		let cards = vec![
-			Card::MotorOn,
-			Card::Wait(4),
-			Card::Left,
-			Card::Wait(2),
-			Card::MotorOff,
+			
 		]; //TODO: load cards from pybadge
 		Lazy::force(&TEXTURES);
 		let level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
@@ -99,16 +97,19 @@ async fn run_game() {
 	let mut game_state = GameState::new();
 	let mut events = game_state.input_players.get_events();
 	let mut no_player = true;
-	while no_player {
+	/*while no_player {
 		events = game_state.input_players.get_events();
-		for event in &events {
-			println!("{:?}", event);
-			 if event.is_some() {
+		for event in events.iter() {
+			if event.is_some(){
 				no_player = false;
-			 }
+				println!("{:?}", event);
+			}
 		}
-	}
-	loop {
+	}*/
+
+	loop {;
+		let players = Players::init();
+		
 		game_state.update().await;
 		game_state.draw().await;
 		next_frame().await

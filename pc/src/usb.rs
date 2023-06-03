@@ -28,8 +28,14 @@ impl Player {
 
 #[derive(Default)]
 pub(crate) struct Players {
+	/// found players. Might can become `Some` later,
+	/// if a new player does join.
+	///
+	/// The connection establishment is already finish
+	/// and message can be send/receive to/from player,
+	/// if entry is `Some`.
 	players: [Option<Player>; 4],
-	///uart devices, wich where not classificated as pybadge yets
+	///uart devices, wich where not classificated as pybadge yet
 	possible_players: Vec<Player>
 }
 
@@ -116,6 +122,7 @@ impl Players {
 			}
 			if found_player {
 				let new_player = self.possible_players.remove(i);
+				println!("Player Joined");
 				info!("player join from port {}", new_player.port_name);
 				*self.players.iter_mut().find(|f| f.is_none()).unwrap() =
 					Some(new_player);
