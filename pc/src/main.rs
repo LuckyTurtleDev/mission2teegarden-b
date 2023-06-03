@@ -4,7 +4,7 @@
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::{Map, Orientation};
-use macroquad::{prelude::*, window, Window};
+use macroquad::{prelude::*, window, Window, miniquad::native::egl::NativeWindowType};
 use my_env_logger_style::{TimestampPrecision, env_logger::init};
 use once_cell::sync::Lazy;
 //use m3_models::CardIter;
@@ -17,7 +17,7 @@ use usb::Players;
 
 use crate::cards_ev::evaluate_cards;
 
-use m3_models::Card;
+use m3_models::{Card, ToPypadeGameEvent, AvailableCards};
 mod draw;
 mod update;
 mod usb;
@@ -64,7 +64,7 @@ struct GameState {
 impl GameState {
 	fn new() -> GameState {
 		let cards = vec![
-			
+			Card::MotorOff
 		]; //TODO: load cards from pybadge
 		Lazy::force(&TEXTURES);
 		let level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
@@ -97,23 +97,34 @@ async fn run_game() {
 	let mut game_state = GameState::new();
 	let mut events = game_state.input_players.get_events();
 	let mut no_player = true;
-	/*while no_player {
-		events = game_state.input_players.get_events();
-		for event in events.iter() {
-			if event.is_some(){
-				no_player = false;
-				println!("{:?}", event);
+
+	match &mut game_state.game_run {
+		None => todo!("no game run"),
+		Some(ref mut game_run) => {
+			while no_player {
+				events = game_state.input_players.get_events();
+				for event in events {
+					if event.is_some() {
+						no_player = false;
+						break;
+					}
+				}
+				next_frame().await;
+			}
+	
+			let players = Players::init();
+			for player in players.possible_players {
+				player.send_events(ToPypadeGameEvent::NewLevel(game_run.level.cards.clone()));
+				println!("send cards to player");
 			}
 		}
-	}*/
-
+	}
 	loop {;
-		let players = Players::init();
-		
 		game_state.update().await;
 		game_state.draw().await;
 		next_frame().await
 	}
+	
 }
 
 fn main() {
