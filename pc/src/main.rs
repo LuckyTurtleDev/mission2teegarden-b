@@ -4,8 +4,8 @@
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::{Map, Orientation};
-use macroquad::{prelude::*, window, Window, miniquad::native::egl::NativeWindowType};
-use my_env_logger_style::{TimestampPrecision, env_logger::init};
+use macroquad::{miniquad::native::egl::NativeWindowType, prelude::*, window, Window};
+use my_env_logger_style::{env_logger::init, TimestampPrecision};
 use once_cell::sync::Lazy;
 //use m3_models::CardIter;
 
@@ -17,7 +17,7 @@ use usb::Players;
 
 use crate::cards_ev::evaluate_cards;
 
-use m3_models::{Card, ToPypadeGameEvent, AvailableCards};
+use m3_models::{AvailableCards, Card, ToPypadeGameEvent};
 mod draw;
 mod update;
 mod usb;
@@ -63,9 +63,7 @@ struct GameState {
 
 impl GameState {
 	fn new() -> GameState {
-		let cards = vec![
-			Card::MotorOff
-		]; //TODO: load cards from pybadge
+		let cards = vec![Card::MotorOff]; //TODO: load cards from pybadge
 		Lazy::force(&TEXTURES);
 		let level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		debug!("load level{:#?}", level);
@@ -111,20 +109,21 @@ async fn run_game() {
 				}
 				next_frame().await;
 			}
-	
+
 			let players = Players::init();
 			for player in players.possible_players {
-				player.send_events(ToPypadeGameEvent::NewLevel(game_run.level.cards.clone()));
+				player.send_events(ToPypadeGameEvent::NewLevel(
+					game_run.level.cards.clone()
+				));
 				println!("send cards to player");
 			}
 		}
 	}
-	loop {;
+	loop {
 		game_state.update().await;
 		game_state.draw().await;
 		next_frame().await
 	}
-	
 }
 
 fn main() {
