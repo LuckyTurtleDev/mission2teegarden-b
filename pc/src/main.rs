@@ -17,7 +17,7 @@ use usb::Players;
 
 use crate::cards_ev::evaluate_cards;
 
-use m3_models::{AvailableCards, Card, ToPypadeGameEvent};
+use m3_models::{AvailableCards, Card, ToPypadeGameEvent, ToPcGameEvent};
 mod draw;
 mod update;
 mod usb;
@@ -63,7 +63,7 @@ struct GameState {
 
 impl GameState {
 	fn new() -> GameState {
-		let cards = vec![Card::MotorOff]; //TODO: load cards from pybadge
+		let cards = vec![Card::MotorOn, Card::Wait(4), Card::Right, Card::Wait(2)]; //TODO: load cards from pybadge
 		Lazy::force(&TEXTURES);
 		let level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		debug!("load level{:#?}", level);
@@ -110,15 +110,28 @@ async fn run_game() {
 				next_frame().await;
 			}
 
-			let players = Players::init();
-			for player in players.possible_players {
-				player.send_events(ToPypadeGameEvent::NewLevel(
-					game_run.level.cards.clone()
-				));
-				println!("send cards to player");
-			}
+				//let players = game_state.input_players;
+				for player in &game_state.input_players.possible_players {
+					debug!("send level to player");
+					player.send_events(ToPypadeGameEvent::NewLevel(
+						game_run.level.cards.clone()
+					));
+				}
 		}
 	}
+	// wait for all players cards sets
+	/*let mut waiting_for_cards = true;
+	while waiting_for_cards {
+		events = game_state.input_players.get_events();
+		for player_events in events {
+			for event in player_events {
+				if let Some(ToPcGameEvent::Cards(cards)) = event {
+					debug!("got cards from player");
+				}
+			}
+		}
+	}*/
+
 	loop {
 		game_state.update().await;
 		game_state.draw().await;

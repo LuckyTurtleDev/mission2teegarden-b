@@ -219,6 +219,7 @@ fn main() -> ! {
 			.unwrap();
 			init = true;
 		}*/
+
 		for event in events {
 			match event {
 				MessageToPyBadge::Protocol(_) => {},

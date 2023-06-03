@@ -6,15 +6,13 @@ use crate::{cards_ev::CarAction, GameState, PlayerState, Rotation};
 impl GameState {
 	///update the current state.
 	pub async fn update(&mut self) {
-		let _player_events = self.input_players.get_events();
+		//let _player_events = self.input_players.get_events();
 		if self.delta_time >= self.movement_time {
 			self.delta_time -= self.movement_time;
 
 			self.next_move();
 		}
 		self.delta_time += get_frame_time();
-
-		//use delta time, to avoid that the logic is effected by frame drops
 	}
 
 	pub fn next_move(&mut self) {
