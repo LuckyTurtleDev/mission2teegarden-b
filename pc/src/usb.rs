@@ -37,7 +37,7 @@ pub(crate) struct Players {
 	/// if entry is `Some`.
 	pub(crate) players: [Option<Player>; 4],
 	///uart devices, wich where not classificated as pybadge yet
-	pub(crate) possible_players: Vec<Player>
+	possible_players: Vec<Player>
 }
 
 impl Players {
@@ -123,7 +123,6 @@ impl Players {
 			}
 			if found_player {
 				let new_player = self.possible_players.remove(i);
-				println!("Player Joined");
 				info!("player join from port {}", new_player.port_name);
 				*self.players.iter_mut().find(|f| f.is_none()).unwrap() =
 					Some(new_player);

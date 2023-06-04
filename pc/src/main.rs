@@ -1,6 +1,8 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
 #![forbid(unused_must_use, unsafe_code)]
 
+//use core::num::{dec2flt::number, self};
+
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::{Map, Orientation};
@@ -95,42 +97,51 @@ async fn run_game() {
 	let mut game_state = GameState::new();
 	let mut events = game_state.input_players.get_events();
 	let mut no_player = true;
+	let mut player_counter = 0;
+	debug!("haaaalloo");
 
 	match &mut game_state.game_run {
 		None => todo!("no game run"),
 		Some(ref mut game_run) => {
 			while no_player {
-				events = game_state.input_players.get_events();
-				for event in events {
-					if event.is_some() {
+				game_state.input_players.get_events();
+				for player in &game_state.input_players.players {
+					if let Some(Player) = player {
+						debug!("send level to player");
+						player_counter += 1;
+						player.as_ref().unwrap().send_events(ToPypadeGameEvent::NewLevel(
+							AvailableCards {
+								left: 3,
+								right: 3,
+								motor_on: 2,
+								motor_off: 2,
+								wait: 9
+							}
+						));
 						no_player = false;
-						break;
 					}
 				}
 				next_frame().await;
 			}
-
-				//let players = game_state.input_players;
-				for player in &game_state.input_players.possible_players {
-					debug!("send level to player");
-					player.send_events(ToPypadeGameEvent::NewLevel(
-						game_run.level.cards.clone()
-					));
-				}
 		}
 	}
 	// wait for all players cards sets
-	/*let mut waiting_for_cards = true;
-	while waiting_for_cards {
+	let mut card_set_counter = 0;
+	debug!("Number of players: {}", player_counter);
+	while card_set_counter < player_counter {
 		events = game_state.input_players.get_events();
 		for player_events in events {
-			for event in player_events {
-				if let Some(ToPcGameEvent::Cards(cards)) = event {
-					debug!("got cards from player");
+			if let Some(vec) = player_events.clone() {
+				for event in player_events.unwrap() {
+					if let ToPcGameEvent::Solution(solution) = event {
+						debug!("got cards from player");
+						card_set_counter += 1;
+					}
 				}
+				
 			}
 		}
-	}*/
+	}
 
 	loop {
 		game_state.update().await;
