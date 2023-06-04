@@ -14,7 +14,7 @@ pub struct CardIter {
 	/// Relative y-position to former position
 	wait_counter: u8,
 	driving: bool,
-	cards: Vec<Card>
+	cards: Vec<Option<Card>>
 }
 
 impl<'a> Iterator for CardIter {
@@ -29,7 +29,7 @@ impl<'a> Iterator for CardIter {
 					Some(None)
 				}
 			},
-			Some(card) => match card {
+			Some(card) => match card.unwrap() {
 				Card::Left => {
 					self.card_pos += 1;
 					Some(Some(CarAction::RotateLeft))
@@ -39,7 +39,7 @@ impl<'a> Iterator for CardIter {
 					Some(Some(CarAction::RotateRight))
 				},
 				Card::Wait(i) => {
-					if self.wait_counter < (*i) - 1 {
+					if self.wait_counter < (i) - 1 {
 						self.wait_counter += 1;
 						if self.driving {
 							Some(Some(CarAction::DriveForward))
@@ -67,7 +67,7 @@ impl<'a> Iterator for CardIter {
 	}
 }
 
-pub fn evaluate_cards(cards: Vec<Card>) -> CardIter {
+pub fn evaluate_cards(cards: Vec<Option<Card>>) -> CardIter {
 	CardIter {
 		card_pos: 0,
 		wait_counter: 0,

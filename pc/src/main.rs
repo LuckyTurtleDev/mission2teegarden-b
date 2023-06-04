@@ -65,9 +65,16 @@ struct GameState {
 
 impl GameState {
 	fn new() -> GameState {
-		let cards = vec![Card::MotorOn, Card::Wait(4), Card::Right, Card::Wait(2)]; //TODO: load cards from pybadge
+		let cards = vec![Some(Card::MotorOn), Some(Card::Wait(4)), Some(Card::Right), Some(Card::Wait(2))]; //TODO: load cards from pybadge
 		Lazy::force(&TEXTURES);
-		let level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
+		let  mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
+		level.cards = AvailableCards {
+			left: 3,
+			right: 3,
+			motor_on: 2,
+			motor_off: 2,
+			wait: 9
+		};
 		debug!("load level{:#?}", level);
 		let player_states = level
 			.iter_player()
@@ -110,38 +117,36 @@ async fn run_game() {
 						debug!("send level to player");
 						player_counter += 1;
 						player.as_ref().unwrap().send_events(ToPypadeGameEvent::NewLevel(
-							AvailableCards {
-								left: 3,
-								right: 3,
-								motor_on: 2,
-								motor_off: 2,
-								wait: 9
-							}
+							game_run.level.cards.clone(),
 						));
 						no_player = false;
 					}
 				}
 				next_frame().await;
 			}
-		}
-	}
-	// wait for all players cards sets
-	let mut card_set_counter = 0;
-	debug!("Number of players: {}", player_counter);
-	while card_set_counter < player_counter {
-		events = game_state.input_players.get_events();
-		for player_events in events {
-			if let Some(vec) = player_events.clone() {
-				for event in player_events.unwrap() {
-					if let ToPcGameEvent::Solution(solution) = event {
-						debug!("got cards from player");
-						card_set_counter += 1;
+
+			// wait for all players cards sets
+			let mut card_set_counter = 0;
+			debug!("Number of players: {}", player_counter);
+			while card_set_counter < player_counter {
+				events = game_state.input_players.get_events();
+				for player_events in events {
+					if let Some(vec) = player_events.clone() {
+						for event in player_events.unwrap() {
+							if let ToPcGameEvent::Solution(solution) = event {
+								game_run.player_states[card_set_counter].card_iter = evaluate_cards(solution.to_vec());
+								debug!("got cards from player");
+								card_set_counter += 1;
+							}
+						}
+						
 					}
 				}
-				
+				next_frame().await;
 			}
 		}
 	}
+	
 
 	loop {
 		game_state.update().await;
