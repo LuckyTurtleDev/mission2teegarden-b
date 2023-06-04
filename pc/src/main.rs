@@ -19,7 +19,7 @@ use usb::Players;
 
 use crate::cards_ev::evaluate_cards;
 
-use m3_models::{AvailableCards, Card, ToPypadeGameEvent, ToPcGameEvent};
+use m3_models::{AvailableCards, Card, ToPcGameEvent, ToPypadeGameEvent};
 mod draw;
 mod update;
 mod usb;
@@ -65,9 +65,14 @@ struct GameState {
 
 impl GameState {
 	fn new() -> GameState {
-		let cards = vec![Some(Card::MotorOn), Some(Card::Wait(4)), Some(Card::Right), Some(Card::Wait(2))]; //TODO: load cards from pybadge
+		let cards = vec![
+			Some(Card::MotorOn),
+			Some(Card::Wait(4)),
+			Some(Card::Right),
+			Some(Card::Wait(2)),
+		]; //TODO: load cards from pybadge
 		Lazy::force(&TEXTURES);
-		let  mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
+		let mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		level.cards = AvailableCards {
 			left: 3,
 			right: 3,
@@ -116,9 +121,9 @@ async fn run_game() {
 					if let Some(Player) = player {
 						debug!("send level to player");
 						player_counter += 1;
-						player.as_ref().unwrap().send_events(ToPypadeGameEvent::NewLevel(
-							game_run.level.cards.clone(),
-						));
+						player.as_ref().unwrap().send_events(
+							ToPypadeGameEvent::NewLevel(game_run.level.cards.clone())
+						);
 						no_player = false;
 					}
 				}
@@ -134,19 +139,18 @@ async fn run_game() {
 					if let Some(vec) = player_events.clone() {
 						for event in player_events.unwrap() {
 							if let ToPcGameEvent::Solution(solution) = event {
-								game_run.player_states[card_set_counter].card_iter = evaluate_cards(solution.to_vec());
+								game_run.player_states[card_set_counter].card_iter =
+									evaluate_cards(solution.to_vec());
 								debug!("got cards from player");
 								card_set_counter += 1;
 							}
 						}
-						
 					}
 				}
 				next_frame().await;
 			}
 		}
 	}
-	
 
 	loop {
 		game_state.update().await;
