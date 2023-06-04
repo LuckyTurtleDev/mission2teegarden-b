@@ -2,7 +2,7 @@ use m3_map::Orientation;
 use m3_models::{GameOver, ToPypadeGameEvent};
 use macroquad::prelude::*;
 
-use crate::{cards_ev::CarAction, GameState, PlayerState, Rotation};
+use crate::{cards_ev::CarAction, GameRun, GameState, PlayerState, Rotation};
 
 impl GameState {
 	///update the current state.
@@ -26,22 +26,19 @@ impl GameState {
 					player.orientation = game_run.player_states[x].orientation;
 				}
 				//update next state
-				let mut array: [(i8, i8); 4] = [(-1, -1), (-1, -1), (-1, -1), (-1, -1)];
 				for (x, state) in &mut game_run.player_states.iter_mut().enumerate() {
 					let new_values = get_relative_xy(state);
 					let new_x = state.position.0 as i8 + new_values.0;
 					let new_y = state.position.1 as i8 + new_values.1;
-					if new_x < 0 || new_y < 0 {
+
+					if new_y < 0
+						|| new_x < 0 || new_x >= game_run.level.width as i8
+						|| new_y >= game_run.level.height as i8
+					{
 						if self.input_players.players[x].as_ref().is_some() {
-							debug!("Spieler {}", x);
+							debug!("Durch Update GameOver");
 							self.input_players.players[x].as_ref().unwrap().send_events(
 								ToPypadeGameEvent::GameOver(GameOver::DriveAway)
-							);
-						}
-					} else if array.contains(&(new_x, new_y)) {
-						if self.input_players.players[x].as_ref().is_some() {
-							self.input_players.players[x].as_ref().unwrap().send_events(
-								ToPypadeGameEvent::GameOver(GameOver::Crash)
 							);
 						}
 					} else {
@@ -54,7 +51,38 @@ impl GameState {
 						};
 						*state = new_state;
 					}
-					array[x] = (new_x, new_y);
+				}
+				// check for collisions with other players
+				for x in 0..3 {
+					for y in x + 1..4 {
+						if game_run.player_states[x].position
+							== game_run.player_states[y].position
+						{
+							debug!(
+								"Player Position: {:?}, {:?}, {:?}, {:?}",
+								game_run.player_states[0].position,
+								game_run.player_states[1].position,
+								game_run.player_states[2].position,
+								game_run.player_states[3].position
+							);
+							if self.input_players.players[x].as_ref().is_some() {
+								self.input_players.players[x]
+									.as_ref()
+									.unwrap()
+									.send_events(ToPypadeGameEvent::GameOver(
+										GameOver::Crash
+									));
+							}
+							if self.input_players.players[y].as_ref().is_some() {
+								self.input_players.players[y]
+									.as_ref()
+									.unwrap()
+									.send_events(ToPypadeGameEvent::GameOver(
+										GameOver::Crash
+									));
+							}
+						}
+					}
 				}
 			}
 		}

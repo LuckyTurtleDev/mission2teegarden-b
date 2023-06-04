@@ -106,44 +106,44 @@ async fn run_game() {
 	let mut no_player = true;
 	let mut player_counter = 0;
 
-	match &mut game_state.game_run {
-		None => todo!("no game run"),
-		Some(ref mut game_run) => {
-			while no_player {
-				game_state.input_players.get_events();
-				for player in &game_state.input_players.players {
-					if let Some(Player) = player {
-						debug!("send level to player");
-						player_counter += 1;
-						player.as_ref().unwrap().send_events(
-							ToPypadeGameEvent::NewLevel(game_run.level.cards.clone())
-						);
-						no_player = false;
-					}
-				}
-				next_frame().await;
-			}
-
-			// wait for all players cards sets
-			let mut card_set_counter = 0;
-			debug!("Number of players: {}", player_counter);
-			while card_set_counter < player_counter {
-				events = game_state.input_players.get_events();
-				for (x, player_events) in events.iter().enumerate() {
-					if let Some(player_events) = player_events.clone() {
-						for event in player_events {
-							if let ToPcGameEvent::Solution(solution) = event {
-								game_run.player_states[x].card_iter =
-									evaluate_cards(solution.to_vec());
-								debug!("got cards from player");
-								card_set_counter += 1;
-							}
-						}
-					}
-				}
-				next_frame().await;
+	while no_player {
+		game_state.draw().await;
+		game_state.input_players.get_events();
+		for player in &game_state.input_players.players {
+			if let Some(Player) = player {
+				debug!("send level to player");
+				player_counter += 1;
+				player
+					.as_ref()
+					.unwrap()
+					.send_events(ToPypadeGameEvent::NewLevel(
+						game_state.game_run.as_ref().unwrap().level.cards.clone()
+					));
+				no_player = false;
 			}
 		}
+		next_frame().await;
+	}
+
+	// wait for all players cards sets
+	let mut card_set_counter = 0;
+	debug!("Number of players: {}", player_counter);
+	while card_set_counter < player_counter {
+		game_state.draw().await;
+		events = game_state.input_players.get_events();
+		for (x, player_events) in events.iter().enumerate() {
+			if let Some(player_events) = player_events.clone() {
+				for event in player_events {
+					if let ToPcGameEvent::Solution(solution) = event {
+						game_state.game_run.as_mut().unwrap().player_states[x]
+							.card_iter = evaluate_cards(solution.to_vec());
+						debug!("got cards from player");
+						card_set_counter += 1;
+					}
+				}
+			}
+		}
+		next_frame().await;
 	}
 
 	loop {
