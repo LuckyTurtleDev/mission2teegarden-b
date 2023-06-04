@@ -65,12 +65,7 @@ struct GameState {
 
 impl GameState {
 	fn new() -> GameState {
-		let cards = vec![
-			Some(Card::MotorOn),
-			Some(Card::Wait(4)),
-			Some(Card::Right),
-			Some(Card::Wait(2)),
-		]; //TODO: load cards from pybadge
+		let cards = vec![];
 		Lazy::force(&TEXTURES);
 		let mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		level.cards = AvailableCards {
@@ -110,7 +105,6 @@ async fn run_game() {
 	let mut events = game_state.input_players.get_events();
 	let mut no_player = true;
 	let mut player_counter = 0;
-	debug!("haaaalloo");
 
 	match &mut game_state.game_run {
 		None => todo!("no game run"),
@@ -135,11 +129,11 @@ async fn run_game() {
 			debug!("Number of players: {}", player_counter);
 			while card_set_counter < player_counter {
 				events = game_state.input_players.get_events();
-				for player_events in events {
-					if let Some(vec) = player_events.clone() {
-						for event in player_events.unwrap() {
+				for (x, player_events) in events.iter().enumerate() {
+					if let Some(player_events) = player_events.clone() {
+						for event in player_events {
 							if let ToPcGameEvent::Solution(solution) = event {
-								game_run.player_states[card_set_counter].card_iter =
+								game_run.player_states[x].card_iter =
 									evaluate_cards(solution.to_vec());
 								debug!("got cards from player");
 								card_set_counter += 1;

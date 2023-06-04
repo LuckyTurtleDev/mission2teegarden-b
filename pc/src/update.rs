@@ -25,7 +25,6 @@ impl GameState {
 					player.position = game_run.player_states[x].position;
 					player.orientation = game_run.player_states[x].orientation;
 				}
-
 				//update next state
 				let mut array: [(i8, i8); 4] = [(-1, -1), (-1, -1), (-1, -1), (-1, -1)];
 				for (x, state) in &mut game_run.player_states.iter_mut().enumerate() {
@@ -33,14 +32,18 @@ impl GameState {
 					let new_x = state.position.0 as i8 + new_values.0;
 					let new_y = state.position.1 as i8 + new_values.1;
 					if new_x < 0 || new_y < 0 {
-						self.input_players.players[x].as_ref().unwrap().send_events(
-							ToPypadeGameEvent::GameOver(GameOver::DriveAway)
-						);
+						if self.input_players.players[x].as_ref().is_some() {
+							debug!("Spieler {}", x);
+							self.input_players.players[x].as_ref().unwrap().send_events(
+								ToPypadeGameEvent::GameOver(GameOver::DriveAway)
+							);
+						}
 					} else if array.contains(&(new_x, new_y)) {
-						self.input_players.players[x]
-							.as_ref()
-							.unwrap()
-							.send_events(ToPypadeGameEvent::GameOver(GameOver::Crash));
+						if self.input_players.players[x].as_ref().is_some() {
+							self.input_players.players[x].as_ref().unwrap().send_events(
+								ToPypadeGameEvent::GameOver(GameOver::Crash)
+							);
+						}
 					} else {
 						let new_state = PlayerState {
 							position: (new_x as u8, new_y as u8),

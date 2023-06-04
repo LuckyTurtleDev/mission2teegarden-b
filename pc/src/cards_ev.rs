@@ -29,38 +29,47 @@ impl<'a> Iterator for CardIter {
 					Some(None)
 				}
 			},
-			Some(card) => match card.as_ref().unwrap() {
-				Card::Left => {
-					self.card_pos += 1;
-					Some(Some(CarAction::RotateLeft))
-				},
-				Card::Right => {
-					self.card_pos += 1;
-					Some(Some(CarAction::RotateRight))
-				},
-				Card::Wait(i) => {
-					if self.wait_counter < (i) - 1 {
-						self.wait_counter += 1;
-						if self.driving {
-							Some(Some(CarAction::DriveForward))
-						} else {
-							Some(None)
-						}
-					} else {
-						self.wait_counter = 0;
-						self.card_pos += 1;
+			Some(card) => match card {
+				None => {
+					if self.driving {
 						Some(Some(CarAction::DriveForward))
+					} else {
+						Some(None)
 					}
 				},
-				Card::MotorOn => {
-					self.card_pos += 1;
-					self.driving = true;
-					Some(None)
-				},
-				Card::MotorOff => {
-					self.card_pos += 1;
-					self.driving = false;
-					Some(None)
+				Some(card) => match card {
+					Card::Left => {
+						self.card_pos += 1;
+						Some(Some(CarAction::RotateLeft))
+					},
+					Card::Right => {
+						self.card_pos += 1;
+						Some(Some(CarAction::RotateRight))
+					},
+					Card::Wait(i) => {
+						if self.wait_counter < (i) - 1 {
+							self.wait_counter += 1;
+							if self.driving {
+								Some(Some(CarAction::DriveForward))
+							} else {
+								Some(None)
+							}
+						} else {
+							self.wait_counter = 0;
+							self.card_pos += 1;
+							Some(Some(CarAction::DriveForward))
+						}
+					},
+					Card::MotorOn => {
+						self.card_pos += 1;
+						self.driving = true;
+						Some(None)
+					},
+					Card::MotorOff => {
+						self.card_pos += 1;
+						self.driving = false;
+						Some(None)
+					}
 				}
 			}
 		}
@@ -71,7 +80,7 @@ pub fn evaluate_cards(cards: Vec<Option<Card>>) -> CardIter {
 	CardIter {
 		card_pos: 0,
 		wait_counter: 0,
-		driving: true,
+		driving: false,
 		cards
 	}
 }
