@@ -1,5 +1,6 @@
 use m3_map::Orientation;
 use macroquad::prelude::*;
+use m3_models::{ToPypadeGameEvent, GameOver};
 
 use crate::{cards_ev::CarAction, GameState, PlayerState, Rotation};
 
@@ -26,12 +27,19 @@ impl GameState {
 				}
 
 				//update next state
-				for state in &mut game_run.player_states {
+				let mut array: [(i8, i8); 4] = [(-1, -1), (-1, -1), (-1, -1), (-1, -1)];
+				for (x, state) in &mut game_run.player_states.iter_mut().enumerate() {
 					let new_values = get_relative_xy(state);
 					let new_x = state.position.0 as i8 + new_values.0;
 					let new_y = state.position.1 as i8 + new_values.1;
 					if new_x < 0 || new_y < 0 {
-						todo!()
+						self.input_players.players[x].as_ref().unwrap().send_events(ToPypadeGameEvent::GameOver(
+							GameOver::DriveAway
+						));
+					} else if array.contains(&(new_x, new_y)) {
+						self.input_players.players[x].as_ref().unwrap().send_events(ToPypadeGameEvent::GameOver(
+							GameOver::Crash
+						));
 					} else {
 						let new_state = PlayerState {
 							position: (new_x as u8, new_y as u8),
@@ -42,6 +50,7 @@ impl GameState {
 						};
 						*state = new_state;
 					}
+					array[x] = (new_x, new_y);
 				}
 			}
 		}

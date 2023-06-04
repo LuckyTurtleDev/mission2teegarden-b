@@ -29,7 +29,7 @@ impl<'a> Iterator for CardIter {
 					Some(None)
 				}
 			},
-			Some(card) => match card.unwrap() {
+			Some(card) => match card.as_ref().unwrap() {
 				Card::Left => {
 					self.card_pos += 1;
 					Some(Some(CarAction::RotateLeft))
