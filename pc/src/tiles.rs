@@ -1,17 +1,17 @@
-pub use m3_map::tiles::MapBaseTile;
+pub(crate) use m3_map::tiles::MapBaseTile;
 use m3_map::tiles::{ObjectTile, PlayerTile, Tile};
 use macroquad::{prelude::ImageFormat, texture::Texture2D};
 use once_cell::sync::Lazy;
 
 #[allow(clippy::redundant_closure)] //false positive?
-pub static TEXTURES: Lazy<Textures> = Lazy::new(|| Textures::init());
+pub(crate) static TEXTURES: Lazy<Textures> = Lazy::new(|| Textures::init());
 
-pub trait GetTexture {
+pub(crate) trait GetTexture {
 	fn texture(&self, textures: &Textures) -> Texture2D;
 }
 
 ///Store all Textures
-pub struct Textures {
+pub(crate) struct Textures {
 	grass: Texture2D,
 	stone: Texture2D,
 	player1_car: Texture2D,
@@ -27,7 +27,7 @@ pub struct Textures {
 
 impl Textures {
 	///init all Textures
-	pub fn init() -> Textures {
+	pub(crate) fn init() -> Textures {
 		Textures {
 			grass: Texture2D::from_file_with_format(
 				include_bytes!("../assets/img/BaseTiles/grass.png"),
@@ -76,7 +76,7 @@ impl Textures {
 		}
 	}
 
-	pub fn get_player_textures(&self) -> Vec<Texture2D> {
+	pub(crate) fn get_player_textures(&self) -> Vec<Texture2D> {
 		vec![
 			self.player1_car,
 			self.player2_car,

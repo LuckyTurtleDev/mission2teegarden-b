@@ -1,14 +1,14 @@
 use m3_models::Card;
 
 #[derive(Debug, PartialEq)]
-pub enum CarAction {
+pub(crate) enum CarAction {
 	TurnLeft,
 	TurnRight,
 	DriveForward
 }
 
 #[derive(Clone, Debug)]
-pub struct CardIter {
+pub(crate) struct CardIter {
 	/// Position of card in vector
 	card_pos: usize,
 	/// Relative y-position to former position
@@ -17,7 +17,7 @@ pub struct CardIter {
 	cards: Vec<Card>
 }
 
-impl<'a> Iterator for CardIter {
+impl Iterator for CardIter {
 	type Item = Option<CarAction>;
 
 	fn next(&mut self) -> Option<Self::Item> {
@@ -69,7 +69,7 @@ impl<'a> Iterator for CardIter {
 	}
 }
 
-pub fn evaluate_cards(cards: Vec<Card>) -> CardIter {
+pub(crate) fn evaluate_cards(cards: Vec<Card>) -> CardIter {
 	CardIter {
 		card_pos: 0,
 		wait_counter: 0,

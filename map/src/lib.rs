@@ -104,7 +104,7 @@ pub struct InvalidOritation {
 
 impl TryFrom<&LayerTile<'_>> for Orientation {
 	type Error = InvalidOritation;
-	fn try_from(value: &LayerTile) -> Result<Self, Self::Error> {
+	fn try_from(value: &LayerTile<'_>) -> Result<Self, Self::Error> {
 		match (value.flip_h, value.flip_v, value.flip_d) {
 			(false, false, false) => Ok(Orientation::North),
 			(true, true, false) => Ok(Orientation::South),
