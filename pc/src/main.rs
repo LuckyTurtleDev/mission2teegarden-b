@@ -72,7 +72,7 @@ struct GameState {
 impl GameState {
 	fn new() -> GameState {
 		Lazy::force(&TEXTURES);
-		let mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
+		let mut level = Map::from_string(LEVELS[1]).unwrap(); //tests check if map is vaild
 		level.cards = AvailableCards {
 			left: 3,
 			right: 3,

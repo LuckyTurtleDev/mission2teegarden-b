@@ -122,6 +122,8 @@ impl GameState {
 				for y in x + 1..4 {
 					if self.input_players.players[x].as_ref().is_some()
 						&& self.input_players.players[y].as_ref().is_some()
+						&& (!game_run.player_states[x].reached_goal
+							&& !game_run.player_states[y].reached_goal)
 						&& (game_run.player_states[x].position
 							== game_run.player_states[y].position
 							|| game_run.player_states[x].position
