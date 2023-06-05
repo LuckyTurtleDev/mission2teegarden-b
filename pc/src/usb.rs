@@ -12,7 +12,6 @@ use std::{
 	time::Duration
 };
 
-
 #[derive(Debug)]
 pub(crate) struct Player {
 	receiver: Receiver<MessageToPc>,
