@@ -46,10 +46,9 @@ fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameS
 		game_state.activity = crate::Activity::Drive;
 	}
 }
-
 impl GameState {
 	///update the current state.
-	pub async fn update(&mut self) {
+	pub(crate) async fn update(&mut self) {
 		let events = self.input_players.get_events();
 		match &mut self.activity {
 			crate::Activity::Select => setup_players(events, self),
@@ -65,7 +64,7 @@ impl GameState {
 		}
 	}
 
-	pub fn next_move(&mut self) {
+	pub(crate) fn next_move(&mut self) {
 		if let Some(ref mut game_run) = self.game_run {
 			// update player position
 			for (x, player) in game_run.level.iter_mut_player().enumerate() {
