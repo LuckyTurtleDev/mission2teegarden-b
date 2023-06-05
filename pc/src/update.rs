@@ -104,14 +104,18 @@ impl GameState {
 			for x in 0..3 {
 				for y in x + 1..4 {
 					if game_run.player_states[x].position
-						== game_run.player_states[y].position && self.input_players.players[x].as_ref().is_some() && self.input_players.players[y].as_ref().is_some()
+						== game_run.player_states[y].position
+						&& self.input_players.players[x].as_ref().is_some()
+						&& self.input_players.players[y].as_ref().is_some()
 					{
-						self.input_players.players[x].as_ref().unwrap().send_events(
-							ToPypadeGameEvent::GameOver(GameOver::Crash)
-						);
-						self.input_players.players[y].as_ref().unwrap().send_events(
-							ToPypadeGameEvent::GameOver(GameOver::Crash)
-						);
+						self.input_players.players[x]
+							.as_ref()
+							.unwrap()
+							.send_events(ToPypadeGameEvent::GameOver(GameOver::Crash));
+						self.input_players.players[y]
+							.as_ref()
+							.unwrap()
+							.send_events(ToPypadeGameEvent::GameOver(GameOver::Crash));
 					}
 				}
 			}
