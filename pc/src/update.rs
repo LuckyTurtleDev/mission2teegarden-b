@@ -121,10 +121,13 @@ impl GameState {
 			for x in 0..3 {
 				for y in x + 1..4 {
 					if self.input_players.players[x].as_ref().is_some()
-						&& self.input_players.players[y].as_ref().is_some() && (game_run.player_states[x].position == game_run.player_states[y].position || game_run.player_states[x].position == game_run.level.iter_player().nth(y).unwrap().position)
+						&& self.input_players.players[y].as_ref().is_some()
+						&& (game_run.player_states[x].position
+							== game_run.player_states[y].position
+							|| game_run.player_states[x].position
+								== game_run.level.iter_player().nth(y).unwrap().position)
 					{
-						
-							self.input_players.players[x]
+						self.input_players.players[x]
 							.as_ref()
 							.unwrap()
 							.send_events(ToPypadeGameEvent::GameOver(GameOver::Crash));
@@ -134,9 +137,10 @@ impl GameState {
 							.send_events(ToPypadeGameEvent::GameOver(GameOver::Crash));
 						game_run.player_states[x].crashed = true;
 						game_run.player_states[y].crashed = true;
-						game_run.player_states[x].position = game_run.level.iter_player().nth(x).unwrap().position;
-						game_run.player_states[y].position = game_run.level.iter_player().nth(y).unwrap().position;
-						
+						game_run.player_states[x].position =
+							game_run.level.iter_player().nth(x).unwrap().position;
+						game_run.player_states[y].position =
+							game_run.level.iter_player().nth(y).unwrap().position;
 					}
 				}
 			}
