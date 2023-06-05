@@ -1,15 +1,13 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
 #![forbid(unused_must_use, unsafe_code)]
 
-//use core::num::{dec2flt::number, self};
 
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::{Map, Orientation};
-use macroquad::{miniquad::native::egl::NativeWindowType, prelude::*, window, Window};
-use my_env_logger_style::{env_logger::init, TimestampPrecision};
+use macroquad::{prelude::*, window, Window};
+use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
-//use m3_models::CardIter;
 
 mod cards_ev;
 mod tiles;
@@ -19,7 +17,7 @@ use usb::Players;
 
 use crate::cards_ev::evaluate_cards;
 
-use m3_models::{AvailableCards, Card, ToPcGameEvent, ToPypadeGameEvent};
+use m3_models::AvailableCards;
 mod draw;
 mod update;
 mod usb;
@@ -110,10 +108,6 @@ impl GameState {
 
 async fn run_game() {
 	let mut game_state = GameState::new();
-	let mut events = game_state.input_players.get_events();
-	let mut player_counter = 0;
-	let mut card_set_counter = 0;
-
 	loop {
 		game_state.update().await;
 		game_state.draw().await;

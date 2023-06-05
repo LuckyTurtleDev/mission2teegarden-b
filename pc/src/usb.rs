@@ -1,6 +1,6 @@
 use anyhow::Context;
 use bincode::error::DecodeError;
-use log::{debug, info, trace, warn};
+use log::{debug, info, trace};
 use m3_models::{
 	MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPybadgeProtocol, ToPypadeGameEvent
 };

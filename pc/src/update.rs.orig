@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 use crate::evaluate_cards;
 use m3_map::Orientation;
 use m3_models::{GameOver, ToPcGameEvent, ToPypadeGameEvent};
+=======
+use crate::{cards_ev::CarAction, GameState, PlayerState, Rotation, RotationPoint};
+use m3_map::Orientation;
+>>>>>>> main
 use macroquad::prelude::*;
+use my_env_logger_style::env_logger::DEFAULT_FILTER_ENV;
 
-use crate::{cards_ev::CarAction, GameState, PlayerState, Rotation};
+<<<<<<< HEAD
+use crate::{cards_ev::CarAction, GameRun, GameState, PlayerState, Rotation};
 
 fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameState) {
 	if game_state.player_count < events.iter().flatten().count() as u8 {
@@ -45,9 +52,10 @@ fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameS
 		game_state.activity = crate::Activity::Drive;
 	}
 }
+
 impl GameState {
 	///update the current state.
-	pub(crate) async fn update(&mut self) {
+	pub async fn update(&mut self) {
 		let events = self.input_players.get_events();
 		match &mut self.activity {
 			crate::Activity::Select => setup_players(events, self),
@@ -55,6 +63,14 @@ impl GameState {
 				//let _player_events = self.input_players.get_events();
 				if self.delta_time >= self.movement_time {
 					self.delta_time -= self.movement_time;
+=======
+impl GameState {
+	///update the current state.
+	pub(crate) async fn update(&mut self) {
+		let _player_events = self.input_players.get_events();
+		if self.delta_time >= self.movement_time {
+			self.delta_time -= self.movement_time;
+>>>>>>> main
 
 					self.next_move();
 				}
@@ -63,7 +79,8 @@ impl GameState {
 		}
 	}
 
-	pub(crate) fn next_move(&mut self) {
+<<<<<<< HEAD
+	pub fn next_move(&mut self) {
 		if let Some(ref mut game_run) = self.game_run {
 			// update player position
 			for (x, player) in game_run.level.iter_mut_player().enumerate() {
@@ -123,6 +140,34 @@ impl GameState {
 								ToPypadeGameEvent::GameOver(GameOver::Crash)
 							);
 						}
+=======
+	pub(crate) fn next_move(&mut self) {
+		match &mut self.game_run {
+			None => !todo!(),
+			Some(ref mut game_run) => {
+				// update player position
+				for (x, player) in &mut game_run.level.iter_mut_player().enumerate() {
+					player.position = game_run.player_states[x].position;
+					player.orientation = game_run.player_states[x].orientation;
+				}
+
+				//update next state
+				for state in &mut game_run.player_states {
+					let new_values = get_relative_xy(state);
+					let new_x = state.position.0 as i8 + new_values.0;
+					let new_y = state.position.1 as i8 + new_values.1;
+					if new_x < 0 || new_y < 0 {
+						todo!()
+					} else {
+						let new_state = PlayerState {
+							position: (new_x as u8, new_y as u8),
+							orientation: new_values.2,
+							next_action: state.card_iter.next().unwrap(),
+							rotation: new_values.3,
+							card_iter: state.card_iter.clone()
+						};
+						*state = new_state;
+>>>>>>> main
 					}
 				}
 			}
@@ -131,7 +176,10 @@ impl GameState {
 }
 
 fn get_relative_xy(player_state: &PlayerState) -> (i8, i8, Orientation, Rotation) {
+<<<<<<< HEAD
 	let mut rotation = Rotation::NoRotation;
+=======
+>>>>>>> main
 	match &player_state.next_action {
 		None => (0, 0, player_state.orientation, rotation),
 		Some(car_action) => {
