@@ -136,7 +136,7 @@ async fn run_game() {
 				for event in player_events {
 					if let ToPcGameEvent::Solution(solution) = event {
 						game_state.game_run.as_mut().unwrap().player_states[x]
-							.card_iter = evaluate_cards(solution.to_vec());
+							.card_iter = evaluate_cards(solution.into_iter().flatten().collect());
 						debug!("got cards from player");
 						card_set_counter += 1;
 					}

@@ -14,7 +14,7 @@ pub struct CardIter {
 	/// Relative y-position to former position
 	wait_counter: u8,
 	driving: bool,
-	cards: Vec<Option<Card>>
+	cards: Vec<Card>
 }
 
 impl<'a> Iterator for CardIter {
@@ -30,57 +30,48 @@ impl<'a> Iterator for CardIter {
 				}
 			},
 			Some(card) => match card {
-				None => {
-					if self.driving {
-						Some(Some(CarAction::DriveForward))
+				Card::Left => {
+					self.card_pos += 1;
+					Some(Some(CarAction::RotateLeft))
+				},
+				Card::Right => {
+					self.card_pos += 1;
+					Some(Some(CarAction::RotateRight))
+				},
+				Card::Wait(i) => {
+					if self.wait_counter < (*i) - 1 {
+						self.wait_counter += 1;
+						if self.driving {
+							Some(Some(CarAction::DriveForward))
+						} else {
+							Some(None)
+						}
 					} else {
-						Some(None)
+						self.wait_counter = 0;
+						self.card_pos += 1;
+						Some(Some(CarAction::DriveForward))
 					}
 				},
-				Some(card) => match card {
-					Card::Left => {
-						self.card_pos += 1;
-						Some(Some(CarAction::RotateLeft))
-					},
-					Card::Right => {
-						self.card_pos += 1;
-						Some(Some(CarAction::RotateRight))
-					},
-					Card::Wait(i) => {
-						if self.wait_counter < (i) - 1 {
-							self.wait_counter += 1;
-							if self.driving {
-								Some(Some(CarAction::DriveForward))
-							} else {
-								Some(None)
-							}
-						} else {
-							self.wait_counter = 0;
-							self.card_pos += 1;
-							Some(Some(CarAction::DriveForward))
-						}
-					},
-					Card::MotorOn => {
-						self.card_pos += 1;
-						self.driving = true;
-						Some(None)
-					},
-					Card::MotorOff => {
-						self.card_pos += 1;
-						self.driving = false;
-						Some(None)
-					}
+				Card::MotorOn => {
+					self.card_pos += 1;
+					self.driving = true;
+					Some(None)
+				},
+				Card::MotorOff => {
+					self.card_pos += 1;
+					self.driving = false;
+					Some(None)
 				}
 			}
 		}
 	}
 }
 
-pub fn evaluate_cards(cards: Vec<Option<Card>>) -> CardIter {
+pub fn evaluate_cards(cards: Vec<Card>) -> CardIter {
 	CardIter {
 		card_pos: 0,
 		wait_counter: 0,
-		driving: false,
+		driving: true,
 		cards
 	}
 }
