@@ -7,7 +7,6 @@ use m3_map::{Map, Orientation};
 use macroquad::{prelude::*, window, Window};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
-//use m3_models::CardIter;
 
 mod cards_ev;
 mod tiles;
@@ -17,7 +16,7 @@ use usb::Players;
 
 use crate::cards_ev::evaluate_cards;
 
-use m3_models::Card;
+use m3_models::AvailableCards;
 mod draw;
 mod update;
 mod usb;
@@ -35,26 +34,23 @@ static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 	]
 });
 
+enum Activity {
+	Drive,
+	Select
+}
+
 #[derive(PartialEq, Clone, Copy, Debug)]
-pub enum RotationPoint {
-	TopLeft,
-	TopRight,
-	BottomLeft,
-	BottomRight,
+pub enum Rotation {
+	RotateLeft,
+	RotateRight,
 	NoRotation
 }
-
-struct Rotation {
-	pivot: RotationPoint,
-	sign: i8
-}
-
 struct PlayerState {
 	position: (u8, u8),
 	orientation: Orientation,
 	next_action: Option<CarAction>,
 	rotation: Rotation,
-	card_iter: cards_ev::CardIter
+	card_iter: Option<cards_ev::CardIter>
 }
 
 struct GameRun {
@@ -63,6 +59,8 @@ struct GameRun {
 }
 
 struct GameState {
+	player_count: u8,
+	activity: Activity,
 	game_run: Option<GameRun>,
 	input_players: Players,
 	delta_time: f32,
@@ -71,15 +69,15 @@ struct GameState {
 
 impl GameState {
 	fn new() -> GameState {
-		let cards = vec![
-			Card::MotorOn,
-			Card::Wait(3),
-			Card::Left,
-			Card::Wait(2),
-			Card::MotorOff,
-		]; //TODO: load cards from pybadge
 		Lazy::force(&TEXTURES);
-		let level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
+		let mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
+		level.cards = AvailableCards {
+			left: 3,
+			right: 3,
+			motor_on: 2,
+			motor_off: 2,
+			wait: 9
+		};
 		debug!("load level{:#?}", level);
 		let player_states = level
 			.iter_player()
@@ -87,11 +85,8 @@ impl GameState {
 				position: f.position,
 				orientation: f.orientation,
 				next_action: None,
-				rotation: Rotation {
-					pivot: RotationPoint::NoRotation,
-					sign: 1
-				},
-				card_iter: evaluate_cards(cards.clone())
+				rotation: Rotation::NoRotation,
+				card_iter: None
 			})
 			.collect();
 		let game_run = GameRun {
@@ -100,10 +95,12 @@ impl GameState {
 		};
 
 		GameState {
+			activity: Activity::Select,
 			game_run: Some(game_run),
 			input_players: usb::Players::init(),
 			delta_time: 0.0,
-			movement_time: 0.5
+			movement_time: 0.5,
+			player_count: 0
 		}
 	}
 }

@@ -13,7 +13,7 @@ use std::{
 };
 
 #[derive(Debug)]
-struct Player {
+pub(crate) struct Player {
 	receiver: Receiver<MessageToPc>,
 	sender: Sender<MessageToPyBadge>,
 	port_name: String
@@ -36,7 +36,7 @@ pub(crate) struct Players {
 	/// The connection establishment is already finish
 	/// and message can be send/receive to/from player,
 	/// if entry is `Some`.
-	players: [Option<Player>; 4],
+	pub(crate) players: [Option<Player>; 4],
 	///uart devices, wich where not classificated as pybadge yet
 	possible_players: Vec<Player>
 }
@@ -132,7 +132,7 @@ impl Players {
 		let mut events = [None, None, None, None];
 		for (i, player) in self.players.iter().enumerate() {
 			if let Some(player) = player {
-				let mut events_of_player = Vec::new();
+				let mut events_of_player = Vec::with_capacity(1);
 				match player.receiver.try_recv() {
 					Ok(event) => match event {
 						MessageToPc::GameEvent(event) => events_of_player.push(event),
@@ -140,10 +140,10 @@ impl Players {
 						MessageToPc::KeepAlive => {}
 					},
 					Err(err) => match err {
-						TryRecvError::Empty => continue,
+						TryRecvError::Empty => {},
 						TryRecvError::Disconnected => panic!("channel disconnected")
 					}
-				}
+				};
 				events[i] = Some(events_of_player);
 			}
 		}

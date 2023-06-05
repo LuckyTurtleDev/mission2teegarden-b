@@ -1,4 +1,4 @@
-use crate::{tiles::GetTexture, GameState, Orientation, RotationPoint, TEXTURES};
+use crate::{tiles::GetTexture, GameState, Orientation, Rotation, TEXTURES};
 use macroquad::{math::Vec2, prelude::*};
 
 impl GameState {
@@ -38,80 +38,67 @@ impl GameState {
 				//draw players
 				let player_textures = TEXTURES.get_player_textures();
 				for (x, player) in game_run.level.iter_player().enumerate() {
-					let texture = player_textures[x];
-					// Car drives forward
-					if game_run.player_states[x].rotation.pivot
-						== RotationPoint::NoRotation
-					{
-						let relative_pos_x = (game_run.player_states[x].position.0
-							as f32 - player.position.0 as f32)
-							* dest_size / (self.movement_time
-							/ self.delta_time);
-						let relative_pos_y = (game_run.player_states[x].position.1
-							as f32 - player.position.1 as f32)
-							* dest_size / (self.movement_time
-							/ self.delta_time);
-						let rotation: f32 = match game_run.player_states[x].orientation {
-							Orientation::North => 0.0,
-							Orientation::East => 90.0,
-							Orientation::South => 180.0,
-							Orientation::West => 270.0
-						};
-						let draw_params = DrawTextureParams {
-							dest_size: Some(Vec2::new(dest_size, dest_size)),
-							rotation: rotation.to_radians(),
-							..Default::default()
-						};
-						draw_texture_ex(
-							texture,
-							player.position.0 as f32 * dest_size
-								+ relative_pos_x + map_offset_x,
-							player.position.1 as f32 * dest_size
-								+ relative_pos_y + map_offset_y,
-							WHITE,
-							draw_params
-						);
-					// Car makes a turn
-					} else {
-						let pivot_xy = match game_run.player_states[x].rotation.pivot {
-							RotationPoint::TopLeft => Vec2::new(
-								player.position.0 as f32,
-								(player.position.1) as f32
-							),
-							RotationPoint::TopRight => Vec2::new(
-								(player.position.0 + 1) as f32,
-								player.position.1 as f32
-							),
-							RotationPoint::BottomLeft => Vec2::new(
-								player.position.0 as f32,
-								(player.position.1 + 1) as f32
-							),
-							RotationPoint::BottomRight => Vec2::new(
-								(player.position.0 + 1) as f32,
-								(player.position.1 + 1) as f32
-							),
-							// Never happens
-							RotationPoint::NoRotation => Vec2::new(0.0, 0.0)
-						};
-						let pivot_xy = Vec2::new(
-							pivot_xy.x * dest_size + map_offset_x,
-							pivot_xy.y * dest_size + map_offset_y
-						);
-						let angle: f32 = 90.0 / (self.movement_time / self.delta_time)
-							* game_run.player_states[x].rotation.sign as f32;
-						let draw_params = DrawTextureParams {
-							dest_size: Some(Vec2::new(dest_size, dest_size)),
-							rotation: angle.to_radians(),
-							pivot: Some(pivot_xy),
-							..Default::default()
-						};
-						draw_texture_ex(
-							texture,
-							player.position.0 as f32 * dest_size + map_offset_x,
-							player.position.1 as f32 * dest_size + map_offset_y,
-							WHITE,
-							draw_params
-						);
+					if self.input_players.players[x].is_some() {
+						let texture = player_textures[x];
+						// Car drives forward
+						if game_run.player_states[x].rotation == Rotation::NoRotation {
+							let relative_pos_x = (game_run.player_states[x].position.0
+								as f32 - player.position.0 as f32)
+								* dest_size / (self.movement_time
+								/ self.delta_time);
+							let relative_pos_y = (game_run.player_states[x].position.1
+								as f32 - player.position.1 as f32)
+								* dest_size / (self.movement_time
+								/ self.delta_time);
+							let rotation: f32 = match player.orientation {
+								Orientation::North => 0.0,
+								Orientation::East => 90.0,
+								Orientation::South => 180.0,
+								Orientation::West => 270.0
+							};
+							let draw_params = DrawTextureParams {
+								dest_size: Some(Vec2::new(dest_size, dest_size)),
+								rotation: rotation.to_radians(),
+								..Default::default()
+							};
+							draw_texture_ex(
+								texture,
+								player.position.0 as f32 * dest_size
+									+ relative_pos_x + map_offset_x,
+								player.position.1 as f32 * dest_size
+									+ relative_pos_y + map_offset_y,
+								WHITE,
+								draw_params
+							);
+						// Car makes a turn
+						} else {
+							let sign = match game_run.player_states[x].rotation {
+								Rotation::RotateLeft => -1.0,
+								Rotation::RotateRight => 1.0,
+								_ => unreachable!()
+							};
+							let angle_offset = match player.orientation {
+								Orientation::North => 0.0,
+								Orientation::East => 90.0,
+								Orientation::South => 180.0,
+								Orientation::West => 270.0
+							};
+							let angle: f32 = (90.0
+								/ (self.movement_time / self.delta_time)
+								+ angle_offset) * sign;
+							let draw_params = DrawTextureParams {
+								dest_size: Some(Vec2::new(dest_size, dest_size)),
+								rotation: angle.to_radians(),
+								..Default::default()
+							};
+							draw_texture_ex(
+								texture,
+								player.position.0 as f32 * dest_size + map_offset_x,
+								player.position.1 as f32 * dest_size + map_offset_y,
+								WHITE,
+								draw_params
+							);
+						}
 					}
 				}
 			}

@@ -2,8 +2,8 @@ use m3_models::Card;
 
 #[derive(Debug, PartialEq)]
 pub(crate) enum CarAction {
-	TurnLeft,
-	TurnRight,
+	RotateLeft,
+	RotateRight,
 	DriveForward
 }
 
@@ -15,6 +15,17 @@ pub(crate) struct CardIter {
 	wait_counter: u8,
 	driving: bool,
 	cards: Vec<Card>
+}
+
+impl Default for CardIter {
+	fn default() -> Self {
+		Self {
+			card_pos: 0,
+			wait_counter: 0,
+			driving: true,
+			cards: Vec::with_capacity(0)
+		}
+	}
 }
 
 impl Iterator for CardIter {
@@ -32,13 +43,11 @@ impl Iterator for CardIter {
 			Some(card) => match card {
 				Card::Left => {
 					self.card_pos += 1;
-					self.driving = true;
-					Some(Some(CarAction::TurnLeft))
+					Some(Some(CarAction::RotateLeft))
 				},
 				Card::Right => {
 					self.card_pos += 1;
-					self.driving = true;
-					Some(Some(CarAction::TurnRight))
+					Some(Some(CarAction::RotateRight))
 				},
 				Card::Wait(i) => {
 					if self.wait_counter < (*i) - 1 {
@@ -51,7 +60,11 @@ impl Iterator for CardIter {
 					} else {
 						self.wait_counter = 0;
 						self.card_pos += 1;
-						Some(Some(CarAction::DriveForward))
+						if self.driving {
+							Some(Some(CarAction::DriveForward))
+						} else {
+							Some(None)
+						}
 					}
 				},
 				Card::MotorOn => {
@@ -71,10 +84,8 @@ impl Iterator for CardIter {
 
 pub(crate) fn evaluate_cards(cards: Vec<Card>) -> CardIter {
 	CardIter {
-		card_pos: 0,
-		wait_counter: 0,
-		driving: true,
-		cards
+		cards,
+		..Default::default()
 	}
 }
 
@@ -92,7 +103,7 @@ mod tests {
 			Some(DriveForward),
 			Some(DriveForward),
 			Some(DriveForward),
-			Some(TurnLeft),
+			Some(RotateLeft),
 			Some(DriveForward),
 			Some(DriveForward),
 			None,
