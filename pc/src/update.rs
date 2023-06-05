@@ -66,49 +66,65 @@ impl GameState {
 	pub(crate) fn next_move(&mut self) {
 		if let Some(ref mut game_run) = self.game_run {
 			// update player position
+			let global_goal = game_run.level.global_goal;
 			for (x, player) in game_run.level.iter_mut_player().enumerate() {
 				player.position = game_run.player_states[x].position;
 				player.orientation = game_run.player_states[x].orientation;
+
+				if let Some(goal) = player.goal {
+					if player.position.0 == goal.0 && player.position.1 == goal.1 {
+						game_run.player_states[x].reached_goal = true;
+					}
+				}
+				if let Some(global_goal) = global_goal {
+					if player.position.0 == global_goal.0
+						&& player.position.1 == global_goal.1
+					{
+						game_run.player_states[x].reached_goal = true;
+					}
+				}
 			}
 			//update next state
 			for (x, state) in &mut game_run.player_states.iter_mut().enumerate() {
-				let new_values = get_relative_xy(state);
-				let new_x = state.position.0 as i8 + new_values.0;
-				let new_y = state.position.1 as i8 + new_values.1;
+				if !state.reached_goal && !state.crashed {
+					let new_values = get_relative_xy(state);
+					let new_x = state.position.0 as i8 + new_values.0;
+					let new_y = state.position.1 as i8 + new_values.1;
 
-				if new_y < 0
-					|| new_x < 0 || new_x >= game_run.level.width as i8
-					|| new_y >= game_run.level.height as i8
-				{
-					if self.input_players.players[x].as_ref().is_some() {
-						debug!("Durch Update GameOver");
-						self.input_players.players[x].as_ref().unwrap().send_events(
-							ToPypadeGameEvent::GameOver(GameOver::DriveAway)
-						);
+					if new_y < 0
+						|| new_x < 0 || new_x >= game_run.level.width as i8
+						|| new_y >= game_run.level.height as i8
+					{
+						if self.input_players.players[x].as_ref().is_some() {
+							self.input_players.players[x].as_ref().unwrap().send_events(
+								ToPypadeGameEvent::GameOver(GameOver::DriveAway)
+							);
+						}
+					} else {
+						let new_state = PlayerState {
+							position: (new_x as u8, new_y as u8),
+							orientation: new_values.2,
+							next_action: match &mut state.card_iter {
+								Some(iter) => iter.next().unwrap(),
+								None => Some(CarAction::DriveForward)
+							},
+							rotation: new_values.3,
+							reached_goal: state.reached_goal,
+							crashed: state.crashed,
+							card_iter: state.card_iter.clone()
+						};
+						*state = new_state;
 					}
-				} else {
-					let new_state = PlayerState {
-						position: (new_x as u8, new_y as u8),
-						orientation: new_values.2,
-						next_action: match &mut state.card_iter {
-							Some(iter) => iter.next().unwrap(),
-							None => Some(CarAction::DriveForward)
-						},
-						rotation: new_values.3,
-						card_iter: state.card_iter.clone()
-					};
-					*state = new_state;
 				}
 			}
 			// check for collisions with other players
 			for x in 0..3 {
 				for y in x + 1..4 {
-					if game_run.player_states[x].position
-						== game_run.player_states[y].position
-						&& self.input_players.players[x].as_ref().is_some()
-						&& self.input_players.players[y].as_ref().is_some()
+					if self.input_players.players[x].as_ref().is_some()
+						&& self.input_players.players[y].as_ref().is_some() && (game_run.player_states[x].position == game_run.player_states[y].position || game_run.player_states[x].position == game_run.level.iter_player().nth(y).unwrap().position)
 					{
-						self.input_players.players[x]
+						
+							self.input_players.players[x]
 							.as_ref()
 							.unwrap()
 							.send_events(ToPypadeGameEvent::GameOver(GameOver::Crash));
@@ -116,6 +132,11 @@ impl GameState {
 							.as_ref()
 							.unwrap()
 							.send_events(ToPypadeGameEvent::GameOver(GameOver::Crash));
+						game_run.player_states[x].crashed = true;
+						game_run.player_states[y].crashed = true;
+						game_run.player_states[x].position = game_run.level.iter_player().nth(x).unwrap().position;
+						game_run.player_states[y].position = game_run.level.iter_player().nth(y).unwrap().position;
+						
 					}
 				}
 			}
