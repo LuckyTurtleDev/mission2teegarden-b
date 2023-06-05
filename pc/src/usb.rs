@@ -12,6 +12,7 @@ use std::{
 	time::Duration
 };
 
+#[derive(Debug)]
 struct Player {
 	receiver: Receiver<MessageToPc>,
 	sender: Sender<MessageToPyBadge>,
@@ -27,7 +28,7 @@ impl Player {
 	}
 }
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub(crate) struct Players {
 	/// found players. Might can become `Some` later,
 	/// if a new player does join.
@@ -105,24 +106,24 @@ impl Players {
 	pub(crate) fn get_events(&mut self) -> [Option<Vec<ToPcGameEvent>>; 4] {
 		if self.players.iter().any(|f| f.is_none()) {
 			//check if some of the serial ports a pybadge and it as player
-			let mut i: usize = 0;
-			let mut found_player = false;
-			for possible_player in self.possible_players.iter() {
+			let mut pos = None;
+			for (i, possible_player) in self.possible_players.iter().enumerate() {
+				let message = match possible_player.receiver.try_recv() {
+					Ok(value) => value,
+					Err(err) => match err {
+						TryRecvError::Empty => continue,
+						TryRecvError::Disconnected => panic!("channel disconnected")
+					}
+				};
 				if MessageToPc::Protocol(m3_models::ToPcProtocol::ConnectionResponse)
-					== match possible_player.receiver.try_recv() {
-						Ok(value) => value,
-						Err(err) => match err {
-							TryRecvError::Empty => continue,
-							TryRecvError::Disconnected => panic!("channel disconnected")
-						}
-					} {
-					found_player = true;
+					== message
+				{
+					pos = Some(i);
 					break;
 				}
-				i += 1;
 			}
-			if found_player {
-				let new_player = self.possible_players.remove(i);
+			if let Some(pos) = pos {
+				let new_player = self.possible_players.remove(pos);
 				info!("player join from port {}", new_player.port_name);
 				*self.players.iter_mut().find(|f| f.is_none()).unwrap() =
 					Some(new_player);
