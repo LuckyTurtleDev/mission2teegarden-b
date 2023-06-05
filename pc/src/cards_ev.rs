@@ -17,6 +17,17 @@ pub struct CardIter {
 	cards: Vec<Card>
 }
 
+impl Default for CardIter {
+	fn default() -> Self {
+		Self {
+			card_pos: 0,
+			wait_counter: 0,
+			driving: true,
+			cards: Vec::with_capacity(0)
+		}
+	}
+}
+
 impl<'a> Iterator for CardIter {
 	type Item = Option<CarAction>;
 
@@ -49,7 +60,11 @@ impl<'a> Iterator for CardIter {
 					} else {
 						self.wait_counter = 0;
 						self.card_pos += 1;
-						Some(Some(CarAction::DriveForward))
+						if self.driving {
+							Some(Some(CarAction::DriveForward))
+						} else {
+							Some(None)
+						}
 					}
 				},
 				Card::MotorOn => {
@@ -69,10 +84,8 @@ impl<'a> Iterator for CardIter {
 
 pub fn evaluate_cards(cards: Vec<Card>) -> CardIter {
 	CardIter {
-		card_pos: 0,
-		wait_counter: 0,
-		driving: true,
-		cards
+		cards,
+		..Default::default()
 	}
 }
 

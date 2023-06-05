@@ -37,6 +37,11 @@ static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 	]
 });
 
+enum Activity {
+	Drive,
+	Select
+}
+
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub enum Rotation {
 	RotateLeft,
@@ -48,7 +53,7 @@ struct PlayerState {
 	orientation: Orientation,
 	next_action: Option<CarAction>,
 	rotation: Rotation,
-	card_iter: cards_ev::CardIter
+	card_iter: Option<cards_ev::CardIter>
 }
 
 struct GameRun {
@@ -57,6 +62,8 @@ struct GameRun {
 }
 
 struct GameState {
+	player_count: u8,
+	activity: Activity,
 	game_run: Option<GameRun>,
 	input_players: Players,
 	delta_time: f32,
@@ -65,7 +72,6 @@ struct GameState {
 
 impl GameState {
 	fn new() -> GameState {
-		let cards = vec![];
 		Lazy::force(&TEXTURES);
 		let mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		level.cards = AvailableCards {
@@ -83,7 +89,7 @@ impl GameState {
 				orientation: f.orientation,
 				next_action: None,
 				rotation: Rotation::NoRotation,
-				card_iter: evaluate_cards(cards.clone())
+				card_iter: None
 			})
 			.collect();
 		let game_run = GameRun {
@@ -92,10 +98,12 @@ impl GameState {
 		};
 
 		GameState {
+			activity: Activity::Select,
 			game_run: Some(game_run),
 			input_players: usb::Players::init(),
 			delta_time: 0.0,
-			movement_time: 0.5
+			movement_time: 0.5,
+			player_count: 0
 		}
 	}
 }
@@ -103,48 +111,8 @@ impl GameState {
 async fn run_game() {
 	let mut game_state = GameState::new();
 	let mut events = game_state.input_players.get_events();
-	let mut no_player = true;
 	let mut player_counter = 0;
-
-	while no_player {
-		game_state.draw().await;
-		game_state.input_players.get_events();
-		for player in &game_state.input_players.players {
-			if let Some(Player) = player {
-				debug!("send level to player");
-				player_counter += 1;
-				player
-					.as_ref()
-					.unwrap()
-					.send_events(ToPypadeGameEvent::NewLevel(
-						game_state.game_run.as_ref().unwrap().level.cards.clone()
-					));
-				no_player = false;
-			}
-		}
-		next_frame().await;
-	}
-
-	// wait for all players cards sets
 	let mut card_set_counter = 0;
-	debug!("Number of players: {}", player_counter);
-	while card_set_counter < player_counter {
-		game_state.draw().await;
-		events = game_state.input_players.get_events();
-		for (x, player_events) in events.iter().enumerate() {
-			if let Some(player_events) = player_events.clone() {
-				for event in player_events {
-					if let ToPcGameEvent::Solution(solution) = event {
-						game_state.game_run.as_mut().unwrap().player_states[x]
-							.card_iter = evaluate_cards(solution.into_iter().flatten().collect());
-						debug!("got cards from player");
-						card_set_counter += 1;
-					}
-				}
-			}
-		}
-		next_frame().await;
-	}
 
 	loop {
 		game_state.update().await;
