@@ -14,7 +14,7 @@ embedded-graphics = "0.7.1"
 embedded-sprites = "0.1.2"
 heapless = "0.7.16"
 m3-models = { version = "0.1.0", path = "../models" }
-pybadge-high = { version = "0.2.0", features = ["usb", "time", "bluescreen", "bluescreen-message-nightly"] }
+pybadge-high = { version = "0.2.0", features = ["usb", "time", "bluescreen", "bluescreen-message-nightly", "neopixel"] }
 strum = { version = "0.24.1", default-features = false }
 
 

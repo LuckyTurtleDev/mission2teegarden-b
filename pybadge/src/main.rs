@@ -24,12 +24,13 @@ use pybadge_high::{
 	buttons::{Button, Buttons},
 	prelude::*,
 	time::uptime,
-	Color, Display, PyBadge
+	Color, Display, NeoPixel, PyBadge
 };
-use strum::IntoEnumIterator;
 
 mod activitys;
 mod usb;
+
+mod log;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const _CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -65,7 +66,7 @@ fn read_events(usb_data: &mut Vec<u8, 128>) -> Vec<MessageToPyBadge, 10> {
 }
 
 fn send_event(event: MessageToPc) {
-	let mut buf = [0_u8; 128];
+	let mut buf = [0_u8; 265];
 	let len = encode_into_slice(event, &mut buf, bincode::config::standard()).unwrap();
 	usb::wirte(&buf[..len]);
 }
@@ -97,6 +98,7 @@ fn send_button_state(buttons: &Buttons) {
 struct State<'a> {
 	display: Display,
 	buttons: Buttons,
+	neopixel: NeoPixel,
 	/// initinal avaibale cards
 	init_avaiable_cards: AvailableCards,
 	/// count of different card types
@@ -182,6 +184,7 @@ fn main() -> ! {
 	let mut state = State {
 		display,
 		buttons,
+		neopixel: pybadge.neopixel,
 		init_avaiable_cards: AvailableCards::default(),
 		card_type_count: 0,
 		avaiable_cards: AvailableCards::default(),
@@ -196,7 +199,6 @@ fn main() -> ! {
 	};
 	let mut last_activity = Activity::GameOver(m3_models::GameOver::Crash);
 	let mut timestamp;
-	//let mut init = false;
 	loop {
 		timestamp = uptime();
 		send_event(MessageToPc::KeepAlive);
@@ -204,26 +206,20 @@ fn main() -> ! {
 		send_button_state(&state.buttons);
 		usb::read(&mut usb_data);
 		let events = read_events(&mut usb_data);
-		/* //uncommend this to thest the card selector, without working pc game
-		if !init {
-		events
-			.push(MessageToPyBadge::GameEvent(ToPypadeGameEvent::NewLevel(
-				AvailableCards {
-					left: 3,
-					right: 3,
-					motor_on: 2,
-					motor_off: 2,
-					wait: 9
-				}
-			)))
-			.unwrap();
-			init = true;
-		}*/
-
 		for event in events {
 			match event {
 				MessageToPyBadge::Protocol(_) => {},
 				MessageToPyBadge::GameEvent(event) => match event {
+					ToPypadeGameEvent::NeoPixelColor(color) => {
+						state
+							.neopixel
+							.write((0..5).map(|_| pybadge_high::NeoPixelColor {
+								r: color.r,
+								g: color.g,
+								b: color.b
+							}))
+							.unwrap();
+					},
 					ToPypadeGameEvent::NewLevel(available_cards) => {
 						state.activity = Activity::Selecter;
 						state.solution.clear();

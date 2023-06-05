@@ -51,8 +51,19 @@ pub enum Key {
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
+pub struct Log {
+	// data sending/de-/encoding is broken if array is to long.
+	// for example if messsage if is 128 long. This output will be send for "hiiiii":
+	// message: [104, 105, 105, 105, 105, 105, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2], length: 2 }
+	// at some point the bytes become always 2.
+	pub message: [u8; 100],
+	pub length: u16
+}
+
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum ToPcProtocol {
-	ConnectionResponse
+	ConnectionResponse,
+	Log(Log)
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
@@ -79,7 +90,17 @@ pub enum ToPybadgeProtocol {
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]
+pub struct NeoPixelColor {
+	pub r: u8,
+	pub g: u8,
+	pub b: u8
+}
+
+#[derive(Debug, Clone, Decode, Encode, PartialEq)]
 pub enum ToPypadeGameEvent {
+	/// set all NeoPixel to this Color.
+	/// Regular used as indication for Player number
+	NeoPixelColor(NeoPixelColor),
 	NewLevel(AvailableCards),
 	GameOver(GameOver),
 	/// Retry the current level,
