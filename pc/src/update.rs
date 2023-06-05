@@ -1,17 +1,10 @@
-use std::borrow::BorrowMut;
-
-use m3_map::{Orientation, Player};
+use crate::{cards_ev::CarAction, GameState, PlayerState, Rotation, RotationPoint};
+use m3_map::Orientation;
 use macroquad::prelude::*;
-
-use crate::{
-	cards_ev::CarAction,
-	tiles::{GetTexture, Textures, TEXTURES},
-	GameState, PlayerState, Rotation, RotationPoint
-};
 
 impl GameState {
 	///update the current state.
-	pub async fn update(&mut self) {
+	pub(crate) async fn update(&mut self) {
 		let _player_events = self.input_players.get_events();
 		if self.delta_time >= self.movement_time {
 			self.delta_time -= self.movement_time;
@@ -23,7 +16,7 @@ impl GameState {
 		//use delta time, to avoid that the logic is effected by frame drops
 	}
 
-	pub fn next_move(&mut self) {
+	pub(crate) fn next_move(&mut self) {
 		match &mut self.game_run {
 			None => !todo!(),
 			Some(ref mut game_run) => {
@@ -35,7 +28,7 @@ impl GameState {
 
 				//update next state
 				for state in &mut game_run.player_states {
-					let new_values = getRelativeXY(state);
+					let new_values = get_relative_xy(state);
 					let new_x = state.position.0 as i8 + new_values.0;
 					let new_y = state.position.1 as i8 + new_values.1;
 					if new_x < 0 || new_y < 0 {
@@ -56,7 +49,7 @@ impl GameState {
 	}
 }
 
-fn getRelativeXY(player_state: &PlayerState) -> (i8, i8, Orientation, Rotation) {
+fn get_relative_xy(player_state: &PlayerState) -> (i8, i8, Orientation, Rotation) {
 	match &player_state.next_action {
 		None => (0, 0, player_state.orientation, Rotation {
 			pivot: RotationPoint::NoRotation,
