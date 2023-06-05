@@ -14,7 +14,7 @@ use std::{
 
 
 #[derive(Debug)]
-struct Player {
+pub(crate) struct Player {
 	receiver: Receiver<MessageToPc>,
 	sender: Sender<MessageToPyBadge>,
 	port_name: String

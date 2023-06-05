@@ -39,7 +39,8 @@ impl GameState {
 				//draw players
 				let player_textures = TEXTURES.get_player_textures();
 				for (x, player) in game_run.level.iter_player().enumerate() {
-					let texture = player_textures[x];
+					if self.input_players.players[x].is_some() {
+						let texture = player_textures[x];
 					// Car drives forward
 					if game_run.player_states[x].rotation == Rotation::NoRotation {
 						let relative_pos_x = (game_run.player_states[x].position.0
@@ -97,6 +98,7 @@ impl GameState {
 							WHITE,
 							draw_params
 						);
+					}
 					}
 				}
 			}
