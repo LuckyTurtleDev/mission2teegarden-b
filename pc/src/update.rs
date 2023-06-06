@@ -1,9 +1,62 @@
-use crate::evaluate_cards;
+use crate::{
+	cards_ev::CarAction, evaluate_cards, GameState, Map, PlayerState, Rotation, LEVELS
+};
 use m3_map::Orientation;
-use m3_models::{GameOver, ToPcGameEvent, ToPypadeGameEvent};
+use m3_models::{GameOver, Key, ToPcGameEvent, ToPypadeGameEvent};
 use macroquad::prelude::*;
 
-use crate::{cards_ev::CarAction, GameState, PlayerState, Rotation};
+fn wants_reset(events: [Option<Vec<ToPcGameEvent>>; 4]) -> bool {
+	for player_events in events.into_iter().flatten() {
+		for event in player_events {
+			if let ToPcGameEvent::KeyPressed(key) = event {
+				return key == Key::Select;
+			}
+		}
+	}
+	false
+}
+
+fn reset_level(game_state: &mut GameState) {
+	let level = Map::from_string(LEVELS[1]).unwrap();
+	for (x, player) in game_state
+		.input_players
+		.players
+		.iter()
+		.flatten()
+		.enumerate()
+	{
+		player.send_events(ToPypadeGameEvent::Retry);
+		game_state.game_run.as_mut().unwrap().player_states[x].position =
+			level.iter_player().next().unwrap().position;
+		//let y = game_state.game_run.as_mut().unwrap().level.iter_player().nth(x).unwrap();
+		//game_state.game_run.as_mut().unwrap().level.iter_player().nth(x).unwrap() = level.iter_player().next().unwrap().position;
+	}
+	for player in game_state
+		.game_run
+		.as_mut()
+		.unwrap()
+		.level
+		.iter_mut_player()
+	{
+		player.position = level.iter_player().next().unwrap().position;
+		player.orientation = level.iter_player().next().unwrap().orientation;
+	}
+	let player_states = level
+		.iter_player()
+		.map(|f| PlayerState {
+			position: f.position,
+			orientation: f.orientation,
+			next_action: None,
+			rotation: Rotation::NoRotation,
+			reached_goal: false,
+			crashed: false,
+			card_iter: None
+		})
+		.collect();
+	game_state.game_run.as_mut().unwrap().player_states = player_states;
+	game_state.delta_time = 0.0;
+	game_state.activity = crate::Activity::Select;
+}
 
 fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameState) {
 	if game_state.player_count < events.iter().flatten().count() as u8 {
@@ -52,77 +105,100 @@ impl GameState {
 		match &mut self.activity {
 			crate::Activity::Select => setup_players(events, self),
 			crate::Activity::Drive => {
-				//let _player_events = self.input_players.get_events();
-				if self.delta_time >= self.movement_time {
-					self.delta_time -= self.movement_time;
+				if wants_reset(events) {
+					reset_level(self);
+				} else {
+					if self.delta_time >= self.movement_time {
+						self.delta_time -= self.movement_time;
 
-					self.next_move();
+						self.next_move();
+					}
+					self.delta_time += get_frame_time();
 				}
-				self.delta_time += get_frame_time();
-			}
+			},
 		}
 	}
 
 	pub(crate) fn next_move(&mut self) {
 		if let Some(ref mut game_run) = self.game_run {
 			// update player position
+			let global_goal = game_run.level.global_goal;
 			for (x, player) in game_run.level.iter_mut_player().enumerate() {
 				player.position = game_run.player_states[x].position;
 				player.orientation = game_run.player_states[x].orientation;
+
+				if let Some(goal) = player.goal {
+					if player.position.0 == goal.0 && player.position.1 == goal.1 {
+						game_run.player_states[x].reached_goal = true;
+					}
+				}
+				if let Some(global_goal) = global_goal {
+					if player.position.0 == global_goal.0
+						&& player.position.1 == global_goal.1
+					{
+						game_run.player_states[x].reached_goal = true;
+					}
+				}
 			}
 			//update next state
 			for (x, state) in &mut game_run.player_states.iter_mut().enumerate() {
-				let new_values = get_relative_xy(state);
-				let new_x = state.position.0 as i8 + new_values.0;
-				let new_y = state.position.1 as i8 + new_values.1;
+				if !state.reached_goal && !state.crashed {
+					let new_values = get_relative_xy(state);
+					let new_x = state.position.0 as i8 + new_values.0;
+					let new_y = state.position.1 as i8 + new_values.1;
 
-				if new_y < 0
-					|| new_x < 0 || new_x >= game_run.level.width as i8
-					|| new_y >= game_run.level.height as i8
-				{
-					if self.input_players.players[x].as_ref().is_some() {
-						debug!("Durch Update GameOver");
-						self.input_players.players[x].as_ref().unwrap().send_events(
-							ToPypadeGameEvent::GameOver(GameOver::DriveAway)
-						);
+					if new_y < 0
+						|| new_x < 0 || new_x >= game_run.level.width as i8
+						|| new_y >= game_run.level.height as i8
+					{
+						if self.input_players.players[x].as_ref().is_some() {
+							self.input_players.players[x].as_ref().unwrap().send_events(
+								ToPypadeGameEvent::GameOver(GameOver::DriveAway)
+							);
+						}
+					} else {
+						let new_state = PlayerState {
+							position: (new_x as u8, new_y as u8),
+							orientation: new_values.2,
+							next_action: match &mut state.card_iter {
+								Some(iter) => iter.next().unwrap(),
+								None => Some(CarAction::DriveForward)
+							},
+							rotation: new_values.3,
+							reached_goal: state.reached_goal,
+							crashed: state.crashed,
+							card_iter: state.card_iter.clone()
+						};
+						*state = new_state;
 					}
-				} else {
-					let new_state = PlayerState {
-						position: (new_x as u8, new_y as u8),
-						orientation: new_values.2,
-						next_action: match &mut state.card_iter {
-							Some(iter) => iter.next().unwrap(),
-							None => Some(CarAction::DriveForward)
-						},
-						rotation: new_values.3,
-						card_iter: state.card_iter.clone()
-					};
-					*state = new_state;
 				}
 			}
 			// check for collisions with other players
 			for x in 0..3 {
 				for y in x + 1..4 {
-					if game_run.player_states[x].position
-						== game_run.player_states[y].position
+					if self.input_players.players[x].as_ref().is_some()
+						&& self.input_players.players[y].as_ref().is_some()
+						&& (!game_run.player_states[x].reached_goal
+							&& !game_run.player_states[y].reached_goal)
+						&& (game_run.player_states[x].position
+							== game_run.player_states[y].position
+							|| game_run.player_states[x].position
+								== game_run.level.iter_player().nth(y).unwrap().position)
 					{
-						debug!(
-							"Player Position: {:?}, {:?}, {:?}, {:?}",
-							game_run.player_states[0].position,
-							game_run.player_states[1].position,
-							game_run.player_states[2].position,
-							game_run.player_states[3].position
-						);
-						if self.input_players.players[x].as_ref().is_some() {
-							self.input_players.players[x].as_ref().unwrap().send_events(
-								ToPypadeGameEvent::GameOver(GameOver::Crash)
-							);
-						}
-						if self.input_players.players[y].as_ref().is_some() {
-							self.input_players.players[y].as_ref().unwrap().send_events(
-								ToPypadeGameEvent::GameOver(GameOver::Crash)
-							);
-						}
+						self.input_players.players[x]
+							.as_ref()
+							.unwrap()
+							.send_events(ToPypadeGameEvent::GameOver(GameOver::Crash));
+						self.input_players.players[y]
+							.as_ref()
+							.unwrap()
+							.send_events(ToPypadeGameEvent::GameOver(GameOver::Crash));
+						game_run.player_states[x].crashed = true;
+						game_run.player_states[y].crashed = true;
+						game_run.player_states[x].position =
+							game_run.level.iter_player().nth(x).unwrap().position;
+						game_run.player_states[y].position =
+							game_run.level.iter_player().nth(y).unwrap().position;
 					}
 				}
 			}
