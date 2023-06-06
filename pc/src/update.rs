@@ -1,9 +1,62 @@
-use crate::evaluate_cards;
+use crate::{
+	cards_ev::CarAction, evaluate_cards, GameState, Map, PlayerState, Rotation, LEVELS
+};
 use m3_map::Orientation;
-use m3_models::{GameOver, ToPcGameEvent, ToPypadeGameEvent};
+use m3_models::{GameOver, Key, ToPcGameEvent, ToPypadeGameEvent};
 use macroquad::prelude::*;
 
-use crate::{cards_ev::CarAction, GameState, PlayerState, Rotation};
+fn wants_reset(events: [Option<Vec<ToPcGameEvent>>; 4]) -> bool {
+	for player_events in events.into_iter().flatten() {
+		for event in player_events {
+			if let ToPcGameEvent::KeyPressed(key) = event {
+				return key == Key::Select;
+			}
+		}
+	}
+	false
+}
+
+fn reset_level(game_state: &mut GameState) {
+	let level = Map::from_string(LEVELS[1]).unwrap();
+	for (x, player) in game_state
+		.input_players
+		.players
+		.iter()
+		.flatten()
+		.enumerate()
+	{
+		player.send_events(ToPypadeGameEvent::Retry);
+		game_state.game_run.as_mut().unwrap().player_states[x].position =
+			level.iter_player().next().unwrap().position;
+		//let y = game_state.game_run.as_mut().unwrap().level.iter_player().nth(x).unwrap();
+		//game_state.game_run.as_mut().unwrap().level.iter_player().nth(x).unwrap() = level.iter_player().next().unwrap().position;
+	}
+	for player in game_state
+		.game_run
+		.as_mut()
+		.unwrap()
+		.level
+		.iter_mut_player()
+	{
+		player.position = level.iter_player().next().unwrap().position;
+		player.orientation = level.iter_player().next().unwrap().orientation;
+	}
+	let player_states = level
+		.iter_player()
+		.map(|f| PlayerState {
+			position: f.position,
+			orientation: f.orientation,
+			next_action: None,
+			rotation: Rotation::NoRotation,
+			reached_goal: false,
+			crashed: false,
+			card_iter: None
+		})
+		.collect();
+	game_state.game_run.as_mut().unwrap().player_states = player_states;
+	game_state.delta_time = 0.0;
+	game_state.activity = crate::Activity::Select;
+}
 
 fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameState) {
 	if game_state.player_count < events.iter().flatten().count() as u8 {
@@ -52,14 +105,17 @@ impl GameState {
 		match &mut self.activity {
 			crate::Activity::Select => setup_players(events, self),
 			crate::Activity::Drive => {
-				//let _player_events = self.input_players.get_events();
-				if self.delta_time >= self.movement_time {
-					self.delta_time -= self.movement_time;
+				if wants_reset(events) {
+					reset_level(self);
+				} else {
+					if self.delta_time >= self.movement_time {
+						self.delta_time -= self.movement_time;
 
-					self.next_move();
+						self.next_move();
+					}
+					self.delta_time += get_frame_time();
 				}
-				self.delta_time += get_frame_time();
-			}
+			},
 		}
 	}
 
