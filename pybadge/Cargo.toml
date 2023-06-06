@@ -11,6 +11,8 @@ license = "AGPL-3.0-or-later"
 [dependencies]
 pybadge-high = { version = "0.2.0", features = ["neopixel"] }
 
+# profiles for the non root package will be ignored,
+# but after publishing to crates.io this is the workspace root
 [profile.release]
 codegen-units = 1 # better optimizations
 debug = true # symbols are nice and they don't increase the size on Flash
