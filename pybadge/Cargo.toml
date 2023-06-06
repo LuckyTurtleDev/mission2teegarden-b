@@ -9,7 +9,14 @@ repository = "https://github.com/LuckyTurtleDev/m3"
 license = "AGPL-3.0-or-later"
 
 [dependencies]
-pybadge-high = { version = "0.2.0", features = ["neopixel"] }
+bincode = { version = "2.0.0-rc.3", default-features = false, features = ["derive"] }
+embedded-graphics = "0.7.1"
+embedded-sprites = "0.1.2"
+heapless = "0.7.16"
+m3-models = { version = "0.1.0", path = "../models" }
+pybadge-high = { version = "0.2.0", all-features = true, features = ["usb", "time", "bluescreen", "bluescreen-message-nightly", "neopixel"] }
+strum = { version = "0.24.1", default-features = false }
+
 
 # profiles for the non root package will be ignored,
 # but after publishing to crates.io this is the workspace root
