@@ -13,12 +13,10 @@ fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameS
 				game_state.game_run.as_ref().unwrap().level.cards.clone()
 			));
 			let color = match game_state.player_count {
-				1 => NeoPixelColor { r: 10, g: 0, b: 0 },
-				2 => NeoPixelColor {
-					r: 88,
-					g: 76,
-					b: 25
-				},
+				1 => NeoPixelColor { r: 20, g: 20, b: 0 },
+				2 => NeoPixelColor { r: 38, g: 2, b: 0 },
+				3 => NeoPixelColor { r: 2, g: 2, b: 16 },
+				4 => NeoPixelColor { r: 20, g: 0, b: 20 },
 				_ => panic!()
 			};
 			player.send_events(ToPypadeGameEvent::NeoPixelColor(color));

@@ -3,6 +3,10 @@ use core::{fmt::Write, write};
 use heapless::String;
 use m3_models::{Log, ToPcProtocol};
 
+// This is extremly ugl
+// and should to refactor
+/// Sends an log level to pc (max 100 bytes)
+#[allow(dead_code)]
 pub(crate) fn debug<S>(message: S)
 where
 	S: core::fmt::Display

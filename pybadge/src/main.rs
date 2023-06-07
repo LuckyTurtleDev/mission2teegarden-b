@@ -22,7 +22,6 @@ use m3_models::{
 use pybadge_high::{
 	buttons,
 	buttons::{Button, Buttons},
-	cortex_m::delay,
 	prelude::*,
 	time::uptime,
 	Color, Display, NeoPixel, NeoPixelColor, PyBadge
@@ -141,22 +140,16 @@ impl State<'_> {
 
 #[entry]
 fn main() -> ! {
-	let mut pybadge = PyBadge::take().unwrap();
-	pybadge
-		.neopixel
-		.write((0..5).map(|_| NeoPixelColor {
-			r: 255,
-			g: 0,
-			b: 255
-		}))
-		.ok();
-	loop {}
 	let text_style = MonoTextStyle::new(&FONT_6X10, Color::WHITE);
 	let mut usb_data = Vec::<u8, 128>::new();
+	let mut pybadge = PyBadge::take().unwrap();
 	let mut delay = pybadge.delay;
 	let mut display = pybadge.display;
 	let mut buttons = pybadge.buttons;
 	let mut neopixel = pybadge.neopixel;
+	neopixel
+		.write((0..5).map(|_| NeoPixelColor { r: 0, g: 0, b: 0 }))
+		.unwrap();
 	display.clear(Color::BLACK).unwrap();
 	Text::new(
 		"Please connect pybadge to \n  pc then start the game",
