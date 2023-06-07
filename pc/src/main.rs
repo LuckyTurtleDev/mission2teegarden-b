@@ -50,7 +50,7 @@ struct PlayerState {
 	orientation: Orientation,
 	next_action: Option<CarAction>,
 	rotation: Rotation,
-	reached_goal: bool,
+	finished: bool, // either reached goal or got GameOver
 	crashed: bool,
 	card_iter: Option<cards_ev::CardIter>
 }
@@ -88,7 +88,7 @@ impl GameState {
 				orientation: f.orientation,
 				next_action: None,
 				rotation: Rotation::NoRotation,
-				reached_goal: false,
+				finished: false,
 				crashed: false,
 				card_iter: None
 			})

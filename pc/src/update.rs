@@ -28,18 +28,17 @@ fn reset_level(game_state: &mut GameState) {
 		player.send_events(ToPypadeGameEvent::Retry);
 		game_state.game_run.as_mut().unwrap().player_states[x].position =
 			level.iter_player().next().unwrap().position;
-		//let y = game_state.game_run.as_mut().unwrap().level.iter_player().nth(x).unwrap();
-		//game_state.game_run.as_mut().unwrap().level.iter_player().nth(x).unwrap() = level.iter_player().next().unwrap().position;
 	}
-	for player in game_state
+	for (x, player) in game_state
 		.game_run
 		.as_mut()
 		.unwrap()
 		.level
 		.iter_mut_player()
+		.enumerate()
 	{
-		player.position = level.iter_player().next().unwrap().position;
-		player.orientation = level.iter_player().next().unwrap().orientation;
+		player.position = level.iter_player().nth(x).unwrap().position;
+		player.orientation = level.iter_player().nth(x).unwrap().orientation;
 	}
 	let player_states = level
 		.iter_player()
@@ -48,7 +47,7 @@ fn reset_level(game_state: &mut GameState) {
 			orientation: f.orientation,
 			next_action: None,
 			rotation: Rotation::NoRotation,
-			reached_goal: false,
+			finished: false,
 			crashed: false,
 			card_iter: None
 		})
@@ -129,27 +128,28 @@ impl GameState {
 
 				if let Some(goal) = player.goal {
 					if player.position.0 == goal.0 && player.position.1 == goal.1 {
-						game_run.player_states[x].reached_goal = true;
+						game_run.player_states[x].finished = true;
 					}
 				}
 				if let Some(global_goal) = global_goal {
 					if player.position.0 == global_goal.0
 						&& player.position.1 == global_goal.1
 					{
-						game_run.player_states[x].reached_goal = true;
+						game_run.player_states[x].finished = true;
 					}
 				}
 			}
 			//update next state
 			for (x, state) in &mut game_run.player_states.iter_mut().enumerate() {
-				if !state.reached_goal && !state.crashed {
+				if !state.finished && !state.crashed {
 					let new_values = get_relative_xy(state);
 					let new_x = state.position.0 as i8 + new_values.0;
 					let new_y = state.position.1 as i8 + new_values.1;
 
-					if new_y < 0
+					if (new_y < 0
 						|| new_x < 0 || new_x >= game_run.level.width as i8
-						|| new_y >= game_run.level.height as i8
+						|| new_y >= game_run.level.height as i8)
+						&& !state.finished
 					{
 						if self.input_players.players[x].as_ref().is_some() {
 							self.input_players.players[x].as_ref().unwrap().send_events(
@@ -165,7 +165,7 @@ impl GameState {
 								None => Some(CarAction::DriveForward)
 							},
 							rotation: new_values.3,
-							reached_goal: state.reached_goal,
+							finished: state.finished,
 							crashed: state.crashed,
 							card_iter: state.card_iter.clone()
 						};
@@ -178,8 +178,8 @@ impl GameState {
 				for y in x + 1..4 {
 					if self.input_players.players[x].as_ref().is_some()
 						&& self.input_players.players[y].as_ref().is_some()
-						&& (!game_run.player_states[x].reached_goal
-							&& !game_run.player_states[y].reached_goal)
+						&& (!game_run.player_states[x].finished
+							&& !game_run.player_states[y].finished)
 						&& (game_run.player_states[x].position
 							== game_run.player_states[y].position
 							|| game_run.player_states[x].position
