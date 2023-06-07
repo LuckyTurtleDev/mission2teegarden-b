@@ -50,6 +50,8 @@ struct PlayerState {
 	orientation: Orientation,
 	next_action: Option<CarAction>,
 	rotation: Rotation,
+	reached_goal: bool,
+	crashed: bool,
 	card_iter: Option<cards_ev::CardIter>
 }
 
@@ -70,7 +72,7 @@ struct GameState {
 impl GameState {
 	fn new() -> GameState {
 		Lazy::force(&TEXTURES);
-		let mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
+		let mut level = Map::from_string(LEVELS[1]).unwrap(); //tests check if map is vaild
 		level.cards = AvailableCards {
 			left: 3,
 			right: 3,
@@ -86,6 +88,8 @@ impl GameState {
 				orientation: f.orientation,
 				next_action: None,
 				rotation: Rotation::NoRotation,
+				reached_goal: false,
+				crashed: false,
 				card_iter: None
 			})
 			.collect();
