@@ -39,7 +39,7 @@ impl GameState {
 				let player_textures = TEXTURES.get_player_textures();
 				for (x, player) in game_run.level.iter_player().enumerate() {
 					if self.input_players.players[x].is_some()
-						&& !game_run.player_states[x].reached_goal
+						&& !game_run.player_states[x].finished
 					{
 						let texture = player_textures[x];
 						// Car drives forward
