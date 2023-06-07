@@ -18,7 +18,7 @@ pub enum InvalidTile {
 	#[error("invalid tiel id {0}")]
 	InvalidId(u32),
 	#[error("wrong Tile set. Found {0:?} expected {1:?}")]
-	WrongTileset(String,String)
+	WrongTileset(String, String)
 }
 
 ///Store all Tiles, with can be used at the map background
@@ -42,11 +42,15 @@ impl Passable for MapBaseTile {
 
 impl<'a> TryFrom<&tiled::LayerTile<'a>> for MapBaseTile {
 	type Error = InvalidTile;
-	fn try_from(value:& tiled::LayerTile<'a>) -> Result<MapBaseTile, Self::Error> {
-		if value.get_tileset().name != "BaseTiles"{
-			return Err(InvalidTile::WrongTileset(value.get_tileset().name.clone(), "BaseTiles".to_owned()));
+	fn try_from(value: &tiled::LayerTile<'a>) -> Result<MapBaseTile, Self::Error> {
+		if value.get_tileset().name != "BaseTiles" {
+			return Err(InvalidTile::WrongTileset(
+				value.get_tileset().name.clone(),
+				"BaseTiles".to_owned()
+			));
 		};
-		let value_u8: u8 = value.id()
+		let value_u8: u8 = value
+			.id()
 			.try_into()
 			.map_err(|_| Self::Error::InvalidId(value.id()))?;
 		Self::try_from_primitive(value_u8).map_err(|_| Self::Error::InvalidId(value.id()))
@@ -71,11 +75,15 @@ impl Passable for ObjectTile {
 
 impl<'a> TryFrom<&tiled::LayerTile<'a>> for ObjectTile {
 	type Error = InvalidTile;
-	fn try_from(value:& tiled::LayerTile<'a>) -> Result<ObjectTile, Self::Error> {
-		if value.get_tileset().name != "BaseTiles"{
-			return Err(InvalidTile::WrongTileset(value.get_tileset().name.clone(), "BaseTiles".to_owned()));
+	fn try_from(value: &tiled::LayerTile<'a>) -> Result<ObjectTile, Self::Error> {
+		if value.get_tileset().name != "ObjectTiles" {
+			return Err(InvalidTile::WrongTileset(
+				value.get_tileset().name.clone(),
+				"BaseTiles".to_owned()
+			));
 		};
-		let value_u8: u8 = value.id()
+		let value_u8: u8 = value
+			.id()
 			.try_into()
 			.map_err(|_| Self::Error::InvalidId(value.id()))?;
 		Self::try_from_primitive(value_u8).map_err(|_| Self::Error::InvalidId(value.id()))
@@ -100,14 +108,18 @@ pub enum PlayerTile {
 }
 
 impl<'a> TryFrom<&tiled::LayerTile<'a>> for PlayerTile {
-		type Error = InvalidTile;
-	fn try_from(value:& tiled::LayerTile<'a>) -> Result<PlayerTile, Self::Error> {
-		if value.get_tileset().name != "BaseTiles"{
-			return Err(InvalidTile::WrongTileset(value.get_tileset().name.clone(), "BaseTiles".to_owned()));
+	type Error = InvalidTile;
+	fn try_from(value: &tiled::LayerTile<'a>) -> Result<PlayerTile, Self::Error> {
+		if value.get_tileset().name != "Player" {
+			return Err(InvalidTile::WrongTileset(
+				value.get_tileset().name.clone(),
+				"BaseTiles".to_owned()
+			));
 		};
-		let value_u8: u8 = value.id()
+		let value_u8: u8 = value
+			.id()
 			.try_into()
 			.map_err(|_| Self::Error::InvalidId(value.id()))?;
 		Self::try_from_primitive(value_u8).map_err(|_| Self::Error::InvalidId(value.id()))
-}
+	}
 }

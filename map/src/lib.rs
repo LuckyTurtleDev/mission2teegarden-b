@@ -204,10 +204,12 @@ impl Map {
 						for x in 0..width {
 							let mut column = Vec::with_capacity(width as usize);
 							for y in 0..height {
-								let tile = match tile_layer.get_tile(x.into(), y.into()) {
-									Some(tile) => MapBaseTile::try_from(&tile),
-									None => Ok(MapBaseTile::default())
-								}.map_err(|err| MapError::InvalidTile(i,err))?;
+								let tile =
+									match tile_layer.get_tile(x.into(), y.into()) {
+										Some(tile) => MapBaseTile::try_from(&tile),
+										None => Ok(MapBaseTile::default())
+									}
+									.map_err(|err| MapError::InvalidTile(i, err))?;
 								column.push(tile);
 							}
 							base_layer.push(column);
@@ -221,7 +223,11 @@ impl Map {
 							let mut column = Vec::with_capacity(width as usize);
 							for y in 0..height {
 								let tile = match tile_layer.get_tile(x.into(), y.into()) {
-									Some(tile) => Some(ObjectTile::try_from(&tile).map_err(|err| MapError::InvalidTile(i,err))?),
+									Some(tile) => {
+										Some(ObjectTile::try_from(&tile).map_err(
+											|err| MapError::InvalidTile(i, err)
+										)?)
+									},
 									None => None
 								};
 								column.push(tile);
@@ -243,7 +249,8 @@ impl Map {
 									tile_layer.get_tile(x.into(), y.into())
 								{
 									let orientation = Orientation::try_from(&tile)?;
-									let tile = PlayerTile::try_from(&tile).map_err(|err| MapError::InvalidTile(i,err))?;
+									let tile = PlayerTile::try_from(&tile)
+										.map_err(|err| MapError::InvalidTile(i, err))?;
 									let player = Some(Player {
 										position: (x, y),
 										orientation,
