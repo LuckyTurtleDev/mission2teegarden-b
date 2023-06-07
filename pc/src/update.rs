@@ -2,7 +2,7 @@ use crate::{
 	cards_ev::CarAction, evaluate_cards, GameState, Map, PlayerState, Rotation, LEVELS
 };
 use m3_map::Orientation;
-use m3_models::{GameOver, Key, ToPcGameEvent, ToPypadeGameEvent};
+use m3_models::{GameOver, Key, NeoPixelColor, ToPcGameEvent, ToPypadeGameEvent};
 use macroquad::prelude::*;
 
 fn wants_reset(events: [Option<Vec<ToPcGameEvent>>; 4]) -> bool {
@@ -61,10 +61,17 @@ fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameS
 	if game_state.player_count < events.iter().flatten().count() as u8 {
 		if let Some(player) = game_state.input_players.players.iter().flatten().last() {
 			game_state.player_count += 1;
-
 			player.send_events(ToPypadeGameEvent::NewLevel(
 				game_state.game_run.as_ref().unwrap().level.cards.clone()
 			));
+			let color = match game_state.player_count {
+				1 => NeoPixelColor { r: 20, g: 20, b: 0 },
+				2 => NeoPixelColor { r: 38, g: 2, b: 0 },
+				3 => NeoPixelColor { r: 2, g: 2, b: 16 },
+				4 => NeoPixelColor { r: 20, g: 0, b: 20 },
+				_ => panic!()
+			};
+			player.send_events(ToPypadeGameEvent::NeoPixelColor(color));
 		}
 	}
 	// get player cards

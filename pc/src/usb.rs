@@ -2,7 +2,8 @@ use anyhow::Context;
 use bincode::error::DecodeError;
 use log::{debug, info, trace};
 use m3_models::{
-	MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPybadgeProtocol, ToPypadeGameEvent
+	MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPcProtocol, ToPybadgeProtocol,
+	ToPypadeGameEvent
 };
 use serialport::{available_ports, ClearBuffer, SerialPort, SerialPortInfo};
 use std::{
@@ -136,7 +137,15 @@ impl Players {
 				match player.receiver.try_recv() {
 					Ok(event) => match event {
 						MessageToPc::GameEvent(event) => events_of_player.push(event),
-						MessageToPc::Protocol(_protocol) => todo!(),
+						MessageToPc::Protocol(protocol) => match protocol {
+							ToPcProtocol::Log(log) => debug!(
+								"pybadge 🎮 log: {}",
+								String::from_utf8_lossy(
+									&log.message[0..log.length as usize]
+								)
+							),
+							_ => panic!()
+						},
 						MessageToPc::KeepAlive => {}
 					},
 					Err(err) => match err {
@@ -213,5 +222,9 @@ impl Pybadge {
 		let data = bincode::encode_to_vec(message, bincode::config::standard()).unwrap();
 		trace!("send  data   to {:?} {:?}", &self.port_name, data);
 		self.port.write_all(&data).unwrap();
+		//pybadge does ignore messages which are send directly after each other.
+		//So put a small delay here.
+		//Do I care why this happen?
+		thread::sleep(Duration::from_millis(50));
 	}
 }
