@@ -156,7 +156,14 @@ impl GameState {
 								ToPypadeGameEvent::GameOver(GameOver::DriveAway)
 							);
 						}
-					} else {
+					}  /*else if !game_run.level.passable(new_x as u8, new_y as u8) && !state.finished && !state.crashed {
+						if self.input_players.players[x].as_ref().is_some() {
+							self.input_players.players[x].as_ref().unwrap().send_events(
+								ToPypadeGameEvent::GameOver(GameOver::Crash)
+							);
+							game_run.player_states[x].crashed = true;
+						}
+					} */else {
 						let new_state = PlayerState {
 							position: (new_x as u8, new_y as u8),
 							orientation: new_values.2,
