@@ -148,11 +148,11 @@ impl GameState {
 					let new_x = state.position.0 as i8 + new_values.0;
 					let new_y = state.position.1 as i8 + new_values.1;
 
-					if (new_y < 0 - 1
-						|| new_x < 0 - 1 || new_x > game_run.level.width as i8
-						|| new_y > game_run.level.height as i8)
+					if (new_y < 0
+						|| new_x < 0 || new_x >= game_run.level.width as i8
+						|| new_y >= game_run.level.height as i8)
 						&& !state.finished
-					{
+						{
 						if self.input_players.players[x].as_ref().is_some() {
 							self.input_players.players[x].as_ref().unwrap().send_events(
 								ToPypadeGameEvent::GameOver(GameOver::DriveAway)
