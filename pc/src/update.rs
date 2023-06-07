@@ -39,9 +39,7 @@ fn reset_level(game_state: &mut GameState) {
 	{
 		player.position = level.iter_player().nth(x).unwrap().position;
 		player.orientation = level.iter_player().nth(x).unwrap().orientation;
-		debug!("Player Position: {:?}", player.position);
 	}
-	debug!("#################");
 	let player_states = level
 		.iter_player()
 		.map(|f| PlayerState {
