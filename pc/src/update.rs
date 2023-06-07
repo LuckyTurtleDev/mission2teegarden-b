@@ -150,7 +150,7 @@ impl GameState {
 						|| new_x < 0 || new_x >= game_run.level.width as i8
 						|| new_y >= game_run.level.height as i8)
 						&& !state.finished
-						{
+					{
 						if self.input_players.players[x].as_ref().is_some() {
 							self.input_players.players[x].as_ref().unwrap().send_events(
 								ToPypadeGameEvent::GameOver(GameOver::DriveAway)
