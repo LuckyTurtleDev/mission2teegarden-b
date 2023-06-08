@@ -65,7 +65,7 @@ jobs:
             ~/.cargo/registry
             target
           key: "Build ${{runner.os}} Target ${{ matrix.target }} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
-      - run: cross build --release --locked --all-features --target ${{ matrix.target }} -p m3
+      - run: cross build --release --locked --target ${{ matrix.target }} -p m3
         env:
           RUST_BACKTRACE: 1
         working-directory: pc
