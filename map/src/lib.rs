@@ -13,7 +13,7 @@ use thiserror::Error;
 use tiled::{LayerTile, LayerType, Loader, Properties};
 
 pub mod tiles;
-use tiles::{InvalidTileID, MapBaseTile, ObjectTile, Passable, PlayerTile, Tile};
+use tiles::{InvalidTile, MapBaseTile, ObjectTile, Passable, PlayerTile, Tile};
 
 /// allow Serialization of MapProporties
 struct PropertiesSerde(Properties);
@@ -125,18 +125,18 @@ pub enum MapError {
 	TieledError(#[from] tiled::Error),
 	#[error("map has to many layers")]
 	ToManyLayers,
-	#[error("{0} Layer should be a {1}")]
-	WrongLayer(usize, String),
-	#[error("{0} Layer Infinite")]
+	#[error("{0}. Layer should be a {1}")]
+	WrongLayerType(usize, String),
+	#[error("{0}. Layer Infinite")]
 	InfiniteTileLayer(String),
 	#[error("Map is to widht. Max size is 255x255 tiles")]
 	ToWidth,
 	#[error("Map is to hight. Max size is 255x255 tiles")]
 	ToHight,
-	#[error("{0}")]
-	InvalidTileId(#[from] InvalidTileID),
-	#[error("Map needs at least one player")]
-	NoPlayer,
+	#[error("Found invalid Tile at Layes {0}: {1}")]
+	InvalidTile(usize, InvalidTile),
+	#[error("Player is missing")]
+	PlayerMissing(usize),
 	#[error("{0}")]
 	InvalidOritation(#[from] InvalidOritation),
 	#[error("Failed to load Map Properties:\n{}\n{}", .str, .err)]
@@ -204,16 +204,18 @@ impl Map {
 						for x in 0..width {
 							let mut column = Vec::with_capacity(width as usize);
 							for y in 0..height {
-								let tile = match tile_layer.get_tile(x.into(), y.into()) {
-									Some(tile) => MapBaseTile::try_from(tile.id()),
-									None => Ok(MapBaseTile::default())
-								}?;
+								let tile =
+									match tile_layer.get_tile(x.into(), y.into()) {
+										Some(tile) => MapBaseTile::try_from(&tile),
+										None => Ok(MapBaseTile::default())
+									}
+									.map_err(|err| MapError::InvalidTile(i, err))?;
 								column.push(tile);
 							}
 							base_layer.push(column);
 						}
 					},
-					_ => return Err(MapError::WrongLayer(i, "TileLayer".to_owned()))
+					_ => return Err(MapError::WrongLayerType(i, "TileLayer".to_owned()))
 				},
 				1 => match layer.layer_type() {
 					LayerType::Tiles(tile_layer) => {
@@ -221,7 +223,11 @@ impl Map {
 							let mut column = Vec::with_capacity(width as usize);
 							for y in 0..height {
 								let tile = match tile_layer.get_tile(x.into(), y.into()) {
-									Some(tile) => Some(ObjectTile::try_from(tile.id())?),
+									Some(tile) => {
+										Some(ObjectTile::try_from(&tile).map_err(
+											|err| MapError::InvalidTile(i, err)
+										)?)
+									},
 									None => None
 								};
 								column.push(tile);
@@ -229,7 +235,7 @@ impl Map {
 							object_layer.push(column);
 						}
 					},
-					_ => return Err(MapError::WrongLayer(i, "TileLayer".to_owned()))
+					_ => return Err(MapError::WrongLayerType(i, "TileLayer".to_owned()))
 				},
 				2 => match layer.layer_type() {
 					LayerType::Tiles(tile_layer) => {
@@ -243,7 +249,8 @@ impl Map {
 									tile_layer.get_tile(x.into(), y.into())
 								{
 									let orientation = Orientation::try_from(&tile)?;
-									let tile = PlayerTile::try_from(tile.id())?;
+									let tile = PlayerTile::try_from(&tile)
+										.map_err(|err| MapError::InvalidTile(i, err))?;
 									let player = Some(Player {
 										position: (x, y),
 										orientation,
@@ -283,12 +290,20 @@ impl Map {
 							f
 						});
 					},
-					_ => return Err(MapError::WrongLayer(i, "TileLayer".to_owned()))
+					_ => return Err(MapError::WrongLayerType(i, "TileLayer".to_owned()))
 				},
 				_ => return Err(MapError::ToManyLayers)
 			}
 		}
-		let player_1 = player_1.ok_or(MapError::NoPlayer)?;
+		let player_1 = player_1.ok_or(MapError::PlayerMissing(1))?;
+		// if player i does exist, player i-1 must also exist
+		if (player_4.is_some() && player_3.is_none())
+			|| (player_3.is_some() && player_2.is_none())
+		{
+			player_2.as_ref().ok_or(MapError::PlayerMissing(2))?;
+			player_3.as_ref().ok_or(MapError::PlayerMissing(3))?;
+			player_4.as_ref().ok_or(MapError::PlayerMissing(4))?;
+		}
 		Ok(Map {
 			name,
 			width,
