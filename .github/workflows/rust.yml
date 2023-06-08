@@ -68,14 +68,13 @@ jobs:
         env:
           RUST_BACKTRACE: 1
           working-directory: pc
-      - run: tree
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
         with:
           name: "${{ matrix.target }}"
           path: |
-            target/release/m3
-            targe/release/m3.exe
+            target/release/m3-pc
+            targe/release/m3-pc.exe
             
   check_pybadge:
     runs-on: ubuntu-latest
