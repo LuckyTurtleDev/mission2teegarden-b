@@ -64,7 +64,7 @@ jobs:
             ~/.cargo/registry
             target
           key: "PC Build ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
-      - run: cargo bulid --all-features --release --locked -p m3-models
+      - run: cargo build --all-features --release --locked -p m3-models
         env:
           RUST_BACKTRACE: 1
           working-directory: pc
