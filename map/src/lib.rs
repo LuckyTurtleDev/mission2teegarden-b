@@ -135,8 +135,8 @@ pub enum MapError {
 	ToHight,
 	#[error("Found invalid Tile at Layes {0}: {1}")]
 	InvalidTile(usize, InvalidTile),
-	#[error("Map needs at least one player")]
-	NoPlayer,
+	#[error("Player is missing")]
+	PlayerMissing(usize),
 	#[error("{0}")]
 	InvalidOritation(#[from] InvalidOritation),
 	#[error("Failed to load Map Properties:\n{}\n{}", .str, .err)]
@@ -295,7 +295,15 @@ impl Map {
 				_ => return Err(MapError::ToManyLayers)
 			}
 		}
-		let player_1 = player_1.ok_or(MapError::NoPlayer)?;
+		let player_1 = player_1.ok_or(MapError::PlayerMissing(1))?;
+		// if player i does exist, player i-1 must also exist
+		if (player_4.is_some() && player_3.is_none())
+			|| (player_3.is_some() && player_2.is_none())
+		{
+			player_2.as_ref().ok_or(MapError::PlayerMissing(2))?;
+			player_3.as_ref().ok_or(MapError::PlayerMissing(3))?;
+			player_4.as_ref().ok_or(MapError::PlayerMissing(4))?;
+		}
 		Ok(Map {
 			name,
 			width,
