@@ -86,8 +86,8 @@ impl GameState {
 								Orientation::West => 270.0
 							};
 							let angle: f32 = (90.0
-								/ (self.movement_time / self.delta_time)
-								+ angle_offset) * sign;
+								/ (self.movement_time / self.delta_time))
+								* sign + angle_offset;
 							let draw_params = DrawTextureParams {
 								dest_size: Some(Vec2::new(dest_size, dest_size)),
 								rotation: angle.to_radians(),

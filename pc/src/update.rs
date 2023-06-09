@@ -1,5 +1,6 @@
 use crate::{
-	cards_ev::CarAction, evaluate_cards, GameState, Map, PlayerState, Rotation, LEVELS
+	cards_ev::CarAction, evaluate_cards, GameState, Map, PlayerState, Rotation, LEVELS,
+	LEVEL_NR
 };
 use m3_map::Orientation;
 use m3_models::{GameOver, Key, NeoPixelColor, ToPcGameEvent, ToPypadeGameEvent};
@@ -17,7 +18,7 @@ fn wants_reset(events: [Option<Vec<ToPcGameEvent>>; 4]) -> bool {
 }
 
 fn reset_level(game_state: &mut GameState) {
-	let level = Map::from_string(LEVELS[1]).unwrap();
+	let level = Map::from_string(LEVELS[LEVEL_NR]).unwrap();
 	for (x, player) in game_state
 		.input_players
 		.players
@@ -127,21 +128,20 @@ impl GameState {
 
 	pub(crate) fn next_move(&mut self) {
 		if let Some(ref mut game_run) = self.game_run {
-			// update player position
+			// update player positions
 			let global_goal = game_run.level.global_goal;
 			for (x, player) in game_run.level.iter_mut_player().enumerate() {
 				player.position = game_run.player_states[x].position;
 				player.orientation = game_run.player_states[x].orientation;
 
-				if let Some(goal) = player.goal {
-					if player.position.0 == goal.0 && player.position.1 == goal.1 {
-						game_run.player_states[x].finished = true;
-					}
-				}
 				if let Some(global_goal) = global_goal {
 					if player.position.0 == global_goal.0
 						&& player.position.1 == global_goal.1
 					{
+						game_run.player_states[x].finished = true;
+					}
+				} else if let Some(goal) = player.goal {
+					if player.position.0 == goal.0 && player.position.1 == goal.1 {
 						game_run.player_states[x].finished = true;
 					}
 				}
@@ -163,6 +163,16 @@ impl GameState {
 								ToPypadeGameEvent::GameOver(GameOver::DriveAway)
 							);
 						}
+					} else if !game_run.level.passable(new_x as u8, new_y as u8)
+						&& !state.crashed && self.input_players.players[x]
+						.as_ref()
+						.is_some()
+					{
+						self.input_players.players[x]
+							.as_ref()
+							.unwrap()
+							.send_events(ToPypadeGameEvent::GameOver(GameOver::Crash));
+						state.crashed = true;
 					} else {
 						let new_state = PlayerState {
 							position: (new_x as u8, new_y as u8),
