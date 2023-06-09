@@ -1366,12 +1366,15 @@ dependencies = [
  "document-features",
  "edgebadge",
  "embedded-graphics",
+ "embedded-hal",
  "heapless",
  "num_enum",
  "rustc_version 0.4.0",
+ "smart-leds-trait",
  "st7735-lcd",
  "usb-device",
  "usbd-serial",
+ "ws2812-timer-delay",
 ]
 
 [[package]]

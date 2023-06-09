@@ -23,6 +23,7 @@ mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
+const LEVEL_NR: usize = 2;
 
 ///store maps as String binary format
 ///call `Map::from_str()`
@@ -50,7 +51,7 @@ struct PlayerState {
 	orientation: Orientation,
 	next_action: Option<CarAction>,
 	rotation: Rotation,
-	finished: bool, // either reached goal or got GameOver
+	finished: bool, // either reached goal or out of map
 	crashed: bool,
 	card_iter: Option<cards_ev::CardIter>
 }
@@ -72,7 +73,7 @@ struct GameState {
 impl GameState {
 	fn new() -> GameState {
 		Lazy::force(&TEXTURES);
-		let mut level = Map::from_string(LEVELS[1]).unwrap(); //tests check if map is vaild
+		let mut level = Map::from_string(LEVELS[LEVEL_NR]).unwrap(); //tests check if map is vaild
 		level.cards = AvailableCards {
 			left: 3,
 			right: 3,
