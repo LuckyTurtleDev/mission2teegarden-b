@@ -30,13 +30,12 @@ fn reset_level(game_state: &mut GameState) {
 		game_state.game_run.as_mut().unwrap().player_states[x].position =
 			level.iter_player().next().unwrap().position;
 	}
-	for (x, (x, player)) in game_state
+	for (x, player) in game_state
 		.game_run
 		.as_mut()
 		.unwrap()
 		.level
 		.iter_mut_player()
-		.enumerate()
 		.enumerate()
 	{
 		player.position = level.iter_player().nth(x).unwrap().position;
