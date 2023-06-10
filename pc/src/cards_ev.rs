@@ -100,7 +100,7 @@ mod tests {
 	#[test]
 	fn test_card_evaluation() {
 		let cards = vec![MotorOn, Wait(3), Left, Wait(2), MotorOff];
-		let card_iter = evaluate_cards(cards).take(6);
+		let card_iter = evaluate_cards(cards).take(6).map(|(_i, card)| card);
 		let correct_actions = vec![
 			None,
 			Some(DriveForward),
@@ -113,7 +113,7 @@ mod tests {
 		];
 		for (i, card) in card_iter.enumerate() {
 			assert!(
-				card == *(correct_actions.get(i).unwrap().1),
+				card == *(correct_actions.get(i).unwrap()),
 				"Action: `{:?}`, Solution: `{:?}`",
 				card,
 				*(correct_actions.get(i).unwrap())
