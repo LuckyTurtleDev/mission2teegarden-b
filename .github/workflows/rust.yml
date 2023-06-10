@@ -68,6 +68,7 @@ jobs:
         env:
           RUST_BACKTRACE: 1
           working-directory: pc
+      - run: tree
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
         with:
@@ -143,7 +144,7 @@ jobs:
     steps:
         - name: Install alsa, libudev
           run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v3
         - uses: dtolnay/rust-toolchain@stable
           id: "rust-toolchain"
           with:
