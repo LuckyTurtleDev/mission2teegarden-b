@@ -11,7 +11,7 @@ jobs:
   test_pc:
     strategy:
       matrix:
-        os: [ubuntu, windows]
+        os: [ubuntu, windows, macos]
         rust_version: [stable, 1.64]
     name: "test pc ${{ matrix.os }} ${{ matrix.rust_version }}"
     continue-on-error: true
@@ -41,8 +41,41 @@ jobs:
       - run: cargo test --all-features -p m3-pc
         env:
           RUST_BACKTRACE: 1
-         
-         
+          
+  build_pc:
+    strategy:
+      matrix:
+        os: [ubuntu, windows, macos]
+    continue-on-error: true
+    name: build ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
+    needs: [test_pc]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
+        id: "rust-toolchain"
+      - name: Install alsa, libudev
+        if:  ${{ matrix.os == 'ubuntu' }}
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/git
+            ~/.cargo/registry
+            target
+          key: "PC Build ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
+      - run: cargo build --all-features --release --locked -p m3-models
+        env:
+          RUST_BACKTRACE: 1
+          working-directory: pc
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: "${{ matrix.target }}"
+          path: |
+            target/release/m3-pc
+            targe/release/m3-pc.exe
+            
   check_pybadge:
     runs-on: ubuntu-latest
     strategy:
@@ -73,9 +106,40 @@ jobs:
         env:
           RUST_BACKTRACE: 1
   
+  build_pybadge:
+    runs-on: ubuntu-latest
+    needs: [check_pybadge]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@nightly
+        id: "rust-toolchain"
+        with:
+          targets: thumbv7em-none-eabihf
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/git
+            ~/.cargo/registry
+            target
+          key: "Build Pybadge ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
+      - name: cargo check models
+        run: cargo check --all-features --target thumbv7em-none-eabihf -p m3-models
+        env:
+          RUST_BACKTRACE: 1
+      - name: cargo bulid pybadge
+        run: cargo build --release --locked --all-features -p m3-pybadge
+        working-directory: pybadge
+        env:
+          RUST_BACKTRACE: 1
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: "pybadge"
+          path: target/thumbv7em-none-eabihf/release/m3-pybadge
+  
   clippy_pc:
     runs-on: ubuntu-latest
-    needs: [test_pc, check_pybadge]
+    needs: [test_pc]
     steps:
         - name: Install alsa, libudev
           run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev
@@ -98,7 +162,7 @@ jobs:
 
   clippy_pybadge:
     runs-on: ubuntu-latest
-    needs: [test_pc, check_pybadge]
+    needs: [check_pybadge]
     if: false #issue at actions; see https://github.com/LoliGothick/clippy-check/issues/94
     steps:
         - name: Install alsa, libudev
