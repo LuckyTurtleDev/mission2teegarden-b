@@ -68,7 +68,6 @@ jobs:
         env:
           RUST_BACKTRACE: 1
           working-directory: pc
-      - run: tree
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
         with:
