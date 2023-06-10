@@ -174,20 +174,13 @@ impl GameState {
 							.send_events(ToPypadeGameEvent::GameOver(GameOver::Crash));
 						state.crashed = true;
 					} else {
-						//probably better to edit existing state instead creating an new
-						let new_state = PlayerState {
-							position: (new_x as u8, new_y as u8),
-							orientation: new_values.2,
-							next_action: match &mut state.solution {
-								Some(iter) => iter.next().unwrap().1,
-								None => Some(CarAction::DriveForward)
-							},
-							rotation: new_values.3,
-							finished: state.finished,
-							crashed: state.crashed,
-							solution: state.solution.clone()
+						state.position = (new_x as u8, new_y as u8);
+						state.orientation = new_values.2;
+						state.rotation = new_values.3;
+						state.next_action = match &mut state.solution {
+							Some(iter) => iter.next().unwrap().1,
+							None => Some(CarAction::DriveForward)
 						};
-						*state = new_state;
 					}
 				}
 			}
