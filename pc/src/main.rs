@@ -54,7 +54,8 @@ struct PlayerState {
 	/// either reached goal or out of map
 	finished: bool,
 	crashed: bool,
-	card_iter: Option<cards_ev::CardIter>
+	/// Is `None` if the player has not create/send any solution.
+	solution: Option<cards_ev::CardIter>
 }
 
 struct GameRun {
@@ -92,7 +93,7 @@ impl GameState {
 				rotation: Rotation::NoRotation,
 				finished: false,
 				crashed: false,
-				card_iter: None
+				solution: None
 			})
 			.collect();
 		let game_run = GameRun {

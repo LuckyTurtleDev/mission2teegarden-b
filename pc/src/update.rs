@@ -50,7 +50,7 @@ fn reset_level(game_state: &mut GameState) {
 			rotation: Rotation::NoRotation,
 			finished: false,
 			crashed: false,
-			card_iter: None
+			solution: None
 		})
 		.collect();
 	game_state.game_run.as_mut().unwrap().player_states = player_states;
@@ -85,19 +85,20 @@ fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameS
 						.flatten()
 						.map(|f| f.to_owned())
 						.collect();
-					game_state.game_run.as_mut().unwrap().player_states[x].card_iter =
+					game_state.game_run.as_mut().unwrap().player_states[x].solution =
 						Some(evaluate_cards(cards));
 				}
 			}
 		}
 	}
+	//check if all player has submit an solution.
 	if game_state
 		.game_run
 		.as_ref()
 		.unwrap()
 		.player_states
 		.iter()
-		.filter(|f| f.card_iter.is_some())
+		.filter(|f| f.solution.is_some())
 		.count() as u8
 		== game_state.player_count
 		&& game_state.player_count > 0
@@ -173,17 +174,18 @@ impl GameState {
 							.send_events(ToPypadeGameEvent::GameOver(GameOver::Crash));
 						state.crashed = true;
 					} else {
+						//probably better to edit existing state instead creating an new
 						let new_state = PlayerState {
 							position: (new_x as u8, new_y as u8),
 							orientation: new_values.2,
-							next_action: match &mut state.card_iter {
+							next_action: match &mut state.solution {
 								Some(iter) => iter.next().unwrap().1,
 								None => Some(CarAction::DriveForward)
 							},
 							rotation: new_values.3,
 							finished: state.finished,
 							crashed: state.crashed,
-							card_iter: state.card_iter.clone()
+							solution: state.solution.clone()
 						};
 						*state = new_state;
 					}

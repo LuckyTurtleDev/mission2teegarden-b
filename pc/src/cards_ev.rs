@@ -113,7 +113,7 @@ mod tests {
 		];
 		for (i, card) in card_iter.enumerate() {
 			assert!(
-				card == *(correct_actions.get(i).unwrap()),
+				card == *(correct_actions.get(i).unwrap().1),
 				"Action: `{:?}`, Solution: `{:?}`",
 				card,
 				*(correct_actions.get(i).unwrap())
