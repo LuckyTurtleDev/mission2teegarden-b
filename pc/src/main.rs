@@ -51,7 +51,8 @@ struct PlayerState {
 	orientation: Orientation,
 	next_action: Option<CarAction>,
 	rotation: Rotation,
-	finished: bool, // either reached goal or out of map
+	/// either reached goal or out of map
+	finished: bool,
 	crashed: bool,
 	card_iter: Option<cards_ev::CardIter>
 }

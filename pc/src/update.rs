@@ -133,7 +133,6 @@ impl GameState {
 			for (x, player) in game_run.level.iter_mut_player().enumerate() {
 				player.position = game_run.player_states[x].position;
 				player.orientation = game_run.player_states[x].orientation;
-
 				if let Some(global_goal) = global_goal {
 					if player.position.0 == global_goal.0
 						&& player.position.1 == global_goal.1
@@ -178,7 +177,7 @@ impl GameState {
 							position: (new_x as u8, new_y as u8),
 							orientation: new_values.2,
 							next_action: match &mut state.card_iter {
-								Some(iter) => iter.next().unwrap(),
+								Some(iter) => iter.next().unwrap().1,
 								None => Some(CarAction::DriveForward)
 							},
 							rotation: new_values.3,
