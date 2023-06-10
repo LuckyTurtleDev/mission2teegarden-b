@@ -75,7 +75,7 @@ jobs:
           name: "${{ matrix.os }}"
           path: |
             target/release/m3-pc
-            targe/release/m3-pc.exe
+            target/release/m3-pc.exe
             
   check_pybadge:
     runs-on: ubuntu-latest
