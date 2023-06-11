@@ -18,6 +18,7 @@ use crate::cards_ev::evaluate_cards;
 
 use m3_models::AvailableCards;
 mod draw;
+mod menu;
 mod update;
 mod usb;
 
@@ -35,9 +36,16 @@ static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 	]
 });
 
+#[derive(PartialEq)]
+enum Phase {
+	Select,
+	Drive
+}
+
+#[derive(PartialEq)]
 enum Activity {
-	Drive,
-	Select
+	Menu,
+	GameRound(Phase)
 }
 
 #[derive(PartialEq, Clone, Copy, Debug)]
@@ -100,7 +108,7 @@ impl GameState {
 		};
 
 		GameState {
-			activity: Activity::Select,
+			activity: Activity::Menu,
 			game_run: Some(game_run),
 			input_players: usb::Players::init(),
 			delta_time: 0.0,
