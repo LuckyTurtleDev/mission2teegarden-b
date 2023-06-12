@@ -11,11 +11,9 @@ m3 is avaibale at the following repositories:
 
 Prebuild binarys can also been downloaded from the [Github release](https://github.com/LuckyTurtleDev/m3/releases/latest).
 
-The pybadge file can be fashed with an UF2 flashing tool. I recommand using [hf2-cli](https://crates.io/crates/hf2-cli).
-
 ### Building from source: 
 Alternative you can easily build m3 by yourself:
-* on Linux insall the following dev dependencies:
+* on Linux install the following dev dependencies:
   * [`alsa-lib`](https://github.com/alsa-project/alsa-lib)
   * [`libudev`](https://github.com/systemd/systemd)
 * [install rust](https://www.rust-lang.org/tools/install)
@@ -24,8 +22,9 @@ See the [rust book](https://doc.rust-lang.org/cargo/commands/cargo-install.html)
 * make sure that `~/.cargo/bin` is listed at the `PATH` enviroment variable
 
 # Flash Pybadge:
-Download Pybadge binary from [Github release](https://github.com/LuckyTurtleDev/m3/releases/latest).
-
+Download Pybadge binary from [Github release](https://github.com/LuckyTurtleDev/m3/releases/latest)
+and flash it with an UF2 flash. I recommand using [hf2-cli](https://crates.io/crates/hf2-cli).
+Press the reset button of the pybdage twice, to enter the bootloader, before flashing.
 ### Building from source: 
 Alternative you can easily build m3 by yourself:
 * [install rust(up)](https://www.rust-lang.org/tools/install)
