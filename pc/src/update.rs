@@ -80,11 +80,8 @@ fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameS
 		if let Some(player_events) = player_events {
 			for event in player_events {
 				if let ToPcGameEvent::Solution(solution) = event {
-					let cards: Vec<_> = solution
-						.into_iter()
-						.flatten()
-						.map(|f| f.to_owned())
-						.collect();
+					let cards: Vec<_> =
+						solution.iter().flatten().map(|f| f.to_owned()).collect();
 					game_state.game_run.as_mut().unwrap().player_states[x].solution =
 						Some(evaluate_cards(cards));
 				}
