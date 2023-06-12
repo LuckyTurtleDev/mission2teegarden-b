@@ -105,7 +105,9 @@ pub enum ToPypadeGameEvent {
 	GameOver(GameOver),
 	/// Retry the current level,
 	/// with out clearing the solution of the player
-	Retry
+	Retry,
+	/// Index of the card which is currently evaluated
+	CurrentCardIndex(u8)
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]

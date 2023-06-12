@@ -184,7 +184,19 @@ impl GameState {
 						state.orientation = new_values.2;
 						state.rotation = new_values.3;
 						state.next_action = match &mut state.solution {
-							Some(iter) => iter.next().unwrap().1,
+							Some(iter) => {
+								let (index, action) = iter.next().unwrap();
+								if let Some(index) = index {
+									if let Some(ref player) = player {
+										player.send_events(
+											ToPypadeGameEvent::CurrentCardIndex(
+												index as u8
+											)
+										);
+									}
+								}
+								action
+							},
 							None => Some(CarAction::DriveForward)
 						};
 					}
