@@ -204,7 +204,10 @@ impl GameState {
 			}
 			// check for collisions with other players
 			for x in 0..3 {
-				for y in x + 1..4 {
+				for y in 1..4 {
+					if y <= x {
+						continue;
+					}
 					if self.input_players.players[x].as_ref().is_some()
 						&& self.input_players.players[y].as_ref().is_some()
 						&& (!game_run.player_states[x].finished
