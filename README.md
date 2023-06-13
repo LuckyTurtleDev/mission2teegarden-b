@@ -22,10 +22,10 @@ See the [rust book](https://doc.rust-lang.org/cargo/commands/cargo-install.html)
 * make sure that `~/.cargo/bin` is listed at the `PATH` enviroment variable
 
 # Flash Pybadge:
-Install an UF2 flasher. I recommand using [hf2-cli](https://crates.io/crates/hf2-cli).
-Download and unpack Pybadge binary from [Github release](https://github.com/LuckyTurtleDev/m3/releases/latest).
-Press the reset button of the pybdage twice, to enter the bootloader.
-After this execute `hf2 elf m3-pybadge` (or the corresponding command of your flahing tool) to flash the binary to the pybadge.
+* Install an UF2 flasher. I recommand using [hf2-cli](https://crates.io/crates/hf2-cli).
+* Download and unpack Pybadge binary from [Github release](https://github.com/LuckyTurtleDev/m3/releases/latest).
+* Press the reset button of the pybdage twice, to enter the bootloader.
+* After this execute `hf2 elf m3-pybadge` (or the corresponding command of your flahing tool) to flash the binary to the pybadge.
 ### Building from source: 
 Alternative you can build m3 by yourself:
 * [install rust(up)](https://www.rust-lang.org/tools/install)
