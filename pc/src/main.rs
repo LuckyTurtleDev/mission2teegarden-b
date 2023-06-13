@@ -45,6 +45,7 @@ enum Phase {
 #[derive(PartialEq)]
 enum Activity {
 	Menu,
+	SelectLevel,
 	GameRound(Phase)
 }
 
@@ -75,7 +76,8 @@ struct GameState {
 	game_run: Option<GameRun>,
 	input_players: Players,
 	delta_time: f32,
-	movement_time: f32
+	movement_time: f32,
+	running: bool
 }
 
 impl GameState {
@@ -109,21 +111,32 @@ impl GameState {
 
 		GameState {
 			activity: Activity::Menu,
-			game_run: Some(game_run),
+			game_run: None,
 			input_players: usb::Players::init(),
 			delta_time: 0.0,
 			movement_time: 0.5,
-			player_count: 0
+			player_count: 0,
+			running: true
 		}
 	}
 }
 
 async fn run_game() {
 	let mut game_state = GameState::new();
-	loop {
-		game_state.update().await;
-		game_state.draw().await;
-		next_frame().await
+	while game_state.running {
+		match game_state.activity {
+			Activity::Menu => {
+				game_state.build_menu();
+			},
+			Activity::SelectLevel => {
+				game_state.build_level_menu();
+			},
+			Activity::GameRound(_) => {
+				game_state.update().await;
+				game_state.draw().await;
+			}
+		}
+		next_frame().await;
 	}
 }
 

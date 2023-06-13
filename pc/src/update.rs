@@ -17,7 +17,7 @@ fn reset_button_pressed(events: [Option<Vec<ToPcGameEvent>>; 4]) -> bool {
 	false
 }
 
-fn reset_level(game_state: &mut GameState) {
+fn init_level(game_state: &mut GameState) {
 	let level = Map::from_string(LEVELS[LEVEL_NR]).unwrap();
 	for (x, player) in game_state
 		.input_players
@@ -105,6 +105,7 @@ fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameS
 		game_state.activity = Activity::GameRound(Phase::Drive);
 	}
 }
+
 impl GameState {
 	///update the current state.
 	pub(crate) async fn update(&mut self) {
@@ -113,17 +114,17 @@ impl GameState {
 			Activity::GameRound(Phase::Select) => setup_players(events, self),
 			Activity::GameRound(Phase::Drive) => {
 				if reset_button_pressed(events) {
-					reset_level(self);
+					init_level(self);
 				} else {
 					if self.delta_time >= self.movement_time {
 						self.delta_time -= self.movement_time;
-
 						self.next_move();
 					}
 					self.delta_time += get_frame_time();
 				}
 			},
-			Activity::Menu => {}
+			Activity::Menu => {},
+			Activity::SelectLevel => {}
 		}
 	}
 
