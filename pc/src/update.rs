@@ -1,9 +1,9 @@
 use crate::{
 	cards_ev::CarAction, evaluate_cards, Activity, GameState, Map, Phase, PlayerState,
-	Rotation, LEVELS, LEVEL_NR
+	Rotation, LEVELS, GameRun
 };
 use m3_map::Orientation;
-use m3_models::{GameOver, Key, NeoPixelColor, ToPcGameEvent, ToPypadeGameEvent};
+use m3_models::{GameOver, Key, NeoPixelColor, ToPcGameEvent, AvailableCards, ToPypadeGameEvent};
 use macroquad::prelude::*;
 
 fn reset_button_pressed(events: [Option<Vec<ToPcGameEvent>>; 4]) -> bool {
@@ -17,8 +17,15 @@ fn reset_button_pressed(events: [Option<Vec<ToPcGameEvent>>; 4]) -> bool {
 	false
 }
 
-fn init_level(game_state: &mut GameState) {
-	let level = Map::from_string(LEVELS[LEVEL_NR]).unwrap();
+pub(crate) fn init_level(game_state: &mut GameState) {
+	let mut level = Map::from_string(LEVELS[game_state.level_num]).unwrap();
+	level.cards = AvailableCards {
+		left: 3,
+		right: 3,
+		motor_on: 2,
+		motor_off: 2,
+		wait: 4
+	};
 	for (x, player) in game_state
 		.input_players
 		.players
@@ -53,7 +60,11 @@ fn init_level(game_state: &mut GameState) {
 			solution: None
 		})
 		.collect();
-	game_state.game_run.as_mut().unwrap().player_states = player_states;
+	let game_run = GameRun {
+		level,
+		player_states
+	};
+	game_state.game_run = Some(game_run);
 	game_state.delta_time = 0.0;
 	game_state.activity = Activity::GameRound(Phase::Select);
 }

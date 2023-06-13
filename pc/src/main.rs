@@ -24,7 +24,6 @@ mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
-const LEVEL_NR: usize = 2;
 
 ///store maps as String binary format
 ///call `Map::from_str()`
@@ -79,13 +78,14 @@ struct GameState {
 	input_players: Players,
 	delta_time: f32,
 	movement_time: f32,
+	level_num: usize,
 	running: bool
 }
 
 impl GameState {
 	fn new() -> GameState {
 		Lazy::force(&TEXTURES);
-		let mut level = Map::from_string(LEVELS[LEVEL_NR]).unwrap(); //tests check if map is vaild
+		let mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		level.cards = AvailableCards {
 			left: 3,
 			right: 3,
@@ -113,11 +113,12 @@ impl GameState {
 
 		GameState {
 			activity: Activity::Menu,
-			game_run: None,
+			game_run: Some(game_run),
 			input_players: usb::Players::init(),
 			delta_time: 0.0,
 			movement_time: 0.5,
 			player_count: 0,
+			level_num: 0,
 			running: true
 		}
 	}

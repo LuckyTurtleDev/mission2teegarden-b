@@ -1,4 +1,4 @@
-use crate::{Activity, GameState, Phase, LEVELS};
+use crate::{Activity, GameState, Phase, LEVELS, update::init_level};
 use macroquad::{
 	hash,
 	prelude::*,
@@ -81,11 +81,12 @@ impl GameState {
 		root_ui().window(hash!(), menu_position, menu_size, |ui| {
 			if ui.button(None, "Tutorial") {
 				debug!("Play pressed");
-				self.activity = Activity::SelectLevel;
+				todo!("Tutorial");
 			}
 			for x in 0..LEVELS.len() {
 				if ui.button(None, format!("Level {}", x + 1)) {
-					//self.game_run = Some(GameRun::new(x));
+					self.level_num = x;
+					init_level(self);
 					self.activity = Activity::GameRound(Phase::Select);
 				}
 			}
