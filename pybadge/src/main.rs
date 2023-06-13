@@ -234,6 +234,7 @@ fn main() -> ! {
 					ToPypadeGameEvent::GameOver(game_over_type) => {
 						state.activity = Activity::GameOver(game_over_type)
 					},
+					ToPypadeGameEvent::CurrentCardIndex(_) => {}
 				}
 			}
 		}

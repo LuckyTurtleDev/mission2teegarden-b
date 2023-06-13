@@ -29,56 +29,59 @@ impl Default for CardIter {
 }
 
 impl Iterator for CardIter {
-	type Item = Option<CarAction>;
+	type Item = (Option<usize>, Option<CarAction>);
 
 	fn next(&mut self) -> Option<Self::Item> {
-		match self.cards.get(self.card_pos) {
+		Some(match self.cards.get(self.card_pos) {
 			None => {
 				if self.driving {
-					Some(Some(CarAction::DriveForward))
+					(None, Some(CarAction::DriveForward))
 				} else {
-					Some(None)
+					(None, None)
 				}
 			},
-			Some(card) => match card {
-				Card::Left => {
-					self.card_pos += 1;
-					Some(Some(CarAction::RotateLeft))
-				},
-				Card::Right => {
-					self.card_pos += 1;
-					Some(Some(CarAction::RotateRight))
-				},
-				Card::Wait(i) => {
-					if self.wait_counter < (*i) - 1 {
-						self.wait_counter += 1;
-						if self.driving {
-							Some(Some(CarAction::DriveForward))
-						} else {
-							Some(None)
-						}
-					} else {
-						self.wait_counter = 0;
+			Some(card) => {
+				let car_action = match card {
+					Card::Left => {
 						self.card_pos += 1;
-						if self.driving {
-							Some(Some(CarAction::DriveForward))
+						Some(CarAction::RotateLeft)
+					},
+					Card::Right => {
+						self.card_pos += 1;
+						Some(CarAction::RotateRight)
+					},
+					Card::Wait(i) => {
+						if self.wait_counter < (*i) - 1 {
+							self.wait_counter += 1;
+							if self.driving {
+								Some(CarAction::DriveForward)
+							} else {
+								None
+							}
 						} else {
-							Some(None)
+							self.wait_counter = 0;
+							self.card_pos += 1;
+							if self.driving {
+								Some(CarAction::DriveForward)
+							} else {
+								None
+							}
 						}
+					},
+					Card::MotorOn => {
+						self.card_pos += 1;
+						self.driving = true;
+						None
+					},
+					Card::MotorOff => {
+						self.card_pos += 1;
+						self.driving = false;
+						None
 					}
-				},
-				Card::MotorOn => {
-					self.card_pos += 1;
-					self.driving = true;
-					Some(None)
-				},
-				Card::MotorOff => {
-					self.card_pos += 1;
-					self.driving = false;
-					Some(None)
-				}
+				};
+				(Some(self.card_pos), car_action)
 			}
-		}
+		})
 	}
 }
 
@@ -97,7 +100,7 @@ mod tests {
 	#[test]
 	fn test_card_evaluation() {
 		let cards = vec![MotorOn, Wait(3), Left, Wait(2), MotorOff];
-		let card_iter = evaluate_cards(cards).take(6);
+		let card_iter = evaluate_cards(cards).take(6).map(|(_i, card)| card);
 		let correct_actions = vec![
 			None,
 			Some(DriveForward),
