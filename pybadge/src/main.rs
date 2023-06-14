@@ -29,7 +29,7 @@ use pybadge_high::{
 
 mod activitys;
 mod usb;
-
+mod assets;
 mod log;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
