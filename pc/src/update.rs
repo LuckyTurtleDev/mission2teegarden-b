@@ -101,6 +101,9 @@ fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameS
 		&& game_state.player_count > 0
 	{
 		game_state.activity = crate::Activity::Drive;
+		for player in game_state.input_players.players.iter().flatten(){
+			player.send_events(ToPypadeGameEvent::Driving);
+		}
 	}
 }
 impl GameState {
