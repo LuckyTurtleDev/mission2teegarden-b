@@ -4,19 +4,19 @@ use m3_models::Card;
 use pybadge_high::Color;
 
 #[include_image]
-const IMG_CARD_LEFT: Image<'_, Color> = "pybadge/img/Left.png";
+pub(crate) const IMG_CARD_LEFT: Image<'_, Color> = "pybadge/img/Left.png";
 #[include_image]
-const IMG_CARD_RIGHT: Image<'_, Color> = "pybadge/img/Right.png";
+pub(crate) const IMG_CARD_RIGHT: Image<'_, Color> = "pybadge/img/Right.png";
 #[include_image]
-const IMG_CARD_MOVE: Image<'_, Color> = "pybadge/img/Move.png";
+pub(crate) const IMG_CARD_MOVE: Image<'_, Color> = "pybadge/img/Move.png";
 #[include_image]
-const IMG_CARD_STOP: Image<'_, Color> = "pybadge/img/Stop.png";
+pub(crate) const IMG_CARD_STOP: Image<'_, Color> = "pybadge/img/Stop.png";
 #[include_image]
-const IMG_CARD_WAIT: Image<'_, Color> = "pybadge/img/Wait.png";
+pub(crate) const IMG_CARD_WAIT: Image<'_, Color> = "pybadge/img/Wait.png";
 #[include_image]
-const IMG_CARD_SELETED: Image<'_, Color> = "pybadge/img/CardSelected.png";
+pub(crate) const IMG_CARD_SELETED: Image<'_, Color> = "pybadge/img/CardSelected.png";
 #[include_image]
-const IMG_CARD_FRAME: Image<'_, Color> = "pybadge/img/CardFrame.png";
+pub(crate) const IMG_CARD_FRAME: Image<'_, Color> = "pybadge/img/CardFrame.png";
 
 pub(crate) fn get_card_image(card: &Card) -> Image<'static, Color> {
 	match card {

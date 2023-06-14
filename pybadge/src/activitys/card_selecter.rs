@@ -1,4 +1,8 @@
-use crate::{send_event, State};
+use crate::{
+	activitys::draw_card,
+	assets::{IMG_CARD_FRAME, IMG_CARD_SELETED},
+	send_event, State
+};
 use core::{fmt::Write, mem};
 use embedded_graphics::{
 	mono_font::MonoTextStyle,
@@ -15,34 +19,9 @@ use pybadge_high::{
 };
 use strum::IntoEnumIterator;
 
-#[include_image]
-const IMG_CARD_LEFT: Image<'_, Color> = "pybadge/img/Left.png";
-#[include_image]
-const IMG_CARD_RIGHT: Image<'_, Color> = "pybadge/img/Right.png";
-#[include_image]
-const IMG_CARD_MOVE: Image<'_, Color> = "pybadge/img/Move.png";
-#[include_image]
-const IMG_CARD_STOP: Image<'_, Color> = "pybadge/img/Stop.png";
-#[include_image]
-const IMG_CARD_WAIT: Image<'_, Color> = "pybadge/img/Wait.png";
-#[include_image]
-const IMG_CARD_SELETED: Image<'_, Color> = "pybadge/img/CardSelected.png";
-#[include_image]
-const IMG_CARD_FRAME: Image<'_, Color> = "pybadge/img/CardFrame.png";
-
 /// max count of card per line
 const CARD_LINE_LENGTH: u8 = 6;
 const CARD_SELECTION_HIGHT: u8 = 91;
-
-fn get_card_image(card: &Card) -> Image<'static, Color> {
-	match card {
-		Card::Left => IMG_CARD_LEFT,
-		Card::Right => IMG_CARD_RIGHT,
-		Card::MotorOn => IMG_CARD_MOVE,
-		Card::MotorOff => IMG_CARD_STOP,
-		Card::Wait(_) => IMG_CARD_WAIT
-	}
-}
 
 /// draw the number of avaibale cards above a card type
 /// The number is drawn at line postion i at the heigh y.
@@ -58,51 +37,6 @@ fn draw_count(
 	Text::new(&count_str, Point::new((26 * i + 9) as i32, 87), text_style)
 		.draw(display)
 		.unwrap();
-}
-
-/// draw a card or clearr field is None.
-/// The card is drawn at postion i at the line which start the heigh y,
-/// with build in line break
-fn draw_card(
-	i: u8,
-	y: u8,
-	card: Option<&Card>,
-	display: &mut Display,
-	text_style_on_card: MonoTextStyle<'_, Color>
-) {
-	let top_left = Point::new(
-		(26 * (i % CARD_LINE_LENGTH) + 2) as i32,
-		(y + 38 * (i / CARD_LINE_LENGTH)) as i32
-	);
-	if let Some(card) = card {
-		Sprite::new(top_left, &get_card_image(card))
-			.draw(display)
-			.unwrap();
-		if let Card::Wait(wait_count) = card {
-			let mut wait_count_str = String::<3>::new();
-			write!(wait_count_str, "{}", wait_count).unwrap();
-			Text::new(
-				&wait_count_str,
-				Point::new(
-					(26 * (i % CARD_LINE_LENGTH) + 9) as i32,
-					(y + 15 + 38 * (i / CARD_LINE_LENGTH)) as i32
-				),
-				text_style_on_card
-			)
-			.draw(display)
-			.unwrap();
-		}
-	} else {
-		// clear the postion of the card by filling it with black
-		Rectangle::with_corners(top_left, top_left + Point::new(25, 36))
-			.into_styled(
-				PrimitiveStyleBuilder::new()
-					.fill_color(Color::BLACK)
-					.build()
-			)
-			.draw(display)
-			.unwrap();
-	}
 }
 
 /// initial draw of this activity.
