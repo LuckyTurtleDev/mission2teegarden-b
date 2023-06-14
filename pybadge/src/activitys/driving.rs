@@ -1,20 +1,12 @@
-use crate::{
-	activitys::draw_card, State
-};
+use crate::{activitys::draw_card, State};
 
-use embedded_graphics::{
-	prelude::*
-};
+use embedded_graphics::prelude::*;
 
-
-
-use pybadge_high::{
-	Color
-};
+use pybadge_high::Color;
 use strum::IntoEnumIterator;
 
 pub(crate) fn init(state: &mut State<'_>) {
-    state.display.clear(Color::BLACK).unwrap();
+	state.display.clear(Color::BLACK).unwrap();
 	for (i, card) in state.submitted_solution.iter().enumerate() {
 		draw_card(
 			i as u8,
