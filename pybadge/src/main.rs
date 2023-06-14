@@ -28,9 +28,9 @@ use pybadge_high::{
 };
 
 mod activitys;
-mod usb;
 mod assets;
 mod log;
+mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const _CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");

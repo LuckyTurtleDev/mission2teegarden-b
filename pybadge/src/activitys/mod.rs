@@ -1,28 +1,23 @@
-
-use core::{fmt::Write};
+use core::fmt::Write;
 use embedded_graphics::{
 	mono_font::MonoTextStyle,
 	prelude::*,
 	primitives::{PrimitiveStyleBuilder, Rectangle},
 	text::Text
 };
-use embedded_sprites::{sprite::Sprite};
+use embedded_sprites::sprite::Sprite;
 use heapless::String;
-use m3_models::{Card};
-use pybadge_high::{
-	Color, Display
-};
+use m3_models::Card;
+use pybadge_high::{Color, Display};
 
 use crate::assets::get_card_image;
 
 pub(crate) mod card_selecter;
-pub(crate) mod game_over;
 pub(crate) mod driving;
+pub(crate) mod game_over;
 
 /// count of cards per line
 const CARD_LINE_LENGTH: u8 = 6;
-
-
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(crate) enum Activity {

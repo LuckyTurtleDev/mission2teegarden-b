@@ -1,14 +1,7 @@
-
-
-
 use embedded_sprites::{image::Image, include_image};
 
-use m3_models::{Card};
-use pybadge_high::{
-	Color
-};
-
-
+use m3_models::Card;
+use pybadge_high::Color;
 
 #[include_image]
 const IMG_CARD_LEFT: Image<'_, Color> = "pybadge/img/Left.png";
