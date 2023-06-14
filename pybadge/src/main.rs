@@ -107,6 +107,7 @@ struct State<'a> {
 	avaiable_cards: AvailableCards,
 	/// solution created by the player
 	solution: Vec<Card, 12>,
+	submitted_solution: Vec<Card, 12>,
 	activity: Activity,
 	cursor: (u8, u8),
 	wait_count: u8,
@@ -123,6 +124,7 @@ impl State<'_> {
 		match self.activity {
 			Activity::Waiting => {},
 			Activity::Selecter => activitys::card_selecter::init(self),
+			Activity::Driving => activitys::driving::init(self),
 			Activity::GameOver(game_over_type) => {
 				activitys::game_over::init(self, &game_over_type.clone())
 			},
@@ -133,6 +135,7 @@ impl State<'_> {
 		match self.activity {
 			Activity::Waiting => {},
 			Activity::Selecter => activitys::card_selecter::update(self),
+			Activity::Driving => activitys::driving::update(self),
 			Activity::GameOver(_) => {}
 		}
 	}
@@ -193,6 +196,7 @@ fn main() -> ! {
 		card_type_count: 0,
 		avaiable_cards: AvailableCards::default(),
 		solution: Vec::new(),
+		submitted_solution: Vec::new(),
 		activity: Activity::Waiting,
 		cursor: (0, 0),
 		wait_count: 1,
@@ -230,6 +234,7 @@ fn main() -> ! {
 						state.avaiable_cards = available_cards.clone();
 						state.init_avaiable_cards = available_cards;
 					},
+					ToPypadeGameEvent::Driving => state.activity = Activity::Driving,
 					ToPypadeGameEvent::Retry => state.activity = Activity::Selecter,
 					ToPypadeGameEvent::GameOver(game_over_type) => {
 						state.activity = Activity::GameOver(game_over_type)

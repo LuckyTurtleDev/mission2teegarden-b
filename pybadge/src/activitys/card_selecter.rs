@@ -19,8 +19,6 @@ use pybadge_high::{
 };
 use strum::IntoEnumIterator;
 
-/// max count of card per line
-const CARD_LINE_LENGTH: u8 = 6;
 const CARD_SELECTION_HIGHT: u8 = 91;
 
 /// draw the number of avaibale cards above a card type
@@ -150,6 +148,7 @@ pub(crate) fn update(state: &mut State<'_>) {
 						send_event(MessageToPc::GameEvent(ToPcGameEvent::Solution(
 							solution
 						)));
+						state.submitted_solution = state.solution.clone();
 					},
 					_ => {}
 				}
@@ -170,7 +169,7 @@ pub(crate) fn update(state: &mut State<'_>) {
 			state.wait_count = 1
 		}
 		// add a card to solutios
-		if a_pressed && state.solution.len() < 12 {
+		if a_pressed && !state.solution.is_full() {
 			//update card state
 			for (i, card) in Card::iter()
 				.filter(|card| state.init_avaiable_cards.card_count(card) != 0)

@@ -22,6 +22,7 @@ const CARD_LINE_LENGTH: u8 = 6;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(crate) enum Activity {
 	Selecter,
+	Driving,
 	Waiting,
 	GameOver(m3_models::GameOver)
 }
