@@ -1,21 +1,15 @@
 use crate::{
-	activitys::draw_card,
-	assets::{IMG_CARD_FRAME, IMG_CARD_SELETED},
-	send_event, State
+	activitys::draw_card, State
 };
-use core::{fmt::Write, mem};
+
 use embedded_graphics::{
-	mono_font::MonoTextStyle,
-	prelude::*,
-	primitives::{PrimitiveStyleBuilder, Rectangle},
-	text::Text
+	prelude::*
 };
-use embedded_sprites::{image::Image, include_image, sprite::Sprite};
-use heapless::String;
-use m3_models::{Card, MessageToPc, ToPcGameEvent};
+
+
+
 use pybadge_high::{
-	buttons::{Button, Event},
-	Color, Display
+	Color
 };
 use strum::IntoEnumIterator;
 
@@ -32,4 +26,4 @@ pub(crate) fn init(state: &mut State<'_>) {
 	}
 }
 
-pub(crate) fn update(state: &mut State<'_>) {}
+pub(crate) fn update(_state: &mut State<'_>) {}
