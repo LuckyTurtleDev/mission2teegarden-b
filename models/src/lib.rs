@@ -101,6 +101,7 @@ pub enum ToPypadeGameEvent {
 	/// set all NeoPixel to this Color.
 	/// Regular used as indication for Player number
 	NeoPixelColor(NeoPixelColor),
+	Driving,
 	NewLevel(AvailableCards),
 	GameOver(GameOver),
 	/// Retry the current level,
