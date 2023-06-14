@@ -3,7 +3,7 @@
 #![no_std]
 #![no_main]
 
-use activitys::Activity;
+use activitys::{driving::DrivingState, Activity};
 use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
 use embedded_graphics::{
 	draw_target::DrawTarget,
@@ -109,6 +109,7 @@ struct State<'a> {
 	solution: Vec<Card, 12>,
 	submitted_solution: Vec<Card, 12>,
 	activity: Activity,
+	driving_state: DrivingState,
 	cursor: (u8, u8),
 	wait_count: u8,
 	/// positon of the wait card to allow faster update
@@ -132,7 +133,7 @@ impl State<'_> {
 	}
 	/// only partional update the display, to improve fps
 	fn update_draw(&mut self) {
-		match self.activity {
+		match &self.activity {
 			Activity::Waiting => {},
 			Activity::Selecter => activitys::card_selecter::update(self),
 			Activity::Driving => activitys::driving::update(self),
@@ -198,6 +199,7 @@ fn main() -> ! {
 		solution: Vec::new(),
 		submitted_solution: Vec::new(),
 		activity: Activity::Waiting,
+		driving_state: Default::default(),
 		cursor: (0, 0),
 		wait_count: 1,
 		wait_card_index: None,
@@ -234,12 +236,17 @@ fn main() -> ! {
 						state.avaiable_cards = available_cards.clone();
 						state.init_avaiable_cards = available_cards;
 					},
-					ToPypadeGameEvent::Driving => state.activity = Activity::Driving,
+					ToPypadeGameEvent::Driving => {
+						state.activity = Activity::Driving;
+						state.driving_state = Default::default();
+					},
 					ToPypadeGameEvent::Retry => state.activity = Activity::Selecter,
 					ToPypadeGameEvent::GameOver(game_over_type) => {
 						state.activity = Activity::GameOver(game_over_type)
 					},
-					ToPypadeGameEvent::CurrentCardIndex(_) => {}
+					ToPypadeGameEvent::CurrentCardIndex(i) => {
+						state.driving_state.active_card = i;
+					}
 				}
 			}
 		}

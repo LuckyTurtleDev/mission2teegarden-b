@@ -108,7 +108,7 @@ pub enum ToPypadeGameEvent {
 	/// with out clearing the solution of the player
 	Retry,
 	/// Index of the card which is currently evaluated
-	CurrentCardIndex(u8)
+	CurrentCardIndex(Option<u8>)
 }
 
 #[derive(Debug, Clone, Decode, Encode, PartialEq)]

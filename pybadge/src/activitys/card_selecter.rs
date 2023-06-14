@@ -1,11 +1,7 @@
-use crate::{
-	activitys::draw_card,
-	assets::{IMG_CARD_FRAME, IMG_CARD_SELETED},
-	send_event, State
-};
+use super::{draw_card, DrawObject};
+use crate::{send_event, State};
 use core::{fmt::Write, mem};
 use embedded_graphics::{mono_font::MonoTextStyle, prelude::*, text::Text};
-use embedded_sprites::sprite::Sprite;
 use heapless::String;
 use m3_models::{Card, MessageToPc, ToPcGameEvent};
 use pybadge_high::{
@@ -64,7 +60,7 @@ pub(crate) fn init(state: &mut State<'_>) {
 		draw_card(
 			i as u8,
 			CARD_SELECTION_HIGHT,
-			Some(&card),
+			DrawObject::Card(&card),
 			&mut state.display,
 			state.text_style_on_card
 		);
@@ -77,7 +73,7 @@ pub(crate) fn init(state: &mut State<'_>) {
 		draw_card(
 			i as u8,
 			1,
-			Some(card),
+			DrawObject::Card(&card),
 			&mut state.display,
 			state.text_style_on_card
 		);
@@ -104,7 +100,7 @@ pub(crate) fn update(state: &mut State<'_>) {
 							draw_card(
 								i,
 								1,
-								None,
+								DrawObject::Clear,
 								&mut state.display,
 								state.text_style_on_card
 							);
@@ -201,7 +197,7 @@ pub(crate) fn update(state: &mut State<'_>) {
 				draw_card(
 					i,
 					1,
-					Some(card),
+					DrawObject::Card(card),
 					&mut state.display,
 					state.text_style_on_card
 				);
@@ -212,34 +208,30 @@ pub(crate) fn update(state: &mut State<'_>) {
 				draw_card(
 					wait_card_pos,
 					CARD_SELECTION_HIGHT,
-					Some(&Card::Wait(state.wait_count)),
+					DrawObject::Card(&Card::Wait(state.wait_count)),
 					&mut state.display,
 					state.text_style_on_card
 				);
 			}
 		}
 		if last_cursor_pos != state.cursor {
-			Sprite::new(
-				Point::new(
-					(26 * last_cursor_pos.0 + 2) as i32,
-					CARD_SELECTION_HIGHT as i32
-				),
-				&IMG_CARD_FRAME
+			draw_card(
+				last_cursor_pos.0,
+				CARD_SELECTION_HIGHT,
+				DrawObject::Frame,
+				&mut state.display,
+				state.text_style_on_card
 			)
-			.draw(&mut state.display)
-			.unwrap();
 		}
 		//                         updating wait count, does override the cursor, so it must be redrawn
 		if last_cursor_pos != state.cursor || last_wait_count != state.wait_count {
-			Sprite::new(
-				Point::new(
-					(26 * state.cursor.0 + 2) as i32,
-					CARD_SELECTION_HIGHT as i32
-				),
-				&IMG_CARD_SELETED
-			)
-			.draw(&mut state.display)
-			.unwrap();
+			draw_card(
+				state.cursor.0,
+				CARD_SELECTION_HIGHT,
+				DrawObject::Cursor,
+				&mut state.display,
+				state.text_style_on_card
+			);
 		}
 	}
 }

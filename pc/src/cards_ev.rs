@@ -32,6 +32,7 @@ impl Iterator for CardIter {
 	type Item = (Option<usize>, Option<CarAction>);
 
 	fn next(&mut self) -> Option<Self::Item> {
+		let card_pos = self.card_pos;
 		Some(match self.cards.get(self.card_pos) {
 			None => {
 				if self.driving {
@@ -79,7 +80,7 @@ impl Iterator for CardIter {
 						None
 					}
 				};
-				(Some(self.card_pos), car_action)
+				(Some(card_pos), car_action)
 			}
 		})
 	}
@@ -100,16 +101,16 @@ mod tests {
 	#[test]
 	fn test_card_evaluation() {
 		let cards = vec![MotorOn, Wait(3), Left, Wait(2), MotorOff];
-		let card_iter = evaluate_cards(cards).take(6).map(|(_i, card)| card);
+		let card_iter = evaluate_cards(cards).take(6);
 		let correct_actions = vec![
-			None,
-			Some(DriveForward),
-			Some(DriveForward),
-			Some(DriveForward),
-			Some(RotateLeft),
-			Some(DriveForward),
-			Some(DriveForward),
-			None,
+			(Some(0), None),
+			(Some(1), Some(DriveForward)),
+			(Some(1), Some(DriveForward)),
+			(Some(1), Some(DriveForward)),
+			(Some(2), Some(RotateLeft)),
+			(Some(3), Some(DriveForward)),
+			(Some(3), Some(DriveForward)),
+			(Some(4), None),
 		];
 		for (i, card) in card_iter.enumerate() {
 			assert!(

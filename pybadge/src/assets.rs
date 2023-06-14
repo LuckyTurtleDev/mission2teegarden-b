@@ -3,6 +3,9 @@ use embedded_sprites::{image::Image, include_image};
 use m3_models::Card;
 use pybadge_high::Color;
 
+pub(crate) const CARD_WIHDT: u8 = 25;
+pub(crate) const CARD_HEIGHT: u8 = 36;
+
 #[include_image]
 pub(crate) const IMG_CARD_LEFT: Image<'_, Color> = "pybadge/img/Left.png";
 #[include_image]
