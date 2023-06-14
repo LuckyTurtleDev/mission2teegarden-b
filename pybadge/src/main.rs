@@ -142,7 +142,7 @@ impl State<'_> {
 fn main() -> ! {
 	let text_style = MonoTextStyle::new(&FONT_6X10, Color::WHITE);
 	let mut usb_data = Vec::<u8, 128>::new();
-	let mut pybadge = PyBadge::take().unwrap();
+	let pybadge = PyBadge::take().unwrap();
 	let mut delay = pybadge.delay;
 	let mut display = pybadge.display;
 	let mut buttons = pybadge.buttons;
