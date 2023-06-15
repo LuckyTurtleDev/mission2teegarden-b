@@ -132,11 +132,12 @@ jobs:
         working-directory: pybadge
         env:
           RUST_BACKTRACE: 1
+      - run: arm-none-eabi-objcopy -O binary target/thumbv7em-none-eabihf/release/m3-pybadge m3-pybadge
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
         with:
           name: "pybadge"
-          path: target/thumbv7em-none-eabihf/release/m3-pybadge
+          path: m3-pybadge
   
   clippy_pc:
     runs-on: ubuntu-latest
