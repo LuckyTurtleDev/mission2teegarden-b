@@ -110,6 +110,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [check_pybadge]
     steps:
+      - uses: carlosperate/arm-none-eabi-gcc-action@v1
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@nightly
         id: "rust-toolchain"
