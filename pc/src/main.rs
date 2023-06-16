@@ -14,7 +14,7 @@ use cards_ev::CarAction;
 use tiles::TEXTURES;
 use usb::Players;
 
-use crate::cards_ev::evaluate_cards;
+use crate::{cards_ev::evaluate_cards, update::setup_players};
 
 use m3_models::AvailableCards;
 mod draw;
@@ -127,17 +127,21 @@ impl GameState {
 async fn run_game() {
 	let mut game_state = GameState::new();
 	while game_state.running {
+		let events = game_state.input_players.get_events();
 		match game_state.activity {
+			Activity::GameRound(Phase::Select) => {
+				//game_state.update(&events).await;
+				game_state.draw().await;
+				setup_players(&events, &mut game_state)
+			},
+			Activity::GameRound(Phase::Drive) => {
+				game_state.update(&events).await;
+				game_state.draw().await;
+			},
 			Activity::Menu => {
 				game_state.build_menu();
 			},
-			Activity::SelectLevel => {
-				game_state.build_level_menu();
-			},
-			Activity::GameRound(_) => {
-				game_state.update().await;
-				game_state.draw().await;
-			}
+			Activity::SelectLevel => game_state.build_level_menu()
 		}
 		next_frame().await;
 	}

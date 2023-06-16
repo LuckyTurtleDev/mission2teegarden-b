@@ -1,16 +1,19 @@
 use crate::{
-	cards_ev::CarAction, evaluate_cards, Activity, GameState, Map, Phase, PlayerState,
-	Rotation, LEVELS, GameRun
+	cards_ev::CarAction, evaluate_cards, Activity, GameRun, GameState, Map, Phase,
+	PlayerState, Rotation, LEVELS
 };
+use bincode::de;
 use m3_map::Orientation;
-use m3_models::{GameOver, Key, NeoPixelColor, ToPcGameEvent, AvailableCards, ToPypadeGameEvent};
+use m3_models::{
+	AvailableCards, GameOver, Key, NeoPixelColor, ToPcGameEvent, ToPypadeGameEvent
+};
 use macroquad::prelude::*;
 
-fn reset_button_pressed(events: [Option<Vec<ToPcGameEvent>>; 4]) -> bool {
+fn reset_button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
 	for player_events in events.into_iter().flatten() {
 		for event in player_events {
 			if let ToPcGameEvent::KeyPressed(key) = event {
-				return key == Key::Select;
+				return *key == Key::Select;
 			}
 		}
 	}
@@ -34,10 +37,10 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 		.enumerate()
 	{
 		player.send_events(ToPypadeGameEvent::Retry);
-		game_state.game_run.as_mut().unwrap().player_states[x].position =
-			level.iter_player().next().unwrap().position;
+		/*game_state.game_run.as_mut().unwrap().player_states[x].position =
+		level.iter_player().next().unwrap().position;*/
 	}
-	for (x, player) in game_state
+	/*for (x, player) in game_state
 		.game_run
 		.as_mut()
 		.unwrap()
@@ -47,7 +50,7 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 	{
 		player.position = level.iter_player().nth(x).unwrap().position;
 		player.orientation = level.iter_player().nth(x).unwrap().orientation;
-	}
+	}*/
 	let player_states = level
 		.iter_player()
 		.map(|f| PlayerState {
@@ -69,7 +72,11 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 	game_state.activity = Activity::GameRound(Phase::Select);
 }
 
-fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameState) {
+pub(crate) fn setup_players(
+	events: &[Option<Vec<ToPcGameEvent>>; 4],
+	game_state: &mut GameState
+) {
+	debug!("setup_players");
 	if game_state.player_count < events.iter().flatten().count() as u8 {
 		if let Some(player) = game_state.input_players.players.iter().flatten().last() {
 			game_state.player_count += 1;
@@ -90,6 +97,7 @@ fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameS
 	for (x, player_events) in events.iter().enumerate() {
 		if let Some(player_events) = player_events {
 			for event in player_events {
+				debug!("{:?}", event);
 				if let ToPcGameEvent::Solution(solution) = event {
 					let cards: Vec<_> =
 						solution.iter().flatten().map(|f| f.to_owned()).collect();
@@ -99,7 +107,7 @@ fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameS
 			}
 		}
 	}
-	//check if all player has submit an solution.
+	// check if all player has submit an solution.
 	if game_state
 		.game_run
 		.as_ref()
@@ -116,27 +124,20 @@ fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameS
 }
 
 impl GameState {
-	///update the current state.
-	pub(crate) async fn update(&mut self) {
-		let events = self.input_players.get_events();
-		match &mut self.activity {
-			Activity::GameRound(Phase::Select) => setup_players(events, self),
-			Activity::GameRound(Phase::Drive) => {
-				if reset_button_pressed(events) {
-					init_level(self);
-				} else {
-					if self.delta_time >= self.movement_time {
-						self.delta_time -= self.movement_time;
-						self.next_move();
-					}
-					self.delta_time += get_frame_time();
-				}
-			},
-			Activity::Menu => {},
-			Activity::SelectLevel => {}
+	/// update the current state.
+	pub(crate) async fn update(&mut self, events: &[Option<Vec<ToPcGameEvent>>; 4]) {
+		if reset_button_pressed(&events) {
+			init_level(self);
+		} else {
+			if self.delta_time >= self.movement_time {
+				self.delta_time -= self.movement_time;
+				self.next_move();
+			}
+			self.delta_time += get_frame_time();
 		}
 	}
 
+	/// calculate next moves
 	pub(crate) fn next_move(&mut self) {
 		if let Some(ref mut game_run) = self.game_run {
 			// update player positions
