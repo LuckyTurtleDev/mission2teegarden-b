@@ -9,6 +9,7 @@ repository = "https://github.com/LuckyTurtleDev/m3"
 license = "AGPL-3.0-or-later"
 
 [dependencies]
+basic-toml = "0.1.2"
 clap = { version = "4.2.5", features = ["derive"] }
 log = "0.4.17"
 m3-models = { version = "0.1.0", path = "../models", features = ["serde"] }
