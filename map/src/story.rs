@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum Character {
-	Captain,
+	Captain
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -32,16 +32,16 @@ pub struct Story {
 
 #[cfg(test)]
 mod tests {
+	use super::*;
 	use basic_toml as toml;
-    use super::*;
-    
-    #[test]
-    fn load_story() {
-        let toml = r#"
+
+	#[test]
+	fn load_story() {
+		let toml = r#"
         [[pre_level]]
         text = "hi, I am the captain ..."
 		profil = "Captain"
         "#;
-        let _config: Story = toml::from_str(&toml).unwrap();
-    }
+		let _config: Story = toml::from_str(&toml).unwrap();
+	}
 }
