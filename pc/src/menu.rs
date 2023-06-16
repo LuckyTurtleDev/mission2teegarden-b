@@ -1,4 +1,5 @@
 use crate::{update::init_level, Activity, GameState, Phase, LEVELS};
+use m3_models::ToPcGameEvent;
 use macroquad::{
 	hash,
 	prelude::*,
@@ -46,7 +47,7 @@ fn get_menu_skin() -> Skin {
 }
 
 impl GameState {
-	pub(crate) fn build_menu(&mut self) {
+	pub(crate) async fn build_menu(&mut self, events: &[Option<Vec<ToPcGameEvent>>; 4]) {
 		clear_background(GRAY);
 		let screen_width = screen_width();
 		let screen_height = screen_height();
@@ -56,30 +57,38 @@ impl GameState {
 			(screen_height - menu_size.y) / 2.0
 		);
 		let menu_skin = get_menu_skin();
+		debug!("Menu loop");
 		root_ui().push_skin(&menu_skin);
-		root_ui().window(hash!(), menu_position, menu_size, |ui| {
-			let play_button_id = hash!("play_button");
-			let play_button_text = "Play";
-			let play_button_text_dim =
-				measure_text(play_button_text, None, BUTTON_FONT_SIZE, 1.0);
+		while self.activity == Activity::Menu {
+			clear_background(GRAY);
+			root_ui().window(hash!(), menu_position, menu_size, |ui| {
+				let play_button_id = hash!("play_button");
+				let play_button_text = "Play";
+				let play_button_text_dim =
+					measure_text(play_button_text, None, BUTTON_FONT_SIZE, 1.0);
 
-			let play_button = Button::new("Play")
+				let play_button = Button::new("Play")
                 .position(vec2(200.0-60.0, 60.0))
 				//.size(vec2(play_button_text_width + 20.0, 30.0))
 				//.selected(true)
                 .ui(ui);
 
-			if play_button {
-				debug!("Play pressed");
-				self.activity = Activity::SelectLevel;
-			}
-			if ui.button(None, "Quit") {
-				self.running = false;
-			}
-		});
+				if play_button {
+					debug!("Play pressed");
+					self.activity = Activity::SelectLevel;
+				}
+				if ui.button(None, "Quit") {
+					self.running = false;
+				}
+			});
+			next_frame().await;
+		}
 	}
 
-	pub(crate) fn build_level_menu(&mut self) {
+	pub(crate) async fn build_level_menu(
+		&mut self,
+		events: &[Option<Vec<ToPcGameEvent>>; 4]
+	) {
 		clear_background(GRAY);
 		let screen_width = screen_width();
 		let screen_height = screen_height();
@@ -90,21 +99,24 @@ impl GameState {
 		);
 		let menu_skin = get_menu_skin();
 		root_ui().push_skin(&menu_skin);
-		root_ui().window(hash!(), menu_position, menu_size, |ui| {
-			if ui.button(None, "Tutorial") {
-				debug!("Play pressed");
-				todo!("Tutorial");
-			}
-			for x in 0..LEVELS.len() {
-				if ui.button(None, format!("Level {}", x + 1)) {
-					self.level_num = x;
-					init_level(self);
-					self.activity = Activity::GameRound(Phase::Select);
+		while self.activity == Activity::SelectLevel {
+			root_ui().window(hash!(), menu_position, menu_size, |ui| {
+				if ui.button(None, "Tutorial") {
+					debug!("Play pressed");
+					todo!("Tutorial");
 				}
-			}
-			if ui.button(None, "Quit") {
-				self.running = false;
-			}
-		});
+				for x in 0..LEVELS.len() {
+					if ui.button(None, format!("Level {}", x + 1)) {
+						self.level_num = x;
+						init_level(self);
+						self.activity = Activity::GameRound(Phase::Select);
+					}
+				}
+				if ui.button(None, "Quit") {
+					self.running = false;
+				}
+			});
+			next_frame().await;
+		}
 	}
 }

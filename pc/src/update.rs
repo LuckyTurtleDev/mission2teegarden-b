@@ -97,7 +97,6 @@ pub(crate) fn setup_players(
 	for (x, player_events) in events.iter().enumerate() {
 		if let Some(player_events) = player_events {
 			for event in player_events {
-				debug!("{:?}", event);
 				if let ToPcGameEvent::Solution(solution) = event {
 					let cards: Vec<_> =
 						solution.iter().flatten().map(|f| f.to_owned()).collect();

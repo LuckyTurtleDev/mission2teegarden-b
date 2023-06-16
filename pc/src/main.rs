@@ -139,9 +139,9 @@ async fn run_game() {
 				game_state.draw().await;
 			},
 			Activity::Menu => {
-				game_state.build_menu();
+				game_state.build_menu(&events).await;
 			},
-			Activity::SelectLevel => game_state.build_level_menu()
+			Activity::SelectLevel => game_state.build_level_menu(&events).await
 		}
 		next_frame().await;
 	}
