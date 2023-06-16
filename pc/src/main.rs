@@ -127,21 +127,21 @@ impl GameState {
 async fn run_game() {
 	let mut game_state = GameState::new();
 	while game_state.running {
-		let events = game_state.input_players.get_events();
+		//let events = game_state.input_players.get_events();
 		match game_state.activity {
 			Activity::GameRound(Phase::Select) => {
 				//game_state.update(&events).await;
 				game_state.draw().await;
-				setup_players(&events, &mut game_state)
+				setup_players(&mut game_state)
 			},
 			Activity::GameRound(Phase::Drive) => {
-				game_state.update(&events).await;
+				game_state.update().await;
 				game_state.draw().await;
 			},
 			Activity::Menu => {
-				game_state.build_menu(&events).await;
+				game_state.build_menu().await;
 			},
-			Activity::SelectLevel => game_state.build_level_menu(&events).await
+			Activity::SelectLevel => game_state.build_level_menu().await
 		}
 		next_frame().await;
 	}

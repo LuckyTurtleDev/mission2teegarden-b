@@ -73,10 +73,9 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 }
 
 pub(crate) fn setup_players(
-	events: &[Option<Vec<ToPcGameEvent>>; 4],
 	game_state: &mut GameState
 ) {
-	debug!("setup_players");
+	let events = game_state.input_players.get_events();
 	if game_state.player_count < events.iter().flatten().count() as u8 {
 		if let Some(player) = game_state.input_players.players.iter().flatten().last() {
 			game_state.player_count += 1;
@@ -124,7 +123,8 @@ pub(crate) fn setup_players(
 
 impl GameState {
 	/// update the current state.
-	pub(crate) async fn update(&mut self, events: &[Option<Vec<ToPcGameEvent>>; 4]) {
+	pub(crate) async fn update(&mut self) {
+		let events = self.input_players.get_events();
 		if reset_button_pressed(&events) {
 			init_level(self);
 		} else {
