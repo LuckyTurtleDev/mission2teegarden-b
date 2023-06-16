@@ -15,6 +15,8 @@ use tiled::{LayerTile, LayerType, Loader, Properties};
 pub mod tiles;
 use tiles::{InvalidTile, MapBaseTile, ObjectTile, Passable, PlayerTile, Tile};
 
+pub mod story;
+
 /// allow Serialization of MapProporties
 struct PropertiesSerde(Properties);
 impl Serialize for PropertiesSerde {
