@@ -1,24 +1,34 @@
 use crate::{
-	cards_ev::CarAction, evaluate_cards, GameState, Map, PlayerState, Rotation, LEVELS,
-	LEVEL_NR
+	cards_ev::CarAction, evaluate_cards, Activity, GameRun, GameState, Map, Phase,
+	PlayerState, Rotation, LEVELS
 };
+use bincode::de;
 use m3_map::Orientation;
-use m3_models::{GameOver, Key, NeoPixelColor, ToPcGameEvent, ToPypadeGameEvent};
+use m3_models::{
+	AvailableCards, GameOver, Key, NeoPixelColor, ToPcGameEvent, ToPypadeGameEvent
+};
 use macroquad::prelude::*;
 
-fn wants_reset(events: [Option<Vec<ToPcGameEvent>>; 4]) -> bool {
+fn reset_button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
 	for player_events in events.into_iter().flatten() {
 		for event in player_events {
 			if let ToPcGameEvent::KeyPressed(key) = event {
-				return key == Key::Select;
+				return *key == Key::Select;
 			}
 		}
 	}
 	false
 }
 
-fn reset_level(game_state: &mut GameState) {
-	let level = Map::from_string(LEVELS[LEVEL_NR]).unwrap();
+pub(crate) fn init_level(game_state: &mut GameState) {
+	let mut level = Map::from_string(LEVELS[game_state.level_num]).unwrap();
+	level.cards = AvailableCards {
+		left: 3,
+		right: 3,
+		motor_on: 2,
+		motor_off: 2,
+		wait: 4
+	};
 	for (x, player) in game_state
 		.input_players
 		.players
@@ -27,10 +37,10 @@ fn reset_level(game_state: &mut GameState) {
 		.enumerate()
 	{
 		player.send_events(ToPypadeGameEvent::Retry);
-		game_state.game_run.as_mut().unwrap().player_states[x].position =
-			level.iter_player().next().unwrap().position;
+		/*game_state.game_run.as_mut().unwrap().player_states[x].position =
+		level.iter_player().next().unwrap().position;*/
 	}
-	for (x, player) in game_state
+	/*for (x, player) in game_state
 		.game_run
 		.as_mut()
 		.unwrap()
@@ -40,7 +50,7 @@ fn reset_level(game_state: &mut GameState) {
 	{
 		player.position = level.iter_player().nth(x).unwrap().position;
 		player.orientation = level.iter_player().nth(x).unwrap().orientation;
-	}
+	}*/
 	let player_states = level
 		.iter_player()
 		.map(|f| PlayerState {
@@ -53,12 +63,17 @@ fn reset_level(game_state: &mut GameState) {
 			solution: None
 		})
 		.collect();
-	game_state.game_run.as_mut().unwrap().player_states = player_states;
+	let game_run = GameRun {
+		level,
+		player_states
+	};
+	game_state.game_run = Some(game_run);
 	game_state.delta_time = 0.0;
-	game_state.activity = crate::Activity::Select;
+	game_state.activity = Activity::GameRound(Phase::Select);
 }
 
-fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameState) {
+pub(crate) fn setup_players(game_state: &mut GameState) {
+	let events = game_state.input_players.get_events();
 	if game_state.player_count < events.iter().flatten().count() as u8 {
 		if let Some(player) = game_state.input_players.players.iter().flatten().last() {
 			game_state.player_count += 1;
@@ -88,7 +103,7 @@ fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameS
 			}
 		}
 	}
-	//check if all player has submit an solution.
+	// check if all player has submit an solution.
 	if game_state
 		.game_run
 		.as_ref()
@@ -100,33 +115,29 @@ fn setup_players(events: [Option<Vec<ToPcGameEvent>>; 4], game_state: &mut GameS
 		== game_state.player_count
 		&& game_state.player_count > 0
 	{
-		game_state.activity = crate::Activity::Drive;
+		game_state.activity = crate::Activity::GameRound(Phase::Drive);
 		for player in game_state.input_players.players.iter().flatten() {
 			player.send_events(ToPypadeGameEvent::Driving);
 		}
 	}
 }
+
 impl GameState {
-	///update the current state.
+	/// update the current state.
 	pub(crate) async fn update(&mut self) {
 		let events = self.input_players.get_events();
-		match &mut self.activity {
-			crate::Activity::Select => setup_players(events, self),
-			crate::Activity::Drive => {
-				if wants_reset(events) {
-					reset_level(self);
-				} else {
-					if self.delta_time >= self.movement_time {
-						self.delta_time -= self.movement_time;
-
-						self.next_move();
-					}
-					self.delta_time += get_frame_time();
-				}
-			},
+		if reset_button_pressed(&events) {
+			init_level(self);
+		} else {
+			if self.delta_time >= self.movement_time {
+				self.delta_time -= self.movement_time;
+				self.next_move();
+			}
+			self.delta_time += get_frame_time();
 		}
 	}
 
+	/// calculate next moves
 	pub(crate) fn next_move(&mut self) {
 		if let Some(ref mut game_run) = self.game_run {
 			// update player positions
