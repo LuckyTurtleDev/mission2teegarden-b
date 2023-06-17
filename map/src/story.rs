@@ -21,7 +21,7 @@ pub struct Speech {
 	background: Option<Background>
 }
 
-#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Story {
 	#[serde(default)]
