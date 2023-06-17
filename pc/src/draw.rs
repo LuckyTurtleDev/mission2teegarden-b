@@ -2,15 +2,17 @@ use crate::{tiles::GetTexture, GameState, Orientation, Rotation, TEXTURES};
 use macroquad::{math::Vec2, prelude::*};
 
 impl GameState {
+	///draw the menu
+
 	///draw the current game state
-	pub(crate) async fn draw(&self) {
+	pub(crate) async fn draw(&mut self) {
 		clear_background(BLACK);
 		let screen_width = screen_width();
 		let screen_height = screen_height();
-
 		match &self.game_run {
 			None => todo!(),
 			Some(game_run) => {
+				//draw map
 				let dest_size = (screen_width / game_run.level.width as f32)
 					.min(screen_height / game_run.level.height as f32);
 				//center map, by using offset

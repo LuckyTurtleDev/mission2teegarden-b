@@ -14,16 +14,16 @@ use cards_ev::CarAction;
 use tiles::TEXTURES;
 use usb::Players;
 
-use crate::cards_ev::evaluate_cards;
+use crate::{cards_ev::evaluate_cards, update::setup_players};
 
 use m3_models::AvailableCards;
 mod draw;
+mod menu;
 mod update;
 mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
-const LEVEL_NR: usize = 2;
 
 ///store maps as String binary format
 ///call `Map::from_str()`
@@ -35,9 +35,17 @@ static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 	]
 });
 
+#[derive(PartialEq)]
+enum Phase {
+	Select,
+	Drive
+}
+
+#[derive(PartialEq)]
 enum Activity {
-	Drive,
-	Select
+	Menu,
+	SelectLevel,
+	GameRound(Phase)
 }
 
 #[derive(PartialEq, Clone, Copy, Debug)]
@@ -69,13 +77,15 @@ struct GameState {
 	game_run: Option<GameRun>,
 	input_players: Players,
 	delta_time: f32,
-	movement_time: f32
+	movement_time: f32,
+	level_num: usize,
+	running: bool
 }
 
 impl GameState {
 	fn new() -> GameState {
 		Lazy::force(&TEXTURES);
-		let mut level = Map::from_string(LEVELS[LEVEL_NR]).unwrap(); //tests check if map is vaild
+		let mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		level.cards = AvailableCards {
 			left: 3,
 			right: 3,
@@ -102,22 +112,38 @@ impl GameState {
 		};
 
 		GameState {
-			activity: Activity::Select,
+			activity: Activity::Menu,
 			game_run: Some(game_run),
 			input_players: usb::Players::init(),
 			delta_time: 0.0,
 			movement_time: 0.5,
-			player_count: 0
+			player_count: 0,
+			level_num: 0,
+			running: true
 		}
 	}
 }
 
 async fn run_game() {
 	let mut game_state = GameState::new();
-	loop {
-		game_state.update().await;
-		game_state.draw().await;
-		next_frame().await
+	while game_state.running {
+		//let events = game_state.input_players.get_events();
+		match game_state.activity {
+			Activity::GameRound(Phase::Select) => {
+				//game_state.update(&events).await;
+				game_state.draw().await;
+				setup_players(&mut game_state)
+			},
+			Activity::GameRound(Phase::Drive) => {
+				game_state.update().await;
+				game_state.draw().await;
+			},
+			Activity::Menu => {
+				game_state.build_menu().await;
+			},
+			Activity::SelectLevel => game_state.build_level_menu().await
+		}
+		next_frame().await;
 	}
 }
 
