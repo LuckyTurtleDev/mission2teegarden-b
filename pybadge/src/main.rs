@@ -3,7 +3,7 @@
 #![no_std]
 #![no_main]
 
-use activitys::Activity;
+use activitys::{driving::DrivingState, Activity};
 use bincode::{decode_from_slice, encode_into_slice, error::DecodeError};
 use embedded_graphics::{
 	draw_target::DrawTarget,
@@ -28,9 +28,9 @@ use pybadge_high::{
 };
 
 mod activitys;
-mod usb;
-
+mod assets;
 mod log;
+mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const _CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -107,7 +107,9 @@ struct State<'a> {
 	avaiable_cards: AvailableCards,
 	/// solution created by the player
 	solution: Vec<Card, 12>,
+	submitted_solution: Vec<Card, 12>,
 	activity: Activity,
+	driving_state: DrivingState,
 	cursor: (u8, u8),
 	wait_count: u8,
 	/// positon of the wait card to allow faster update
@@ -123,6 +125,7 @@ impl State<'_> {
 		match self.activity {
 			Activity::Waiting => {},
 			Activity::Selecter => activitys::card_selecter::init(self),
+			Activity::Driving => activitys::driving::init(self),
 			Activity::GameOver(game_over_type) => {
 				activitys::game_over::init(self, &game_over_type.clone())
 			},
@@ -130,9 +133,10 @@ impl State<'_> {
 	}
 	/// only partional update the display, to improve fps
 	fn update_draw(&mut self) {
-		match self.activity {
+		match &self.activity {
 			Activity::Waiting => {},
 			Activity::Selecter => activitys::card_selecter::update(self),
+			Activity::Driving => activitys::driving::update(self),
 			Activity::GameOver(_) => {}
 		}
 	}
@@ -142,7 +146,7 @@ impl State<'_> {
 fn main() -> ! {
 	let text_style = MonoTextStyle::new(&FONT_6X10, Color::WHITE);
 	let mut usb_data = Vec::<u8, 128>::new();
-	let mut pybadge = PyBadge::take().unwrap();
+	let pybadge = PyBadge::take().unwrap();
 	let mut delay = pybadge.delay;
 	let mut display = pybadge.display;
 	let mut buttons = pybadge.buttons;
@@ -193,7 +197,9 @@ fn main() -> ! {
 		card_type_count: 0,
 		avaiable_cards: AvailableCards::default(),
 		solution: Vec::new(),
+		submitted_solution: Vec::new(),
 		activity: Activity::Waiting,
+		driving_state: Default::default(),
 		cursor: (0, 0),
 		wait_count: 1,
 		wait_card_index: None,
@@ -230,11 +236,17 @@ fn main() -> ! {
 						state.avaiable_cards = available_cards.clone();
 						state.init_avaiable_cards = available_cards;
 					},
+					ToPypadeGameEvent::Driving => {
+						state.activity = Activity::Driving;
+						state.driving_state = Default::default();
+					},
 					ToPypadeGameEvent::Retry => state.activity = Activity::Selecter,
 					ToPypadeGameEvent::GameOver(game_over_type) => {
 						state.activity = Activity::GameOver(game_over_type)
 					},
-					ToPypadeGameEvent::CurrentCardIndex(_) => {}
+					ToPypadeGameEvent::CurrentCardIndex(i) => {
+						state.driving_state.active_card = i;
+					}
 				}
 			}
 		}

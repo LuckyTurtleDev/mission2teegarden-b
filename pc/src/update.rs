@@ -115,7 +115,10 @@ pub(crate) fn setup_players(game_state: &mut GameState) {
 		== game_state.player_count
 		&& game_state.player_count > 0
 	{
-		game_state.activity = Activity::GameRound(Phase::Drive);
+		game_state.activity = crate::Activity::Drive;
+		for player in game_state.input_players.players.iter().flatten() {
+			player.send_events(ToPypadeGameEvent::Driving);
+		}
 	}
 }
 
@@ -194,15 +197,15 @@ impl GameState {
 						state.next_action = match &mut state.solution {
 							Some(iter) => {
 								let (index, action) = iter.next().unwrap();
-								if let Some(index) = index {
-									if let Some(ref player) = player {
-										player.send_events(
-											ToPypadeGameEvent::CurrentCardIndex(
-												index as u8
-											)
-										);
-									}
+
+								if let Some(ref player) = player {
+									player.send_events(
+										ToPypadeGameEvent::CurrentCardIndex(
+											index.map(|f| f as u8)
+										)
+									);
 								}
+
 								action
 							},
 							None => Some(CarAction::DriveForward)
