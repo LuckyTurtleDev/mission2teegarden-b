@@ -1,5 +1,3 @@
-
-
 use std::vec;
 
 use crate::{update::init_level, Activity, GameState, Phase, LEVELS};
@@ -12,7 +10,7 @@ use macroquad::{
 
 const BUTTON_FONT_SIZE: u16 = 16;
 
-fn get_menu_skin() -> Skin {
+/*fn get_menu_skin() -> Skin {
 	{
 		let window_style = root_ui()
 			.style_builder()
@@ -48,7 +46,7 @@ fn get_menu_skin() -> Skin {
 			..root_ui().default_skin()
 		}
 	}
-}
+}*/
 
 impl GameState {
 	pub(crate) async fn build_menu(&mut self) {
@@ -60,54 +58,29 @@ impl GameState {
 			(screen_width - menu_size.x) / 2.0,
 			(screen_height - menu_size.y) / 2.0
 		);
-		let menu_skin = get_menu_skin();
-		let focused_button_index = 0;
-		root_ui().push_skin(&menu_skin);
+		/*let menu_skin = get_menu_skin();
+		root_ui().push_skin(&menu_skin);*/
 		while self.activity == Activity::Menu {
 			clear_background(BLACK);
 			root_ui().window(hash!(), menu_position, menu_size, |ui| {
-				let play_button_id = hash!("play_button");
-				let play_button_text = "Play";
-				let play_button_text_dim =
-					measure_text(play_button_text, None, BUTTON_FONT_SIZE, 1.0);
-				let play_button = Button::new("Play")
-                .position(vec2(200.0-60.0, 60.0))
-				.size(vec2(60.0, 15.0))
-				//.selected(true)
-				;
-				let quit_button = Button::new("Quit")
-				.position(vec2(200.0-60.0, 100.0))
-				.size(vec2(60.0, 15.0));
-				let buttons = vec![play_button, quit_button];
-				for (x, button) in buttons.iter().enumerate() {
-					if x == focused_button_index {
-						button.size(vec2(80.0, 20.0)).ui(ui);
-					} else {
-						button.ui(ui);
-					}
-				}
-
-				/*if focused_button_index == 0 {
-					
-					if play_button.size(vec2(300.0, 150.0)).ui(ui) {
-						debug!("Play pressed");
-						self.activity = Activity::SelectLevel;
-					}
-				}
-				else {
+				if Button::new("Play")
+					.position(vec2(200.0 - 60.0, 100.0))
+					.ui(ui)
+				{
 					self.activity = Activity::SelectLevel;
 				}
-				if ui.button(vec2(10.0, 10.0), "Quit") {
+				if Button::new("Quit")
+					.position(vec2(200.0 - 60.0, 300.0))
+					.ui(ui)
+				{
 					self.running = false;
-				}*/
+				}
 			});
 			next_frame().await;
 		}
 	}
 
-	pub(crate) async fn build_level_menu(
-		&mut self
-	) {
+	pub(crate) async fn build_level_menu(&mut self) {
 		clear_background(BLACK);
 		let screen_width = screen_width();
 		let screen_height = screen_height();
@@ -116,8 +89,8 @@ impl GameState {
 			(screen_width - menu_size.x) / 2.0,
 			(screen_height - menu_size.y) / 2.0
 		);
-		let menu_skin = get_menu_skin();
-		root_ui().push_skin(&menu_skin);
+		/*let menu_skin = get_std_menu_skin();
+		root_ui().push_skin(&menu_skin);*/
 		while self.activity == Activity::SelectLevel {
 			root_ui().window(hash!(), menu_position, menu_size, |ui| {
 				if ui.button(None, "Tutorial") {
