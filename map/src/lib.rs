@@ -1,6 +1,7 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
 #![forbid(unused_must_use, unsafe_code)]
 
+use basic_toml as toml;
 use log::debug;
 use m3_models::AvailableCards;
 use ron::error::SpannedError;
@@ -8,12 +9,18 @@ use serde::{
 	ser::{SerializeMap, Serializer},
 	Deserialize, Serialize
 };
-use std::{iter, path::Path};
+use std::{
+	io, iter,
+	path::{Path, PathBuf}
+};
+use story::Story;
 use thiserror::Error;
 use tiled::{LayerTile, LayerType, Loader, Properties};
 
 pub mod tiles;
 use tiles::{InvalidTile, MapBaseTile, ObjectTile, Passable, PlayerTile, Tile};
+
+pub mod story;
 
 /// allow Serialization of MapProporties
 struct PropertiesSerde(Properties);
@@ -54,7 +61,8 @@ impl Serialize for PropertiesSerde {
 struct MapProperties {
 	#[serde(flatten)]
 	cards: AvailableCards,
-	name: Option<String>
+	name: Option<String>,
+	story: Option<String>
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -80,7 +88,9 @@ pub struct Map {
 	pub player_2: Option<Player>,
 	pub player_3: Option<Player>,
 	pub player_4: Option<Player>,
-	pub cards: AvailableCards
+	pub cards: AvailableCards,
+	#[serde(default)]
+	pub story: Story
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]
@@ -140,7 +150,11 @@ pub enum MapError {
 	#[error("{0}")]
 	InvalidOritation(#[from] InvalidOritation),
 	#[error("Failed to load Map Properties:\n{}\n{}", .str, .err)]
-	MapProperty { str: String, err: serde_json::Error }
+	MapProperty { str: String, err: serde_json::Error },
+	#[error("failed to read file story file {1:?}:\n{0}")]
+	IoError(io::Error, PathBuf),
+	#[error("could not prase story toml file:\n{0}")]
+	TomlError(#[from] toml::Error)
 }
 
 impl Map {
@@ -304,6 +318,13 @@ impl Map {
 			player_3.as_ref().ok_or(MapError::PlayerMissing(3))?;
 			player_4.as_ref().ok_or(MapError::PlayerMissing(4))?;
 		}
+
+		let story: Story = if let Some(story_toml) = map_properties.story {
+			toml::from_str(&story_toml)?
+		} else {
+			Default::default()
+		};
+
 		Ok(Map {
 			name,
 			width,
@@ -315,7 +336,8 @@ impl Map {
 			player_2,
 			player_3,
 			player_4,
-			cards
+			cards,
+			story
 		})
 	}
 
