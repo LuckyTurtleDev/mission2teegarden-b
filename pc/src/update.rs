@@ -115,7 +115,7 @@ pub(crate) fn setup_players(game_state: &mut GameState) {
 		== game_state.player_count
 		&& game_state.player_count > 0
 	{
-		game_state.activity = crate::Activity::Drive;
+		game_state.activity = crate::Activity::GameRound(Phase::Drive);
 		for player in game_state.input_players.players.iter().flatten() {
 			player.send_events(ToPypadeGameEvent::Driving);
 		}
