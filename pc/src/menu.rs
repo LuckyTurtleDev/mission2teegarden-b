@@ -14,9 +14,9 @@ fn get_menu_skin() -> Skin {
 		let window_style = root_ui()
 			.style_builder()
 			.background(Image::from_file_with_format(
-                include_bytes!("../assets/img/Menu/menu_background.png"),
-                None,
-            ))
+				include_bytes!("../assets/img/Menu/menu_background.png"),
+				None
+			))
 			.background_margin(RectOffset::new(20.0, 20.0, 10.0, 10.0))
 			.margin(RectOffset::new(-20.0, -30.0, 0.0, 0.0))
 			.build();
@@ -101,13 +101,9 @@ fn evaluate_events(
 
 impl GameState {
 	pub(crate) async fn build_menu(&mut self) {
-		let background_texture = load_texture("../assets/img/Menu/menu_background.png").await.unwrap();
-		draw_texture(
-            background_texture,
-            0.0,
-            0.0,
-            Color::new(1.0, 1.0, 1.0, 1.0), // Farbe, falls das Bild transparent ist
-        );
+		let background_texture = load_texture("assets/img/Menu/menu_background.png")
+			.await
+			.unwrap();
 		let screen_width = screen_width();
 		let screen_height = screen_height();
 		let menu_size = vec2(screen_width * 0.5, screen_height * 0.8);
@@ -128,7 +124,7 @@ impl GameState {
 			button_focused_index = (button_focused_index
 				+ evaluate_events(&events, &mut enter_pressed))
 			.clamp(0, 1);
-			clear_background(BLACK);
+			draw_texture(background_texture, 0.0, 0.0, WHITE);
 			root_ui().window(hash!(), menu_position, menu_size, |ui| {
 				ui.pop_skin();
 				if button_focused_index == 0 {
@@ -161,7 +157,9 @@ impl GameState {
 	}
 
 	pub(crate) async fn build_level_menu(&mut self) {
-		clear_background(BLACK);
+		let background_texture = load_texture("assets/img/Menu/menu_background.png")
+			.await
+			.unwrap();
 		let screen_width = screen_width();
 		let screen_height = screen_height();
 		let menu_size = vec2(screen_width * 0.5, screen_height * 0.8);
@@ -180,7 +178,7 @@ impl GameState {
 			button_focused_index = (button_focused_index
 				+ evaluate_events(&events, &mut enter_pressed))
 			.clamp(0, LEVELS.len() as i8);
-			clear_background(BLACK);
+			draw_texture(background_texture, 0.0, 0.0, WHITE);
 			root_ui().window(hash!(), menu_position, menu_size, |ui| {
 				for (i, _level) in LEVELS.clone().into_iter().enumerate() {
 					ui.pop_skin();
