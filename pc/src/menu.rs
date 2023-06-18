@@ -9,6 +9,24 @@ use macroquad::{
 
 const BUTTON_FONT_SIZE: u16 = 16;
 
+fn get_menu_skin() -> Skin {
+	{
+		let window_style = root_ui()
+			.style_builder()
+			.background(Image::from_file_with_format(
+                include_bytes!("../assets/img/Menu/menu_background.png"),
+                None,
+            ))
+			.background_margin(RectOffset::new(20.0, 20.0, 10.0, 10.0))
+			.margin(RectOffset::new(-20.0, -30.0, 0.0, 0.0))
+			.build();
+		Skin {
+			window_style,
+			..root_ui().default_skin()
+		}
+	}
+}
+
 fn get_button_skin() -> Skin {
 	{
 		let window_style = root_ui()
@@ -83,7 +101,13 @@ fn evaluate_events(
 
 impl GameState {
 	pub(crate) async fn build_menu(&mut self) {
-		clear_background(GRAY);
+		let background_texture = load_texture("../assets/img/Menu/menu_background.png").await.unwrap();
+		draw_texture(
+            background_texture,
+            0.0,
+            0.0,
+            Color::new(1.0, 1.0, 1.0, 1.0), // Farbe, falls das Bild transparent ist
+        );
 		let screen_width = screen_width();
 		let screen_height = screen_height();
 		let menu_size = vec2(screen_width * 0.5, screen_height * 0.8);
