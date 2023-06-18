@@ -113,7 +113,7 @@ impl GameState {
 
 		GameState {
 			activity: Activity::Menu,
-			game_run: Some(game_run),
+			game_run: None,
 			input_players: usb::Players::init(),
 			delta_time: 0.0,
 			movement_time: 0.5,

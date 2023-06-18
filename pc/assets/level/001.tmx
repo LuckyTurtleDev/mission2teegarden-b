@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="256" tileheight="256" infinite="0" nextlayerid="4" nextobjectid="1">
+ <properties>
+  <property name="story">[[pre_level]]
+text = &quot;hi, I am the captain ...&quot;
+profil = &quot;Captain&quot;
+background = &quot;OuterSpace&quot;
+
+[[pre_level]]
+text = &quot;now it is you turn!&quot;
+
+[[after_level]]
+text = &quot;You have mastered the challenge!&quot;
+profil = &quot;Captain&quot;
+</property>
+ </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
  <tileset firstgid="2" source="../img/ObjectTiles/ObjectTiles.tsx"/>
  <tileset firstgid="4" source="../img/Player/Player.tsx"/>
