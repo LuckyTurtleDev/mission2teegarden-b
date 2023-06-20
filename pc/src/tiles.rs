@@ -1,5 +1,8 @@
 pub(crate) use m3_map::tiles::MapBaseTile;
-use m3_map::tiles::{ObjectTile, PlayerTile, Tile};
+use m3_map::{
+	story::{Background, Character},
+	tiles::{ObjectTile, PlayerTile, Tile}
+};
 use macroquad::{prelude::ImageFormat, texture::Texture2D};
 use once_cell::sync::Lazy;
 
@@ -22,7 +25,9 @@ pub(crate) struct Textures {
 	player1_goal: Texture2D,
 	player2_goal: Texture2D,
 	player3_goal: Texture2D,
-	player4_goal: Texture2D
+	player4_goal: Texture2D,
+	captain: Texture2D,
+	outer_space: Texture2D
 }
 
 impl Textures {
@@ -71,6 +76,14 @@ impl Textures {
 			),
 			player4_goal: Texture2D::from_file_with_format(
 				include_bytes!("../assets/img/Player/player4_goal.png"),
+				Some(ImageFormat::Png)
+			),
+			captain: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/Character/captain.png"),
+				Some(ImageFormat::Png)
+			),
+			outer_space: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/Backgrounds/outer_space.png"),
 				Some(ImageFormat::Png)
 			)
 		}
@@ -127,6 +140,22 @@ impl GetTexture for Tile {
 			Tile::MapBaseTile(tile) => tile.texture(textures),
 			Tile::MapObjectTile(tile) => tile.texture(textures),
 			Tile::PlayerTile(tile) => tile.texture(textures)
+		}
+	}
+}
+
+impl GetTexture for Character {
+	fn texture(&self, textures: &Textures) -> Texture2D {
+		match self {
+			Character::Captain => textures.captain
+		}
+	}
+}
+
+impl GetTexture for Background {
+	fn texture(&self, textures: &Textures) -> Texture2D {
+		match self {
+			Background::OuterSpace => textures.outer_space
 		}
 	}
 }
