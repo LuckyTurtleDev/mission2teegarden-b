@@ -2,7 +2,6 @@ use crate::{
 	cards_ev::CarAction, evaluate_cards, Activity, GameRun, GameState, Map, Phase,
 	PlayerState, Rotation, LEVELS
 };
-use bincode::de;
 use m3_map::Orientation;
 use m3_models::{
 	AvailableCards, GameOver, Key, NeoPixelColor, ToPcGameEvent, ToPypadeGameEvent
@@ -10,7 +9,7 @@ use m3_models::{
 use macroquad::prelude::*;
 
 fn reset_button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
-	for player_events in events.into_iter().flatten() {
+	for player_events in events.iter().flatten() {
 		for event in player_events {
 			if let ToPcGameEvent::KeyPressed(key) = event {
 				return *key == Key::Select;
