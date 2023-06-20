@@ -21,7 +21,7 @@ impl GameState {
 				let map_offset_y =
 					(screen_height - dest_size * game_run.level.height as f32) / 2.0;
 				for (x, y, tile) in game_run.level.iter_all() {
-					let texture = tile.texture(&TEXTURES);
+					let texture = tile.texture();
 					let draw_params = DrawTextureParams {
 						dest_size: Some(Vec2::new(dest_size, dest_size)),
 						..Default::default()
