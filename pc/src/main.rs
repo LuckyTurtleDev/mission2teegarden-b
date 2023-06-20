@@ -14,12 +14,12 @@ use cards_ev::CarAction;
 use tiles::TEXTURES;
 use usb::Players;
 
-use crate::{cards_ev::evaluate_cards, update::setup_players};
-
 use m3_models::AvailableCards;
 mod draw;
+use cards_ev::evaluate_cards;
 mod menu;
 mod update;
+use update::setup_players;
 mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
