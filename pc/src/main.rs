@@ -1,10 +1,11 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
 #![forbid(unused_must_use, unsafe_code)]
 
+use assets::{Sounds, SOUNDS};
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::{Map, Orientation};
-use macroquad::{prelude::*, window, Window};
+use macroquad::{audio::play_sound, prelude::*, window, Window};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
 
@@ -20,6 +21,7 @@ use cards_ev::evaluate_cards;
 mod menu;
 mod update;
 use update::setup_players;
+mod assets;
 mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
@@ -125,6 +127,14 @@ impl GameState {
 }
 
 async fn run_game() {
+	Sounds::init().await;
+	play_sound(
+		SOUNDS.get().unwrap().background,
+		macroquad::audio::PlaySoundParams {
+			looped: true,
+			volume: 1.0
+		}
+	);
 	let mut game_state = GameState::new();
 	while game_state.running {
 		//let events = game_state.input_players.get_events();
