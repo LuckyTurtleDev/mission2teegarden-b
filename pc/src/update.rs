@@ -36,20 +36,7 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 		.enumerate()
 	{
 		player.send_events(ToPypadeGameEvent::Retry);
-		/*game_state.game_run.as_mut().unwrap().player_states[x].position =
-		level.iter_player().next().unwrap().position;*/
 	}
-	/*for (x, player) in game_state
-		.game_run
-		.as_mut()
-		.unwrap()
-		.level
-		.iter_mut_player()
-		.enumerate()
-	{
-		player.position = level.iter_player().nth(x).unwrap().position;
-		player.orientation = level.iter_player().nth(x).unwrap().orientation;
-	}*/
 	let player_states = level
 		.iter_player()
 		.map(|f| PlayerState {
@@ -73,6 +60,7 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 
 pub(crate) fn setup_players(game_state: &mut GameState) {
 	let events = game_state.input_players.get_events();
+	debug!("setup players");
 	if game_state.player_count < events.iter().flatten().count() as u8 {
 		if let Some(player) = game_state.input_players.players.iter().flatten().last() {
 			game_state.player_count += 1;
@@ -87,6 +75,7 @@ pub(crate) fn setup_players(game_state: &mut GameState) {
 				_ => panic!()
 			};
 			player.send_events(ToPypadeGameEvent::NeoPixelColor(color));
+			debug!("NeoPixel send");
 		}
 	}
 	// get player cards
