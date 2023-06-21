@@ -1,5 +1,8 @@
 pub(crate) use m3_map::tiles::MapBaseTile;
-use m3_map::tiles::{ObjectTile, PlayerTile, Tile};
+use m3_map::{
+	story::{Background, Character},
+	tiles::{ObjectTile, PlayerTile, Tile}
+};
 use macroquad::{prelude::ImageFormat, texture::Texture2D};
 use once_cell::sync::Lazy;
 
@@ -7,7 +10,7 @@ use once_cell::sync::Lazy;
 pub(crate) static TEXTURES: Lazy<Textures> = Lazy::new(|| Textures::init());
 
 pub(crate) trait GetTexture {
-	fn texture(&self, textures: &Textures) -> Texture2D;
+	fn texture(&self) -> Texture2D;
 }
 
 ///Store all Textures
@@ -22,7 +25,9 @@ pub(crate) struct Textures {
 	player1_goal: Texture2D,
 	player2_goal: Texture2D,
 	player3_goal: Texture2D,
-	player4_goal: Texture2D
+	player4_goal: Texture2D,
+	captain: Texture2D,
+	outer_space: Texture2D
 }
 
 impl Textures {
@@ -72,6 +77,14 @@ impl Textures {
 			player4_goal: Texture2D::from_file_with_format(
 				include_bytes!("../assets/img/Player/player4_goal.png"),
 				Some(ImageFormat::Png)
+			),
+			captain: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/Character/captain.png"),
+				Some(ImageFormat::Png)
+			),
+			outer_space: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/Backgrounds/outer_space.png"),
+				Some(ImageFormat::Png)
 			)
 		}
 	}
@@ -88,45 +101,61 @@ impl Textures {
 
 impl GetTexture for MapBaseTile {
 	///get Texture assioated with this Tile
-	fn texture(&self, textures: &Textures) -> Texture2D {
+	fn texture(&self) -> Texture2D {
 		match self {
-			Self::Grass => textures.grass
+			Self::Grass => TEXTURES.grass
 		}
 	}
 }
 
 impl GetTexture for ObjectTile {
 	///get Texture assioated with this Tile
-	fn texture(&self, textures: &Textures) -> Texture2D {
+	fn texture(&self) -> Texture2D {
 		match self {
-			Self::Stone => textures.stone
+			Self::Stone => TEXTURES.stone
 		}
 	}
 }
 
 impl GetTexture for PlayerTile {
 	///get Texture assioated with this Tile
-	fn texture(&self, textures: &Textures) -> Texture2D {
+	fn texture(&self) -> Texture2D {
 		match self {
-			Self::Car1 => textures.player1_car,
-			Self::Car2 => textures.player2_car,
-			Self::Car3 => textures.player3_car,
-			Self::Car4 => textures.player4_car,
-			Self::GlobalGoal => textures.global_goal,
-			Self::Goal1 => textures.player1_goal,
-			Self::Goal2 => textures.player2_goal,
-			Self::Goal3 => textures.player3_goal,
-			Self::Goal4 => textures.player4_goal
+			Self::Car1 => TEXTURES.player1_car,
+			Self::Car2 => TEXTURES.player2_car,
+			Self::Car3 => TEXTURES.player3_car,
+			Self::Car4 => TEXTURES.player4_car,
+			Self::GlobalGoal => TEXTURES.global_goal,
+			Self::Goal1 => TEXTURES.player1_goal,
+			Self::Goal2 => TEXTURES.player2_goal,
+			Self::Goal3 => TEXTURES.player3_goal,
+			Self::Goal4 => TEXTURES.player4_goal
 		}
 	}
 }
 
 impl GetTexture for Tile {
-	fn texture(&self, textures: &Textures) -> Texture2D {
+	fn texture(&self) -> Texture2D {
 		match self {
-			Tile::MapBaseTile(tile) => tile.texture(textures),
-			Tile::MapObjectTile(tile) => tile.texture(textures),
-			Tile::PlayerTile(tile) => tile.texture(textures)
+			Tile::MapBaseTile(tile) => tile.texture(),
+			Tile::MapObjectTile(tile) => tile.texture(),
+			Tile::PlayerTile(tile) => tile.texture()
+		}
+	}
+}
+
+impl GetTexture for Character {
+	fn texture(&self) -> Texture2D {
+		match self {
+			Character::Captain => TEXTURES.captain
+		}
+	}
+}
+
+impl GetTexture for Background {
+	fn texture(&self) -> Texture2D {
+		match self {
+			Background::OuterSpace => TEXTURES.outer_space
 		}
 	}
 }
