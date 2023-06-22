@@ -3,10 +3,10 @@
  <properties>
   <property name="story">[[pre_level]]
 text = &quot;&quot;&quot;\
-	Dear crew after a long journey we have final reached SOMEPLANET. \
-	This has taken us one step closer to create a new home for humankind. \
-	Because the planet might be dangerous, we can not send humans to it yet. \
-	So it is up to our scientist and programmers, with theire robots to explore the planet and build a first base. \
+	Dear crew after a long journey we have final reached SOMEPLANET. \n
+	This has taken us one step closer to create a new home for humankind. \n
+	Because the planet might be dangerous, we can not send humans to it yet. \n
+	So it is up to our scientist and programmers, with theire robots to explore the planet and build a first base. \n
        &quot;&quot;&quot;
 profil = &quot;Captain&quot;
 background = &quot;OuterSpace&quot;

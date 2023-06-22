@@ -18,6 +18,7 @@ use m3_models::AvailableCards;
 mod draw;
 use cards_ev::evaluate_cards;
 mod menu;
+mod story_display;
 mod update;
 use update::setup_players;
 mod usb;
@@ -37,8 +38,10 @@ static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 
 #[derive(PartialEq)]
 enum Phase {
+	Introduction,
 	Select,
-	Drive
+	Drive,
+	Finish
 }
 
 #[derive(PartialEq)]
@@ -129,6 +132,15 @@ async fn run_game() {
 	while game_state.running {
 		//let events = game_state.input_players.get_events();
 		match game_state.activity {
+			Activity::GameRound(Phase::Introduction) => {
+				// Tutorial/Story
+				game_state.display_speech().await;
+				game_state.activity = Activity::GameRound(Phase::Select);
+			},
+			Activity::GameRound(Phase::Finish) => {
+				// Story
+				game_state.activity = Activity::Menu;
+			},
 			Activity::GameRound(Phase::Select) => {
 				//game_state.update(&events).await;
 				game_state.draw().await;
