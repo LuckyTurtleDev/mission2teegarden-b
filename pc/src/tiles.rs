@@ -16,6 +16,10 @@ pub(crate) trait GetTexture {
 ///Store all Textures
 pub(crate) struct Textures {
 	grass: Texture2D,
+	grass_corner_sand: Texture2D,
+	half_grass_sand: Texture2D,
+	sand: Texture2D,
+	sand_corner_grass: Texture2D,
 	stone: Texture2D,
 	player1_car: Texture2D,
 	player2_car: Texture2D,
@@ -36,6 +40,22 @@ impl Textures {
 		Textures {
 			grass: Texture2D::from_file_with_format(
 				include_bytes!("../assets/img/BaseTiles/grass.png"),
+				Some(ImageFormat::Png)
+			),
+			grass_corner_sand: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/BaseTiles/grass_corner_sand.png"),
+				Some(ImageFormat::Png)
+			),
+			half_grass_sand: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/BaseTiles/half_grass_sand.png"),
+				Some(ImageFormat::Png)
+			),
+			sand: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/BaseTiles/sand.png"),
+				Some(ImageFormat::Png)
+			),
+			sand_corner_grass: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/BaseTiles/sand_corner_grass.png"),
 				Some(ImageFormat::Png)
 			),
 			stone: Texture2D::from_file_with_format(
@@ -103,7 +123,11 @@ impl GetTexture for MapBaseTile {
 	///get Texture assioated with this Tile
 	fn texture(&self) -> Texture2D {
 		match self {
-			Self::Grass => TEXTURES.grass
+			Self::Grass => TEXTURES.grass,
+			Self::GrassCornerSand => TEXTURES.grass_corner_sand,
+			Self::HalfGrassSand => TEXTURES.sand_corner_grass,
+			Self::Sand => TEXTURES.sand,
+			Self::SandCornerGrass => TEXTURES.sand
 		}
 	}
 }
