@@ -10,6 +10,7 @@ use serde::{
 	Deserialize, Serialize
 };
 use std::{
+	f32::consts::PI,
 	io, iter,
 	path::{Path, PathBuf}
 };
@@ -100,6 +101,18 @@ pub enum Orientation {
 	South,
 	East,
 	West
+}
+
+impl Orientation {
+	/// return the rotate of the Orientation in grad
+	pub fn rotation(&self) -> f32 {
+		match self {
+			Self::North => 0.0,
+			Self::South => PI,
+			Self::East => 0.5 * PI,
+			Self::West => 1.5 * PI
+		}
+	}
 }
 
 #[derive(Error, Debug)]

@@ -125,9 +125,9 @@ impl GetTexture for MapBaseTile {
 		match self {
 			Self::Grass => TEXTURES.grass,
 			Self::GrassCornerSand => TEXTURES.grass_corner_sand,
-			Self::HalfGrassSand => TEXTURES.sand_corner_grass,
+			Self::HalfGrassSand => TEXTURES.half_grass_sand,
 			Self::Sand => TEXTURES.sand,
-			Self::SandCornerGrass => TEXTURES.sand
+			Self::SandCornerGrass => TEXTURES.sand_corner_grass
 		}
 	}
 }
