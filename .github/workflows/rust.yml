@@ -182,7 +182,7 @@ jobs:
               ~/.cargo/registry
               target
             key: "Clippy ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
-        - uses: LuckyTurtleDev/clippy-check@patch-1
+        - uses: LoliGothick/clippy-check@master
           with:
             token: ${{ secrets.GITHUB_TOKEN }}
             target: thumbv7em-none-eabihf
