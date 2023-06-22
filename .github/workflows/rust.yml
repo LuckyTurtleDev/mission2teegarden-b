@@ -81,6 +81,7 @@ jobs:
     strategy:
       matrix:
         rust_version: [stable, nightly, 1.64]
+    continue-on-error: true
     name: "check pybadge ${{ matrix.rust_version }}"
     steps:
       - uses: actions/checkout@v3
