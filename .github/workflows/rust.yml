@@ -9,11 +9,11 @@ on:
 jobs:
   test_pc:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu, windows, macos]
         rust_version: [stable, 1.64]
     name: "test pc ${{ matrix.os }} ${{ matrix.rust_version }}"
-    continue-on-error: true
     runs-on: ${{ matrix.os }}-latest
     steps:
       - uses: actions/checkout@v3
@@ -43,9 +43,9 @@ jobs:
           
   build_pc:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu, windows, macos]
-    continue-on-error: true
     name: build ${{ matrix.os }}
     runs-on: ${{ matrix.os }}-latest
     needs: [test_pc]
