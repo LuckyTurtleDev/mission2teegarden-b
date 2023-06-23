@@ -24,6 +24,8 @@ mod update;
 use update::setup_players;
 mod assets;
 use assets::SOUNDS;
+
+use crate::assets::MUSIC;
 mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
@@ -157,7 +159,7 @@ fn main() {
 	info!("🚗 {CARGO_PKG_NAME}  v{CARGO_PKG_VERSION} 🚗");
 	let (_stream, stream_handle) =
 		OutputStream::try_default().expect("failed to access default audio sink");
-	let test = Cursor::new(SOUNDS.music);
+	let test = Cursor::new(MUSIC.holiznacc0_mutant_club);
 	let music_source = Decoder::new(test).unwrap();
 	stream_handle
 		.play_raw(music_source.convert_samples())
