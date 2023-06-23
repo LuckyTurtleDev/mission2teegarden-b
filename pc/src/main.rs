@@ -81,7 +81,7 @@ struct GameState {
 	delta_time: f32,
 	movement_time: f32,
 	level_num: usize,
-	running: bool,
+	running: bool
 }
 
 impl GameState {
