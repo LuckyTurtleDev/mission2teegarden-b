@@ -13,7 +13,6 @@ basic-toml = "0.1.2"
 clap = { version = "4.2.5", features = ["derive"] }
 log = "0.4.17"
 m3-models = { version = "0.1.0", path = "../models", features = ["serde"] }
-macroquad = "0.3.25"
 num_enum = "0.6.1"
 ron = "0.8.0"
 serde = { version = "1.0.163", features = ["derive"] }
