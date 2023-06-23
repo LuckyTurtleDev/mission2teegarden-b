@@ -1,13 +1,14 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
 #![forbid(unused_must_use, unsafe_code)]
 
-use assets::{Sounds, SOUNDS};
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::{Map, Orientation};
 use macroquad::{audio::play_sound, prelude::*, window, Window};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
+use rodio::{Decoder, OutputStream, Source};
+use std::io::Cursor;
 
 mod cards_ev;
 mod tiles;
@@ -22,6 +23,7 @@ mod menu;
 mod update;
 use update::setup_players;
 mod assets;
+use assets::SOUNDS;
 mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
@@ -127,14 +129,6 @@ impl GameState {
 }
 
 async fn run_game() {
-	Sounds::init().await;
-	play_sound(
-		SOUNDS.get().unwrap().background,
-		macroquad::audio::PlaySoundParams {
-			looped: true,
-			volume: 1.0
-		}
-	);
 	let mut game_state = GameState::new();
 	while game_state.running {
 		//let events = game_state.input_players.get_events();
@@ -161,6 +155,13 @@ fn main() {
 	my_env_logger_style::set_timestamp_precision(TimestampPrecision::Disable);
 	my_env_logger_style::just_log();
 	info!("🚗 {CARGO_PKG_NAME}  v{CARGO_PKG_VERSION} 🚗");
+	let (_stream, stream_handle) =
+		OutputStream::try_default().expect("failed to access default audio sink");
+	let test = Cursor::new(SOUNDS.music);
+	let music_source = Decoder::new(test).unwrap();
+	stream_handle
+		.play_raw(music_source.convert_samples())
+		.unwrap();
 	Window::from_config(
 		window::Conf {
 			sample_count: 8, //anti-aliasing

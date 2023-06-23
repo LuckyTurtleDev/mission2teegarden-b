@@ -1,7 +1,25 @@
-use std::future::Future;
+use once_cell::sync::Lazy;
+use rodio::OutputStream;
 
+pub(crate) const SOUNDS: Sounds = Sounds {
+	music: include_bytes!(
+		"/home/lukas/git/m3/pc/assets/sound/music/HoliznaCC0 - Mutant Club.mp3"
+	)
+};
+
+pub(crate) struct Sounds {
+	pub(crate) music: &'static [u8]
+}
+
+//pub(crate) static SOUND_OUTPUT: Lazy<OutputStream> = Lazy::new(|| OutputStream::try_default().expect("failed to access default audio sink").1);
+//pub fn test() {
+//	let (_stream, stream_handle) = OutputStream::try_default().expect("failed to access default audio sink");
+//}
+/*
 use macroquad::audio::{load_sound_from_bytes, Sound};
 use once_cell::sync::OnceCell;
+
+pub(crate) struct Mp3(());
 
 pub(crate) static SOUNDS: OnceCell<Sounds> = OnceCell::new();
 
@@ -18,3 +36,4 @@ impl Sounds {
 		SOUNDS.set(sound).unwrap_or_else(|_| panic!());
 	}
 }
+*/
