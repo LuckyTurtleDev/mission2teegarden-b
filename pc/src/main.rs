@@ -4,29 +4,24 @@
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::{Map, Orientation};
-use macroquad::{audio::play_sound, prelude::*, window, Window};
+use m3_models::AvailableCards;
+use macroquad::{prelude::*, window, Window};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
-use rodio::{Decoder, OutputStream, Source};
-use std::io::Cursor;
+use sound::SoundPlayer;
 
+mod assets;
 mod cards_ev;
-mod tiles;
-use cards_ev::CarAction;
-use tiles::TEXTURES;
-use usb::Players;
-
-use m3_models::AvailableCards;
+use cards_ev::{evaluate_cards, CarAction};
 mod draw;
-use cards_ev::evaluate_cards;
 mod menu;
+mod sound;
+mod tiles;
+use tiles::TEXTURES;
 mod update;
 use update::setup_players;
-mod assets;
-use assets::SOUNDS;
-
-use crate::assets::MUSIC;
 mod usb;
+use usb::Players;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -78,6 +73,7 @@ struct GameRun {
 }
 
 struct GameState {
+	sound_player: SoundPlayer,
 	player_count: u8,
 	activity: Activity,
 	game_run: Option<GameRun>,
@@ -85,11 +81,12 @@ struct GameState {
 	delta_time: f32,
 	movement_time: f32,
 	level_num: usize,
-	running: bool
+	running: bool,
 }
 
 impl GameState {
 	fn new() -> GameState {
+		let sound_player = sound::SoundPlayer::new();
 		Lazy::force(&TEXTURES);
 		let mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		level.cards = AvailableCards {
@@ -118,6 +115,7 @@ impl GameState {
 		};
 
 		GameState {
+			sound_player,
 			activity: Activity::Menu,
 			game_run: None,
 			input_players: usb::Players::init(),
@@ -133,6 +131,7 @@ impl GameState {
 async fn run_game() {
 	let mut game_state = GameState::new();
 	while game_state.running {
+		game_state.sound_player.poll();
 		//let events = game_state.input_players.get_events();
 		match game_state.activity {
 			Activity::GameRound(Phase::Select) => {
@@ -149,6 +148,7 @@ async fn run_game() {
 			},
 			Activity::SelectLevel => game_state.build_level_menu().await
 		}
+		log::warn!("hii");
 		next_frame().await;
 	}
 }
@@ -157,13 +157,6 @@ fn main() {
 	my_env_logger_style::set_timestamp_precision(TimestampPrecision::Disable);
 	my_env_logger_style::just_log();
 	info!("🚗 {CARGO_PKG_NAME}  v{CARGO_PKG_VERSION} 🚗");
-	let (_stream, stream_handle) =
-		OutputStream::try_default().expect("failed to access default audio sink");
-	let test = Cursor::new(MUSIC.holiznacc0_mutant_club);
-	let music_source = Decoder::new(test).unwrap();
-	stream_handle
-		.play_raw(music_source.convert_samples())
-		.unwrap();
 	Window::from_config(
 		window::Conf {
 			sample_count: 8, //anti-aliasing
