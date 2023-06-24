@@ -14,13 +14,13 @@ use cards_ev::CarAction;
 use tiles::TEXTURES;
 use usb::Players;
 
-use m3_models::AvailableCards;
+use m3_models::{AvailableCards, ToPypadeGameEvent};
 mod draw;
 use cards_ev::evaluate_cards;
 mod menu;
 mod story_display;
 mod update;
-use update::setup_players;
+use update::{activate_players, init_level, setup_players};
 mod usb;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
@@ -132,10 +132,8 @@ impl GameState {
 async fn run_game() {
 	let mut game_state = GameState::new();
 	while game_state.running {
-		//let events = game_state.input_players.get_events();
 		match game_state.activity {
 			Activity::GameRound(Phase::Introduction) => {
-				// Tutorial/Story
 				game_state
 					.display_speech(
 						&game_state
@@ -148,6 +146,16 @@ async fn run_game() {
 							.clone()
 					)
 					.await;
+				activate_players(
+					&mut game_state,
+					ToPypadeGameEvent::NewLevel(AvailableCards {
+						left: 3,
+						right: 3,
+						motor_on: 2,
+						motor_off: 2,
+						wait: 9
+					})
+				);
 				game_state.activity = Activity::GameRound(Phase::Select);
 			},
 			Activity::GameRound(Phase::Finish) => {
@@ -176,7 +184,10 @@ async fn run_game() {
 			Activity::Menu => {
 				game_state.build_menu().await;
 			},
-			Activity::SelectLevel => game_state.build_level_menu().await
+			Activity::SelectLevel => {
+				game_state.build_level_menu().await;
+				init_level(&mut game_state);
+			}
 		}
 		next_frame().await;
 	}
