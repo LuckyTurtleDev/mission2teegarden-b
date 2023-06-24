@@ -18,6 +18,7 @@ use m3_models::AvailableCards;
 mod draw;
 use cards_ev::evaluate_cards;
 mod menu;
+mod story_display;
 mod update;
 use update::setup_players;
 mod usb;
@@ -37,8 +38,10 @@ static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 
 #[derive(PartialEq)]
 enum Phase {
+	Introduction,
 	Select,
-	Drive
+	Drive,
+	Finish
 }
 
 #[derive(PartialEq)]
@@ -68,7 +71,8 @@ struct PlayerState {
 
 struct GameRun {
 	level: Map,
-	player_states: Vec<PlayerState>
+	player_states: Vec<PlayerState>,
+	player_finished_level: u8
 }
 
 struct GameState {
@@ -108,7 +112,8 @@ impl GameState {
 			.collect();
 		let game_run = GameRun {
 			level,
-			player_states
+			player_states,
+			player_finished_level: 0
 		};
 
 		GameState {
@@ -129,8 +134,38 @@ async fn run_game() {
 	while game_state.running {
 		//let events = game_state.input_players.get_events();
 		match game_state.activity {
+			Activity::GameRound(Phase::Introduction) => {
+				// Tutorial/Story
+				game_state
+					.display_speech(
+						&game_state
+							.game_run
+							.as_ref()
+							.unwrap()
+							.level
+							.story
+							.pre_level
+							.clone()
+					)
+					.await;
+				game_state.activity = Activity::GameRound(Phase::Select);
+			},
+			Activity::GameRound(Phase::Finish) => {
+				game_state
+					.display_speech(
+						&game_state
+							.game_run
+							.as_ref()
+							.unwrap()
+							.level
+							.story
+							.after_level
+							.clone()
+					)
+					.await;
+				game_state.activity = Activity::SelectLevel;
+			},
 			Activity::GameRound(Phase::Select) => {
-				//game_state.update(&events).await;
 				game_state.draw().await;
 				setup_players(&mut game_state)
 			},

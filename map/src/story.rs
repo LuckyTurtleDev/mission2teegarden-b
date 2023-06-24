@@ -14,11 +14,11 @@ pub enum Background {
 #[serde(deny_unknown_fields)]
 pub struct Speech {
 	/// The text, which should be show at the botton of the screen.
-	text: String,
+	pub text: String,
 	/// Profile picture of the speaking character
-	profil: Option<Character>,
+	pub profil: Option<Character>,
 	/// Background picture, which is shown during the speech
-	background: Option<Background>
+	pub background: Option<Background>
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]

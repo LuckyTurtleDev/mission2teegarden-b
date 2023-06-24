@@ -51,7 +51,8 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 		.collect();
 	let game_run = GameRun {
 		level,
-		player_states
+		player_states,
+		player_finished_level: 0
 	};
 	game_state.game_run = Some(game_run);
 	game_state.delta_time = 0.0;
@@ -60,7 +61,6 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 
 pub(crate) fn setup_players(game_state: &mut GameState) {
 	let events = game_state.input_players.get_events();
-	debug!("setup players");
 	if game_state.player_count < events.iter().flatten().count() as u8 {
 		if let Some(player) = game_state.input_players.players.iter().flatten().last() {
 			game_state.player_count += 1;
@@ -75,7 +75,6 @@ pub(crate) fn setup_players(game_state: &mut GameState) {
 				_ => panic!()
 			};
 			player.send_events(ToPypadeGameEvent::NeoPixelColor(color));
-			debug!("NeoPixel send");
 		}
 	}
 	// get player cards
@@ -118,6 +117,11 @@ impl GameState {
 			init_level(self);
 		} else {
 			if self.delta_time >= self.movement_time {
+				if self.game_run.as_ref().unwrap().player_finished_level
+					== self.player_count
+				{
+					self.activity = Activity::GameRound(Phase::Finish);
+				}
 				self.delta_time -= self.movement_time;
 				self.next_move();
 			}
@@ -142,10 +146,12 @@ impl GameState {
 						&& player.position.1 == global_goal.1
 					{
 						player_state.finished = true;
+						game_run.player_finished_level += 1;
 					}
 				} else if let Some(goal) = player.goal {
 					if player.position.0 == goal.0 && player.position.1 == goal.1 {
 						player_state.finished = true;
+						game_run.player_finished_level += 1;
 					}
 				}
 			}
