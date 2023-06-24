@@ -151,7 +151,7 @@ impl GameState {
 		);
 		let button_skin = get_button_skin();
 		let button_focused_skin = get_button_focused_skin();
-		let mut skin: &Skin = &button_focused_skin.clone();
+		let skin: &Skin = &button_focused_skin.clone();
 		let mut enter_pressed = false;
 		let mut button_focused_index = 0;
 

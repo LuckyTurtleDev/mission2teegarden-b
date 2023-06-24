@@ -71,7 +71,8 @@ struct PlayerState {
 
 struct GameRun {
 	level: Map,
-	player_states: Vec<PlayerState>
+	player_states: Vec<PlayerState>,
+	player_finished_level: u8
 }
 
 struct GameState {
@@ -111,7 +112,8 @@ impl GameState {
 			.collect();
 		let game_run = GameRun {
 			level,
-			player_states
+			player_states,
+			player_finished_level: 0
 		};
 
 		GameState {
@@ -134,15 +136,14 @@ async fn run_game() {
 		match game_state.activity {
 			Activity::GameRound(Phase::Introduction) => {
 				// Tutorial/Story
-				game_state.display_speech().await;
+				game_state.display_speech_regarding_activity().await;
 				game_state.activity = Activity::GameRound(Phase::Select);
 			},
 			Activity::GameRound(Phase::Finish) => {
-				// Story
-				game_state.activity = Activity::Menu;
+				game_state.display_speech_regarding_activity().await;
+				game_state.activity = Activity::SelectLevel;
 			},
 			Activity::GameRound(Phase::Select) => {
-				//game_state.update(&events).await;
 				game_state.draw().await;
 				setup_players(&mut game_state)
 			},

@@ -5,7 +5,7 @@ impl GameState {
 	///draw the menu
 
 	///draw the current game state
-	pub(crate) async fn draw(&mut self) {
+	pub(crate) async fn draw(&self) {
 		clear_background(BLACK);
 		let screen_width = screen_width();
 		let screen_height = screen_height();
