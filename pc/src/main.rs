@@ -136,11 +136,33 @@ async fn run_game() {
 		match game_state.activity {
 			Activity::GameRound(Phase::Introduction) => {
 				// Tutorial/Story
-				game_state.display_speech_regarding_activity().await;
+				game_state
+					.display_speech(
+						&game_state
+							.game_run
+							.as_ref()
+							.unwrap()
+							.level
+							.story
+							.pre_level
+							.clone()
+					)
+					.await;
 				game_state.activity = Activity::GameRound(Phase::Select);
 			},
 			Activity::GameRound(Phase::Finish) => {
-				game_state.display_speech_regarding_activity().await;
+				game_state
+					.display_speech(
+						&game_state
+							.game_run
+							.as_ref()
+							.unwrap()
+							.level
+							.story
+							.after_level
+							.clone()
+					)
+					.await;
 				game_state.activity = Activity::SelectLevel;
 			},
 			Activity::GameRound(Phase::Select) => {

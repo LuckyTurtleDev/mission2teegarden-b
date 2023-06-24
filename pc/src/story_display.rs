@@ -8,7 +8,7 @@ use macroquad::{
 	window::next_frame
 };
 
-use crate::{tiles::GetTexture, Activity, GameState, Phase};
+use crate::{tiles::GetTexture, GameState};
 
 /// Check if any button is pressed.
 fn button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
@@ -35,98 +35,97 @@ fn get_font_size(text_lines: &Vec<&str>, screen_width: f32) -> u16 {
 	(font_size as f32 * screen_width / longest_line_width) as u16
 }
 
-async fn display_speech(speeches: &Vec<Speech>, game_state: &mut GameState) {
-	for speech in speeches {
-		let mut events = game_state.input_players.get_events();
-		let speech_lines: &Vec<&str> = &speech.text.split('\n').collect();
-		let speech_line_groups: Vec<Vec<&str>> =
-			speech_lines.chunks(5).map(|chunk| chunk.to_vec()).collect();
-		while !button_pressed(&events) {
-			for group in &speech_line_groups {
-				events = game_state.input_players.get_events();
-				while !button_pressed(&events) {
-					let screen_width = screen_width();
-					let screen_height = screen_height();
-					if let Some(background) = &speech.background {
-						let background_texture = background.texture();
-						let draw_params = DrawTextureParams {
-							dest_size: Some(Vec2::new(screen_width, screen_height)),
-							..Default::default()
-						};
-						draw_texture_ex(background_texture, 0.0, 0.0, WHITE, draw_params);
-					} else {
-						game_state.draw().await;
-					}
-					let text_box_height = screen_height / 4.0;
-					let text_box_margin_bottom = screen_height / 20.0;
-					let text_box_position_y =
-						screen_height - text_box_height - text_box_margin_bottom;
-					// draw text box
-					draw_rectangle(
-						0.0,
-						text_box_position_y,
-						screen_width,
-						text_box_height,
-						Color::new(0.0, 0.0, 0.0, 0.8)
-					);
-					// draw narrator
-					let mut profil_texture_width = 0.0;
-					if let Some(profil) = &speech.profil {
-						let profil_texture = profil.texture();
-						profil_texture_width = profil_texture.width() * text_box_height
-							/ profil_texture.height();
-						let draw_params = DrawTextureParams {
-							dest_size: Some(Vec2::new(
-								profil_texture_width,
-								text_box_height
-							)),
-							..Default::default()
-						};
-						draw_texture_ex(
-							profil_texture,
-							0.0,
-							text_box_position_y,
-							WHITE,
-							draw_params
-						);
-					}
-					// draw text
-					let font_size =
-						get_font_size(group, screen_width - profil_texture_width - 20.0);
-					for (x, line) in group.iter().enumerate() {
-						//let text_dim = measure_text(line, None, font_size, 1.0);
-						let max_text_dim =
-							measure_text(&speech.text, None, font_size, 1.0);
-						let text_params = TextParams {
-							font_size,
-							color: WHITE,
-							..Default::default()
-						};
-						draw_text_ex(
-							line,
-							profil_texture_width + 10.0,
-							text_box_position_y
-								+ max_text_dim.height * x as f32 + max_text_dim.offset_y
-								+ 20.0,
-							text_params
-						);
-					}
-					events = game_state.input_players.get_events();
-					next_frame().await;
-				}
-			}
-		}
-	}
-}
-
 impl GameState {
 	/// Display the story text for the current level.
-	pub(crate) async fn display_speech_regarding_activity(&mut self) {
-		if let Some(ref mut game_run) = self.game_run {
-			if let Activity::GameRound(Phase::Introduction) = self.activity {
-				display_speech(&game_run.level.story.pre_level.clone(), self).await;
-			} else if let Activity::GameRound(Phase::Finish) = self.activity {
-				display_speech(&game_run.level.story.after_level.clone(), self).await;
+	pub(crate) async fn display_speech(&mut self, speeches: &Vec<Speech>) {
+		for speech in speeches {
+			let mut events = self.input_players.get_events();
+			let speech_lines: &Vec<&str> = &speech.text.split('\n').collect();
+			let speech_line_groups: Vec<Vec<&str>> =
+				speech_lines.chunks(5).map(|chunk| chunk.to_vec()).collect();
+			while !button_pressed(&events) {
+				for group in &speech_line_groups {
+					events = self.input_players.get_events();
+					while !button_pressed(&events) {
+						let screen_width = screen_width();
+						let screen_height = screen_height();
+						if let Some(background) = &speech.background {
+							let background_texture = background.texture();
+							let draw_params = DrawTextureParams {
+								dest_size: Some(Vec2::new(screen_width, screen_height)),
+								..Default::default()
+							};
+							draw_texture_ex(
+								background_texture,
+								0.0,
+								0.0,
+								WHITE,
+								draw_params
+							);
+						} else {
+							self.draw().await;
+						}
+						let text_box_height = screen_height / 4.0;
+						let text_box_margin_bottom = screen_height / 20.0;
+						let text_box_position_y =
+							screen_height - text_box_height - text_box_margin_bottom;
+						// draw text box
+						draw_rectangle(
+							0.0,
+							text_box_position_y,
+							screen_width,
+							text_box_height,
+							Color::new(0.0, 0.0, 0.0, 0.8)
+						);
+						// draw narrator
+						let mut profil_texture_width = 0.0;
+						if let Some(profil) = &speech.profil {
+							let profil_texture = profil.texture();
+							profil_texture_width = profil_texture.width()
+								* text_box_height / profil_texture
+								.height();
+							let draw_params = DrawTextureParams {
+								dest_size: Some(Vec2::new(
+									profil_texture_width,
+									text_box_height
+								)),
+								..Default::default()
+							};
+							draw_texture_ex(
+								profil_texture,
+								0.0,
+								text_box_position_y,
+								WHITE,
+								draw_params
+							);
+						}
+						// draw text
+						let font_size = get_font_size(
+							group,
+							screen_width - profil_texture_width - 20.0
+						);
+						for (x, line) in group.iter().enumerate() {
+							//let text_dim = measure_text(line, None, font_size, 1.0);
+							let max_text_dim =
+								measure_text(&speech.text, None, font_size, 1.0);
+							let text_params = TextParams {
+								font_size,
+								color: WHITE,
+								..Default::default()
+							};
+							draw_text_ex(
+								line,
+								profil_texture_width + 10.0,
+								text_box_position_y
+									+ max_text_dim.height * x as f32 + max_text_dim.offset_y
+									+ 20.0,
+								text_params
+							);
+						}
+						events = self.input_players.get_events();
+						next_frame().await;
+					}
+				}
 			}
 		}
 	}
