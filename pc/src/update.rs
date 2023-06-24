@@ -19,6 +19,15 @@ fn reset_button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
 	false
 }
 
+pub(crate) fn activate_players(
+	game_state: &mut GameState,
+	to_pybadge_game_event: ToPypadeGameEvent
+) {
+	for player in game_state.input_players.players.iter().flatten() {
+		player.send_events(to_pybadge_game_event.clone());
+	}
+}
+
 pub(crate) fn init_level(game_state: &mut GameState) {
 	let mut level = Map::from_string(LEVELS[game_state.level_num]).unwrap();
 	level.cards = AvailableCards {
@@ -28,15 +37,6 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 		motor_off: 2,
 		wait: 4
 	};
-	for (x, player) in game_state
-		.input_players
-		.players
-		.iter()
-		.flatten()
-		.enumerate()
-	{
-		player.send_events(ToPypadeGameEvent::Retry);
-	}
 	let player_states = level
 		.iter_player()
 		.map(|f| PlayerState {
@@ -56,7 +56,6 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 	};
 	game_state.game_run = Some(game_run);
 	game_state.delta_time = 0.0;
-	game_state.activity = Activity::GameRound(Phase::Select);
 }
 
 pub(crate) fn setup_players(game_state: &mut GameState) {
@@ -115,6 +114,7 @@ impl GameState {
 		let events = self.input_players.get_events();
 		if reset_button_pressed(&events) {
 			init_level(self);
+			activate_players(self, ToPypadeGameEvent::Retry)
 		} else {
 			if self.delta_time >= self.movement_time {
 				if self.game_run.as_ref().unwrap().player_finished_level
