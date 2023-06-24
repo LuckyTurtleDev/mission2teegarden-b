@@ -1,9 +1,8 @@
 use log::debug;
 use m3_models::ToPcGameEvent;
 use macroquad::{
-	hash,
 	math::Vec2,
-	prelude::{screen_height, screen_width, vec2, BLACK, WHITE},
+	prelude::{draw_rectangle, screen_height, screen_width, vec2, Color, BLACK, WHITE},
 	text::{draw_text_ex, measure_text, TextParams},
 	texture::{draw_texture_ex, DrawTextureParams},
 	ui::{root_ui, widgets},
@@ -12,6 +11,7 @@ use macroquad::{
 
 use crate::{tiles::GetTexture, Activity, GameState, Phase};
 
+/// Check if any button is pressed.
 fn button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
 	for player_events in events.iter().flatten() {
 		for event in player_events {
@@ -23,40 +23,85 @@ fn button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
 	false
 }
 
+/// Get the font size that will fit the longest line of text on the screen.
+fn get_font_size(text_lines: &Vec<&str>, screen_width: f32) -> u16 {
+	let font_size = 20;
+	let mut longest_line_width = 0.0;
+	for line in text_lines {
+		let text_dim = measure_text(line, None, font_size, 1.0);
+		if text_dim.width > longest_line_width {
+			longest_line_width = text_dim.width;
+		}
+	}
+	(font_size as f32 * screen_width / longest_line_width) as u16
+}
+
 impl GameState {
+	/// Display the story text for the current level.
 	pub(crate) async fn display_speech(&mut self) {
 		if let Some(ref mut game_run) = self.game_run {
 			let mut speeches = &game_run.level.story.pre_level;
 			if let Activity::GameRound(Phase::Finish) = self.activity {
 				speeches = &game_run.level.story.after_level;
 			}
-			let font_size = 40;
 			for speech in speeches {
 				let mut events = self.input_players.get_events();
-				let text_dim = measure_text(&speech.text, None, font_size, 1.0);
 				while !button_pressed(&events) {
 					let screen_width = screen_width();
+					let screen_height = screen_height();
 					if let Some(background) = &speech.background {
 						let background_texture = background.texture();
 						let draw_params = DrawTextureParams {
+							dest_size: Some(Vec2::new(screen_width, screen_height)),
+							..Default::default()
+						};
+						draw_texture_ex(background_texture, 0.0, 0.0, WHITE, draw_params);
+					}
+					let speech_lines: &Vec<&str> = &speech.text.split('\n').collect();
+					let speech_line_groups: Vec<Vec<&str>> =
+						speech_lines.chunks(5).map(|chunk| chunk.to_vec()).collect();
+					let mut text_dim = measure_text(speech_lines[0], None, 20, 1.0);
+					let text_box_height = screen_height / 4.0;
+					let text_box_margin_bottom = screen_height / 20.0;
+					let story_position_y =
+						screen_height - text_box_height - text_box_margin_bottom;
+					// draw text box
+					draw_rectangle(
+						0.0,
+						story_position_y,
+						screen_width,
+						text_box_height,
+						Color::new(255.0, 255.0, 255.0, 0.3)
+					);
+					// draw narrator
+					let mut profil_texture_width = 0.0;
+					if let Some(profil) = &speech.profil {
+						let profil_texture = profil.texture();
+						profil_texture_width = profil_texture.width() * text_box_height
+							/ profil_texture.height();
+						let draw_params = DrawTextureParams {
 							dest_size: Some(Vec2::new(
-								screen_width,
-								background_texture.height() * screen_width
-									/ background_texture.width()
+								profil_texture_width,
+								text_box_height
 							)),
 							..Default::default()
 						};
 						draw_texture_ex(
-							background.texture(),
+							profil_texture,
 							0.0,
-							0.0,
+							story_position_y,
 							WHITE,
 							draw_params
 						);
 					}
-					let speech_lines: &Vec<&str> = &speech.text.split('\n').collect();
-					debug!("Number of Lines: {}", speech_lines.len());
+					// draw text
+					let font_size = get_font_size(
+						speech_lines,
+						screen_width - profil_texture_width - 20.0
+					);
+
 					for (x, line) in speech_lines.iter().enumerate() {
+						text_dim = measure_text(line, None, font_size, 1.0);
 						let text_params = TextParams {
 							font_size,
 							color: WHITE,
@@ -64,8 +109,9 @@ impl GameState {
 						};
 						draw_text_ex(
 							line,
-							0.0,
-							500.0 + x as f32 * text_dim.height,
+							profil_texture_width + 10.0,
+							story_position_y
+								+ text_dim.height * x as f32 + text_dim.offset_y,
 							text_params
 						);
 					}
