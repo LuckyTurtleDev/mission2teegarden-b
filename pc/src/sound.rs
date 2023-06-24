@@ -1,8 +1,8 @@
 use crate::assets::MUSIC;
-use log::{info, warn};
-use rand::{random, seq::SliceRandom, thread_rng};
+use log::info;
+use rand::{seq::SliceRandom, thread_rng};
 use rodio::{Decoder, OutputStream, OutputStreamHandle, Sink};
-use std::io::Cursor;
+use std::{io::Cursor, path::PathBuf};
 
 enum CurrentBackgroundMusic {
 	Titel,
@@ -36,9 +36,14 @@ impl SoundPlayer {
 		self.background_music.stop();
 		self.background_music.set_speed(1.0);
 		self.background_music.set_volume(0.8);
-		self.background_music.append(
-			Decoder::new_looped(Cursor::new(MUSIC.holiznacc0_mutant_club)).unwrap()
+		info!(
+			"play song {:?}",
+			PathBuf::from(MUSIC.titel_music.file_name)
+				.file_stem()
+				.unwrap()
 		);
+		self.background_music
+			.append(Decoder::new_looped(Cursor::new(MUSIC.titel_music.data)).unwrap());
 		self.background_music.play();
 		self.current_background_music = CurrentBackgroundMusic::Titel;
 	}
@@ -56,10 +61,13 @@ impl SoundPlayer {
 			CurrentBackgroundMusic::Titel => {},
 			CurrentBackgroundMusic::Level => {
 				if self.background_music.empty() {
-					info!("play song now");
 					let song = MUSIC.background_music.choose(&mut thread_rng()).unwrap();
+					info!(
+						"play song {:?}",
+						PathBuf::from(song.file_name).file_stem().unwrap()
+					);
 					self.background_music
-						.append(Decoder::new(Cursor::new(song)).unwrap());
+						.append(Decoder::new(Cursor::new(song.data)).unwrap());
 				}
 			},
 		}
