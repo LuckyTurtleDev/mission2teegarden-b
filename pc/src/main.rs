@@ -148,7 +148,6 @@ async fn run_game() {
 			},
 			Activity::SelectLevel => game_state.build_level_menu().await
 		}
-		log::warn!("hii");
 		next_frame().await;
 	}
 }

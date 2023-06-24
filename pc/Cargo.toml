@@ -22,6 +22,7 @@ macroquad = { version = "0.3.25", default-features = false, features = ["log-rs"
 my-env-logger-style = "0.1.0"
 num_enum = "0.6.1"
 once_cell = { version = "1.17.1", features = ["parking_lot"] }
+rand = "0.8.5"
 rodio = { version = "0.17.1", default-features = false, features = ["mp3"] }
 serialport = "4.2.0"
 
