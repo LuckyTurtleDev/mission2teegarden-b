@@ -16,6 +16,7 @@ use cards_ev::{evaluate_cards, CarAction};
 mod draw;
 mod menu;
 mod sound;
+mod story_display;
 mod tiles;
 use tiles::TEXTURES;
 mod update;
