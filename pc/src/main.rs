@@ -13,13 +13,20 @@ use sound::SoundPlayer;
 mod assets;
 mod cards_ev;
 use cards_ev::{evaluate_cards, CarAction};
+mod tiles;
+use cards_ev::CarAction;
+use tiles::TEXTURES;
+use usb::Players;
+
+use m3_models::{AvailableCards, ToPypadeGameEvent};
 mod draw;
+use cards_ev::evaluate_cards;
 mod menu;
 mod sound;
 mod tiles;
 use tiles::TEXTURES;
 mod update;
-use update::setup_players;
+use update::{activate_players, init_level, setup_players};
 mod usb;
 use usb::Players;
 
@@ -38,8 +45,10 @@ static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 
 #[derive(PartialEq)]
 enum Phase {
+	Introduction,
 	Select,
-	Drive
+	Drive,
+	Finish
 }
 
 #[derive(PartialEq)]
@@ -69,7 +78,8 @@ struct PlayerState {
 
 struct GameRun {
 	level: Map,
-	player_states: Vec<PlayerState>
+	player_states: Vec<PlayerState>,
+	player_finished_level: u8
 }
 
 struct GameState {
@@ -111,7 +121,8 @@ impl GameState {
 			.collect();
 		let game_run = GameRun {
 			level,
-			player_states
+			player_states,
+			player_finished_level: 0
 		};
 
 		GameState {
@@ -132,10 +143,48 @@ async fn run_game() {
 	let mut game_state = GameState::new();
 	while game_state.running {
 		game_state.sound_player.poll();
-		//let events = game_state.input_players.get_events();
 		match game_state.activity {
+			Activity::GameRound(Phase::Introduction) => {
+				game_state
+					.display_speech(
+						&game_state
+							.game_run
+							.as_ref()
+							.unwrap()
+							.level
+							.story
+							.pre_level
+							.clone()
+					)
+					.await;
+				activate_players(
+					&mut game_state,
+					ToPypadeGameEvent::NewLevel(AvailableCards {
+						left: 3,
+						right: 3,
+						motor_on: 2,
+						motor_off: 2,
+						wait: 9
+					})
+				);
+				game_state.activity = Activity::GameRound(Phase::Select);
+			},
+			Activity::GameRound(Phase::Finish) => {
+				game_state
+					.display_speech(
+						&game_state
+							.game_run
+							.as_ref()
+							.unwrap()
+							.level
+							.story
+							.after_level
+							.clone()
+					)
+					.await;
+				game_state.activity = Activity::SelectLevel;
+			},
 			Activity::GameRound(Phase::Select) => {
-				//game_state.update(&events).await;
 				game_state.draw().await;
 				setup_players(&mut game_state)
 			},
@@ -146,7 +195,10 @@ async fn run_game() {
 			Activity::Menu => {
 				game_state.build_menu().await;
 			},
-			Activity::SelectLevel => game_state.build_level_menu().await
+			Activity::SelectLevel => {
+				game_state.build_level_menu().await;
+				init_level(&mut game_state);
+			}
 		}
 		next_frame().await;
 	}

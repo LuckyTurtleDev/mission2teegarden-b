@@ -10,6 +10,7 @@ use serde::{
 	Deserialize, Serialize
 };
 use std::{
+	f32::consts::PI,
 	io, iter,
 	path::{Path, PathBuf}
 };
@@ -77,8 +78,8 @@ pub struct Map {
 	pub name: String,
 	pub width: u8,
 	pub height: u8,
-	pub base_layer: Vec<Vec<MapBaseTile>>,
-	pub object_layer: Vec<Vec<Option<ObjectTile>>>,
+	pub base_layer: Vec<Vec<(MapBaseTile, Orientation)>>,
+	pub object_layer: Vec<Vec<Option<(ObjectTile, Orientation)>>>,
 	pub global_goal: Option<(u8, u8)>,
 	//this was a stupid idea
 	//now I must impl everything 4 times
@@ -93,12 +94,25 @@ pub struct Map {
 	pub story: Story
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Serialize)]
 pub enum Orientation {
+	#[default]
 	North,
 	South,
 	East,
 	West
+}
+
+impl Orientation {
+	/// return the rotate of the Orientation in grad
+	pub fn rotation(&self) -> f32 {
+		match self {
+			Self::North => 0.0,
+			Self::South => PI,
+			Self::East => 0.5 * PI,
+			Self::West => 1.5 * PI
+		}
+	}
 }
 
 #[derive(Error, Debug)]
@@ -164,9 +178,9 @@ impl Map {
 			//car can leave the map an drive away (game over)
 			return true;
 		}
-		self.base_layer[x as usize][y as usize].passable()
+		self.base_layer[x as usize][y as usize].0.passable()
 			&& self.object_layer[x as usize][y as usize]
-				.map(|obejct| obejct.passable())
+				.map(|obejct| obejct.0.passable())
 				.unwrap_or(true)
 	}
 
@@ -218,13 +232,18 @@ impl Map {
 						for x in 0..width {
 							let mut column = Vec::with_capacity(width as usize);
 							for y in 0..height {
-								let tile =
-									match tile_layer.get_tile(x.into(), y.into()) {
-										Some(tile) => MapBaseTile::try_from(&tile),
-										None => Ok(MapBaseTile::default())
-									}
-									.map_err(|err| MapError::InvalidTile(i, err))?;
-								column.push(tile);
+								let tile_and_orientation = match tile_layer
+									.get_tile(x.into(), y.into())
+								{
+									Some(tile) => (
+										MapBaseTile::try_from(&tile).map_err(|err| {
+											MapError::InvalidTile(i, err)
+										})?,
+										Orientation::try_from(&tile)?
+									),
+									None => (MapBaseTile::default(), Default::default())
+								};
+								column.push(tile_and_orientation);
 							}
 							base_layer.push(column);
 						}
@@ -237,11 +256,12 @@ impl Map {
 							let mut column = Vec::with_capacity(width as usize);
 							for y in 0..height {
 								let tile = match tile_layer.get_tile(x.into(), y.into()) {
-									Some(tile) => {
-										Some(ObjectTile::try_from(&tile).map_err(
-											|err| MapError::InvalidTile(i, err)
-										)?)
-									},
+									Some(tile) => Some((
+										ObjectTile::try_from(&tile).map_err(|err| {
+											MapError::InvalidTile(i, err)
+										})?,
+										Orientation::try_from(&tile)?
+									)),
 									None => None
 								};
 								column.push(tile);
@@ -356,22 +376,25 @@ impl Map {
 	}
 
 	/// return an iterator over all BasteTiles and its x and y postion
-	pub fn iter_base_layer(&self) -> impl Iterator<Item = (u8, u8, &MapBaseTile)> {
+	pub fn iter_base_layer(
+		&self
+	) -> impl Iterator<Item = (u8, u8, MapBaseTile, Orientation)> + '_ {
 		self.base_layer.iter().enumerate().flat_map(|(x, y_vec)| {
 			y_vec
 				.iter()
 				.enumerate()
-				.map(move |(y, item)| (x as u8, y as u8, item))
+				.map(move |(y, item)| (x as u8, y as u8, item.0, item.1))
 		})
 	}
 
 	/// return an iterator over all ObjectTiles and its x and y postion
-	pub fn iter_object_layer(&self) -> impl Iterator<Item = (u8, u8, ObjectTile)> + '_ {
+	pub fn iter_object_layer(
+		&self
+	) -> impl Iterator<Item = (u8, u8, ObjectTile, Orientation)> + '_ {
 		self.object_layer.iter().enumerate().flat_map(|(x, y_vec)| {
-			y_vec
-				.iter()
-				.enumerate()
-				.filter_map(move |(y, item)| item.map(|item| (x as u8, y as u8, item)))
+			y_vec.iter().enumerate().filter_map(move |(y, item)| {
+				item.map(|item| (x as u8, y as u8, item.0, item.1))
+			})
 		})
 	}
 
@@ -407,16 +430,16 @@ impl Map {
 
 	/// return an iterator over all static Tiles and its x and y postion.
 	/// starting from the lowest layer
-	pub fn iter_all(&self) -> impl Iterator<Item = (u8, u8, Tile)> + '_ {
-		let base = self
-			.iter_base_layer()
-			.map(|(x, y, tile)| (x, y, Tile::MapBaseTile(tile.to_owned())));
-		let objects = self
-			.iter_object_layer()
-			.map(|(x, y, tile)| (x, y, Tile::MapObjectTile(tile.to_owned())));
+	pub fn iter_all(&self) -> impl Iterator<Item = (u8, u8, Tile, Orientation)> + '_ {
+		let base = self.iter_base_layer().map(|(x, y, tile, orientation)| {
+			(x, y, Tile::MapBaseTile(tile.to_owned()), orientation)
+		});
+		let objects = self.iter_object_layer().map(|(x, y, tile, orientation)| {
+			(x, y, Tile::MapObjectTile(tile.to_owned()), orientation)
+		});
 		let goals = self
 			.iter_player_goals()
-			.map(|(x, y, tile)| (x, y, Tile::PlayerTile(tile)));
+			.map(|(x, y, tile)| (x, y, Tile::PlayerTile(tile), Orientation::default()));
 		base.chain(objects).chain(goals)
 	}
 }

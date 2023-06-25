@@ -1,5 +1,5 @@
 use crate::{update::init_level, Activity, GameState, Phase, LEVELS};
-use m3_models::{Key, ToPcGameEvent};
+use m3_models::{AvailableCards, Key, ToPcGameEvent, ToPypadeGameEvent};
 
 use macroquad::{
 	hash,
@@ -8,24 +8,6 @@ use macroquad::{
 };
 
 const BUTTON_FONT_SIZE: u16 = 16;
-
-fn get_menu_skin() -> Skin {
-	{
-		let window_style = root_ui()
-			.style_builder()
-			.background(Image::from_file_with_format(
-				include_bytes!("../assets/img/Menu/menu_background.png"),
-				None
-			))
-			.background_margin(RectOffset::new(20.0, 20.0, 10.0, 10.0))
-			.margin(RectOffset::new(-20.0, -30.0, 0.0, 0.0))
-			.build();
-		Skin {
-			window_style,
-			..root_ui().default_skin()
-		}
-	}
-}
 
 fn get_button_skin() -> Skin {
 	{
@@ -169,7 +151,7 @@ impl GameState {
 		);
 		let button_skin = get_button_skin();
 		let button_focused_skin = get_button_focused_skin();
-		let mut skin: &Skin = &button_focused_skin.clone();
+		let skin: &Skin = &button_focused_skin.clone();
 		let mut enter_pressed = false;
 		let mut button_focused_index = 0;
 
@@ -185,8 +167,7 @@ impl GameState {
 					if button_focused_index == i as i8 {
 						if enter_pressed {
 							self.level_num = i;
-							init_level(self);
-							self.activity = Activity::GameRound(Phase::Select);
+							self.activity = Activity::GameRound(Phase::Introduction);
 							self.sound_player.play_level_music();
 						}
 						let skin = &button_focused_skin.clone();
@@ -197,7 +178,7 @@ impl GameState {
 					}
 					if ui.button(vec2(140.0, i as f32 * 50.0), format!("Level {}", i + 1))
 					{
-						self.activity = Activity::SelectLevel;
+						self.activity = Activity::GameRound(Phase::Introduction);
 					}
 				}
 

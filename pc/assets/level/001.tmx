@@ -2,33 +2,36 @@
 <map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="256" tileheight="256" infinite="0" nextlayerid="4" nextobjectid="1">
  <properties>
   <property name="story">[[pre_level]]
-text = &quot;&quot;&quot;\
-	Dear crew after a long journey we have final reached SOMEPLANET. \
-	This has taken us one step closer to create a new home for humankind. \
-	Because the planet might be dangerous, we can not send humans to it yet. \
-	So it is up to our scientist and programmers, with theire robots to explore the planet and build a first base. \
+text = &quot;&quot;&quot;
+	Dear crew after a long journey we have final reached SOMEPLANET.
+	This has taken us one step closer to create a new home for humankind.
+	Because the planet might be dangerous, we can not send humans to it yet.
+	So it is up to our scientist and programmers, 
+	with theire robots to explore the planet and build a first base. \
        &quot;&quot;&quot;
 profil = &quot;Captain&quot;
 background = &quot;OuterSpace&quot;
 
 [[pre_level]]
-text = &quot;&quot;&quot;\
-	The robots have landed unharmed on the planet. \
-	Since a long time, the robots are back in action. \
-	We should ensure that you are still aware, of their handling. \
-	You controll the robots with the same color as the light below your screen. \
-	Due to electric interferences not every instruction is aviable in every level. \
-	Also the data rate is limited. So you can only use each instruction a certain times. \
-	The total count of instructions is also limited to 12. \
-	Remender that the robot drives automatically. \
-	At this level only three instructions are avaiable. \
-	First the rotate right and left instructions (↱,↰). \
-	Last the wait instruction (⌛). This instruction means that no change to the state of your robot will perform. So if it is currently dirving it will continue driving. \
-	Move the cursor with 🠴 and 🠶 key and select an instruction with A. \
-	B will remove the last instruction from your code. \
-	Change with 🠵 and 🠷 the count of cycle you robot will wait. \
+text = &quot;&quot;&quot;
+	The robots have landed unharmed on the planet.
+	Since a long time, the robots are back in action.
+	We should ensure that you are still aware, of their handling.
+	You controll the robots with the same color as the light below your screen.
+	Due to electric interferences not every instruction is aviable in every level.
+	Also the data rate is limited. So you can only use each instruction a certain times.
+	The total count of instructions is also limited to 12.
+	Remender that the robot drives automatically.
+	At this level only three instructions are avaiable.
+	First the rotate right and left instructions (↱,↰).
+	Last the wait instruction (⌛).
+	This instruction means that no change to the state of your robot will perform.
+	So if it is currently dirving it will continue driving.
+	Move the cursor with 🠴 and 🠶 key and select an instruction with A.
+	B will remove the last instruction from your code.
+	Change with 🠵 and 🠷 the count of cycle you robot will wait.
 	Your goal at this training it to reach the flag with the color of your robot.
-	So take your programming termial and create instructions for your robot. \	
+	So take your programming termial and create instructions for your robot.\
        &quot;&quot;&quot;
 profil = &quot;Captain&quot;
 
@@ -38,19 +41,19 @@ profil = &quot;Captain&quot;
 </property>
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
- <tileset firstgid="2" source="../img/ObjectTiles/ObjectTiles.tsx"/>
- <tileset firstgid="4" source="../img/Player/Player.tsx"/>
+ <tileset firstgid="6" source="../img/ObjectTiles/ObjectTiles.tsx"/>
+ <tileset firstgid="8" source="../img/Player/Player.tsx"/>
  <layer id="1" name="Base" width="16" height="9">
   <data encoding="csv">
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+1,1,1,1,2,1610612739,2684354562,1,1,1,1,1,1,1,1,1,
+1,1,1,1,3221225475,4,3,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1610612738,2684354563,3221225474,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,2,1610612739,2684354562,1,1,1,
+1,1,1,1,1,1,1,1,2,1610612739,3221225477,4,3,1,1,1,
+1610612739,1610612739,2684354562,1,1,1,1,1,1610612738,2684354565,4,5,3221225474,1,1,1,
+4,4,1610612741,2684354562,1,1,1,1,1,1610612738,2684354563,3221225474,1,1,1,1,
+4,4,4,1610612741,1610612739,1610612739,2684354562,1,1,1,1,1,1,1,1,1,
+4,4,4,4,4,4,3,1,1,1,1,1,1,1,1,1
 </data>
  </layer>
  <layer id="2" name="Objects" width="16" height="9">
@@ -69,13 +72,13 @@ profil = &quot;Captain&quot;
  <layer id="3" name="Player" width="16" height="9">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,3221225478,0,0,0,0,0,0,0,0,0,0,3221225477,0,0,
+0,0,3221225482,0,0,0,0,0,0,0,0,0,0,3221225481,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,11,0,0,0,0,0,0,10,0,0,0,0,
+0,0,0,0,15,0,0,0,0,0,0,14,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,9,0,0,0,0,0,0,12,0,0,0,0,
+0,0,0,0,13,0,0,0,0,0,0,16,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,4,0,0,0,0,0,0,0,0,0,0,7,0,0,
+0,0,8,0,0,0,0,0,0,0,0,0,0,11,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
