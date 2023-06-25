@@ -4,7 +4,7 @@
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::{Map, Orientation};
-use m3_models::AvailableCards;
+use m3_models::{AvailableCards, ToPypadeGameEvent};
 use macroquad::{prelude::*, window, Window};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
@@ -13,14 +13,7 @@ use sound::SoundPlayer;
 mod assets;
 mod cards_ev;
 use cards_ev::{evaluate_cards, CarAction};
-mod tiles;
-use cards_ev::CarAction;
-use tiles::TEXTURES;
-use usb::Players;
-
-use m3_models::{AvailableCards, ToPypadeGameEvent};
 mod draw;
-use cards_ev::evaluate_cards;
 mod menu;
 mod sound;
 mod tiles;
