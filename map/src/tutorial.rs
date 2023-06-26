@@ -28,3 +28,37 @@
 //!
 //! ### Story
 //! An optional story can be added by creating a map propertie called `story` from type `string`
+//! For decoding the story inside the propertie the [toml](https://toml.io/) format is used.
+//! Currently only story elments before and after the level are supported.
+//!
+//! Take a look at this example story:
+//! ```
+//! # let toml = r#"
+//! [[pre_level]]
+//! text = "hi, I am the captain ..."
+//! profil = "Captain"
+//! background = "OuterSpace"
+//!
+//! [[pre_level]]
+//! text = "now it is you turn!"
+//!
+//! [[after_level]]
+//! text = "You have mastered the challenge!"
+//! profil = "Captain"
+//! # "#;
+//! # let _config: m3_map::story::Story = basic_toml::from_str(&toml).unwrap_or_else(|err| panic!("{}", err));
+//! ```
+//! The story has two lists `pre_level` and `after_level`, both are optional.
+//! Each list inculde zero or more [`Speech`s](crate::story::Speech).
+//! The [`Speech`s](crate::story::Speech) from `pre_level` are shown before the level starts,
+//! the ones from `after_level` are show, after the level was finish successfully.
+//! A [`Speech`](crate::story::Speech) exist out of a `text`, a `profil`picture and a `background`.
+//! The last two are optional.
+//! `profil` defined the picture, which is show left from the text.
+//! All variants of [`Character`](`crate::story::Character`) can be used for this.
+//! If `profil` is not set, no picture will be shown.
+//! `background` define the background with is show above the text.
+//! All variants of [`Background`](`crate::story::Background`) can be used for this.
+//! If `background` is not set, the level will be shown.
+//!
+//! For more info see the [`Story`](`crate::story::Story`) struct.
