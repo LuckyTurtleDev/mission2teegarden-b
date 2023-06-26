@@ -1,6 +1,8 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
 #![forbid(unused_must_use, unsafe_code)]
 
+pub mod tutorial;
+
 use basic_toml as toml;
 use log::debug;
 use m3_models::AvailableCards;

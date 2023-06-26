@@ -1,5 +1,5 @@
 use crate::{Activity, GameState, Phase, LEVELS};
-use m3_models::{Key, ToPcGameEvent};
+use m3_models::{AvailableCards, Key, ToPcGameEvent, ToPypadeGameEvent};
 
 use macroquad::{
 	hash,
@@ -162,6 +162,7 @@ impl GameState {
 						if enter_pressed {
 							self.level_num = i;
 							self.activity = Activity::GameRound(Phase::Introduction);
+							self.sound_player.play_level_music();
 						}
 						let skin = &button_focused_skin.clone();
 						ui.push_skin(skin);

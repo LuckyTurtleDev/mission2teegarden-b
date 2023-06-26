@@ -24,8 +24,10 @@ pub struct Speech {
 #[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Story {
+	/// Speechs whitch are shown before the level
 	#[serde(default)]
 	pub pre_level: Vec<Speech>,
+	/// Speechs whicth are shown after the level was finish sucessfully
 	#[serde(default)]
 	pub after_level: Vec<Speech>
 }
