@@ -1,6 +1,5 @@
 use crate::{tiles::GetTexture, GameState, Orientation, Rotation, TEXTURES};
 use macroquad::{math::Vec2, prelude::*};
-use macroquad_particles::{AtlasConfig, BlendMode, Emitter, EmitterConfig};
 
 impl GameState {
 	///draw crash fire

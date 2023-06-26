@@ -92,32 +92,6 @@ struct GameState {
 impl GameState {
 	fn new() -> GameState {
 		Lazy::force(&TEXTURES);
-		let mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
-		level.cards = AvailableCards {
-			left: 3,
-			right: 3,
-			motor_on: 2,
-			motor_off: 2,
-			wait: 9
-		};
-		debug!("load level{:#?}", level);
-		let player_states = level
-			.iter_player()
-			.map(|f| PlayerState {
-				position: f.position,
-				orientation: f.orientation,
-				next_action: None,
-				rotation: Rotation::NoRotation,
-				finished: false,
-				crashed: false,
-				solution: None
-			})
-			.collect();
-		let game_run = GameRun {
-			level,
-			player_states,
-			player_finished_level: 0
-		};
 
 		GameState {
 			activity: Activity::Menu,
