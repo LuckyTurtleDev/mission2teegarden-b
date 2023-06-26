@@ -12,7 +12,6 @@ pub(crate) const MUSIC: Music = Music {
 	titel_music: include_music!("HoliznaCC0 - Mutant Club.mp3"),
 	background_music: &[
 		include_music!("HoliznaCC0 - Ancient Memories.mp3"),
-		include_music!("HoliznaCC0 - Carnival Of Souls.mp3"),
 		include_music!("HoliznaCC0 - Dance Of The Dead.mp3"),
 		include_music!("HoliznaCC0 - Dusty Attic.mp3"),
 		include_music!("HoliznaCC0 - Earth.mp3"),
