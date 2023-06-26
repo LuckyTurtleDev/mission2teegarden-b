@@ -4,24 +4,25 @@
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::{Map, Orientation};
+use m3_models::{AvailableCards, ToPypadeGameEvent};
 use macroquad::{prelude::*, window, Window};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
+use sound::SoundPlayer;
 
+mod assets;
 mod cards_ev;
-mod tiles;
-use cards_ev::CarAction;
-use tiles::TEXTURES;
-use usb::Players;
-
-use m3_models::{AvailableCards, ToPypadeGameEvent};
+use cards_ev::{evaluate_cards, CarAction};
 mod draw;
-use cards_ev::evaluate_cards;
 mod menu;
+mod sound;
 mod story_display;
+mod tiles;
+use tiles::TEXTURES;
 mod update;
 use update::{activate_players, init_level, setup_players};
 mod usb;
+use usb::Players;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -76,6 +77,7 @@ struct GameRun {
 }
 
 struct GameState {
+	sound_player: SoundPlayer,
 	player_count: u8,
 	activity: Activity,
 	game_run: Option<GameRun>,
@@ -88,6 +90,7 @@ struct GameState {
 
 impl GameState {
 	fn new() -> GameState {
+		let sound_player = sound::SoundPlayer::new();
 		Lazy::force(&TEXTURES);
 		let mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		level.cards = AvailableCards {
@@ -117,6 +120,7 @@ impl GameState {
 		};
 
 		GameState {
+			sound_player,
 			activity: Activity::Menu,
 			game_run: None,
 			input_players: usb::Players::init(),
@@ -132,6 +136,7 @@ impl GameState {
 async fn run_game() {
 	let mut game_state = GameState::new();
 	while game_state.running {
+		game_state.sound_player.poll();
 		match game_state.activity {
 			Activity::GameRound(Phase::Introduction) => {
 				game_state

@@ -168,6 +168,7 @@ impl GameState {
 						if enter_pressed {
 							self.level_num = i;
 							self.activity = Activity::GameRound(Phase::Introduction);
+							self.sound_player.play_level_music();
 						}
 						let skin = &button_focused_skin.clone();
 						ui.push_skin(skin);
