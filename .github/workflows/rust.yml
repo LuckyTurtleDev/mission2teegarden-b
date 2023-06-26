@@ -10,11 +10,11 @@ on:
 jobs:
   test_pc:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu, windows, macos]
         rust_version: [stable, 1.64]
     name: "test pc ${{ matrix.os }} ${{ matrix.rust_version }}"
-    continue-on-error: true
     runs-on: ${{ matrix.os }}-latest
     steps:
       - uses: actions/checkout@v3
@@ -44,9 +44,9 @@ jobs:
           
   build_pc:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu, windows, macos]
-    continue-on-error: true
     name: build ${{ matrix.os }}
     runs-on: ${{ matrix.os }}-latest
     needs: [test_pc]
@@ -81,6 +81,7 @@ jobs:
     strategy:
       matrix:
         rust_version: [stable, nightly, 1.64]
+    continue-on-error: true
     name: "check pybadge ${{ matrix.rust_version }}"
     steps:
       - uses: actions/checkout@v3
@@ -165,7 +166,6 @@ jobs:
   clippy_pybadge:
     runs-on: ubuntu-latest
     needs: [check_pybadge]
-    if: false #issue at actions; see https://github.com/LoliGothick/clippy-check/issues/94
     steps:
         - name: Install alsa, libudev
           run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev
@@ -185,6 +185,7 @@ jobs:
         - uses: LoliGothick/clippy-check@master
           with:
             token: ${{ secrets.GITHUB_TOKEN }}
+            target: thumbv7em-none-eabihf
             working-directory: pybadge
 
   rustfmt:

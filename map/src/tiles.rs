@@ -29,13 +29,21 @@ pub enum InvalidTile {
 pub enum MapBaseTile {
 	//numbers must match them from the Tiled tilesets
 	#[default]
-	Grass = 0
+	Grass = 0,
+	GrassCornerSand = 1,
+	HalfGrassSand = 2,
+	Sand = 3,
+	SandCornerGrass = 4
 }
 
 impl Passable for MapBaseTile {
 	fn passable(&self) -> bool {
 		match self {
-			Self::Grass => true
+			Self::Grass => true,
+			Self::GrassCornerSand => true,
+			Self::HalfGrassSand => true,
+			Self::Sand => true,
+			Self::SandCornerGrass => true
 		}
 	}
 }

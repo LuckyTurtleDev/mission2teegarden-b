@@ -4,24 +4,25 @@
 use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::{Map, Orientation};
+use m3_models::{AvailableCards, ToPypadeGameEvent};
 use macroquad::{prelude::*, window, Window};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
+use sound::SoundPlayer;
 
+mod assets;
 mod cards_ev;
-mod tiles;
-use cards_ev::CarAction;
-use tiles::TEXTURES;
-use usb::Players;
-
-use m3_models::AvailableCards;
+use cards_ev::{evaluate_cards, CarAction};
 mod draw;
-use cards_ev::evaluate_cards;
 mod menu;
+mod sound;
 mod story_display;
+mod tiles;
+use tiles::TEXTURES;
 mod update;
-use update::setup_players;
+use update::{activate_players, init_level, setup_players};
 mod usb;
+use usb::Players;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -71,10 +72,12 @@ struct PlayerState {
 
 struct GameRun {
 	level: Map,
-	player_states: Vec<PlayerState>
+	player_states: Vec<PlayerState>,
+	player_finished_level: u8
 }
 
 struct GameState {
+	sound_player: SoundPlayer,
 	player_count: u8,
 	activity: Activity,
 	game_run: Option<GameRun>,
@@ -87,6 +90,7 @@ struct GameState {
 
 impl GameState {
 	fn new() -> GameState {
+		let sound_player = sound::SoundPlayer::new();
 		Lazy::force(&TEXTURES);
 		let mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
 		level.cards = AvailableCards {
@@ -111,10 +115,12 @@ impl GameState {
 			.collect();
 		let game_run = GameRun {
 			level,
-			player_states
+			player_states,
+			player_finished_level: 0
 		};
 
 		GameState {
+			sound_player,
 			activity: Activity::Menu,
 			game_run: None,
 			input_players: usb::Players::init(),
@@ -130,19 +136,49 @@ impl GameState {
 async fn run_game() {
 	let mut game_state = GameState::new();
 	while game_state.running {
-		//let events = game_state.input_players.get_events();
+		game_state.sound_player.poll();
 		match game_state.activity {
 			Activity::GameRound(Phase::Introduction) => {
-				// Tutorial/Story
-				game_state.display_speech().await;
+				game_state
+					.display_speech(
+						&game_state
+							.game_run
+							.as_ref()
+							.unwrap()
+							.level
+							.story
+							.pre_level
+							.clone()
+					)
+					.await;
+				activate_players(
+					&mut game_state,
+					ToPypadeGameEvent::NewLevel(AvailableCards {
+						left: 3,
+						right: 3,
+						motor_on: 2,
+						motor_off: 2,
+						wait: 9
+					})
+				);
 				game_state.activity = Activity::GameRound(Phase::Select);
 			},
 			Activity::GameRound(Phase::Finish) => {
-				// Story
-				game_state.activity = Activity::Menu;
+				game_state
+					.display_speech(
+						&game_state
+							.game_run
+							.as_ref()
+							.unwrap()
+							.level
+							.story
+							.after_level
+							.clone()
+					)
+					.await;
+				game_state.activity = Activity::SelectLevel;
 			},
 			Activity::GameRound(Phase::Select) => {
-				//game_state.update(&events).await;
 				game_state.draw().await;
 				setup_players(&mut game_state)
 			},
@@ -153,7 +189,10 @@ async fn run_game() {
 			Activity::Menu => {
 				game_state.build_menu().await;
 			},
-			Activity::SelectLevel => game_state.build_level_menu().await
+			Activity::SelectLevel => {
+				game_state.build_level_menu().await;
+				init_level(&mut game_state);
+			}
 		}
 		next_frame().await;
 	}
