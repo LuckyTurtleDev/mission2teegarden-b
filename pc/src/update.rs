@@ -58,7 +58,7 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 	game_state.delta_time = 0.0;
 }
 
-pub(crate) fn setup_players(game_state: &mut GameState) {
+pub(crate) async fn setup_players(game_state: &mut GameState) {
 	let events = game_state.input_players.get_events();
 	if game_state.player_count < events.iter().flatten().count() as u8 {
 		if let Some(player) = game_state.input_players.players.iter().flatten().last() {
@@ -114,7 +114,8 @@ impl GameState {
 		let events = self.input_players.get_events();
 		if reset_button_pressed(&events) {
 			init_level(self);
-			activate_players(self, ToPypadeGameEvent::Retry)
+			activate_players(self, ToPypadeGameEvent::Retry);
+			self.activity = Activity::GameRound(Phase::Select);
 		} else {
 			if self.delta_time >= self.movement_time {
 				if self.game_run.as_ref().unwrap().player_finished_level
@@ -217,10 +218,12 @@ impl GameState {
 						&& self.input_players.players[y].as_ref().is_some()
 						&& (!game_run.player_states[x].finished
 							&& !game_run.player_states[y].finished)
-						&& (game_run.player_states[x].position
-							== game_run.player_states[y].position
+						&& (game_run.level.iter_player().nth(x).unwrap().position
+							== game_run.level.iter_player().nth(y).unwrap().position
 							|| game_run.player_states[x].position
-								== game_run.level.iter_player().nth(y).unwrap().position)
+								== game_run.level.iter_player().nth(y).unwrap().position
+							|| game_run.player_states[y].position
+								== game_run.level.iter_player().nth(x).unwrap().position)
 					{
 						self.input_players.players[x]
 							.as_ref()

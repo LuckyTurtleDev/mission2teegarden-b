@@ -1,11 +1,12 @@
 use crate::{tiles::GetTexture, GameState, Orientation, Rotation, TEXTURES};
 use macroquad::{math::Vec2, prelude::*};
+use macroquad_particles::{AtlasConfig, BlendMode, Emitter, EmitterConfig};
 
 impl GameState {
-	///draw the menu
+	///draw crash fire
 
 	///draw the current game state
-	pub(crate) async fn draw(&self) {
+	pub(crate) async fn draw(&mut self) {
 		clear_background(BLACK);
 		let screen_width = screen_width();
 		let screen_height = screen_height();
@@ -66,15 +67,20 @@ impl GameState {
 								rotation: rotation.to_radians(),
 								..Default::default()
 							};
-							draw_texture_ex(
-								texture,
-								player.position.0 as f32 * dest_size
-									+ relative_pos_x + map_offset_x,
-								player.position.1 as f32 * dest_size
-									+ relative_pos_y + map_offset_y,
-								WHITE,
-								draw_params
-							);
+							let pos_x = player.position.0 as f32 * dest_size
+								+ relative_pos_x + map_offset_x;
+							let pos_y = player.position.1 as f32 * dest_size
+								+ relative_pos_y + map_offset_y;
+							draw_texture_ex(texture, pos_x, pos_y, WHITE, draw_params);
+							if game_run.player_states[x].crashed {
+								if let Some(emitter) = self.animation_emitter.as_mut() {
+									emitter.draw(vec2(
+										pos_x + dest_size / 2.0,
+										pos_y + dest_size / 2.0
+									));
+								}
+							}
+
 						// Car makes a turn
 						} else {
 							let sign = match game_run.player_states[x].rotation {
@@ -96,13 +102,19 @@ impl GameState {
 								rotation: angle.to_radians(),
 								..Default::default()
 							};
-							draw_texture_ex(
-								texture,
-								player.position.0 as f32 * dest_size + map_offset_x,
-								player.position.1 as f32 * dest_size + map_offset_y,
-								WHITE,
-								draw_params
-							);
+							let pos_x =
+								player.position.0 as f32 * dest_size + map_offset_x;
+							let pos_y =
+								player.position.1 as f32 * dest_size + map_offset_y;
+							draw_texture_ex(texture, pos_x, pos_y, WHITE, draw_params);
+							if game_run.player_states[x].crashed {
+								if let Some(emitter) = self.animation_emitter.as_mut() {
+									emitter.draw(vec2(
+										pos_x + dest_size / 2.0,
+										pos_y + dest_size
+									));
+								}
+							}
 						}
 					}
 				}

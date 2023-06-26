@@ -5,6 +5,7 @@ use log::{debug, info};
 use m3_macro::include_map;
 use m3_map::{Map, Orientation};
 use macroquad::{prelude::*, window, Window};
+use macroquad_particles::Emitter;
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
 
@@ -17,6 +18,7 @@ use usb::Players;
 use m3_models::{AvailableCards, ToPypadeGameEvent};
 mod draw;
 use cards_ev::evaluate_cards;
+mod animations;
 mod menu;
 mod story_display;
 mod update;
@@ -83,6 +85,7 @@ struct GameState {
 	delta_time: f32,
 	movement_time: f32,
 	level_num: usize,
+	animation_emitter: Option<Emitter>,
 	running: bool
 }
 
@@ -124,6 +127,7 @@ impl GameState {
 			movement_time: 0.5,
 			player_count: 0,
 			level_num: 0,
+			animation_emitter: None,
 			running: true
 		}
 	}
@@ -175,7 +179,7 @@ async fn run_game() {
 			},
 			Activity::GameRound(Phase::Select) => {
 				game_state.draw().await;
-				setup_players(&mut game_state)
+				setup_players(&mut game_state).await;
 			},
 			Activity::GameRound(Phase::Drive) => {
 				game_state.update().await;
@@ -187,6 +191,7 @@ async fn run_game() {
 			Activity::SelectLevel => {
 				game_state.build_level_menu().await;
 				init_level(&mut game_state);
+				game_state.load_fire_emitter().await;
 			}
 		}
 		next_frame().await;

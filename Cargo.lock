@@ -1002,6 +1002,7 @@ dependencies = [
  "m3-map",
  "m3-models",
  "macroquad",
+ "macroquad-particles",
  "my-env-logger-style",
  "num_enum",
  "once_cell",
@@ -1054,6 +1055,15 @@ dependencies = [
  "miniquad",
  "quad-rand",
  "quad-snd",
+]
+
+[[package]]
+name = "macroquad-particles"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8505dc035e4d68799a53a459afef0bc345410039325b5928af2e0d83eb15de40"
+dependencies = [
+ "macroquad",
 ]
 
 [[package]]
