@@ -1175,7 +1175,7 @@ dependencies = [
  "m3-macro",
  "m3-map",
  "m3-models",
- "macroquad 0.3.26 (registry+https://github.com/rust-lang/crates.io-index)",
+ "macroquad",
  "macroquad-particles",
  "my-env-logger-style",
  "num_enum 0.6.1",
@@ -1227,21 +1227,7 @@ dependencies = [
  "glam",
  "image",
  "log",
- "macroquad_macro 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "miniquad",
- "quad-rand",
-]
-
-[[package]]
-name = "macroquad"
-version = "0.3.26"
-source = "git+https://github.com/LuckyTurtleDev/macroquad.git?branch=no-sound#944ca8a04d04d16ae1320dd37785ce889087ed64"
-dependencies = [
- "bumpalo",
- "fontdue",
- "glam",
- "image",
- "macroquad_macro 0.1.7 (git+https://github.com/LuckyTurtleDev/macroquad.git?branch=no-sound)",
+ "macroquad_macro",
  "miniquad",
  "quad-rand",
 ]
@@ -1249,9 +1235,9 @@ dependencies = [
 [[package]]
 name = "macroquad-particles"
 version = "0.1.1"
-source = "git+https://github.com/LuckyTurtleDev/macroquad.git?branch=no-sound#944ca8a04d04d16ae1320dd37785ce889087ed64"
+source = "git+https://github.com/LuckyTurtleDev/macroquad.git?branch=mission2teegarden-b#454f2b95389c2b94224c468d8dc7b3fd017bb9f5"
 dependencies = [
- "macroquad 0.3.26 (git+https://github.com/LuckyTurtleDev/macroquad.git?branch=no-sound)",
+ "macroquad",
 ]
 
 [[package]]
@@ -1259,11 +1245,6 @@ name = "macroquad_macro"
 version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f5cecfede1e530599c8686f7f2d609489101d3d63741a6dc423afc997ce3fcc8"
-
-[[package]]
-name = "macroquad_macro"
-version = "0.1.7"
-source = "git+https://github.com/LuckyTurtleDev/macroquad.git?branch=no-sound#944ca8a04d04d16ae1320dd37785ce889087ed64"
 
 [[package]]
 name = "malloc_buf"
