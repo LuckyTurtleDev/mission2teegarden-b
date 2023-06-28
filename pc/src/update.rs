@@ -46,6 +46,7 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 			rotation: Rotation::NoRotation,
 			finished: false,
 			crashed: false,
+			out_of_map: false,
 			solution: None
 		})
 		.collect();
@@ -162,6 +163,14 @@ impl GameState {
 				.iter_mut()
 				.zip(self.input_players.players.iter())
 			{
+				if state.out_of_map {
+					state.finished = true;
+					if let Some(ref player) = player {
+						player.send_events(ToPypadeGameEvent::GameOver(
+							GameOver::DriveAway
+						));
+					}
+				}
 				if !state.finished && !state.crashed {
 					let new_values = get_relative_xy(state);
 					let new_x = state.position.0 as i8 + new_values.0;
@@ -172,12 +181,9 @@ impl GameState {
 						|| new_y >= game_run.level.height as i8)
 						&& !state.finished
 					{
-						if let Some(ref player) = player {
-							player.send_events(ToPypadeGameEvent::GameOver(
-								GameOver::DriveAway
-							))
-						}
-					} else if !game_run.level.passable(new_x as u8, new_y as u8)
+						state.out_of_map = true;
+					}
+					if !game_run.level.passable(new_x as u8, new_y as u8)
 						&& !state.crashed && player.is_some()
 					{
 						player

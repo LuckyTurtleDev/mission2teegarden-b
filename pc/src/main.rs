@@ -68,6 +68,7 @@ struct PlayerState {
 	/// either reached goal or out of map
 	finished: bool,
 	crashed: bool,
+	out_of_map: bool,
 	/// Is `None` if the player has not create/send any solution.
 	solution: Option<cards_ev::CardIter>
 }

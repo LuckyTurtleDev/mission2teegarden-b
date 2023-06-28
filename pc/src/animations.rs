@@ -14,7 +14,7 @@ impl GameState {
 			lifetime_randomness: 0.7,
 			explosiveness: 0.95,
 			initial_direction_spread: 0.5,
-			amount: 20,
+			amount: 15,
 			atlas: Some(AtlasConfig::new(4, 4, 0..8)),
 			size: 15.0,
 			blend_mode: BlendMode::Additive,
