@@ -1,4 +1,5 @@
 use crate::{tiles::GetTexture, GameState, Orientation, Rotation, TEXTURES};
+use bincode::de;
 use macroquad::{math::Vec2, prelude::*};
 
 impl GameState {
@@ -47,14 +48,24 @@ impl GameState {
 						let texture = player_textures[x];
 						// Car drives forward
 						if game_run.player_states[x].rotation == Rotation::NoRotation {
-							let relative_pos_x = (game_run.player_states[x].position.0
-								as f32 - player.position.0 as f32)
-								* dest_size / (self.movement_time
-								/ self.delta_time);
-							let relative_pos_y = (game_run.player_states[x].position.1
-								as f32 - player.position.1 as f32)
-								* dest_size / (self.movement_time
-								/ self.delta_time);
+							let current_pos_x =
+								if game_run.player_states[x].position.0 == 255 {
+									-1
+								} else {
+									game_run.player_states[x].position.0 as i16
+								};
+							let current_pos_y =
+								if game_run.player_states[x].position.1 == 255 {
+									-1
+								} else {
+									game_run.player_states[x].position.1 as i16
+								};
+							let relative_pos_x = (current_pos_x as f32
+								- player.position.0 as f32) * dest_size
+								/ (self.movement_time / self.delta_time);
+							let relative_pos_y = (current_pos_y as f32
+								- player.position.1 as f32) * dest_size
+								/ (self.movement_time / self.delta_time);
 							let rotation: f32 = match player.orientation {
 								Orientation::North => 0.0,
 								Orientation::East => 90.0,
@@ -79,7 +90,6 @@ impl GameState {
 									));
 								}
 							}
-
 						// Car makes a turn
 						} else {
 							let sign = match game_run.player_states[x].rotation {
@@ -117,6 +127,39 @@ impl GameState {
 						}
 					}
 				}
+				//draw map border
+				//top of map
+				draw_rectangle(
+					map_offset_x,
+					map_offset_y - dest_size,
+					dest_size * game_run.level.width as f32,
+					dest_size,
+					BLACK
+				);
+				// left of map
+				draw_rectangle(
+					map_offset_x - dest_size,
+					map_offset_y,
+					dest_size,
+					dest_size * game_run.level.height as f32,
+					BLACK
+				);
+				// right of map
+				draw_rectangle(
+					map_offset_x + dest_size * game_run.level.width as f32,
+					map_offset_y,
+					dest_size,
+					dest_size * game_run.level.height as f32,
+					BLACK
+				);
+				// bottom of map
+				draw_rectangle(
+					map_offset_x,
+					map_offset_y + dest_size * game_run.level.height as f32,
+					dest_size * game_run.level.width as f32,
+					dest_size,
+					BLACK
+				);
 			}
 		}
 	}
