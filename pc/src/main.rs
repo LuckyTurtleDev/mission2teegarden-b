@@ -6,6 +6,7 @@ use m3_macro::include_map;
 use m3_map::{Map, Orientation};
 use m3_models::{AvailableCards, ToPypadeGameEvent};
 use macroquad::{prelude::*, window, Window};
+use macroquad_particles::Emitter;
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
 use sound::SoundPlayer;
@@ -13,6 +14,7 @@ use sound::SoundPlayer;
 mod assets;
 mod cards_ev;
 use cards_ev::{evaluate_cards, CarAction};
+mod animations;
 mod draw;
 mod menu;
 mod sound;
@@ -66,6 +68,7 @@ struct PlayerState {
 	/// either reached goal or out of map
 	finished: bool,
 	crashed: bool,
+	out_of_map: bool,
 	/// Is `None` if the player has not create/send any solution.
 	solution: Option<cards_ev::CardIter>
 }
@@ -85,6 +88,7 @@ struct GameState {
 	delta_time: f32,
 	movement_time: f32,
 	level_num: usize,
+	animation_emitter: Option<Emitter>,
 	running: bool
 }
 
@@ -92,32 +96,6 @@ impl GameState {
 	fn new() -> GameState {
 		let sound_player = sound::SoundPlayer::new();
 		Lazy::force(&TEXTURES);
-		let mut level = Map::from_string(LEVELS[0]).unwrap(); //tests check if map is vaild
-		level.cards = AvailableCards {
-			left: 3,
-			right: 3,
-			motor_on: 2,
-			motor_off: 2,
-			wait: 9
-		};
-		debug!("load level{:#?}", level);
-		let player_states = level
-			.iter_player()
-			.map(|f| PlayerState {
-				position: f.position,
-				orientation: f.orientation,
-				next_action: None,
-				rotation: Rotation::NoRotation,
-				finished: false,
-				crashed: false,
-				solution: None
-			})
-			.collect();
-		let game_run = GameRun {
-			level,
-			player_states,
-			player_finished_level: 0
-		};
 
 		GameState {
 			sound_player,
@@ -128,6 +106,7 @@ impl GameState {
 			movement_time: 0.5,
 			player_count: 0,
 			level_num: 0,
+			animation_emitter: None,
 			running: true
 		}
 	}
@@ -180,7 +159,7 @@ async fn run_game() {
 			},
 			Activity::GameRound(Phase::Select) => {
 				game_state.draw().await;
-				setup_players(&mut game_state)
+				setup_players(&mut game_state).await;
 			},
 			Activity::GameRound(Phase::Drive) => {
 				game_state.update().await;
@@ -192,6 +171,7 @@ async fn run_game() {
 			Activity::SelectLevel => {
 				game_state.build_level_menu().await;
 				init_level(&mut game_state);
+				game_state.load_fire_emitter().await;
 			}
 		}
 		next_frame().await;

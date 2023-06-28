@@ -176,7 +176,7 @@ pub enum MapError {
 impl Map {
 	///return if all static tiles at x,y postion are passable
 	pub fn passable(&self, x: u8, y: u8) -> bool {
-		if x > self.width || y > self.height {
+		if x >= self.width || y >= self.height {
 			//car can leave the map an drive away (game over)
 			return true;
 		}

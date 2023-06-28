@@ -2,6 +2,7 @@ use crate::{
 	cards_ev::CarAction, evaluate_cards, Activity, GameRun, GameState, Map, Phase,
 	PlayerState, Rotation, LEVELS
 };
+use bincode::de;
 use m3_map::Orientation;
 use m3_models::{
 	AvailableCards, GameOver, Key, NeoPixelColor, ToPcGameEvent, ToPypadeGameEvent
@@ -46,6 +47,7 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 			rotation: Rotation::NoRotation,
 			finished: false,
 			crashed: false,
+			out_of_map: false,
 			solution: None
 		})
 		.collect();
@@ -58,7 +60,7 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 	game_state.delta_time = 0.0;
 }
 
-pub(crate) fn setup_players(game_state: &mut GameState) {
+pub(crate) async fn setup_players(game_state: &mut GameState) {
 	let events = game_state.input_players.get_events();
 	if game_state.player_count < events.iter().flatten().count() as u8 {
 		if let Some(player) = game_state.input_players.players.iter().flatten().last() {
@@ -114,7 +116,8 @@ impl GameState {
 		let events = self.input_players.get_events();
 		if reset_button_pressed(&events) {
 			init_level(self);
-			activate_players(self, ToPypadeGameEvent::Retry)
+			activate_players(self, ToPypadeGameEvent::Retry);
+			self.activity = Activity::GameRound(Phase::Select);
 		} else {
 			if self.delta_time >= self.movement_time {
 				if self.game_run.as_ref().unwrap().player_finished_level
@@ -161,6 +164,14 @@ impl GameState {
 				.iter_mut()
 				.zip(self.input_players.players.iter())
 			{
+				if state.out_of_map {
+					state.finished = true;
+					if let Some(ref player) = player {
+						player.send_events(ToPypadeGameEvent::GameOver(
+							GameOver::DriveAway
+						));
+					}
+				}
 				if !state.finished && !state.crashed {
 					let new_values = get_relative_xy(state);
 					let new_x = state.position.0 as i8 + new_values.0;
@@ -171,12 +182,9 @@ impl GameState {
 						|| new_y >= game_run.level.height as i8)
 						&& !state.finished
 					{
-						if let Some(ref player) = player {
-							player.send_events(ToPypadeGameEvent::GameOver(
-								GameOver::DriveAway
-							))
-						}
-					} else if !game_run.level.passable(new_x as u8, new_y as u8)
+						state.out_of_map = true;
+					}
+					if !game_run.level.passable(new_x as u8, new_y as u8)
 						&& !state.crashed && player.is_some()
 					{
 						player
@@ -217,10 +225,12 @@ impl GameState {
 						&& self.input_players.players[y].as_ref().is_some()
 						&& (!game_run.player_states[x].finished
 							&& !game_run.player_states[y].finished)
-						&& (game_run.player_states[x].position
-							== game_run.player_states[y].position
+						&& (game_run.level.iter_player().nth(x).unwrap().position
+							== game_run.level.iter_player().nth(y).unwrap().position
 							|| game_run.player_states[x].position
-								== game_run.level.iter_player().nth(y).unwrap().position)
+								== game_run.level.iter_player().nth(y).unwrap().position
+							|| game_run.player_states[y].position
+								== game_run.level.iter_player().nth(x).unwrap().position)
 					{
 						self.input_players.players[x]
 							.as_ref()

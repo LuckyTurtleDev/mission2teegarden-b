@@ -1,4 +1,4 @@
-use crate::{update::init_level, Activity, GameState, Phase, LEVELS};
+use crate::{Activity, GameState, Phase, LEVELS};
 use m3_models::{AvailableCards, Key, ToPcGameEvent, ToPypadeGameEvent};
 
 use macroquad::{
@@ -37,11 +37,6 @@ fn get_button_skin() -> Skin {
 
 fn get_button_focused_skin() -> Skin {
 	{
-		let window_style = root_ui()
-			.style_builder()
-			.background_margin(RectOffset::new(15.0, 15.0, 7.5, 7.5))
-			.margin(RectOffset::new(-20.0, -30.0, 0.0, 0.0))
-			.build();
 		let button_style = root_ui()
 			.style_builder()
 			.background(Image::from_file_with_format(
@@ -151,7 +146,6 @@ impl GameState {
 		);
 		let button_skin = get_button_skin();
 		let button_focused_skin = get_button_focused_skin();
-		let skin: &Skin = &button_focused_skin.clone();
 		let mut enter_pressed = false;
 		let mut button_focused_index = 0;
 

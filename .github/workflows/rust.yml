@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, windows, macos]
-        rust_version: [stable, 1.64]
+        rust_version: [stable, "1.70"]
     name: "test pc ${{ matrix.os }} ${{ matrix.rust_version }}"
     runs-on: ${{ matrix.os }}-latest
     steps:
@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rust_version: [stable, nightly, 1.64]
+        rust_version: [stable, nightly, "1.70"]
     continue-on-error: true
     name: "check pybadge ${{ matrix.rust_version }}"
     steps:
