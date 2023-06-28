@@ -1,22 +1,27 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
 #![forbid(unused_must_use, unsafe_code)]
 
+use std::process;
+
 use clap::Parser;
-use m3_map::Map;
+use m3_map::commands::*;
 
 #[derive(Debug, Parser)]
-pub struct Opt {
-	file: String
+enum Opt {
+	/// Validate a Tiled map
+	Validate(OptValidateMap),
+	/// Export a tiled map to an mission2teegarden-b level
+	Export(OptExportMap)
 }
 
 fn main() {
 	let opt = Opt::parse();
-	let result = Map::from_tmx(opt.file);
-	match result {
-		Err(err) => {
-			eprintln!("ERROR: {err}");
-			std::process::exit(1);
-		},
-		Ok(map) => println!("{map:#?}\nmap is valid")
+	let result = match opt {
+		Opt::Validate(opt) => validate(opt),
+		Opt::Export(opt) => export(opt)
+	};
+	if let Err(err) = result {
+		eprintln!("{err:?}");
+		process::exit(1);
 	}
 }
