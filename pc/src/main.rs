@@ -69,8 +69,7 @@ struct PlayerState {
 
 struct GameRun {
 	level: Map,
-	player_states: Vec<PlayerState>,
-	player_finished_level: u8
+	player_states: Vec<PlayerState>
 }
 
 struct GameState {

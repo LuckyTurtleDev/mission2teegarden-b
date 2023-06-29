@@ -52,8 +52,7 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 		.collect();
 	let game_run = GameRun {
 		level,
-		player_states,
-		player_finished_level: 0
+		player_states
 	};
 	game_state.game_run = Some(game_run);
 	game_state.delta_time = 0.0;
@@ -202,7 +201,6 @@ impl GameState {
 						state.next_action = match &mut state.solution {
 							Some(iter) => {
 								let (index, action) = iter.next().unwrap();
-
 								if let Some(ref player) = player {
 									player.send_events(
 										ToPypadeGameEvent::CurrentCardIndex(
@@ -210,7 +208,6 @@ impl GameState {
 										)
 									);
 								}
-
 								action
 							},
 							None => Some(CarAction::DriveForward)
