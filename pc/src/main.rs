@@ -52,6 +52,8 @@ pub enum Rotation {
 	RotateRight,
 	NoRotation
 }
+
+#[derive(Debug)]
 struct PlayerState {
 	position: (u8, u8),
 	orientation: Orientation,
