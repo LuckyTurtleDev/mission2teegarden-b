@@ -55,11 +55,13 @@ impl SoundPlayer {
 		self.background_music.play();
 		self.current_background_music = CurrentBackgroundMusic::Level;
 	}
-	
+
 	/// play a crash sound once
 	pub(crate) fn play_crash(&mut self) {
 		let source = Decoder::new(Cursor::new(SOUNDS.crash)).unwrap();
-		self.output_handle.play_raw(source.convert_samples()).unwrap();
+		self.output_handle
+			.play_raw(source.convert_samples())
+			.unwrap();
 	}
 
 	pub(crate) fn poll(&self) {

@@ -30,7 +30,7 @@ pub(crate) const MUSIC: Music = Music {
 
 pub(crate) const SOUNDS: Sounds = Sounds {
 	/// https://pixabay.com/sound-effects/clank-car-crash-collision-6206/
-	crash: include_bytes!("../assets/sound/effects/crash.mp3"),
+	crash: include_bytes!("../assets/sound/effects/crash.mp3")
 };
 
 pub(crate) struct Song {
@@ -44,7 +44,7 @@ pub(crate) struct Music {
 }
 
 pub(crate) struct Sounds {
-	pub(crate) crash: &'static [u8],
+	pub(crate) crash: &'static [u8]
 }
 
 ///store maps as String binary format
