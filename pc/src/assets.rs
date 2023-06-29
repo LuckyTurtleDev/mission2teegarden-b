@@ -29,8 +29,9 @@ pub(crate) const MUSIC: Music = Music {
 };
 
 pub(crate) const SOUNDS: Sounds = Sounds {
-	/// https://pixabay.com/sound-effects/clank-car-crash-collision-6206/
-	crash: include_bytes!("../assets/sound/effects/crash.mp3")
+	crash: include_bytes!("../assets/sound/effects/crash.mp3"),
+	driving: include_bytes!("../assets/sound/effects/driving.mp3"),
+	gravel_road: include_bytes!("../assets/sound/effects/gravel-road.mp3")
 };
 
 pub(crate) struct Song {
@@ -44,7 +45,12 @@ pub(crate) struct Music {
 }
 
 pub(crate) struct Sounds {
-	pub(crate) crash: &'static [u8]
+	/// https://pixabay.com/sound-effects/clank-car-crash-collision-6206/
+	pub(crate) crash: &'static [u8],
+	/// https://pixabay.com/sound-effects/driving-in-a-car-6227/
+	pub(crate) driving: &'static [u8],
+	/// https://pixabay.com/sound-effects/gravel-road-6747/
+	pub(crate) gravel_road: &'static [u8]
 }
 
 ///store maps as String binary format

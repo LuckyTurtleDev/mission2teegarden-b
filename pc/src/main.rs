@@ -106,7 +106,7 @@ impl GameState {
 
 async fn run_game() {
 	let mut game_state = GameState::new();
-	game_state.sound_player.play_crash();
+	game_state.sound_player.play_driving_looped();
 	while game_state.running {
 		game_state.sound_player.poll();
 		match game_state.activity {
