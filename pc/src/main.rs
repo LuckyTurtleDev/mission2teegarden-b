@@ -52,6 +52,8 @@ pub enum Rotation {
 	RotateRight,
 	NoRotation
 }
+
+#[derive(Debug)]
 struct PlayerState {
 	position: (u8, u8),
 	orientation: Orientation,
@@ -110,6 +112,30 @@ async fn run_game() {
 	game_state.sound_player.play_driving_looped();
 	while game_state.running {
 		game_state.sound_player.poll();
+		match game_state.activity {
+			Activity::GameRound(Phase::Drive) => {
+				if let Some(ref game_run) = game_state.game_run {
+					if 0 == game_run
+						.player_states
+						.iter()
+						.filter(|player| {
+							log::error!{"{player:?}"};
+							!(player.finished
+								|| player.crashed || player.out_of_map
+								|| player.next_action.is_none())
+						})
+						.count()
+					{
+						game_state.sound_player.stopp_driving();
+					} else {
+						game_state.sound_player.play_driving_looped();
+					}
+				} else {
+					game_state.sound_player.stopp_driving();
+				}
+			},
+			_ => game_state.sound_player.stopp_driving()
+		}
 		match game_state.activity {
 			Activity::GameRound(Phase::Introduction) => {
 				game_state

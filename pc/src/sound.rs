@@ -33,7 +33,7 @@ impl SoundPlayer {
 		driving.set_volume(1.0);
 		output_handle.play_raw(driving_output).unwrap();
 		let (gravel, gravel_output) = Sink::new_idle();
-		gravel.set_volume(0.6);
+		gravel.set_volume(2.6);
 		output_handle.play_raw(gravel_output).unwrap();
 		let mut sound_player = SoundPlayer {
 			_stream,
@@ -88,8 +88,10 @@ impl SoundPlayer {
 			self.is_driving = true;
 			let decoder = Decoder::new_looped(Cursor::new(SOUNDS.driving)).unwrap();
 			self.driving.append(decoder);
+			self.driving.play();
 			let decoder = Decoder::new_looped(Cursor::new(SOUNDS.gravel_road)).unwrap();
 			self.gravel.append(decoder);
+			self.gravel.play();
 		}
 	}
 
@@ -97,8 +99,8 @@ impl SoundPlayer {
 	pub(crate) fn stopp_driving(&mut self) {
 		if self.is_driving {
 			self.is_driving = false;
-			self.driving.stop();
-			self.gravel.stop();
+			self.driving.clear();
+			self.gravel.clear();
 		}
 	}
 
