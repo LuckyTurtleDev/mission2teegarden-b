@@ -134,6 +134,11 @@ impl GameState {
 	/// calculate next moves
 	pub(crate) fn next_move(&mut self) {
 		if let Some(ref mut game_run) = self.game_run {
+			let crashed_player_count = game_run
+				.player_states
+				.iter()
+				.filter(|player| player.crashed)
+				.count();
 			// update player positions
 			let global_goal = game_run.level.global_goal;
 			for (player, player_state) in game_run
@@ -247,6 +252,15 @@ impl GameState {
 							game_run.level.iter_player().nth(y).unwrap().position;
 					}
 				}
+			}
+			if crashed_player_count
+				!= game_run
+					.player_states
+					.iter()
+					.filter(|player| player.crashed)
+					.count()
+			{
+				self.sound_player.play_crash();
 			}
 		}
 	}
