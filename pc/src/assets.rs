@@ -24,7 +24,10 @@ pub(crate) const MUSIC: Music = Music {
 	]
 };
 
-pub(crate) const SOUNDS: Sounds = Sounds {};
+pub(crate) const SOUNDS: Sounds = Sounds {
+	/// https://pixabay.com/sound-effects/clank-car-crash-collision-6206/
+	crash: include_bytes!("../assets/sound/effects/crash.mp3"),
+};
 
 pub(crate) struct Song {
 	pub(crate) file_name: &'static str,
@@ -36,4 +39,6 @@ pub(crate) struct Music {
 	pub(crate) background_music: &'static [Song]
 }
 
-pub(crate) struct Sounds {}
+pub(crate) struct Sounds {
+	pub(crate) crash: &'static [u8],
+}
