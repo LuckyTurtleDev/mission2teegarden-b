@@ -2,7 +2,7 @@
 #![forbid(unused_must_use, unsafe_code)]
 
 use clap::Parser;
-use log::{debug, info};
+use log::info;
 use m3_macro::include_map;
 use m3_map::{Map, Orientation};
 use m3_models::{AvailableCards, ToPypadeGameEvent};
@@ -11,7 +11,7 @@ use macroquad_particles::Emitter;
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
 use sound::SoundPlayer;
-use std::io::IsTerminal;
+use std::{io::IsTerminal, process};
 
 mod assets;
 mod cards_ev;
@@ -180,13 +180,11 @@ async fn run_game() {
 	}
 }
 
-
 #[derive(Debug, Default, Parser)]
 pub struct OptPlay {
 	/// An optional level to start file (can be tiled map or mission2teegarden-b level)
 	file: Option<String>
 }
-
 
 #[derive(Debug, Parser)]
 enum Opt {
@@ -213,7 +211,7 @@ fn main() {
 	} else {
 		Default::default()
 	};
-	match opt {
+	let result = match opt {
 		Opt::ValidateMap(opt) => m3_map::commands::validate(opt),
 		Opt::ExportMap(opt) => m3_map::commands::export(opt),
 		Opt::Play(opt) => {
@@ -230,9 +228,12 @@ fn main() {
 			);
 			Ok(())
 		}
+	};
+	if let Err(err) = result {
+		eprintln!("{err:?}");
+		process::exit(1);
 	}
 }
-
 
 #[cfg(test)]
 mod tests {
