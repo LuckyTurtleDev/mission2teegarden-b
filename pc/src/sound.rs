@@ -2,7 +2,7 @@ use crate::assets::{MUSIC, SOUNDS};
 use log::info;
 use rand::{seq::SliceRandom, thread_rng};
 use rodio::{Decoder, OutputStream, OutputStreamHandle, Sink, Source};
-use std::{io::Cursor, path::PathBuf};
+use std::{io::Cursor, path::PathBuf, time::Duration};
 
 enum CurrentBackgroundMusic {
 	Titel,
@@ -74,7 +74,9 @@ impl SoundPlayer {
 
 	/// play a crash sound once
 	pub(crate) fn play_crash(&mut self) {
-		let source = Decoder::new(Cursor::new(SOUNDS.crash)).unwrap();
+		let source = Decoder::new(Cursor::new(SOUNDS.crash))
+			.unwrap()
+			.skip_duration(Duration::from_millis(100));
 		self.output_handle
 			.play_raw(source.convert_samples())
 			.unwrap();

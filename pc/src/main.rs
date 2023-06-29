@@ -78,6 +78,7 @@ struct GameState {
 	game_run: Option<GameRun>,
 	input_players: Players,
 	delta_time: f32,
+	/// time of one round in seconds
 	movement_time: f32,
 	level_num: usize,
 	animation_emitter: Option<Emitter>,
