@@ -1,7 +1,7 @@
+use crate::Map;
 use anyhow::Context;
 use clap::Parser;
 use std::{fs::File, io::Write, path::PathBuf};
-use crate::Map;
 
 #[derive(Debug, Parser)]
 pub struct OptValidateMap {
