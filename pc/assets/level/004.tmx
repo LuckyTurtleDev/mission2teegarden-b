@@ -3,7 +3,7 @@
  <properties>
   <property name="left" type="int" value="4"/>
   <property name="right" type="int" value="4"/>
-  <property name="wait" type="int" value="6"/>
+  <property name="wait" type="int" value="9"/>
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
  <tileset firstgid="6" source="../img/ObjectTiles/ObjectTiles.tsx"/>
@@ -43,7 +43,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,1610612746,0,16,0,0,0,0,0,0,0,0,13,0,1610612745,0,
+0,2684354570,0,16,0,0,0,0,0,0,0,0,13,0,1610612745,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
