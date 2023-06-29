@@ -4,7 +4,7 @@ use m3_map::{
 	story::{Background, Character},
 	tiles::{ObjectTile, PlayerTile, Tile}
 };
-use macroquad::{prelude::ImageFormat, texture::Texture2D};
+use macroquad::texture::Texture2D;
 
 impl GetTexture for MapBaseTile {
 	///get Texture assioated with this Tile
