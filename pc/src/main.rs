@@ -121,7 +121,6 @@ async fn run_game() {
 						.flatten()
 						.zip(game_run.player_states.iter())
 						.filter(|(_player, state)| {
-							log::error! {"{state:?}"};
 							!(state.finished
 								|| state.crashed || state.out_of_map
 								|| state.next_action.is_none())

@@ -33,7 +33,7 @@ impl SoundPlayer {
 		driving.set_volume(1.0);
 		output_handle.play_raw(driving_output).unwrap();
 		let (gravel, gravel_output) = Sink::new_idle();
-		gravel.set_volume(2.6);
+		gravel.set_volume(0.6);
 		output_handle.play_raw(gravel_output).unwrap();
 		let mut sound_player = SoundPlayer {
 			_stream,
@@ -86,10 +86,15 @@ impl SoundPlayer {
 	pub(crate) fn play_driving_looped(&mut self) {
 		if !self.is_driving {
 			self.is_driving = true;
-			let decoder = Decoder::new_looped(Cursor::new(SOUNDS.driving)).unwrap();
+			let decoder = Decoder::new_looped(Cursor::new(SOUNDS.driving))
+				.unwrap()
+				// no idea why, but the sound start a half round to early
+				.delay(Duration::from_millis(250));
 			self.driving.append(decoder);
 			self.driving.play();
-			let decoder = Decoder::new_looped(Cursor::new(SOUNDS.gravel_road)).unwrap();
+			let decoder = Decoder::new_looped(Cursor::new(SOUNDS.gravel_road))
+				.unwrap()
+				.delay(Duration::from_millis(250));
 			self.gravel.append(decoder);
 			self.gravel.play();
 		}
