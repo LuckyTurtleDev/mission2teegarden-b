@@ -20,10 +20,10 @@ use story::Story;
 use thiserror::Error;
 use tiled::{LayerTile, LayerType, Loader, Properties};
 
+pub mod commands;
+pub mod story;
 pub mod tiles;
 use tiles::{InvalidTile, MapBaseTile, ObjectTile, Passable, PlayerTile, Tile};
-
-pub mod story;
 
 /// allow Serialization of MapProporties
 struct PropertiesSerde(Properties);

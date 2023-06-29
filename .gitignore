@@ -1,3 +1,5 @@
 /target
 *.orig
 *~
+
+*.m2tb_map

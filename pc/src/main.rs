@@ -1,7 +1,8 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
 #![forbid(unused_must_use, unsafe_code)]
 
-use log::{debug, info};
+use clap::Parser;
+use log::info;
 use m3_macro::include_map;
 use m3_map::{Map, Orientation};
 use m3_models::{AvailableCards, ToPypadeGameEvent};
@@ -10,6 +11,7 @@ use macroquad_particles::Emitter;
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
 use sound::SoundPlayer;
+use std::{io::IsTerminal, process};
 
 mod assets;
 mod cards_ev;
@@ -178,21 +180,59 @@ async fn run_game() {
 	}
 }
 
+#[derive(Debug, Default, Parser)]
+pub struct OptPlay {
+	/// An optional level to start file (can be tiled map or mission2teegarden-b level)
+	file: Option<String>
+}
+
+#[derive(Debug, Parser)]
+enum Opt {
+	/// Validate a Tiled map
+	ValidateMap(m3_map::commands::OptValidateMap),
+	/// Export a tiled map to an mission2teegarden-b level
+	ExportMap(m3_map::commands::OptExportMap),
+	/// Start the game.
+	Play(OptPlay)
+}
+
+impl Default for Opt {
+	fn default() -> Self {
+		Opt::Play(Default::default())
+	}
+}
+
 fn main() {
 	my_env_logger_style::set_timestamp_precision(TimestampPrecision::Disable);
 	my_env_logger_style::just_log();
 	info!("🚗 {CARGO_PKG_NAME}  v{CARGO_PKG_VERSION} 🚗");
-	Window::from_config(
-		window::Conf {
-			sample_count: 8, //anti-aliasing
-			window_title: format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"),
-			high_dpi: true,
-			#[cfg(not(debug_assertions))]
-			fullscreen: true,
-			..Default::default()
-		},
-		run_game()
-	);
+	let opt = if std::io::stdin().is_terminal() {
+		Opt::parse()
+	} else {
+		Default::default()
+	};
+	let result = match opt {
+		Opt::ValidateMap(opt) => m3_map::commands::validate(opt),
+		Opt::ExportMap(opt) => m3_map::commands::export(opt),
+		Opt::Play(opt) => {
+			Window::from_config(
+				window::Conf {
+					sample_count: 8, //anti-aliasing
+					window_title: format!("{CARGO_PKG_NAME} v{CARGO_PKG_VERSION}"),
+					high_dpi: true,
+					#[cfg(not(debug_assertions))]
+					fullscreen: true,
+					..Default::default()
+				},
+				run_game()
+			);
+			Ok(())
+		}
+	};
+	if let Err(err) = result {
+		eprintln!("{err:?}");
+		process::exit(1);
+	}
 }
 
 #[cfg(test)]
