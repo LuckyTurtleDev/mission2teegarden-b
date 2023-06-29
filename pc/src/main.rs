@@ -52,6 +52,8 @@ pub enum Rotation {
 	RotateRight,
 	NoRotation
 }
+
+#[derive(Debug)]
 struct PlayerState {
 	position: (u8, u8),
 	orientation: Orientation,
@@ -67,8 +69,7 @@ struct PlayerState {
 
 struct GameRun {
 	level: Map,
-	player_states: Vec<PlayerState>,
-	player_finished_level: u8
+	player_states: Vec<PlayerState>
 }
 
 struct GameState {

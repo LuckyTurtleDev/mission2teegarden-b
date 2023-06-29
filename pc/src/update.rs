@@ -35,7 +35,7 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 		right: 3,
 		motor_on: 2,
 		motor_off: 2,
-		wait: 4
+		wait: 9
 	};
 	let player_states = level
 		.iter_player()
@@ -52,8 +52,7 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 		.collect();
 	let game_run = GameRun {
 		level,
-		player_states,
-		player_finished_level: 0
+		player_states
 	};
 	game_state.game_run = Some(game_run);
 	game_state.delta_time = 0.0;
@@ -119,11 +118,6 @@ impl GameState {
 			self.activity = Activity::GameRound(Phase::Select);
 		} else {
 			if self.delta_time >= self.movement_time {
-				if self.game_run.as_ref().unwrap().player_finished_level
-					== self.player_count
-				{
-					self.activity = Activity::GameRound(Phase::Finish);
-				}
 				self.delta_time -= self.movement_time;
 				self.next_move();
 			}
@@ -136,26 +130,35 @@ impl GameState {
 		if let Some(ref mut game_run) = self.game_run {
 			// update player positions
 			let global_goal = game_run.level.global_goal;
-			for (player, player_state) in game_run
+			let mut num_player_finished = 0;
+			for (x, (player, player_state)) in game_run
 				.level
 				.iter_mut_player()
 				.zip(game_run.player_states.iter_mut())
+				.enumerate()
 			{
 				player.position = player_state.position;
 				player.orientation = player_state.orientation;
 				if let Some(global_goal) = global_goal {
 					if player.position.0 == global_goal.0
 						&& player.position.1 == global_goal.1
+						&& self.input_players.players[x].is_some()
 					{
 						player_state.finished = true;
-						game_run.player_finished_level += 1;
+						num_player_finished += 1;
 					}
 				} else if let Some(goal) = player.goal {
-					if player.position.0 == goal.0 && player.position.1 == goal.1 {
+					if player.position.0 == goal.0
+						&& player.position.1 == goal.1
+						&& self.input_players.players[x].is_some()
+					{
 						player_state.finished = true;
-						game_run.player_finished_level += 1;
+						num_player_finished += 1;
 					}
 				}
+			}
+			if num_player_finished == self.player_count {
+				self.activity = Activity::GameRound(Phase::Finish);
 			}
 			//update next state
 			for (state, player) in game_run
@@ -198,7 +201,6 @@ impl GameState {
 						state.next_action = match &mut state.solution {
 							Some(iter) => {
 								let (index, action) = iter.next().unwrap();
-
 								if let Some(ref player) = player {
 									player.send_events(
 										ToPypadeGameEvent::CurrentCardIndex(
@@ -206,7 +208,6 @@ impl GameState {
 										)
 									);
 								}
-
 								action
 							},
 							None => Some(CarAction::DriveForward)
