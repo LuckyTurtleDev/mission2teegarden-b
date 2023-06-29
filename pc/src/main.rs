@@ -1,9 +1,9 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
 #![forbid(unused_must_use, unsafe_code)]
 
+use assets::LEVELS;
 use clap::Parser;
 use log::info;
-use m3_macro::include_map;
 use m3_map::{Map, Orientation};
 use m3_models::{AvailableCards, ToPypadeGameEvent};
 use macroquad::{prelude::*, window, Window};
@@ -14,6 +14,7 @@ use sound::SoundPlayer;
 use std::{io::IsTerminal, process};
 
 mod assets;
+use assets::TEXTURES;
 mod cards_ev;
 use cards_ev::{evaluate_cards, CarAction};
 mod animations;
@@ -21,8 +22,7 @@ mod draw;
 mod menu;
 mod sound;
 mod story_display;
-mod tiles;
-use tiles::TEXTURES;
+pub mod tiles;
 mod update;
 use update::{activate_players, init_level, setup_players};
 mod usb;
@@ -30,17 +30,6 @@ use usb::Players;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
-
-///store maps as String binary format
-///call `Map::from_str()`
-static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
-	vec![
-		include_map!("pc/assets/level/001.tmx"),
-		include_map!("pc/assets/level/002.tmx"),
-		include_map!("pc/assets/level/003.tmx"),
-		include_map!("pc/assets/level/004.tmx"),
-	]
-});
 
 #[derive(PartialEq)]
 enum Phase {
