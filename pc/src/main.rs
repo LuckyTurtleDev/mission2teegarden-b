@@ -115,11 +115,14 @@ async fn run_game() {
 		match game_state.activity {
 			Activity::GameRound(Phase::Drive) => {
 				if let Some(ref game_run) = game_state.game_run {
-					if 0 == game_state.input_players.players.iter().flatten().zip(game_run
-						.player_states
-						.iter())
+					if 0 == game_state
+						.input_players
+						.players
+						.iter()
+						.flatten()
+						.zip(game_run.player_states.iter())
 						.filter(|(_player, state)| {
-							log::error!{"{state:?}"};
+							log::error! {"{state:?}"};
 							!(state.finished
 								|| state.crashed || state.out_of_map
 								|| state.next_action.is_none())
