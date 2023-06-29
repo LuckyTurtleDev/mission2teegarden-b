@@ -1,3 +1,4 @@
+use crate::{assets::GetTexture, GameState};
 use m3_map::story::Speech;
 use m3_models::ToPcGameEvent;
 use macroquad::{
@@ -7,8 +8,6 @@ use macroquad::{
 	texture::{draw_texture_ex, DrawTextureParams},
 	window::next_frame
 };
-
-use crate::{tiles::GetTexture, GameState};
 
 /// Check if any button is pressed.
 fn button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
