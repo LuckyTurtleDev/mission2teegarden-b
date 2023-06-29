@@ -1,8 +1,8 @@
-use crate::assets::MUSIC;
+use crate::assets::{MUSIC, SOUNDS};
 use log::info;
 use rand::{seq::SliceRandom, thread_rng};
-use rodio::{Decoder, OutputStream, OutputStreamHandle, Sink};
-use std::{io::Cursor, path::PathBuf};
+use rodio::{Decoder, OutputStream, OutputStreamHandle, Sink, Source};
+use std::{io::Cursor, path::PathBuf, time::Duration};
 
 enum CurrentBackgroundMusic {
 	Titel,
@@ -12,7 +12,14 @@ enum CurrentBackgroundMusic {
 pub(crate) struct SoundPlayer {
 	output_handle: OutputStreamHandle,
 	_stream: OutputStream,
+	/// music sink handle
 	background_music: Sink,
+	/// drivig sound sink handle
+	driving: Sink,
+	/// driving gravel sound
+	gravel: Sink,
+	/// true if the car if driving
+	is_driving: bool,
 	current_background_music: CurrentBackgroundMusic
 }
 
@@ -22,10 +29,19 @@ impl SoundPlayer {
 			OutputStream::try_default().expect("failed to access default audio device");
 		let (background_music, background_music_output) = Sink::new_idle();
 		output_handle.play_raw(background_music_output).unwrap();
+		let (driving, driving_output) = Sink::new_idle();
+		driving.set_volume(1.0);
+		output_handle.play_raw(driving_output).unwrap();
+		let (gravel, gravel_output) = Sink::new_idle();
+		gravel.set_volume(0.6);
+		output_handle.play_raw(gravel_output).unwrap();
 		let mut sound_player = SoundPlayer {
 			_stream,
 			output_handle,
 			background_music,
+			driving,
+			gravel,
+			is_driving: false,
 			current_background_music: CurrentBackgroundMusic::Level
 		};
 		sound_player.play_titel_music();
@@ -54,6 +70,43 @@ impl SoundPlayer {
 		self.background_music.set_volume(0.6);
 		self.background_music.play();
 		self.current_background_music = CurrentBackgroundMusic::Level;
+	}
+
+	/// play a crash sound once
+	pub(crate) fn play_crash(&mut self) {
+		let source = Decoder::new(Cursor::new(SOUNDS.crash))
+			.unwrap()
+			.skip_duration(Duration::from_millis(100));
+		self.output_handle
+			.play_raw(source.convert_samples())
+			.unwrap();
+	}
+
+	/// play driving sound
+	pub(crate) fn play_driving_looped(&mut self) {
+		if !self.is_driving {
+			self.is_driving = true;
+			let decoder = Decoder::new_looped(Cursor::new(SOUNDS.driving))
+				.unwrap()
+				// no idea why, but the sound start a half round to early
+				.delay(Duration::from_millis(250));
+			self.driving.append(decoder);
+			self.driving.play();
+			let decoder = Decoder::new_looped(Cursor::new(SOUNDS.gravel_road))
+				.unwrap()
+				.delay(Duration::from_millis(250));
+			self.gravel.append(decoder);
+			self.gravel.play();
+		}
+	}
+
+	/// play driving sound
+	pub(crate) fn stopp_driving(&mut self) {
+		if self.is_driving {
+			self.is_driving = false;
+			self.driving.clear();
+			self.gravel.clear();
+		}
 	}
 
 	pub(crate) fn poll(&self) {

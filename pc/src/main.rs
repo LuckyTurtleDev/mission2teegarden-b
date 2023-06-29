@@ -79,6 +79,7 @@ struct GameState {
 	game_run: Option<GameRun>,
 	input_players: Players,
 	delta_time: f32,
+	/// time of one round in seconds
 	movement_time: f32,
 	level_num: usize,
 	animation_emitter: Option<Emitter>,
@@ -107,8 +108,35 @@ impl GameState {
 
 async fn run_game() {
 	let mut game_state = GameState::new();
+	game_state.sound_player.play_driving_looped();
 	while game_state.running {
 		game_state.sound_player.poll();
+		match game_state.activity {
+			Activity::GameRound(Phase::Drive) => {
+				if let Some(ref game_run) = game_state.game_run {
+					if 0 == game_state
+						.input_players
+						.players
+						.iter()
+						.flatten()
+						.zip(game_run.player_states.iter())
+						.filter(|(_player, state)| {
+							!(state.finished
+								|| state.crashed || state.out_of_map
+								|| state.next_action.is_none())
+						})
+						.count()
+					{
+						game_state.sound_player.stopp_driving();
+					} else {
+						game_state.sound_player.play_driving_looped();
+					}
+				} else {
+					game_state.sound_player.stopp_driving();
+				}
+			},
+			_ => game_state.sound_player.stopp_driving()
+		}
 		match game_state.activity {
 			Activity::GameRound(Phase::Introduction) => {
 				game_state
