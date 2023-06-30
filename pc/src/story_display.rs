@@ -1,6 +1,6 @@
 use crate::{assets::GetTexture, GameState};
-use m3_map::story::Speech;
-use m3_models::ToPcGameEvent;
+use mission2teegarden_b_map::story::Speech;
+use mission2teegarden_b_models::ToPcGameEvent;
 use macroquad::{
 	math::Vec2,
 	prelude::{draw_rectangle, screen_height, screen_width, Color, WHITE},

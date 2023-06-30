@@ -1,4 +1,4 @@
-use m3_macro::include_map;
+use mission2teegarden_b_macro::include_map;
 use macroquad::{prelude::ImageFormat, texture::Texture2D};
 use once_cell::sync::Lazy;
 

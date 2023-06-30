@@ -4,7 +4,7 @@
 use std::process;
 
 use clap::Parser;
-use m3_map::commands::*;
+use mission2teegarden_b_map::commands::*;
 
 #[derive(Debug, Parser)]
 enum Opt {

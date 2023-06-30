@@ -2,7 +2,7 @@
 #![forbid(unused_must_use, unsafe_code)]
 
 use glob::glob;
-use m3_map::Map;
+use mission2teegarden_b_map::Map;
 use proc_macro::TokenStream;
 use proc_macro2::{Span, TokenStream as TokenStream2};
 use quote::{quote, quote_spanned};

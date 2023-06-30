@@ -1,11 +1,11 @@
 [package]
 workspace = ".."
-name = "m3-pybadge"
+name = "mission2teegarden-b-pybadge"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.70"
 publish = false
-repository = "https://github.com/LuckyTurtleDev/m3"
+repository = "https://github.com/LuckyTurtleDev/mission2teegarden-b"
 license = "AGPL-3.0-or-later"
 
 [dependencies]
@@ -13,7 +13,7 @@ bincode = { version = "2.0.0-rc.3", default-features = false, features = ["deriv
 embedded-graphics = "0.7.1"
 embedded-sprites = "0.1.2"
 heapless = "0.7.16"
-m3-models = { version = "0.1.0", path = "../models" }
+mission2teegarden-b-models = { version = "0.1.0", path = "../models" }
 pybadge-high = { version = "0.2.0", features = ["usb", "time", "bluescreen", "bluescreen-message-nightly", "neopixel"] }
 strum = { version = "0.24.1", default-features = false }
 

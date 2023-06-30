@@ -1129,78 +1129,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b06a4cde4c0f271a446782e3eff8de789548ce57dbc8eca9292c27f4a42004b4"
 
 [[package]]
-name = "m3-macro"
-version = "0.1.0"
-dependencies = [
- "bincode",
- "glob",
- "m3-map",
- "proc-macro2",
- "quote",
-]
-
-[[package]]
-name = "m3-map"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "basic-toml",
- "clap",
- "log",
- "m3-models",
- "num_enum 0.6.1",
- "ron",
- "serde",
- "serde_json",
- "thiserror",
- "tiled",
-]
-
-[[package]]
-name = "m3-models"
-version = "0.1.0"
-dependencies = [
- "bincode",
- "serde",
- "strum",
- "strum_macros",
-]
-
-[[package]]
-name = "m3-pc"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bincode",
- "clap",
- "log",
- "m3-macro",
- "m3-map",
- "m3-models",
- "macroquad",
- "macroquad-particles",
- "my-env-logger-style",
- "num_enum 0.6.1",
- "once_cell",
- "rand",
- "rodio",
- "serialport",
-]
-
-[[package]]
-name = "m3-pybadge"
-version = "0.1.0"
-dependencies = [
- "bincode",
- "embedded-graphics",
- "embedded-sprites",
- "heapless",
- "m3-models",
- "pybadge-high",
- "strum",
-]
-
-[[package]]
 name = "mach"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1304,6 +1232,78 @@ checksum = "e7810e0be55b428ada41041c41f32c9f1a42817901b4ccf45fa3d4b6561e74c7"
 dependencies = [
  "adler",
  "simd-adler32",
+]
+
+[[package]]
+name = "mission2teegarden-b-macro"
+version = "0.1.0"
+dependencies = [
+ "bincode",
+ "glob",
+ "mission2teegarden-b-map",
+ "proc-macro2",
+ "quote",
+]
+
+[[package]]
+name = "mission2teegarden-b-map"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "basic-toml",
+ "clap",
+ "log",
+ "mission2teegarden-b-models",
+ "num_enum 0.6.1",
+ "ron",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tiled",
+]
+
+[[package]]
+name = "mission2teegarden-b-models"
+version = "0.1.0"
+dependencies = [
+ "bincode",
+ "serde",
+ "strum",
+ "strum_macros",
+]
+
+[[package]]
+name = "mission2teegarden-b-pc"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bincode",
+ "clap",
+ "log",
+ "macroquad",
+ "macroquad-particles",
+ "mission2teegarden-b-macro",
+ "mission2teegarden-b-map",
+ "mission2teegarden-b-models",
+ "my-env-logger-style",
+ "num_enum 0.6.1",
+ "once_cell",
+ "rand",
+ "rodio",
+ "serialport",
+]
+
+[[package]]
+name = "mission2teegarden-b-pybadge"
+version = "0.1.0"
+dependencies = [
+ "bincode",
+ "embedded-graphics",
+ "embedded-sprites",
+ "heapless",
+ "mission2teegarden-b-models",
+ "pybadge-high",
+ "strum",
 ]
 
 [[package]]

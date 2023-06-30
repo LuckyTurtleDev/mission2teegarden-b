@@ -1,4 +1,4 @@
-use m3_models::Card;
+use mission2teegarden_b_models::Card;
 
 #[derive(Debug, PartialEq)]
 pub(crate) enum CarAction {
@@ -95,7 +95,7 @@ pub(crate) fn evaluate_cards(cards: Vec<Card>) -> CardIter {
 
 #[cfg(test)]
 mod tests {
-	use m3_models::Card::{Left, MotorOff, MotorOn, Wait};
+	use mission2teegarden_b_models::Card::{Left, MotorOff, MotorOn, Wait};
 
 	use crate::cards_ev::{evaluate_cards, CarAction::*};
 	#[test]

@@ -1,7 +1,7 @@
 use crate::send_event;
 use core::{fmt::Write, write};
 use heapless::String;
-use m3_models::{Log, ToPcProtocol};
+use mission2teegarden_b_models::{Log, ToPcProtocol};
 
 // This is extremly ugl
 // and should to refactor
@@ -18,7 +18,7 @@ where
 	for (i, byte) in message_string.into_bytes().into_iter().enumerate() {
 		message_bytes[i] = byte;
 	}
-	send_event(m3_models::MessageToPc::Protocol(ToPcProtocol::Log(Log {
+	send_event(mission2teegarden_b_models::MessageToPc::Protocol(ToPcProtocol::Log(Log {
 		length,
 		message: message_bytes
 	})));

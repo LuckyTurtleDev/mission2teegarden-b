@@ -1,11 +1,11 @@
 [package]
 workspace = ".."
-name = "m3-pc"
+name = "mission2teegarden-b-pc"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.70"
 publish = false
-repository = "https://github.com/LuckyTurtleDev/m3"
+repository = "https://github.com/LuckyTurtleDev/mission2teegarden-b"
 license = "AGPL-3.0-or-later"
 
 [features]
@@ -16,9 +16,9 @@ anyhow = "1.0.71"
 bincode = { version = "2.0.0-rc.3", features = ["derive"] }
 clap = { version = "4.3.9", features = ["derive"] }
 log = "0.4.17"
-m3-macro = { version = "0.1.0", path = "../macro" }
-m3-map = { version = "0.1.0", path = "../map" }
-m3-models = { version = "0.1.0", path = "../models" }
+mission2teegarden-b-macro = { version = "0.1.0", path = "../macro" }
+mission2teegarden-b-map = { version = "0.1.0", path = "../map" }
+mission2teegarden-b-models = { version = "0.1.0", path = "../models" }
 macroquad = { version = "0.3.25", default-features = false, features = ["log-rs"] }
 macroquad-particles = { version = "0.1.1", git = "https://github.com/LuckyTurtleDev/macroquad.git", branch = "mission2teegarden-b" }
 my-env-logger-style = "0.1.0"

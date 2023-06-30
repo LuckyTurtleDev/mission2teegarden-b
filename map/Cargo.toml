@@ -1,11 +1,11 @@
 [package]
 workspace = ".."
-name = "m3-map"
+name = "mission2teegarden-b-map"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.70"
 publish = false
-repository = "https://github.com/LuckyTurtleDev/m3"
+repository = "https://github.com/LuckyTurtleDev/mission2teegarden-b"
 license = "AGPL-3.0-or-later"
 
 [dependencies]
@@ -13,7 +13,7 @@ anyhow = "1.0.71"
 basic-toml = "0.1.2"
 clap = { version = "4.2.5", features = ["derive"] }
 log = "0.4.17"
-m3-models = { version = "0.1.0", path = "../models", features = ["serde"] }
+mission2teegarden-b-models = { version = "0.1.0", path = "../models", features = ["serde"] }
 num_enum = "0.6.1"
 ron = "0.8.0"
 serde = { version = "1.0.163", features = ["derive"] }
