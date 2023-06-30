@@ -1,8 +1,7 @@
+use super::DrawObject;
 use crate::{activitys::draw_card, State};
 use embedded_graphics::prelude::*;
 use pybadge_high::Color;
-
-use super::{Activity, DrawObject};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub(crate) struct DrivingState {
