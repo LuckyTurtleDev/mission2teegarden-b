@@ -1,7 +1,19 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
 #![forbid(unused_must_use, unsafe_code)]
 
-include!("readme.rs");
+//! # Installation (Pc):
+//! Mission to Teegarden b is avaibale at the following repositories:
+//!
+//! [![Packaging status](https://repology.org/badge/vertical-allrepos/mission2teegarden_b.svg)](https://repology.org/project/mission2teegarden-b/versions)
+//!
+//! Prebuild binarys can also been downloaded from the
+#![doc=concat!("[Github release](https://github.com/LuckyTurtleDev/m3/releases/v",env!("CARGO_PKG_VERSION"),").")]
+//! ### Building from source:
+//! Alternative you can easily build Mission to Teegarden b  by yourself:
+//! * on Linux install the following dev dependencies:
+//!   * [`alsa-lib`](https://github.com/alsa-project/alsa-lib)
+//!   * [`libudev`](https://github.com/systemd/systemd)
+//! * [install rust](https://www.rust-lang.org/tools/install)
 
 use assets::LEVELS;
 use clap::Parser;
