@@ -1,10 +1,10 @@
 use crate::assets::{GetTexture, TEXTURES};
+use macroquad::texture::Texture2D;
 pub(crate) use mission2teegarden_b_map::tiles::MapBaseTile;
 use mission2teegarden_b_map::{
 	story::{Background, Character},
 	tiles::{ObjectTile, PlayerTile, Tile}
 };
-use macroquad::texture::Texture2D;
 
 impl GetTexture for MapBaseTile {
 	///get Texture assioated with this Tile

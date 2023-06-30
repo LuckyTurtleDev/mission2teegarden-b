@@ -1,6 +1,4 @@
 use crate::{assets::GetTexture, GameState};
-use mission2teegarden_b_map::story::Speech;
-use mission2teegarden_b_models::ToPcGameEvent;
 use macroquad::{
 	math::Vec2,
 	prelude::{draw_rectangle, screen_height, screen_width, Color, WHITE},
@@ -8,6 +6,8 @@ use macroquad::{
 	texture::{draw_texture_ex, DrawTextureParams},
 	window::next_frame
 };
+use mission2teegarden_b_map::story::Speech;
+use mission2teegarden_b_models::ToPcGameEvent;
 
 /// Check if any button is pressed.
 fn button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {

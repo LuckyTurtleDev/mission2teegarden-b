@@ -116,8 +116,9 @@ impl Players {
 						TryRecvError::Disconnected => panic!("channel disconnected")
 					}
 				};
-				if MessageToPc::Protocol(mission2teegarden_b_models::ToPcProtocol::ConnectionResponse)
-					== message
+				if MessageToPc::Protocol(
+					mission2teegarden_b_models::ToPcProtocol::ConnectionResponse
+				) == message
 				{
 					pos = Some(i);
 					break;

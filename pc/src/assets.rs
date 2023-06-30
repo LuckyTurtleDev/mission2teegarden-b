@@ -1,5 +1,5 @@
-use mission2teegarden_b_macro::include_map;
 use macroquad::{prelude::ImageFormat, texture::Texture2D};
+use mission2teegarden_b_macro::include_map;
 use once_cell::sync::Lazy;
 
 macro_rules! include_music {

@@ -207,7 +207,8 @@ fn main() -> ! {
 		text_style_large,
 		text_style_on_card: MonoTextStyle::new(&FONT_9X15, Color::BLACK)
 	};
-	let mut last_activity = Activity::GameOver(mission2teegarden_b_models::GameOver::Crash);
+	let mut last_activity =
+		Activity::GameOver(mission2teegarden_b_models::GameOver::Crash);
 	let mut timestamp;
 	loop {
 		timestamp = uptime();

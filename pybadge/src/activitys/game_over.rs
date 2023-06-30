@@ -3,7 +3,10 @@ use embedded_graphics::{prelude::*, text::Text};
 use mission2teegarden_b_models::GameOver;
 use pybadge_high::Color;
 
-pub(crate) fn init(state: &mut State<'_>, game_over_type: &mission2teegarden_b_models::GameOver) {
+pub(crate) fn init(
+	state: &mut State<'_>,
+	game_over_type: &mission2teegarden_b_models::GameOver
+) {
 	state.display.clear(Color::BLACK).unwrap();
 	//draw only cards, which are aviable for this level
 	Text::new("Game Over", Point::new(40, 40), state.text_style_large)
