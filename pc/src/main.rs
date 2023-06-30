@@ -1,6 +1,8 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
 #![forbid(unused_must_use, unsafe_code)]
 
+include!("readme.rs");
+
 use assets::LEVELS;
 use clap::Parser;
 use log::info;

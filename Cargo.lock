@@ -1235,6 +1235,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "mission2teegarden-b"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bincode",
+ "clap",
+ "log",
+ "macroquad",
+ "macroquad-particles",
+ "mission2teegarden-b-macro",
+ "mission2teegarden-b-map",
+ "mission2teegarden-b-models",
+ "my-env-logger-style",
+ "num_enum 0.6.1",
+ "once_cell",
+ "rand",
+ "rodio",
+ "serialport",
+]
+
+[[package]]
 name = "mission2teegarden-b-macro"
 version = "0.1.0"
 dependencies = [
@@ -1270,27 +1291,6 @@ dependencies = [
  "serde",
  "strum",
  "strum_macros",
-]
-
-[[package]]
-name = "mission2teegarden-b-pc"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bincode",
- "clap",
- "log",
- "macroquad",
- "macroquad-particles",
- "mission2teegarden-b-macro",
- "mission2teegarden-b-map",
- "mission2teegarden-b-models",
- "my-env-logger-style",
- "num_enum 0.6.1",
- "once_cell",
- "rand",
- "rodio",
- "serialport",
 ]
 
 [[package]]
