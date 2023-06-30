@@ -64,7 +64,7 @@ jobs:
             ~/.cargo/registry
             target
           key: "PC Build ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
-      - run: cargo build --all-features --release --locked -p mission2teegarden-b-pc
+      - run: cargo build --all-features --release --locked -p mission2teegarden-b
         env:
           RUST_BACKTRACE: 1
           working-directory: pc
@@ -79,9 +79,9 @@ jobs:
   check_pybadge:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         rust_version: [stable, nightly, "1.70"]
-    continue-on-error: true
     name: "check pybadge ${{ matrix.rust_version }}"
     steps:
       - uses: actions/checkout@v3
