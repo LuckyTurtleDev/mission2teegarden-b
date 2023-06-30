@@ -38,7 +38,7 @@ jobs:
       - run: cargo test --all-features -p mission2teegarden-b-map
         env:
           RUST_BACKTRACE: 1
-      - run: cargo test --all-features -p mission2teegarden-b-pc
+      - run: cargo test --all-features -p mission2teegarden-b
         env:
           RUST_BACKTRACE: 1
           
