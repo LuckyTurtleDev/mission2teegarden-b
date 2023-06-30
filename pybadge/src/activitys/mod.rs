@@ -10,7 +10,7 @@ use embedded_graphics::{
 };
 use embedded_sprites::sprite::Sprite;
 use heapless::String;
-use m3_models::Card;
+use mission2teegarden_b_models::Card;
 use pybadge_high::{Color, Display};
 
 pub(crate) mod card_selecter;
@@ -25,7 +25,7 @@ pub(crate) enum Activity {
 	Selecter,
 	Driving,
 	Waiting,
-	GameOver(m3_models::GameOver)
+	GameOver(mission2teegarden_b_models::GameOver)
 }
 
 enum DrawObject<'a> {

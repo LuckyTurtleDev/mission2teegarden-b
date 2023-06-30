@@ -15,7 +15,7 @@ use embedded_graphics::{
 	text::{renderer::CharacterStyle, Text}
 };
 use heapless::Vec;
-use m3_models::{
+use mission2teegarden_b_models::{
 	AvailableCards, Card, Key, MessageToPc, MessageToPyBadge, ToPcGameEvent,
 	ToPcProtocol, ToPybadgeProtocol, ToPypadeGameEvent
 };
@@ -71,7 +71,7 @@ fn send_event(event: MessageToPc) {
 	usb::wirte(&buf[..len]);
 }
 
-/// convert keys of `pybadge-high` crate, to the keys of the `m3-models` crate.
+/// convert keys of `pybadge-high` crate, to the keys of the `mission2teegarden_b-models` crate.
 fn convert_keys(button: pybadge_high::buttons::Button) -> Key {
 	match button {
 		Button::B => Key::B,
@@ -207,7 +207,8 @@ fn main() -> ! {
 		text_style_large,
 		text_style_on_card: MonoTextStyle::new(&FONT_9X15, Color::BLACK)
 	};
-	let mut last_activity = Activity::GameOver(m3_models::GameOver::Crash);
+	let mut last_activity =
+		Activity::GameOver(mission2teegarden_b_models::GameOver::Crash);
 	let mut timestamp;
 	loop {
 		timestamp = uptime();

@@ -3,7 +3,7 @@ use crate::{send_event, State};
 use core::{fmt::Write, mem};
 use embedded_graphics::{mono_font::MonoTextStyle, prelude::*, text::Text};
 use heapless::String;
-use m3_models::{Card, MessageToPc, ToPcGameEvent};
+use mission2teegarden_b_models::{Card, MessageToPc, ToPcGameEvent};
 use pybadge_high::{
 	buttons::{Button, Event},
 	Color, Display

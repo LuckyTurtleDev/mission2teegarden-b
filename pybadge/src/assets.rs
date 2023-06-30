@@ -1,6 +1,6 @@
 use embedded_sprites::{image::Image, include_image};
 
-use m3_models::Card;
+use mission2teegarden_b_models::Card;
 use pybadge_high::Color;
 
 pub(crate) const CARD_WIHDT: u8 = 25;

@@ -1,5 +1,5 @@
 use crate::{Activity, GameState, Phase, LEVELS};
-use m3_models::{AvailableCards, Key, ToPcGameEvent, ToPypadeGameEvent};
+use mission2teegarden_b_models::{AvailableCards, Key, ToPcGameEvent, ToPypadeGameEvent};
 
 use macroquad::{
 	hash,

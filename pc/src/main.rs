@@ -4,9 +4,9 @@
 use assets::LEVELS;
 use clap::Parser;
 use log::info;
-use m3_map::{Map, Orientation};
 use macroquad::{prelude::*, window, Window};
 use macroquad_particles::Emitter;
+use mission2teegarden_b_map::{Map, Orientation};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
 use sound::SoundPlayer;
@@ -198,9 +198,9 @@ pub struct OptPlay {
 #[derive(Debug, Parser)]
 enum Opt {
 	/// Validate a Tiled map
-	ValidateMap(m3_map::commands::OptValidateMap),
+	ValidateMap(mission2teegarden_b_map::commands::OptValidateMap),
 	/// Export a tiled map to an mission2teegarden-b level
-	ExportMap(m3_map::commands::OptExportMap),
+	ExportMap(mission2teegarden_b_map::commands::OptExportMap),
 	/// Start the game.
 	Play(OptPlay)
 }
@@ -221,8 +221,8 @@ fn main() {
 		Default::default()
 	};
 	let result = match opt {
-		Opt::ValidateMap(opt) => m3_map::commands::validate(opt),
-		Opt::ExportMap(opt) => m3_map::commands::export(opt),
+		Opt::ValidateMap(opt) => mission2teegarden_b_map::commands::validate(opt),
+		Opt::ExportMap(opt) => mission2teegarden_b_map::commands::export(opt),
 		Opt::Play(opt) => {
 			Window::from_config(
 				window::Conf {
