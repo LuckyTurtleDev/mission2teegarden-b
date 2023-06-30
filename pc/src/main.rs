@@ -5,7 +5,6 @@ use assets::LEVELS;
 use clap::Parser;
 use log::info;
 use m3_map::{Map, Orientation};
-use m3_models::{AvailableCards, ToPypadeGameEvent};
 use macroquad::{prelude::*, window, Window};
 use macroquad_particles::Emitter;
 use my_env_logger_style::TimestampPrecision;
@@ -151,16 +150,7 @@ async fn run_game() {
 							.clone()
 					)
 					.await;
-				activate_players(
-					&mut game_state,
-					ToPypadeGameEvent::NewLevel(AvailableCards {
-						left: 3,
-						right: 3,
-						motor_on: 2,
-						motor_off: 2,
-						wait: 9
-					})
-				);
+				activate_players(&mut game_state, false);
 				game_state.activity = Activity::GameRound(Phase::Select);
 			},
 			Activity::GameRound(Phase::Finish) => {

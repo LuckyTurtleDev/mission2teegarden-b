@@ -3,9 +3,7 @@ use crate::{
 	PlayerState, Rotation, LEVELS
 };
 use m3_map::Orientation;
-use m3_models::{
-	AvailableCards, GameOver, Key, NeoPixelColor, ToPcGameEvent, ToPypadeGameEvent
-};
+use m3_models::{GameOver, Key, NeoPixelColor, ToPcGameEvent, ToPypadeGameEvent};
 use macroquad::prelude::*;
 
 fn reset_button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
@@ -19,24 +17,20 @@ fn reset_button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
 	false
 }
 
-pub(crate) fn activate_players(
-	game_state: &mut GameState,
-	to_pybadge_game_event: ToPypadeGameEvent
-) {
+pub(crate) fn activate_players(game_state: &mut GameState, retry: bool) {
 	for player in game_state.input_players.players.iter().flatten() {
-		player.send_events(to_pybadge_game_event.clone());
+		if retry {
+			player.send_events(ToPypadeGameEvent::Retry);
+		} else {
+			player.send_events(ToPypadeGameEvent::NewLevel(
+				game_state.game_run.as_ref().unwrap().level.cards.to_owned()
+			));
+		}
 	}
 }
 
 pub(crate) fn init_level(game_state: &mut GameState) {
-	let mut level = Map::from_string(LEVELS[game_state.level_num]).unwrap();
-	level.cards = AvailableCards {
-		left: 3,
-		right: 3,
-		motor_on: 2,
-		motor_off: 2,
-		wait: 9
-	};
+	let level = Map::from_string(LEVELS[game_state.level_num]).unwrap();
 	let player_states = level
 		.iter_player()
 		.map(|f| PlayerState {
@@ -114,7 +108,7 @@ impl GameState {
 		let events = self.input_players.get_events();
 		if reset_button_pressed(&events) {
 			init_level(self);
-			activate_players(self, ToPypadeGameEvent::Retry);
+			activate_players(self, true);
 			self.activity = Activity::GameRound(Phase::Select);
 		} else {
 			if self.delta_time >= self.movement_time {
