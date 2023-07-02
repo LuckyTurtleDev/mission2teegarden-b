@@ -41,6 +41,9 @@ jobs:
       - run: cargo test --all-features -p mission2teegarden-b
         env:
           RUST_BACKTRACE: 1
+      - run: cargo doc --all-features -p mission2teegarden-b
+        env:
+          RUST_BACKTRACE: 1
           
   build_pc:
     strategy:
@@ -104,6 +107,9 @@ jobs:
       - name: cargo check pybadge
         run: cargo check --all-features -p mission2teegarden-b-pybadge
         working-directory: pybadge
+        env:
+          RUST_BACKTRACE: 1
+      - run: cargo test --all-features -p mission2teegarden-pybadge
         env:
           RUST_BACKTRACE: 1
   
