@@ -19,9 +19,9 @@ Prebuild binarys can also been downloaded from the [Github release][__link2].
 
 Alternative you can easily build Mission to Teegarden b  by yourself:
 
- - on Linux install the following development dependencies:
+ - on Linux install the following development dependencies. At some distros (like Alpine and Debian) seperate development packages exist, regular suffixed with `-dev`. If this the case make sure that you have also installed the `*-dev` version.
 	 - [`alsa-lib`][__link3]
-	 - [`libudev`][__link4] At some distros (lika Alpine and Debian) seperate development packages exist, regular suffixed with `-dev`. It this the case make sure that you have also installed the `*-dev` packages.
+	 - [`libudev`][__link4]
 	
 	
  - [install rust][__link5]
