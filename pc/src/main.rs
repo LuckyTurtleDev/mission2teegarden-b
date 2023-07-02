@@ -28,7 +28,7 @@
 //! * Press the reset button of the pybdage twice, to enter the bootloader.
 //! * After this execute `hf2 elf mission2teegarden-b-pybadge` (or the corresponding command of your flahing tool) to flash the binary to the pybadge.
 //! * Press the reset button again.
-//! ### Building from source: 
+//! ### Building from source:
 //! Alternative you can build m3 by yourself:
 //! * [install rustup](https://www.rust-lang.org/tools/install)
 //! * run `cargo install hf2-cli --locked` to build and install the [hf2-cli](https://crates.io/crates/hf2-cli) flasher.
