@@ -202,6 +202,7 @@ jobs:
     container:
       image: ghcr.io/msrd0/cargo-doc2readme:nightly
     steps:
+    - run: apk add --no-cache alsa-lib libudev-zero-dev
     - uses: actions/checkout@v3
     - run: cargo doc2readme --check --expand-macros
       working-directory: pc
