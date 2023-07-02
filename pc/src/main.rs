@@ -10,9 +10,11 @@
 #![doc=concat!("[Github release](https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v",env!("CARGO_PKG_VERSION"),").")]
 //! ### Building from source:
 //! Alternative you can easily build Mission to Teegarden b  by yourself:
-//! * on Linux install the following dev dependencies:
+//! * on Linux install the following development dependencies:
 //!   * [`alsa-lib`](https://github.com/alsa-project/alsa-lib)
 //!   * [`libudev`](https://github.com/systemd/systemd)
+//! At some distros (lika Alpine and Debian) seperate development packages exist, regular suffixed with `-dev`.
+//! It this the case make sure that you have also installed the `*-dev` packages.
 //! * [install rust](https://www.rust-lang.org/tools/install)
 #![doc=concat!("* [Download](https://github.com/LuckyTurtleDev/mission2teegarden_b/archive/refs/tags/v",env!("CARGO_PKG_VERSION"),".zip)")]
 //! and unpack the source code.
