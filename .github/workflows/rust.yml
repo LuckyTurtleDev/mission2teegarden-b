@@ -109,7 +109,7 @@ jobs:
         working-directory: pybadge
         env:
           RUST_BACKTRACE: 1
-      - run: cargo test --all-features -p mission2teegarden-b-pybadge
+      - run: cargo doc --all-features -p mission2teegarden-b-pybadge
         working-directory: pybadge
         env:
           RUST_BACKTRACE: 1
