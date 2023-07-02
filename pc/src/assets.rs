@@ -45,11 +45,11 @@ pub(crate) struct Music {
 }
 
 pub(crate) struct Sounds {
-	/// https://pixabay.com/sound-effects/clank-car-crash-collision-6206/
+	/// <https://pixabay.com/sound-effects/clank-car-crash-collision-6206/>
 	pub(crate) crash: &'static [u8],
-	/// https://pixabay.com/sound-effects/driving-in-a-car-6227/
+	/// <https://pixabay.com/sound-effects/driving-in-a-car-6227/>
 	pub(crate) driving: &'static [u8],
-	/// https://pixabay.com/sound-effects/gravel-road-6747/
+	/// <https://pixabay.com/sound-effects/gravel-road-6747/>
 	pub(crate) gravel_road: &'static [u8]
 }
 
