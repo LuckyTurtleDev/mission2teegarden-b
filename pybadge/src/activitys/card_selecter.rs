@@ -33,7 +33,7 @@ fn draw_count(
 /// Some other value like `card_type_count`, `wait_card_index` are derivative from the values above and auto init here.
 pub(crate) fn init(state: &mut State<'_>) {
 	state.card_type_count = Card::iter()
-		.filter(|f| state.avaiable_cards.card_count(f) != 0)
+		.filter(|f| state.init_avaiable_cards.card_count(f) != 0)
 		.count() as u8;
 	state.wait_card_index = None;
 	state.display.clear(Color::BLACK).unwrap();
