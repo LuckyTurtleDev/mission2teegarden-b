@@ -66,7 +66,6 @@ pub(crate) fn init(state: &mut State<'_>) {
 		);
 		draw_count(i as u8, count, &mut state.display, state.text_style_large);
 	}
-	state.cursor = (0, 1);
 	// draw (old) solution
 	// (if this is a retry the player has still a solution from the last attempt)
 	for (i, card) in state.solution.iter().enumerate() {
@@ -78,6 +77,14 @@ pub(crate) fn init(state: &mut State<'_>) {
 			state.text_style_on_card
 		);
 	}
+	state.cursor = (0, 1);
+	draw_card(
+		state.cursor.0,
+		CARD_SELECTION_HIGHT,
+		DrawObject::Cursor,
+		&mut state.display,
+		state.text_style_on_card
+	);
 }
 
 pub(crate) fn update(state: &mut State<'_>) {
