@@ -72,7 +72,7 @@ pub(crate) fn init(state: &mut State<'_>) {
 		draw_card(
 			i as u8,
 			1,
-			DrawObject::Card(&card),
+			DrawObject::Card(card),
 			&mut state.display,
 			state.text_style_on_card
 		);
