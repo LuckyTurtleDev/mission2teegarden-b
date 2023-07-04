@@ -1,11 +1,12 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
+#![deny(rustdoc::bare_urls, rustdoc::broken_intra_doc_links)]
 #![forbid(unused_must_use, unsafe_code)]
 
 pub mod tutorial;
 
 use basic_toml as toml;
 use log::debug;
-use m3_models::AvailableCards;
+use mission2teegarden_b_models::AvailableCards;
 use ron::error::SpannedError;
 use serde::{
 	ser::{SerializeMap, Serializer},

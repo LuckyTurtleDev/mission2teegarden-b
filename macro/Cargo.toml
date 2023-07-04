@@ -1,11 +1,11 @@
 [package]
 workspace = ".."
-name = "m3-macro"
+name = "mission2teegarden-b-macro"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.70"
 publish = false
-repository = "https://github.com/LuckyTurtleDev/m3"
+repository = "https://github.com/LuckyTurtleDev/mission2teegarden-b"
 license = "AGPL-3.0-or-later"
 
 
@@ -15,6 +15,6 @@ proc-macro = true
 [dependencies]
 bincode = { version = "2.0.0-rc.3", features = ["derive"] }
 glob = "0.3.1"
-m3-map = { version = "0.1.0", path = "../map" }
+mission2teegarden-b-map = { version = "0.1.0", path = "../map" }
 proc-macro2 = "1.0.56"
 quote = "1.0.26"

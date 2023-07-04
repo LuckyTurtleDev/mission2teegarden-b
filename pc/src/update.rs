@@ -1,10 +1,12 @@
 use crate::{
-	cards_ev::CarAction, evaluate_cards, Activity, GameRun, GameState, Map, Phase,
-	PlayerState, Rotation, LEVELS
+	cards_ev::CarAction, evaluate_cards, usb::Player, Activity, GameRun, GameState, Map,
+	Phase, PlayerState, Rotation, LEVELS
 };
-use m3_map::Orientation;
-use m3_models::{GameOver, Key, NeoPixelColor, ToPcGameEvent, ToPypadeGameEvent};
 use macroquad::prelude::*;
+use mission2teegarden_b_map::Orientation;
+use mission2teegarden_b_models::{
+	AvailableCards, GameOver, Key, NeoPixelColor, ToPcGameEvent, ToPypadeGameEvent
+};
 
 fn reset_button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
 	for player_events in events.iter().flatten() {
@@ -18,14 +20,40 @@ fn reset_button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
 }
 
 pub(crate) fn activate_players(game_state: &mut GameState, retry: bool) {
-	for player in game_state.input_players.players.iter().flatten() {
-		if retry {
-			player.send_events(ToPypadeGameEvent::Retry);
-		} else {
-			player.send_events(ToPypadeGameEvent::NewLevel(
-				game_state.game_run.as_ref().unwrap().level.cards.to_owned()
-			));
-		}
+	for (player_index, player) in game_state
+		.input_players
+		.players
+		.iter()
+		.flatten()
+		.enumerate()
+	{
+		activate_player(
+			player,
+			player_index + 1,
+			retry,
+			game_state.game_run.as_ref().unwrap().level.cards.to_owned()
+		);
+	}
+}
+
+pub(crate) fn activate_player(
+	player: &Player,
+	player_number: usize,
+	retry: bool,
+	cards: AvailableCards
+) {
+	if retry {
+		player.send_events(ToPypadeGameEvent::Retry);
+	} else {
+		player.send_events(ToPypadeGameEvent::NewLevel(cards));
+		let color = match player_number {
+			1 => NeoPixelColor { r: 20, g: 20, b: 0 },
+			2 => NeoPixelColor { r: 38, g: 2, b: 0 },
+			3 => NeoPixelColor { r: 2, g: 2, b: 16 },
+			4 => NeoPixelColor { r: 20, g: 0, b: 20 },
+			_ => panic!()
+		};
+		player.send_events(ToPypadeGameEvent::NeoPixelColor(color));
 	}
 }
 
@@ -58,18 +86,12 @@ pub(crate) async fn setup_players(game_state: &mut GameState) {
 	if game_state.player_count < events.iter().flatten().count() as u8 {
 		if let Some(player) = game_state.input_players.players.iter().flatten().last() {
 			game_state.player_count += 1;
-			player.send_events(ToPypadeGameEvent::NewLevel(
-				game_state.game_run.as_ref().unwrap().level.cards.clone()
-			));
-			let color = match game_state.player_count {
-				1 => NeoPixelColor { r: 20, g: 20, b: 0 },
-				2 => NeoPixelColor { r: 38, g: 2, b: 0 },
-				3 => NeoPixelColor { r: 2, g: 2, b: 16 },
-				4 => NeoPixelColor { r: 20, g: 0, b: 20 },
-				_ => panic!()
-			};
-			player.send_events(ToPypadeGameEvent::NeoPixelColor(color));
-			debug!("NeoPixel send");
+			activate_player(
+				player,
+				game_state.player_count as usize,
+				false,
+				game_state.game_run.as_ref().unwrap().level.cards.to_owned()
+			)
 		}
 	}
 	// get player cards

@@ -1,12 +1,62 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
+#![deny(rustdoc::bare_urls, rustdoc::broken_intra_doc_links)]
 #![forbid(unused_must_use, unsafe_code)]
+
+//! # Map/Level Editor:
+//! Mission to Teegarden b allow creating custom maps/levels, by using the powerfull [Tiled Map editor](https://www.mapeditor.org/).
+//! See [here](mission2teegarden_b_map) for more infos.
+//!
+//! # Installation (Pc):
+//! Mission to Teegarden b is avaibale at the following repositories:
+//!
+//! [![Packaging status](https://repology.org/badge/vertical-allrepos/mission2teegarden_b.svg)](https://repology.org/project/mission2teegarden-b/versions)
+//!
+//! Prebuild binarys can also been downloaded from the
+#![doc=concat!("[Github release](https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v",env!("CARGO_PKG_VERSION"),").")]
+//! ### Building from source:
+//! Alternative you can easily build Mission to Teegarden b  by yourself:
+//! * on Linux install the following development dependencies.
+//! At some distros (like Alpine and Debian) seperate development packages exist, regular suffixed with `-dev`.
+//! If this the case make sure that you have also installed the `*-dev` version.
+//!   * [`alsa-lib`](https://github.com/alsa-project/alsa-lib)
+//!   * [`libudev`](https://github.com/systemd/systemd)
+//! * [install rust](https://www.rust-lang.org/tools/install)
+#![doc=concat!("* [Download](https://github.com/LuckyTurtleDev/mission2teegarden_b/archive/refs/tags/v",env!("CARGO_PKG_VERSION"),".zip)")]
+//! and unpack the source code.
+//! * run `cargo install --path pc --locked` inside the unpacked folder, to build and install the mission2teegarden-b.
+//! See the [rust book](https://doc.rust-lang.org/cargo/commands/cargo-install.html) for more information about cargo install.
+//! * make sure that `~/.cargo/bin` is listed at the `PATH` enviroment variable, otherwise the `mission2teegarden-b` executeable can not be found.
+//!
+//!
+//! # Flash Pybadge:
+//! * Install an UF2 flasher. I recommand using [hf2-cli](https://crates.io/crates/hf2-cli).
+//! * Download and unpack Pybadge binary from
+#![doc=concat!("[Github release](https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v",env!("CARGO_PKG_VERSION"),").")]
+//! * Press the reset button of the pybdage twice, to enter the bootloader.
+//! * After this execute `hf2 elf mission2teegarden-b-pybadge` (or the corresponding command of your flahing tool) to flash the binary to the pybadge.
+//! * Press the reset button again.
+//! ### Building from source:
+//! Alternative you can build m3 by yourself:
+//! * [install rustup](https://www.rust-lang.org/tools/install)
+//! * run `cargo install hf2-cli --locked` to build and install the [hf2-cli](https://crates.io/crates/hf2-cli) flasher.
+//! See the [rust book](https://doc.rust-lang.org/cargo/commands/cargo-install.html) for more information about cargo install.
+//! * make sure that `~/.cargo/bin` is listed at the `PATH` enviroment variable otherwise the executeable can not be found..
+//! * install the rust `thumbv7em-none-eabihf` target (the architecture of the pybadge) by executing `rustup target install thumbv7em-none-eabihf`.
+//! * optional: install nightly toolchain for better error messages at the pybadge. `rustup toolchain install nightly --target thumbv7em-none-eabihf`
+#![doc=concat!("* [Download](https://github.com/LuckyTurtleDev/mission2teegarden_b/archive/refs/tags/v",env!("CARGO_PKG_VERSION"),".zip)")]
+//! and unpack the source code (if not already done).
+//! * press the reset button of the pybadge twice to enter bootloader
+//! * compile and flash program by running `cargo +nightly run --release -locked` inside the downloaded `pybadge` folder.
+//! `+nightly` is optional and have to be left out if the "install nightly toolchain" step was skip.
+//! Please use `+nightly` for bug reports.
+//! * Press the reset button again.
 
 use assets::LEVELS;
 use clap::Parser;
 use log::info;
-use m3_map::{Map, Orientation};
 use macroquad::{prelude::*, window, Window};
 use macroquad_particles::Emitter;
+use mission2teegarden_b_map::{Map, Orientation};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
 use sound::SoundPlayer;
@@ -198,9 +248,9 @@ pub struct OptPlay {
 #[derive(Debug, Parser)]
 enum Opt {
 	/// Validate a Tiled map
-	ValidateMap(m3_map::commands::OptValidateMap),
+	ValidateMap(mission2teegarden_b_map::commands::OptValidateMap),
 	/// Export a tiled map to an mission2teegarden-b level
-	ExportMap(m3_map::commands::OptExportMap),
+	ExportMap(mission2teegarden_b_map::commands::OptExportMap),
 	/// Start the game.
 	Play(OptPlay)
 }
@@ -221,8 +271,8 @@ fn main() {
 		Default::default()
 	};
 	let result = match opt {
-		Opt::ValidateMap(opt) => m3_map::commands::validate(opt),
-		Opt::ExportMap(opt) => m3_map::commands::export(opt),
+		Opt::ValidateMap(opt) => mission2teegarden_b_map::commands::validate(opt),
+		Opt::ExportMap(opt) => mission2teegarden_b_map::commands::export(opt),
 		Opt::Play(opt) => {
 			Window::from_config(
 				window::Conf {

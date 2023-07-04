@@ -1,7 +1,7 @@
 use anyhow::Context;
 use bincode::error::DecodeError;
 use log::{debug, info, trace};
-use m3_models::{
+use mission2teegarden_b_models::{
 	MessageToPc, MessageToPyBadge, ToPcGameEvent, ToPcProtocol, ToPybadgeProtocol,
 	ToPypadeGameEvent
 };
@@ -116,8 +116,9 @@ impl Players {
 						TryRecvError::Disconnected => panic!("channel disconnected")
 					}
 				};
-				if MessageToPc::Protocol(m3_models::ToPcProtocol::ConnectionResponse)
-					== message
+				if MessageToPc::Protocol(
+					mission2teegarden_b_models::ToPcProtocol::ConnectionResponse
+				) == message
 				{
 					pos = Some(i);
 					break;

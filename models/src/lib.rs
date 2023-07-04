@@ -1,4 +1,5 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
+#![deny(rustdoc::bare_urls, rustdoc::broken_intra_doc_links)]
 #![forbid(unused_must_use, unsafe_code)]
 #![no_std]
 
