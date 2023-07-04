@@ -4,7 +4,7 @@ use m3_models::{AvailableCards, Key, ToPcGameEvent, ToPypadeGameEvent};
 use macroquad::{
 	hash,
 	prelude::*,
-	ui::{root_ui, Skin}
+	ui::{root_ui, widgets, Skin}
 };
 
 const BUTTON_FONT_SIZE: u16 = 16;
@@ -81,13 +81,6 @@ impl GameState {
 		let background_texture = load_texture("assets/img/Menu/menu_background.png")
 			.await
 			.unwrap();
-		let screen_width = screen_width();
-		let screen_height = screen_height();
-		let menu_size = vec2(screen_width * 0.5, screen_height * 0.8);
-		let menu_position = vec2(
-			(screen_width - menu_size.x) / 2.0,
-			(screen_height - menu_size.y) / 2.0
-		);
 		let mut button_focused_index = 0;
 
 		let button_skin = get_button_skin();
@@ -98,36 +91,79 @@ impl GameState {
 		root_ui().push_skin(&skin_1);
 		while self.activity == Activity::Menu && self.running {
 			let events = self.input_players.get_events();
+			let screen_width = screen_width();
+			let screen_height = screen_height();
+			/*let menu_position = vec2(
+				(screen_width - menu_size.x) / 2.0,
+				(screen_height - menu_size.y) / 2.0
+			);*/
+			let relative_size = (screen_width / background_texture.width())
+				.max(screen_height / background_texture.height());
+			let background_dim = vec2(
+				relative_size * background_texture.width(),
+				relative_size * background_texture.height()
+			);
+			let draw_params = DrawTextureParams {
+				dest_size: Some(background_dim),
+				..Default::default()
+			};
+			let button_size = vec2(screen_width / 3.0, screen_height / 10.0);
 			button_focused_index = (button_focused_index
 				+ evaluate_events(&events, &mut enter_pressed))
 			.clamp(0, 1);
-			draw_texture(background_texture, 0.0, 0.0, WHITE);
-			root_ui().window(hash!(), menu_position, menu_size, |ui| {
-				ui.pop_skin();
-				if button_focused_index == 0 {
-					if enter_pressed {
-						self.activity = Activity::SelectLevel;
-					}
-					skin_1 = &button_focused_skin;
-					skin_2 = &button_skin;
-				} else {
-					if enter_pressed {
-						self.running = false;
-					}
-					skin_1 = &button_skin;
-					skin_2 = &button_focused_skin;
-				}
-				ui.push_skin(&skin_1);
+			draw_texture_ex(
+				background_texture,
+				-((background_dim.x - screen_width) / 2.0),
+				-((background_dim.y - screen_height) / 2.0),
+				WHITE,
+				draw_params
+			);
 
-				if ui.button(vec2(140.0, 100.0), "Play") {
-					self.activity = Activity::SelectLevel;
+			// It does not work when group has same size as screen
+			root_ui().group(
+				hash!(),
+				vec2(screen_width - 1.0, screen_height - 1.0),
+				|ui| {
+					ui.pop_skin();
+					if button_focused_index == 0 {
+						if enter_pressed {
+							self.activity = Activity::SelectLevel;
+						}
+						skin_1 = &button_focused_skin;
+						skin_2 = &button_skin;
+					} else {
+						if enter_pressed {
+							self.running = false;
+						}
+						skin_1 = &button_skin;
+						skin_2 = &button_focused_skin;
+					}
+					ui.push_skin(&skin_1);
+
+					widgets::Button::new("Play")
+						.position(vec2(
+							(screen_width - button_size.x) / 2.0,
+							(screen_height - button_size.y) / 2.0 - 1.5 * button_size.y
+						))
+						.size(button_size)
+						.ui(ui);
+					/*if ui.button(vec2(140.0, 100.0), "Play") {
+						self.activity = Activity::SelectLevel;
+					}*/
+					ui.pop_skin();
+					ui.push_skin(&skin_2);
+					widgets::Button::new("Quit")
+						.position(vec2(
+							(screen_width - button_size.x) / 2.0,
+							(screen_height - button_size.y) / 2.0 + 1.5 * button_size.y
+						))
+						.size(button_size)
+						.ui(ui);
+					/*if ui.button(vec2(140.0, 200.0), "Quit") {
+						self.running = false;
+					}*/
 				}
-				ui.pop_skin();
-				ui.push_skin(&skin_2);
-				if ui.button(vec2(140.0, 200.0), "Quit") {
-					self.running = false;
-				}
-			});
+			);
 
 			next_frame().await;
 		}

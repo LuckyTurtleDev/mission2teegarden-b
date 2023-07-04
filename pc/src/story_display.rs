@@ -3,7 +3,7 @@ use m3_map::story::Speech;
 use m3_models::ToPcGameEvent;
 use macroquad::{
 	math::Vec2,
-	prelude::{draw_rectangle, screen_height, screen_width, Color, WHITE},
+	prelude::{draw_rectangle, load_ttf_font, screen_height, screen_width, Color, WHITE},
 	text::{draw_text_ex, measure_text, TextParams},
 	texture::{draw_texture_ex, DrawTextureParams},
 	window::next_frame
