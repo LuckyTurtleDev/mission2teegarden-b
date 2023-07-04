@@ -19,28 +19,26 @@ fn get_button_font_size(container_height: f32) -> u16 {
 }
 
 fn get_button_skin(font_size: u16) -> Skin {
-	{
-		let window_style = root_ui()
-			.style_builder()
-			.background_margin(RectOffset::new(20.0, 20.0, 10.0, 10.0))
-			.margin(RectOffset::new(-20.0, -30.0, 0.0, 0.0))
-			.build();
-		let button_style = root_ui()
-			.style_builder()
-			.background(Image::from_file_with_format(
-				include_bytes!("../assets/img/Menu/button_background.png"),
-				None
-			))
-			.background_margin(RectOffset::new(37.0, 37.0, 5.0, 5.0))
-			.margin(RectOffset::new(10.0, 10.0, 0.0, 0.0))
-			.text_color(Color::from_rgba(180, 180, 100, 255))
-			.font_size(font_size)
-			.build();
-		Skin {
-			window_style,
-			button_style,
-			..root_ui().default_skin()
-		}
+	let window_style = root_ui()
+		.style_builder()
+		.background_margin(RectOffset::new(20.0, 20.0, 10.0, 10.0))
+		.margin(RectOffset::new(-20.0, -30.0, 0.0, 0.0))
+		.build();
+	let button_style = root_ui()
+		.style_builder()
+		.background(Image::from_file_with_format(
+			include_bytes!("../assets/img/Menu/button_background.png"),
+			None
+		))
+		.background_margin(RectOffset::new(37.0, 37.0, 5.0, 5.0))
+		.margin(RectOffset::new(10.0, 10.0, 0.0, 0.0))
+		.text_color(Color::from_rgba(180, 180, 100, 255))
+		.font_size(font_size)
+		.build();
+	Skin {
+		window_style,
+		button_style,
+		..root_ui().default_skin()
 	}
 }
 
