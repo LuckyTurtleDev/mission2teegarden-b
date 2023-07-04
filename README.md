@@ -1,7 +1,9 @@
 # 🪐 Mission to Teegarden b
 
 ![License: AGPL-3.0-or-later](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue)
+[![v0.1.0](https://img.shields.io/badge/version-v0.1.0-orange)](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v0.1.0)
 [![GitHub tag (latest SemVer pre-release)](https://img.shields.io/github/v/tag/LuckyTurtleDev/mission2teegarden-b?label=latest&color=orange)](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/latest)
+[![Packaging status](https://repology.org/badge/tiny-repos/mission2teegarden-b.svg)](https://repology.org/project/mission2teegarden-b/versions)
 [![Source Code Repository](https://img.shields.io/badge/Code-On%20GitHub-blue?logo=GitHub)](https://github.com/LuckyTurtleDev/mission2teegarden-b)
 ![Rust Version: ^1.70](https://img.shields.io/badge/rustc-%5E1.70-orange.svg)
 
@@ -59,7 +61,7 @@ Alternative you can build m3 by yourself:
  - Press the reset button again.
 
 
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEG3UfHk2YrT7eG17SRZ28RUSTG0wIbnOI0EnXG1LtZe6B2PVZYXKEG2oEjWAiQVzSGwbQgP9v-iKFGxPC4vLgNSLbG_HLsRNq7H0jYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGxZ8633wCs_9GzKKlc-jeF26G4eLyZuq8IdiG7yPhHI4iD8_YXKEG2oEjWAiQVzSGwbQgP9v-iKFGxPC4vLgNSLbG_HLsRNq7H0jYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
  [__link0]: https://www.mapeditor.org/
  [__link1]: https://docs.rs/mission2teegarden_b_map/0.1.0
  [__link10]: https://crates.io/crates/hf2-cli
