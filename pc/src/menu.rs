@@ -1,4 +1,3 @@
-
 use crate::{Activity, GameState, Phase, LEVELS};
 use m3_models::{AvailableCards, Key, ToPcGameEvent, ToPypadeGameEvent};
 
@@ -26,20 +25,6 @@ fn get_button_skin(font_size: u16) -> Skin {
 			.background_margin(RectOffset::new(20.0, 20.0, 10.0, 10.0))
 			.margin(RectOffset::new(-20.0, -30.0, 0.0, 0.0))
 			.build();
-		Skin {
-			window_style,
-			..root_ui().default_skin()
-		}
-	}
-}
-
-fn get_button_skin() -> Skin {
-	{
-		let window_style = root_ui()
-			.style_builder()
-			.background_margin(RectOffset::new(20.0, 20.0, 10.0, 10.0))
-			.margin(RectOffset::new(-20.0, -30.0, 0.0, 0.0))
-			.build();
 		let button_style = root_ui()
 			.style_builder()
 			.background(Image::from_file_with_format(
@@ -60,27 +45,27 @@ fn get_button_skin() -> Skin {
 }
 
 fn get_button_focused_skin(font_size: u16) -> Skin {
-	{
-		let button_style = root_ui()
-			.style_builder()
-			.background(Image::from_file_with_format(
-				include_bytes!("../assets/img/Menu/button_focused_background.png"),
-			.build();
-		let button_style = root_ui()
-			.style_builder()
-			.background(Image::from_file_with_format(
-				include_bytes!("../assets/img/Menu/button_focused_background.png"),
-				None
-			))
-			.background_margin(RectOffset::new(37.0, 37.0, 5.0, 5.0))
-			.margin(RectOffset::new(10.0, 10.0, 0.0, 0.0))
-			.text_color(Color::from_rgba(180, 180, 100, 255))
-			.font_size(font_size)
-			.build();
-		Skin {
-			button_style,
-			..root_ui().default_skin()
-		}
+	let button_style = root_ui()
+		.style_builder()
+		.background(Image::from_file_with_format(
+			include_bytes!("../assets/img/Menu/button_focused_background.png"),
+			None
+		))
+		.build();
+	let button_style = root_ui()
+		.style_builder()
+		.background(Image::from_file_with_format(
+			include_bytes!("../assets/img/Menu/button_focused_background.png"),
+			None
+		))
+		.background_margin(RectOffset::new(37.0, 37.0, 5.0, 5.0))
+		.margin(RectOffset::new(10.0, 10.0, 0.0, 0.0))
+		.text_color(Color::from_rgba(180, 180, 100, 255))
+		.font_size(font_size)
+		.build();
+	Skin {
+		button_style,
+		..root_ui().default_skin()
 	}
 }
 
@@ -163,19 +148,6 @@ impl GameState {
 						skin_2 = &button_skin;
 					} else {
 						if enter_pressed {
-						self.running = false;
-					}
-					skin_1 = &button_skin;
-					skin_2 = &button_focused_skin;
-				}
-				ui.push_skin(&skin_1);
-
-				if ui.button(vec2(140.0, 100.0), "Play") {
-					self.activity = Activity::SelectLevel;
-				}
-				ui.pop_skin();
-				ui.push_skin(&skin_2);
-				if ui.button(vec2(140.0, 200.0), "Quit") {
 							self.running = false;
 						}
 						skin_1 = &button_skin;
@@ -279,18 +251,16 @@ impl GameState {
 						if level_button {
 							self.activity = Activity::GameRound(Phase::Introduction);
 						}
-				if button_focused_index == LEVELS.len() as i8 {
-					if enter_pressed {
-						self.activity = Activity::Menu;
 					}
-					let skin = &button_focused_skin.clone();
-					ui.push_skin(skin);
-				} else {
-					let skin = &button_skin.clone();
-					ui.push_skin(skin);
-				}
-				if ui.button(vec2(140.0, LEVELS.len() as f32 * 50.0), "Back") {
-					self.activity = Activity::Menu;
+					if button_focused_index == LEVELS.len() as i8 {
+						if enter_pressed {
+							self.activity = Activity::Menu;
+						}
+						let skin = &button_focused_skin.clone();
+						ui.push_skin(skin);
+					} else {
+						let skin = &button_skin.clone();
+						ui.push_skin(skin);
 					}
 
 					ui.pop_skin();
@@ -304,14 +274,14 @@ impl GameState {
 						let skin = &button_skin.clone();
 						ui.push_skin(skin);
 					}
-					let quit_button = widgets::Button::new("Quit")
+					let back_button = widgets::Button::new("Back")
 						.position(vec2(
 							(screen_width - button_size.x) / 2.0,
 							wrapper_offset + LEVELS.len() as f32 * button_offset
 						))
 						.size(button_size)
 						.ui(ui);
-					if quit_button {
+					if back_button {
 						self.activity = Activity::Menu;
 					}
 				}
