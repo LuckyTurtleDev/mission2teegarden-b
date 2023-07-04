@@ -26,7 +26,7 @@ text = &quot;&quot;&quot;
 	Remender that the robot drives automatically.
 	At this level only three instructions are avaiable.
 	First the rotate right and left instructions (↱,↰).
-	Last the wait instruction (⌛).
+	Last the wait instruction (⌛, \u231B).
 	This instruction means that no change to the state of your robot will perform.
 	So if it is currently dirving it will continue driving.
 	Move the cursor with 🠴 and 🠶 key and select an instruction with A.
