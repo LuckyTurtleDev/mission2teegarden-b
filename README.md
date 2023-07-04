@@ -7,19 +7,18 @@
 [![Source Code Repository](https://img.shields.io/badge/Code-On%20GitHub-blue?logo=GitHub)](https://github.com/LuckyTurtleDev/mission2teegarden-b)
 ![Rust Version: ^1.70](https://img.shields.io/badge/rustc-%5E1.70-orange.svg)
 
+Welcome to a journey to the unexplored planet Teegarden b, to find a new home for humanity. Program the robots, which were send to planets surface for explorations, from the safety of your space ship, with up to 4 ~~players~~ programmers. What hazards await you on the planet? Each player can programm it own robot with a [pybadge][__link0]. Work together to solve all puzzles and challenges. Will you be able to prepare everthing for the arrival of humans?
 
-## Map/Level Editor:
-
-Mission to Teegarden b allow creating custom maps/levels, by using the powerfull [Tiled Map editor][__link0]. See [here][__link1] for more infos.
+Try out Mission to Teegarden b now for free and figure it out.
 
 
 ## Installation (Pc):
 
 Mission to Teegarden b is avaibale at the following repositories:
 
-[![Packaging status][__link2]][__link3]
+[![Packaging status][__link1]][__link2]
 
-Prebuild binarys can also been downloaded from the [Github release][__link4].
+Prebuild binarys can also been downloaded from the [Github release][__link3].
 
 
 #### Building from source:
@@ -27,20 +26,20 @@ Prebuild binarys can also been downloaded from the [Github release][__link4].
 Alternative you can easily build Mission to Teegarden b  by yourself:
 
  - on Linux install the following development dependencies. At some distros (like Alpine and Debian) seperate development packages exist, regular suffixed with `-dev`. If this the case make sure that you have also installed the `*-dev` version.
-	 - [`alsa-lib`][__link5]
-	 - [`libudev`][__link6]
+	 - [`alsa-lib`][__link4]
+	 - [`libudev`][__link5]
 	
 	
- - [install rust][__link7]
- - [Download][__link8] and unpack the source code.
- - run `cargo install --path pc --locked` inside the unpacked folder, to build and install the mission2teegarden-b. See the [rust book][__link9] for more information about cargo install.
+ - [install rust][__link6]
+ - [Download][__link7] and unpack the source code.
+ - run `cargo install --path pc --locked` inside the unpacked folder, to build and install the mission2teegarden-b. See the [rust book][__link8] for more information about cargo install.
  - make sure that `~/.cargo/bin` is listed at the `PATH` enviroment variable, otherwise the `mission2teegarden-b` executeable can not be found.
 
 
 ## Flash Pybadge:
 
- - Install an UF2 flasher. I recommand using [hf2-cli][__link10].
- - Download and unpack Pybadge binary from [Github release][__link11].
+ - Install an UF2 flasher. I recommand using [hf2-cli][__link9].
+ - Download and unpack Pybadge binary from [Github release][__link10].
  - Press the reset button of the pybdage twice, to enter the bootloader.
  - After this execute `hf2 elf mission2teegarden-b-pybadge` (or the corresponding command of your flahing tool) to flash the binary to the pybadge.
  - Press the reset button again.
@@ -50,31 +49,37 @@ Alternative you can easily build Mission to Teegarden b  by yourself:
 
 Alternative you can build m3 by yourself:
 
- - [install rustup][__link12]
- - run `cargo install hf2-cli --locked` to build and install the [hf2-cli][__link13] flasher. See the [rust book][__link14] for more information about cargo install.
+ - [install rustup][__link11]
+ - run `cargo install hf2-cli --locked` to build and install the [hf2-cli][__link12] flasher. See the [rust book][__link13] for more information about cargo install.
  - make sure that `~/.cargo/bin` is listed at the `PATH` enviroment variable otherwise the executeable can not be found..
  - install the rust `thumbv7em-none-eabihf` target (the architecture of the pybadge) by executing `rustup target install thumbv7em-none-eabihf`.
  - optional: install nightly toolchain for better error messages at the pybadge. `rustup toolchain install nightly --target thumbv7em-none-eabihf`
- - [Download][__link15] and unpack the source code (if not already done).
+ - [Download][__link14] and unpack the source code (if not already done).
  - press the reset button of the pybadge twice to enter bootloader
  - compile and flash program by running `cargo +nightly run --release -locked` inside the downloaded `pybadge` folder. `+nightly` is optional and have to be left out if the “install nightly toolchain” step was skip. Please use `+nightly` for bug reports.
  - Press the reset button again.
 
 
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGxZ8633wCs_9GzKKlc-jeF26G4eLyZuq8IdiG7yPhHI4iD8_YXKEG2oEjWAiQVzSGwbQgP9v-iKFGxPC4vLgNSLbG_HLsRNq7H0jYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
- [__link0]: https://www.mapeditor.org/
- [__link1]: https://docs.rs/mission2teegarden_b_map/0.1.0
- [__link10]: https://crates.io/crates/hf2-cli
- [__link11]: https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v0.1.0
- [__link12]: https://www.rust-lang.org/tools/install
- [__link13]: https://crates.io/crates/hf2-cli
- [__link14]: https://doc.rust-lang.org/cargo/commands/cargo-install.html
- [__link15]: https://github.com/LuckyTurtleDev/mission2teegarden_b/archive/refs/tags/v0.1.0.zip
- [__link2]: https://repology.org/badge/vertical-allrepos/mission2teegarden_b.svg
- [__link3]: https://repology.org/project/mission2teegarden-b/versions
- [__link4]: https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v0.1.0
- [__link5]: https://github.com/alsa-project/alsa-lib
- [__link6]: https://github.com/systemd/systemd
- [__link7]: https://www.rust-lang.org/tools/install
- [__link8]: https://github.com/LuckyTurtleDev/mission2teegarden_b/archive/refs/tags/v0.1.0.zip
- [__link9]: https://doc.rust-lang.org/cargo/commands/cargo-install.html
+## Map/Level Editor:
+
+Mission to Teegarden b allow creating custom maps/levels, by using the powerfull [Tiled Map editor][__link15]. See [here][__link16] for more information about creating maps.
+
+
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGxZ8633wCs_9GzKKlc-jeF26G4eLyZuq8IdiG7yPhHI4iD8_YXKEG5y8hO0iFAOZG61MJFQi1hn1G0-GrGfh8964G8V42ScFFCGwYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
+ [__link0]: https://www.adafruit.com/product/4200
+ [__link1]: https://repology.org/badge/vertical-allrepos/mission2teegarden_b.svg
+ [__link10]: https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v0.1.0
+ [__link11]: https://www.rust-lang.org/tools/install
+ [__link12]: https://crates.io/crates/hf2-cli
+ [__link13]: https://doc.rust-lang.org/cargo/commands/cargo-install.html
+ [__link14]: https://github.com/LuckyTurtleDev/mission2teegarden_b/archive/refs/tags/v0.1.0.zip
+ [__link15]: https://www.mapeditor.org/
+ [__link16]: https://docs.rs/mission2teegarden_b_map/0.1.0
+ [__link2]: https://repology.org/project/mission2teegarden-b/versions
+ [__link3]: https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v0.1.0
+ [__link4]: https://github.com/alsa-project/alsa-lib
+ [__link5]: https://github.com/systemd/systemd
+ [__link6]: https://www.rust-lang.org/tools/install
+ [__link7]: https://github.com/LuckyTurtleDev/mission2teegarden_b/archive/refs/tags/v0.1.0.zip
+ [__link8]: https://doc.rust-lang.org/cargo/commands/cargo-install.html
+ [__link9]: https://crates.io/crates/hf2-cli

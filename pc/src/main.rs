@@ -2,10 +2,16 @@
 #![deny(rustdoc::bare_urls, rustdoc::broken_intra_doc_links)]
 #![forbid(unused_must_use, unsafe_code)]
 
-//! # Map/Level Editor:
-//! Mission to Teegarden b allow creating custom maps/levels, by using the powerfull [Tiled Map editor](https://www.mapeditor.org/).
-//! See [here](mission2teegarden_b_map) for more infos.
+//! Welcome to a journey to the unexplored planet Teegarden b,
+//! to find a new home for humanity.
+//! Program the robots, which were send to planets surface for explorations, from the safety of your space ship,
+//! with up to 4 ~~players~~ programmers.
+//! What hazards await you on the planet?
+//! Each player can programm it own robot with a [pybadge](https://www.adafruit.com/product/4200).
+//! Work together to solve all puzzles and challenges.
+//! Will you be able to prepare everthing for the arrival of humans?
 //!
+//! Try out Mission to Teegarden b now for free and figure it out.
 //! # Installation (Pc):
 //! Mission to Teegarden b is avaibale at the following repositories:
 //!
@@ -50,6 +56,10 @@
 //! `+nightly` is optional and have to be left out if the "install nightly toolchain" step was skip.
 //! Please use `+nightly` for bug reports.
 //! * Press the reset button again.
+//!
+//! # Map/Level Editor:
+//! Mission to Teegarden b allow creating custom maps/levels, by using the powerfull [Tiled Map editor](https://www.mapeditor.org/).
+//! See [here](mission2teegarden_b_map) for more information about creating maps.
 
 use assets::LEVELS;
 use clap::Parser;
