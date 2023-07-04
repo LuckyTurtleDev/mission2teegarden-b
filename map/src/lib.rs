@@ -2,7 +2,6 @@
 #![deny(rustdoc::bare_urls, rustdoc::broken_intra_doc_links)]
 #![forbid(unused_must_use, unsafe_code)]
 
-
 //! # Mapeditor
 //!
 //! Mission to Teegarden b allow creating custom maps, by using the [Tiled Map editor](https://www.mapeditor.org/).
@@ -83,7 +82,6 @@
 //! ```
 //! Executing one of the commands creates a file with the same basename as the original file and the extension `.m2tb_map`.
 //! Since the map format is not stable yet, it is strongly recommanded to keep the original `.tmx` file
-
 
 use basic_toml as toml;
 use log::debug;
