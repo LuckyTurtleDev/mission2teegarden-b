@@ -54,6 +54,7 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 
 pub(crate) async fn setup_players(game_state: &mut GameState) {
 	let events = game_state.input_players.get_events();
+	debug!("setup players");
 	if game_state.player_count < events.iter().flatten().count() as u8 {
 		if let Some(player) = game_state.input_players.players.iter().flatten().last() {
 			game_state.player_count += 1;
@@ -68,6 +69,7 @@ pub(crate) async fn setup_players(game_state: &mut GameState) {
 				_ => panic!()
 			};
 			player.send_events(ToPypadeGameEvent::NeoPixelColor(color));
+			debug!("NeoPixel send");
 		}
 	}
 	// get player cards

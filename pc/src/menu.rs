@@ -1,4 +1,3 @@
-use std::vec;
 
 use crate::{Activity, GameState, Phase, LEVELS};
 use m3_models::{AvailableCards, Key, ToPcGameEvent, ToPypadeGameEvent};
@@ -27,6 +26,20 @@ fn get_button_skin(font_size: u16) -> Skin {
 			.background_margin(RectOffset::new(20.0, 20.0, 10.0, 10.0))
 			.margin(RectOffset::new(-20.0, -30.0, 0.0, 0.0))
 			.build();
+		Skin {
+			window_style,
+			..root_ui().default_skin()
+		}
+	}
+}
+
+fn get_button_skin() -> Skin {
+	{
+		let window_style = root_ui()
+			.style_builder()
+			.background_margin(RectOffset::new(20.0, 20.0, 10.0, 10.0))
+			.margin(RectOffset::new(-20.0, -30.0, 0.0, 0.0))
+			.build();
 		let button_style = root_ui()
 			.style_builder()
 			.background(Image::from_file_with_format(
@@ -48,6 +61,11 @@ fn get_button_skin(font_size: u16) -> Skin {
 
 fn get_button_focused_skin(font_size: u16) -> Skin {
 	{
+		let button_style = root_ui()
+			.style_builder()
+			.background(Image::from_file_with_format(
+				include_bytes!("../assets/img/Menu/button_focused_background.png"),
+			.build();
 		let button_style = root_ui()
 			.style_builder()
 			.background(Image::from_file_with_format(
@@ -145,6 +163,19 @@ impl GameState {
 						skin_2 = &button_skin;
 					} else {
 						if enter_pressed {
+						self.running = false;
+					}
+					skin_1 = &button_skin;
+					skin_2 = &button_focused_skin;
+				}
+				ui.push_skin(&skin_1);
+
+				if ui.button(vec2(140.0, 100.0), "Play") {
+					self.activity = Activity::SelectLevel;
+				}
+				ui.pop_skin();
+				ui.push_skin(&skin_2);
+				if ui.button(vec2(140.0, 200.0), "Quit") {
 							self.running = false;
 						}
 						skin_1 = &button_skin;
@@ -248,6 +279,18 @@ impl GameState {
 						if level_button {
 							self.activity = Activity::GameRound(Phase::Introduction);
 						}
+				if button_focused_index == LEVELS.len() as i8 {
+					if enter_pressed {
+						self.activity = Activity::Menu;
+					}
+					let skin = &button_focused_skin.clone();
+					ui.push_skin(skin);
+				} else {
+					let skin = &button_skin.clone();
+					ui.push_skin(skin);
+				}
+				if ui.button(vec2(140.0, LEVELS.len() as f32 * 50.0), "Back") {
+					self.activity = Activity::Menu;
 					}
 
 					ui.pop_skin();
