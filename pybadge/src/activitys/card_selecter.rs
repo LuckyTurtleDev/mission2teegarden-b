@@ -3,7 +3,7 @@ use crate::{send_event, State};
 use core::{fmt::Write, mem};
 use embedded_graphics::{mono_font::MonoTextStyle, prelude::*, text::Text};
 use heapless::String;
-use m3_models::{Card, MessageToPc, ToPcGameEvent};
+use mission2teegarden_b_models::{Card, MessageToPc, ToPcGameEvent};
 use pybadge_high::{
 	buttons::{Button, Event},
 	Color, Display
@@ -33,7 +33,7 @@ fn draw_count(
 /// Some other value like `card_type_count`, `wait_card_index` are derivative from the values above and auto init here.
 pub(crate) fn init(state: &mut State<'_>) {
 	state.card_type_count = Card::iter()
-		.filter(|f| state.avaiable_cards.card_count(f) != 0)
+		.filter(|f| state.init_avaiable_cards.card_count(f) != 0)
 		.count() as u8;
 	state.wait_card_index = None;
 	state.display.clear(Color::BLACK).unwrap();
@@ -66,18 +66,25 @@ pub(crate) fn init(state: &mut State<'_>) {
 		);
 		draw_count(i as u8, count, &mut state.display, state.text_style_large);
 	}
-	state.cursor = (0, 1);
 	// draw (old) solution
 	// (if this is a retry the player has still a solution from the last attempt)
 	for (i, card) in state.solution.iter().enumerate() {
 		draw_card(
 			i as u8,
 			1,
-			DrawObject::Card(&card),
+			DrawObject::Card(card),
 			&mut state.display,
 			state.text_style_on_card
 		);
 	}
+	state.cursor = (0, 1);
+	draw_card(
+		state.cursor.0,
+		CARD_SELECTION_HIGHT,
+		DrawObject::Cursor,
+		&mut state.display,
+		state.text_style_on_card
+	);
 }
 
 pub(crate) fn update(state: &mut State<'_>) {

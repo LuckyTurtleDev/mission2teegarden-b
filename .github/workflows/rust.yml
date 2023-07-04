@@ -32,13 +32,16 @@ jobs:
             ~/.cargo/registry
             target
           key: "PC ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
-      - run: cargo test --all-features -p m3-models
+      - run: cargo test --all-features -p mission2teegarden-b-models
         env:
           RUST_BACKTRACE: 1
-      - run: cargo test --all-features -p m3-map
+      - run: cargo test --all-features -p mission2teegarden-b-map
         env:
           RUST_BACKTRACE: 1
-      - run: cargo test --all-features -p m3-pc
+      - run: cargo test --all-features -p mission2teegarden-b
+        env:
+          RUST_BACKTRACE: 1
+      - run: cargo doc --all-features -p mission2teegarden-b
         env:
           RUST_BACKTRACE: 1
           
@@ -64,7 +67,7 @@ jobs:
             ~/.cargo/registry
             target
           key: "PC Build ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
-      - run: cargo build --all-features --release --locked -p m3-pc
+      - run: cargo build --all-features --release --locked -p mission2teegarden-b
         env:
           RUST_BACKTRACE: 1
           working-directory: pc
@@ -73,15 +76,15 @@ jobs:
         with:
           name: "${{ matrix.os }}"
           path: |
-            target/release/m3-pc
-            target/release/m3-pc.exe
+            target/release/mission2teegarden-b
+            target/release/mission2teegarden-b.exe
             
   check_pybadge:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         rust_version: [stable, nightly, "1.70"]
-    continue-on-error: true
     name: "check pybadge ${{ matrix.rust_version }}"
     steps:
       - uses: actions/checkout@v3
@@ -98,11 +101,15 @@ jobs:
             target
           key: "Pybadge ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
       - name: cargo check models
-        run: cargo check --all-features --target thumbv7em-none-eabihf -p m3-models
+        run: cargo check --all-features --target thumbv7em-none-eabihf -p mission2teegarden-b-models
         env:
           RUST_BACKTRACE: 1
       - name: cargo check pybadge
-        run: cargo check --all-features -p m3-pybadge
+        run: cargo check --all-features -p mission2teegarden-b-pybadge
+        working-directory: pybadge
+        env:
+          RUST_BACKTRACE: 1
+      - run: cargo doc --all-features -p mission2teegarden-b-pybadge
         working-directory: pybadge
         env:
           RUST_BACKTRACE: 1
@@ -125,20 +132,20 @@ jobs:
             target
           key: "Build Pybadge ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
       - name: cargo check models
-        run: cargo check --all-features --target thumbv7em-none-eabihf -p m3-models
+        run: cargo check --all-features --target thumbv7em-none-eabihf -p mission2teegarden-b-models
         env:
           RUST_BACKTRACE: 1
       - name: cargo bulid pybadge
-        run: cargo build --release --locked --all-features -p m3-pybadge
+        run: cargo build --release --locked --all-features -p mission2teegarden-b-pybadge
         working-directory: pybadge
         env:
           RUST_BACKTRACE: 1
-      - run: arm-none-eabi-objcopy -O binary target/thumbv7em-none-eabihf/release/m3-pybadge m3-pybadge
+      - run: arm-none-eabi-objcopy -O binary target/thumbv7em-none-eabihf/release/mission2teegarden-b-pybadge mission2teegarden-b-pybadge
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
         with:
           name: "pybadge"
-          path: m3-pybadge
+          path: mission2teegarden-b-pybadge
   
   clippy_pc:
     runs-on: ubuntu-latest
@@ -196,6 +203,16 @@ jobs:
         with:
           components: rustfmt
       - run: cargo fmt --all -- --check
+  
+  doc2readme:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/msrd0/cargo-doc2readme:nightly
+    steps:
+    - run: apk add --no-cache alsa-lib-dev libudev-zero-dev
+    - uses: actions/checkout@v3
+    - run: cargo doc2readme --check --expand-macros
+      working-directory: pc
 
 
   cargo_publish:
@@ -209,7 +226,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: msrd0/cargo-publish-action@v1
         with: 
-          packages: TODO
+          packages: mission2teegarden-b-models mission2teegarden-b-map
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
 

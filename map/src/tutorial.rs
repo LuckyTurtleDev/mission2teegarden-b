@@ -8,9 +8,9 @@
 //! * the map must be finite.
 //! * all layers must be finite.
 //! * no custom Tileset can be used. So only the Tilesets available at github
-//! ([`BaseTiles.tsx`](https://github.com/LuckyTurtleDev/m3/blob/main/pc/assets/img/BaseTiles/BaseTiles.tsx),
-//! [`ObjectTiles.tsx`](https://github.com/LuckyTurtleDev/m3/blob/main/pc/assets/img/ObjectTiles/ObjectTiles.tsx),
-//! [`Player.tsx`](https://github.com/LuckyTurtleDev/m3/blob/main/pc/assets/img/Player/Player.tsx)) can be used.
+//! ([`BaseTiles.tsx`](https://github.com/LuckyTurtleDev/mission2teegarden_b/blob/main/pc/assets/img/BaseTiles/BaseTiles.tsx),
+//! [`ObjectTiles.tsx`](https://github.com/LuckyTurtleDev/mission2teegarden_b/blob/main/pc/assets/img/ObjectTiles/ObjectTiles.tsx),
+//! [`Player.tsx`](https://github.com/LuckyTurtleDev/mission2teegarden_b/blob/main/pc/assets/img/Player/Player.tsx)) can be used.
 //! * All layers must be a Tile layer.
 //! * The 1. Layer must only use Tiles from the `BaseTiles` set.
 //! * The 2. Layer must only use Tiles from the `ObjectTiles` set.
@@ -46,7 +46,7 @@
 //! text = "You have mastered the challenge!"
 //! profil = "Captain"
 //! # "#;
-//! # let _config: m3_map::story::Story = basic_toml::from_str(&toml).unwrap_or_else(|err| panic!("{}", err));
+//! # let _config: mission2teegarden_b_map::story::Story = basic_toml::from_str(&toml).unwrap_or_else(|err| panic!("{}", err));
 //! ```
 //! The story has two lists `pre_level` and `after_level`, both are optional.
 //! Each list include zero or more [`Speech`s](crate::story::Speech).

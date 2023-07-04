@@ -1,10 +1,11 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
+#![deny(rustdoc::bare_urls, rustdoc::broken_intra_doc_links)]
 #![forbid(unused_must_use, unsafe_code)]
 
 use std::process;
 
 use clap::Parser;
-use m3_map::commands::*;
+use mission2teegarden_b_map::commands::*;
 
 #[derive(Debug, Parser)]
 enum Opt {

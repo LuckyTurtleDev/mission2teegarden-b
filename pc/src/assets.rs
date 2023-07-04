@@ -1,5 +1,5 @@
-use m3_macro::include_map;
 use macroquad::{prelude::ImageFormat, texture::Texture2D};
+use mission2teegarden_b_macro::include_map;
 use once_cell::sync::Lazy;
 
 macro_rules! include_music {
@@ -11,23 +11,36 @@ macro_rules! include_music {
 	};
 }
 
+/// currently all music are from [HoliznaCC0](https://freemusicarchive.org/music/holiznacc0/) and license under CC0 1.0.
+/// See source code for more information, about invidiual titels.
 pub(crate) const MUSIC: Music = Music {
-	/// used as title music
+	// https://freemusicarchive.org/music/holiznacc0/power-pop/mutant-club/
 	titel_music: include_music!("HoliznaCC0 - Mutant Club.mp3"),
 	background_music: &[
+		// https://freemusicarchive.org/music/holiznacc0/forager/ancient-memories/
 		include_music!("HoliznaCC0 - Ancient Memories.mp3"),
+		// https://freemusicarchive.org/music/holiznacc0/beats-from-the-crypt/dance-of-the-dead/
 		include_music!("HoliznaCC0 - Dance Of The Dead.mp3"),
+		// https://freemusicarchive.org/music/holiznacc0/forager/dusty-attic/
 		include_music!("HoliznaCC0 - Dusty Attic.mp3"),
+		// https://freemusicarchive.org/music/holiznacc0/interstellar-pop-songs/earth/
 		include_music!("HoliznaCC0 - Earth.mp3"),
+		// https://freemusicarchive.org/music/holiznacc0/stranger-than-fiction-halloween-sci-fi/little-green-men/
 		include_music!("HoliznaCC0 - Little Green Men.mp3"),
+		// https://freemusicarchive.org/music/holiznacc0/interstellar-pop-songs/mercury-1/
 		include_music!("HoliznaCC0 - Mercury.mp3"),
+		// https://freemusicarchive.org/music/holiznacc0/interstellar-pop-songs/saturn-1/
 		include_music!("HoliznaCC0 - Saturn.mp3"),
+		// https://freemusicarchive.org/music/holiznacc0/stranger-than-fiction-halloween-sci-fi/sky-fish/
 		include_music!("HoliznaCC0 - Sky Fish.mp3"),
+		// https://freemusicarchive.org/music/holiznacc0/stranger-than-fiction-halloween-sci-fi/somethings-out-there/
 		include_music!("HoliznaCC0 - Somethings Out There.mp3"),
+		// https://freemusicarchive.org/music/holiznacc0/war-game-commission/track-1/
 		include_music!("HoliznaCC0 - Track 1.mp3")
 	]
 };
 
+/// see [Sounds] struct
 pub(crate) const SOUNDS: Sounds = Sounds {
 	crash: include_bytes!("../assets/sound/effects/crash.mp3"),
 	driving: include_bytes!("../assets/sound/effects/driving.mp3"),
@@ -39,17 +52,19 @@ pub(crate) struct Song {
 	pub(crate) data: &'static [u8]
 }
 
+/// see [MUSIC] const
 pub(crate) struct Music {
 	pub(crate) titel_music: Song,
 	pub(crate) background_music: &'static [Song]
 }
 
+/// Currently all Sound **effecst** are from license under [Pixbay license](https://pixabay.com/service/terms/) .
 pub(crate) struct Sounds {
-	/// https://pixabay.com/sound-effects/clank-car-crash-collision-6206/
+	/// <https://pixabay.com/sound-effects/clank-car-crash-collision-6206/>
 	pub(crate) crash: &'static [u8],
-	/// https://pixabay.com/sound-effects/driving-in-a-car-6227/
+	/// <https://pixabay.com/sound-effects/driving-in-a-car-6227/>
 	pub(crate) driving: &'static [u8],
-	/// https://pixabay.com/sound-effects/gravel-road-6747/
+	/// <https://pixabay.com/sound-effects/gravel-road-6747/>
 	pub(crate) gravel_road: &'static [u8]
 }
 
@@ -61,6 +76,7 @@ pub(crate) static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 		include_map!("pc/assets/level/002.tmx"),
 		include_map!("pc/assets/level/003.tmx"),
 		include_map!("pc/assets/level/004.tmx"),
+		include_map!("pc/assets/level/005.tmx"),
 	]
 });
 

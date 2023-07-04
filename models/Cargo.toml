@@ -1,11 +1,11 @@
 [package]
 workspace = ".."
-name = "m3-models"
+name = "mission2teegarden-b-models"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.70"
 publish = false
-repository = "https://github.com/LuckyTurtleDev/m3"
+repository = "https://github.com/LuckyTurtleDev/mission2teegarden-b"
 license = "AGPL-3.0-or-later"
 
 [features]
