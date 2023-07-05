@@ -62,10 +62,10 @@ Alternative you can build m3 by yourself:
 
 ## Map/Level Editor:
 
-Mission to Teegarden b allow creating custom maps/levels, by using the powerfull [Tiled Map editor][__link15]. See [here][__link16] for more information about creating maps. see [mission2teegarden_b_map::story][__link17]
+Mission to Teegarden b allow creating custom maps/levels, by using the powerfull [Tiled Map editor][__link15]. See [here][__link16] for more information about creating maps.
 
 
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGxZ8633wCs_9GzKKlc-jeF26G4eLyZuq8IdiG7yPhHI4iD8_YXKEG5bmlKLl4o4-G5d61AFXByh4G9fIAr8LL1FYG1OVK9EYE6Z-YWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGxZ8633wCs_9GzKKlc-jeF26G4eLyZuq8IdiG7yPhHI4iD8_YXKEG5y8hO0iFAOZG61MJFQi1hn1G0-GrGfh8964G8V42ScFFCGwYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
  [__link0]: https://www.adafruit.com/product/4200
  [__link1]: https://repology.org/badge/vertical-allrepos/mission2teegarden_b.svg
  [__link10]: https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v0.1.0
@@ -75,7 +75,6 @@ Mission to Teegarden b allow creating custom maps/levels, by using the powerfull
  [__link14]: https://github.com/LuckyTurtleDev/mission2teegarden_b/archive/refs/tags/v0.1.0.zip
  [__link15]: https://www.mapeditor.org/
  [__link16]: https://docs.rs/mission2teegarden_b_map/0.1.0
- [__link17]: https://docs.rs/mission2teegarden_b_map/0.1.0/mission2teegarden_b_map/?search=story
  [__link2]: https://repology.org/project/mission2teegarden-b/versions
  [__link3]: https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v0.1.0
  [__link4]: https://github.com/alsa-project/alsa-lib
