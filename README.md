@@ -7,10 +7,20 @@
 [![Source Code Repository](https://img.shields.io/badge/Code-On%20GitHub-blue?logo=GitHub)](https://github.com/LuckyTurtleDev/mission2teegarden-b)
 ![Rust Version: ^1.70](https://img.shields.io/badge/rustc-%5E1.70-orange.svg)
 
-Welcome to a journey to the unexplored planet Teegarden b, to find a new home for humanity. Program the robots, which were send to planets surface for explorations, from the safety of your space ship, with up to 4 ~~players~~ programmers. What hazards await you on the planet? Each player can programm it own robot with a [pybadge][__link0]. Work together to solve all puzzles and challenges. Will you be able to prepare everthing for the arrival of humans?
+Welcome to a journey to the unexplored planet Teegarden b, to find a new home for humanity. Robots where send to planets surface for explorations. Program the robots from the safety of your space ship, by using your [pybadge][__link0].
 
+<div align="center">
+	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/2a4af8f4-28a4-4589-99c3-2b18de4de267" width=60%>
+</div>
+What hazards await you on the planet?
+Face them with up to 4 players with up to 4 players.
+Work together to solve all puzzles and challenges.
+Will you be able to prepare everthing for the arrival of humans?
+<div align="center">
+	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/42d76a9f-3320-427f-bcf0-07887f0fcedf" width=48%>
+	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/779ec8f7-6e15-4e2c-b737-b1ad5477d9f2" width=48%>
+</div>
 Try out Mission to Teegarden b now for free and figure it out.
-
 
 ## Installation (Pc):
 
@@ -65,7 +75,7 @@ Alternative you can build m3 by yourself:
 Mission to Teegarden b allow creating custom maps/levels, by using the powerfull [Tiled Map editor][__link15]. See [here][__link16] for more information about creating maps.
 
 
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGxZ8633wCs_9GzKKlc-jeF26G4eLyZuq8IdiG7yPhHI4iD8_YXKEG5y8hO0iFAOZG61MJFQi1hn1G0-GrGfh8964G8V42ScFFCGwYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGxZ8633wCs_9GzKKlc-jeF26G4eLyZuq8IdiG7yPhHI4iD8_YXKEGyRiKwT8K9UmGxpAbYWlFV63GxRJDtxkVXAUG2JICb4HpRlgYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
  [__link0]: https://www.adafruit.com/product/4200
  [__link1]: https://repology.org/badge/vertical-allrepos/mission2teegarden_b.svg
  [__link10]: https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v0.1.0

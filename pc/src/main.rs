@@ -4,14 +4,22 @@
 
 //! Welcome to a journey to the unexplored planet Teegarden b,
 //! to find a new home for humanity.
-//! Program the robots, which were send to planets surface for explorations, from the safety of your space ship,
-//! with up to 4 ~~players~~ programmers.
+//! Robots where send to planets surface for explorations.
+//! Program the robots from the safety of your space ship,
+//! by using your [pybadge](https://www.adafruit.com/product/4200).
+//! <div align="center">
+//! 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/2a4af8f4-28a4-4589-99c3-2b18de4de267" width=60%>
+//! </div>
 //! What hazards await you on the planet?
-//! Each player can programm it own robot with a [pybadge](https://www.adafruit.com/product/4200).
+//! Face them with up to 4 players with up to 4 players.
 //! Work together to solve all puzzles and challenges.
 //! Will you be able to prepare everthing for the arrival of humans?
-//!
+//! <div align="center">
+//! 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/42d76a9f-3320-427f-bcf0-07887f0fcedf" width=48%>
+//! 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/779ec8f7-6e15-4e2c-b737-b1ad5477d9f2" width=48%>
+//! </div>
 //! Try out Mission to Teegarden b now for free and figure it out.
+//!
 //! # Installation (Pc):
 //! Mission to Teegarden b is avaibale at the following repositories:
 //!
