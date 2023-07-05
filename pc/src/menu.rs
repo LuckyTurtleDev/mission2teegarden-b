@@ -1,13 +1,11 @@
 use crate::{Activity, GameState, Phase, LEVELS};
-use mission2teegarden_b_models::{AvailableCards, Key, ToPcGameEvent, ToPypadeGameEvent};
+use mission2teegarden_b_models::{Key, ToPcGameEvent};
 
 use macroquad::{
 	hash,
 	prelude::*,
 	ui::{root_ui, widgets, Skin}
 };
-
-const BUTTON_FONT_SIZE: u16 = 16;
 
 fn get_button_font_size(container_height: f32) -> u16 {
 	let font_size = 20;
@@ -43,7 +41,7 @@ fn get_button_skin(font_size: u16) -> Skin {
 }
 
 fn get_button_focused_skin(font_size: u16) -> Skin {
-	let button_style = root_ui()
+	let _button_style = root_ui()
 		.style_builder()
 		.background(Image::from_file_with_format(
 			include_bytes!("../assets/img/Menu/button_focused_background.png"),
