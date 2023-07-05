@@ -17,7 +17,7 @@ Face them with up to 4 players with up to 4 players.
 Work together to solve all puzzles and challenges.
 Will you be able to prepare everthing for the arrival of humans?
 <div align="center">
-	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/42d76a9f-3320-427f-bcf0-07887f0fcedf" width=49%>
+	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/71af7810-5927-4d05-be75-9ca37617c411" width=49%>
 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/779ec8f7-6e15-4e2c-b737-b1ad5477d9f2" width=49%>
 </div>
 Try out Mission to Teegarden b now for free and figure it out.
