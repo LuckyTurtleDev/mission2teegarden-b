@@ -1,3 +1,4 @@
+#![allow(clippy::tabs_in_doc_comments)]
 #![warn(rust_2018_idioms, unreachable_pub)]
 #![deny(rustdoc::bare_urls, rustdoc::broken_intra_doc_links)]
 #![forbid(unused_must_use, unsafe_code)]
@@ -15,8 +16,8 @@
 //! Work together to solve all puzzles and challenges.
 //! Will you be able to prepare everthing for the arrival of humans?
 //! <div align="center">
-//! 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/42d76a9f-3320-427f-bcf0-07887f0fcedf" width=48%>
-//! 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/779ec8f7-6e15-4e2c-b737-b1ad5477d9f2" width=48%>
+//! 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/42d76a9f-3320-427f-bcf0-07887f0fcedf" width=49%>
+//! 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/779ec8f7-6e15-4e2c-b737-b1ad5477d9f2" width=49%>
 //! </div>
 //! Try out Mission to Teegarden b now for free and figure it out.
 //!
