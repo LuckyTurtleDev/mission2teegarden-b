@@ -135,6 +135,7 @@ struct GameState {
 	level_num: usize,
 	animation_emitter: Option<Emitter>,
 	running: bool,
+	/// Supress standby while playing the game
 	_keep_awake: Option<AwakeHandle>
 }
 
