@@ -2,6 +2,11 @@
 #![deny(rustdoc::bare_urls, rustdoc::broken_intra_doc_links)]
 #![forbid(unused_must_use, unsafe_code)]
 
+//! This crate allow you to create maps/levels for [Mission to Teegarden b](https://github.com/LuckyTurtleDev/mission2teegarden-b).
+//! It can be used instead game binary `mission2teegarden-b`.
+//! Every feature provided by this crate is also provided by the game itself.
+//! The only benefits is that this crate is much smaller.
+//!
 //! # Mapeditor
 //!
 //! Mission to Teegarden b allow creating custom maps, by using the [Tiled Map editor](https://www.mapeditor.org/).
