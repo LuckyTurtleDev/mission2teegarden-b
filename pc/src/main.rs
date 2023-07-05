@@ -53,6 +53,7 @@
 
 use assets::LEVELS;
 use clap::Parser;
+use keepawake::AwakeHandle;
 use log::info;
 use macroquad::{prelude::*, window, Window};
 use macroquad_particles::Emitter;
@@ -79,6 +80,7 @@ use usb::Players;
 
 const CARGO_PKG_NAME: &str = env!("CARGO_PKG_NAME");
 const CARGO_PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
+const GAME_TITLE: &str = "Mission to Teegarden b";
 
 #[derive(PartialEq)]
 enum Phase {
@@ -132,14 +134,25 @@ struct GameState {
 	movement_time: f32,
 	level_num: usize,
 	animation_emitter: Option<Emitter>,
-	running: bool
+	running: bool,
+	/// Supress standby while playing the game
+	_keep_awake: Option<AwakeHandle>
 }
 
 impl GameState {
 	fn new() -> GameState {
 		let sound_player = sound::SoundPlayer::new();
 		Lazy::force(&TEXTURES);
-
+		let keep_awake = keepawake::Builder::new()
+			.display(true)
+			.app_name(CARGO_PKG_NAME)
+			.reason(format!("user play {GAME_TITLE}"))
+			.create()
+			.map_err(|err| {
+				let err = err.context("failed to suppress standby");
+				warn!("{err:?}");
+			})
+			.ok();
 		GameState {
 			sound_player,
 			activity: Activity::Menu,
@@ -150,7 +163,8 @@ impl GameState {
 			player_count: 0,
 			level_num: 0,
 			animation_emitter: None,
-			running: true
+			running: true,
+			_keep_awake: keep_awake
 		}
 	}
 }
