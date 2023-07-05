@@ -301,7 +301,8 @@ mod tests {
 	fn test_bundeld_maps() {
 		for (i, map) in LEVELS.iter().enumerate() {
 			//test if map can be deserialize
-			Map::from_string(map).expect(&format!("map with index {i} is not valid"));
+			Map::from_string(map)
+				.unwrap_or_else(|_| panic!("map with index {i} is not valid"));
 		}
 	}
 }
