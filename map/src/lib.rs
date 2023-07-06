@@ -3,8 +3,8 @@
 #![deny(rustdoc::bare_urls, rustdoc::broken_intra_doc_links)]
 #![forbid(unused_must_use, unsafe_code)]
 
-//! This crate allow you to create maps/levels for [Mission to Teegarden b](https://github.com/LuckyTurtleDev/mission2teegarden-b).
-//! It can be used instead game binary `mission2teegarden-b`.
+//! This crate allows you to create maps/levels for [Mission to Teegarden b](https://github.com/LuckyTurtleDev/mission2teegarden-b).
+//! It can be used instead of the game binary `mission2teegarden-b`.
 //! Every feature provided by this crate is also provided by the game itself.
 //! The only benefits is that this crate is much smaller.
 //!
@@ -17,9 +17,9 @@
 //!
 //! ### Limitaions
 //! There exist some conditions and limitation how the map is structured:
-//! * the map must be finite.
-//! * all layers must be finite.
-//! * no custom Tileset can be used. So only the Tilesets available at github
+//! * The map must be finite.
+//! * All layers must be finite.
+//! * No custom Tileset can be used. So only the Tilesets available at Github
 //! ([`BaseTiles.tsx`](https://github.com/LuckyTurtleDev/mission2teegarden_b/blob/main/pc/assets/img/BaseTiles/BaseTiles.tsx),
 //! [`ObjectTiles.tsx`](https://github.com/LuckyTurtleDev/mission2teegarden_b/blob/main/pc/assets/img/ObjectTiles/ObjectTiles.tsx),
 //! [`Player.tsx`](https://github.com/LuckyTurtleDev/mission2teegarden_b/blob/main/pc/assets/img/Player/Player.tsx)) can be used.
@@ -28,20 +28,20 @@
 //! * The 2. Layer must only use Tiles from the `ObjectTiles` set.
 //! * The 3. Layer must only use Tiles from the `Player` set.
 //! * If a field at layer 1. is not set `Grass` is used as default.
-//! * If player `i` have a start postion. All player `<i` must also have a start postion.
-//! * At least player `i` must have a start postion.
-//! * If global goal was not set, each player (which have a start position), must have a player goal.
+//! * If player `i` have a start position. All player `<i` must also have a start position.
+//! * At least player 1 must have a start position.
+//! * If a global goal was not set, each player (which have a start position), must have a player goal.
 //!
 //! ### Available Instructions
 //! Available instruction can be added, by adding a "Custom properties" with type `int` to the Map.
 //! The properties must be named like the fields of the [`AvailableCards`](crate::AvailableCards) struct.
-//! If no propertie for an instruction is set, `0` is used as default.
+//! If no properties for an instruction is set, `0` is used as default.
 //! Keep in mind that the player can only use `12` cards in total.
 //!
 //! ### Story
 //! An optional story can be added by creating a map property called `story` from type `string`
-//! For decoding the story inside the property the [toml](https://toml.io/) format is used.
-//! Currently only story elements before and after the level are supported.
+//! As decoding the [toml](https://toml.io/) format is used.
+//! Currently, only story elements before and after the level are supported.
 //!
 //! Take a look at this example story:
 //! ```
@@ -60,9 +60,9 @@
 //! # "#;
 //! # let _config: mission2teegarden_b_map::story::Story = basic_toml::from_str(&toml).unwrap_or_else(|err| panic!("{}", err));
 //! ```
-//! The story has two lists `pre_level` and `after_level`, both are optional.
+//! The story exist out two lists `pre_level` and `after_level`, both are optional.
 //! Each list include zero or more [`Speech`s](crate::story::Speech).
-//! The [`Speech`s](crate::story::Speech) from `pre_level` are shown before the level starts,
+//! The [`Speech`s](crate::story::Speech) from `pre_level` are shown before the level starts.
 //! The ones from `after_level` are show, after the level was finish successfully.
 //! A [`Speech`](crate::story::Speech) exist out of a `text`, a `profil`picture and a `background`.
 //! The last two are optional.
@@ -73,10 +73,11 @@
 //! All variants of [`Background`](`crate::story::Background`) can be used for this.
 //! If `background` is not set, the level will be shown.
 //!
-//! For more info see the [`Story`](`crate::story::Story`) struct.
+//! For more informations see the [`Story`](`crate::story::Story`) struct.
 //!
 //! ### Map validation
-//! The map can be validate by using the game or this crate.
+//! The map can be validated  by using the game or this crate,
+//! by exectuing one of the following commands.
 //! ```bash
 //! mission2teegarden-b validate-map <FILE>
 //! mission2teegarden-b-map validate <FILE>
@@ -88,8 +89,8 @@
 //! mission2teegarden-b export-map <FILE>
 //! mission2teegarden-b-map export <FILE>
 //! ```
-//! Executing one of the commands creates a file with the same basename as the original file and the extension `.m2tb_map`.
-//! Since the map format is not stable yet, it is strongly recommanded to keep the original `.tmx` file
+//! Executing one of the commands creates a file with the same basename as the original file and the extension `.m2tb_map` inside the current working directory.
+//! Since the map format is not stable yet and can not be editet after exporting, it is strongly recommanded to keep the original `.tmx` file
 
 use basic_toml as toml;
 use log::debug;
