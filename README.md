@@ -78,8 +78,7 @@ Mission to Teegarden b allow creating custom maps/levels, by using the powerfull
 		<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/68403ebd-ce64-4baa-bba2-b52962b89d5c" width=80%>
  </div>
 
-
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEG8SBQfSv2lKpGzcY0F7usNAmG2dp4So9dfdAGxAMkAIveYBCYXKEGxvALrpccUwnG3LtwJOv_IT2G96ptTVep6W9G7qKrdEKLREhYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGyFeA8xDJNVnGxf23IOvNAysG80feHOCOwZiGzoQhbxoYmBeYXKEGxvALrpccUwnG3LtwJOv_IT2G96ptTVep6W9G7qKrdEKLREhYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
  [__link0]: https://www.adafruit.com/product/4200
  [__link1]: https://repology.org/badge/vertical-allrepos/mission2teegarden_b.svg
  [__link10]: https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v0.1.0
