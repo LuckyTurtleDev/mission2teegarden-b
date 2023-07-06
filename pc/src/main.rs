@@ -69,6 +69,9 @@
 //! # Map/Level Editor:
 //! Mission to Teegarden b allow creating custom maps/levels, by using the powerfull [Tiled Map editor](https://www.mapeditor.org/).
 //! See [here](mission2teegarden_b_map) for more information about creating maps.
+//! <div align="center">
+//!		<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/68403ebd-ce64-4baa-bba2-b52962b89d5c" width=80%>
+//! </div>
 
 use assets::LEVELS;
 use clap::Parser;

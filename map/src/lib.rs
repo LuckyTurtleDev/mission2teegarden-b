@@ -1,3 +1,4 @@
+#![allow(clippy::tabs_in_doc_comments)]
 #![warn(rust_2018_idioms, unreachable_pub)]
 #![deny(rustdoc::bare_urls, rustdoc::broken_intra_doc_links)]
 #![forbid(unused_must_use, unsafe_code)]
@@ -8,9 +9,11 @@
 //! The only benefits is that this crate is much smaller.
 //!
 //! # Mapeditor
-//!
 //! Mission to Teegarden b allow creating custom maps, by using the [Tiled Map editor](https://www.mapeditor.org/).
 //! This does include support for available instructions and story.
+//! <div align="center">
+//!		<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/68403ebd-ce64-4baa-bba2-b52962b89d5c" width=60%>
+//! </div>
 //!
 //! ### Limitaions
 //! There exist some conditions and limitation how the map is structured:
