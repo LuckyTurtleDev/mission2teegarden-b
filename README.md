@@ -73,6 +73,9 @@ Alternative you can build m3 by yourself:
 ## Map/Level Editor:
 
 Mission to Teegarden b allow creating custom maps/levels, by using the powerfull [Tiled Map editor][__link15]. See [here][__link16] for more information about creating maps.
+<div align="center">
+	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/68403ebd-ce64-4baa-bba2-b52962b89d5c" width=80%>
+</div>
 
 
  [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGxZ8633wCs_9GzKKlc-jeF26G4eLyZuq8IdiG7yPhHI4iD8_YXKEG2Bx7OIbEqBCG_BNfY2R1pxgG-049FllclaUG9oT6urQN-hBYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
