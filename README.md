@@ -15,7 +15,7 @@ Welcome to a journey to the unexplored planet Teegarden b, to find a new home fo
 What hazards await you on the planet?
 Face them with up to 4 players.
 Work together to solve all puzzles and challenges.
-Will you be able to prepare everything, so humans can arrive on the planet? 
+Will you be able to prepare everything, so humans can arrive on the planet?
 <div align="center">
 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/71af7810-5927-4d05-be75-9ca37617c411" width=49%>
 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/779ec8f7-6e15-4e2c-b737-b1ad5477d9f2" width=49%>
@@ -48,10 +48,10 @@ Alternative you can easily build Mission to Teegarden b  by yourself:
 
 ## Flash Pybadge:
 
- - Install an UF2 flasher. I recommand using [hf2-cli][__link9].
- - Download and unpack Pybadge binary from [Github release][__link10].
+ - Install an UF2 flasher. I recommend using [hf2-cli][__link9].
+ - Download and unpack Pybadge binary from [GitHub release][__link10].
  - Press the reset button of the pybdage twice, to enter the bootloader.
- - After this execute `hf2 elf mission2teegarden-b-pybadge` (or the corresponding command of your flahing tool) to flash the binary to the pybadge.
+ - After this, execute `hf2 elf mission2teegarden-b-pybadge` (or the corresponding command of your flashing tool) to flash the binary to the pybadge.
  - Press the reset button again.
 
 
@@ -59,14 +59,14 @@ Alternative you can easily build Mission to Teegarden b  by yourself:
 
 Alternative you can build m3 by yourself:
 
- - [install rustup][__link11]
- - run `cargo install hf2-cli --locked` to build and install the [hf2-cli][__link12] flasher. See the [rust book][__link13] for more information about cargo install.
- - make sure that `~/.cargo/bin` is listed at the `PATH` enviroment variable otherwise the executeable can not be found..
- - install the rust `thumbv7em-none-eabihf` target (the architecture of the pybadge) by executing `rustup target install thumbv7em-none-eabihf`.
- - optional: install nightly toolchain for better error messages at the pybadge. `rustup toolchain install nightly --target thumbv7em-none-eabihf`
+ - [Install rustup][__link11]
+ - Run `cargo install hf2-cli --locked` to build and install the [hf2-cli][__link12] flasher. See the [rust book][__link13] for more information about cargo install.
+ - Make sure that `~/.cargo/bin` is listed at the `PATH` environment variable, otherwise the executeable can not be found..
+ - Install the rust `thumbv7em-none-eabihf` target (the architecture of the pybadge) by executing `rustup target install thumbv7em-none-eabihf`.
+ - Optional: install nightly toolchain for better error messages at the pybadge. `rustup toolchain install nightly --target thumbv7em-none-eabihf`
  - [Download][__link14] and unpack the source code (if not already done).
- - press the reset button of the pybadge twice to enter bootloader
- - compile and flash program by running `cargo +nightly run --release -locked` inside the downloaded `pybadge` folder. `+nightly` is optional and have to be left out if the “install nightly toolchain” step was skip. Please use `+nightly` for bug reports.
+ - Press the reset button of the pybadge twice to enter bootloader
+ - Compile and flash program by running `cargo +nightly run --release -locked` inside the downloaded `pybadge` folder. `+nightly` is optional and have to be left out if the “install nightly toolchain” step was skip. Please use `+nightly` for bug reports.
  - Press the reset button again.
 
 
@@ -75,7 +75,7 @@ Alternative you can build m3 by yourself:
 Mission to Teegarden b allow creating custom maps/levels, by using the powerfull [Tiled Map editor][__link15]. See [here][__link16] for more information about creating maps.
 
 
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGxZ8633wCs_9GzKKlc-jeF26G4eLyZuq8IdiG7yPhHI4iD8_YXKEG_M0dvPsOYLyG9JLBsHN0vGVG_Z18kA3KHhXG9FzQkMf42SAYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGxZ8633wCs_9GzKKlc-jeF26G4eLyZuq8IdiG7yPhHI4iD8_YXKEG2Bx7OIbEqBCG_BNfY2R1pxgG-049FllclaUG9oT6urQN-hBYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
  [__link0]: https://www.adafruit.com/product/4200
  [__link1]: https://repology.org/badge/vertical-allrepos/mission2teegarden_b.svg
  [__link10]: https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v0.1.0

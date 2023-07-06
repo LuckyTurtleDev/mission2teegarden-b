@@ -44,24 +44,24 @@
 //!
 //!
 //! # Flash Pybadge:
-//! * Install an UF2 flasher. I recommand using [hf2-cli](https://crates.io/crates/hf2-cli).
+//! * Install an UF2 flasher. I recommend using [hf2-cli](https://crates.io/crates/hf2-cli).
 //! * Download and unpack Pybadge binary from
-#![doc=concat!("[Github release](https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v",env!("CARGO_PKG_VERSION"),").")]
+#![doc=concat!("[GitHub release](https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v",env!("CARGO_PKG_VERSION"),").")]
 //! * Press the reset button of the pybdage twice, to enter the bootloader.
-//! * After this execute `hf2 elf mission2teegarden-b-pybadge` (or the corresponding command of your flahing tool) to flash the binary to the pybadge.
+//! * After this, execute `hf2 elf mission2teegarden-b-pybadge` (or the corresponding command of your flashing tool) to flash the binary to the pybadge.
 //! * Press the reset button again.
 //! ### Building from source:
 //! Alternative you can build m3 by yourself:
-//! * [install rustup](https://www.rust-lang.org/tools/install)
-//! * run `cargo install hf2-cli --locked` to build and install the [hf2-cli](https://crates.io/crates/hf2-cli) flasher.
+//! * [Install rustup](https://www.rust-lang.org/tools/install)
+//! * Run `cargo install hf2-cli --locked` to build and install the [hf2-cli](https://crates.io/crates/hf2-cli) flasher.
 //! See the [rust book](https://doc.rust-lang.org/cargo/commands/cargo-install.html) for more information about cargo install.
-//! * make sure that `~/.cargo/bin` is listed at the `PATH` enviroment variable otherwise the executeable can not be found..
-//! * install the rust `thumbv7em-none-eabihf` target (the architecture of the pybadge) by executing `rustup target install thumbv7em-none-eabihf`.
-//! * optional: install nightly toolchain for better error messages at the pybadge. `rustup toolchain install nightly --target thumbv7em-none-eabihf`
+//! * Make sure that `~/.cargo/bin` is listed at the `PATH` environment variable, otherwise the executeable can not be found..
+//! * Install the rust `thumbv7em-none-eabihf` target (the architecture of the pybadge) by executing `rustup target install thumbv7em-none-eabihf`.
+//! * Optional: install nightly toolchain for better error messages at the pybadge. `rustup toolchain install nightly --target thumbv7em-none-eabihf`
 #![doc=concat!("* [Download](https://github.com/LuckyTurtleDev/mission2teegarden_b/archive/refs/tags/v",env!("CARGO_PKG_VERSION"),".zip)")]
 //! and unpack the source code (if not already done).
-//! * press the reset button of the pybadge twice to enter bootloader
-//! * compile and flash program by running `cargo +nightly run --release -locked` inside the downloaded `pybadge` folder.
+//! * Press the reset button of the pybadge twice to enter bootloader
+//! * Compile and flash program by running `cargo +nightly run --release -locked` inside the downloaded `pybadge` folder.
 //! `+nightly` is optional and have to be left out if the "install nightly toolchain" step was skip.
 //! Please use `+nightly` for bug reports.
 //! * Press the reset button again.
