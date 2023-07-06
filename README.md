@@ -7,15 +7,15 @@
 [![Source Code Repository](https://img.shields.io/badge/Code-On%20GitHub-blue?logo=GitHub)](https://github.com/LuckyTurtleDev/mission2teegarden-b)
 ![Rust Version: ^1.70](https://img.shields.io/badge/rustc-%5E1.70-orange.svg)
 
-Welcome to a journey to the unexplored planet Teegarden b, to find a new home for humanity. Robots where send to planets surface for explorations. Program the robots from the safety of your space ship, by using your [pybadge][__link0].
+Welcome to a journey to the unexplored planet Teegarden b, to find a new home for humanity. Robots were sent to the planet’s surface for exploration. Program these robots from the safety of your spaceship, by using your [pybadge][__link0].
 
 <div align="center">
 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/2a4af8f4-28a4-4589-99c3-2b18de4de267" width=60%>
 </div>
 What hazards await you on the planet?
-Face them with up to 4 players with up to 4 players.
+Face them with up to 4 players.
 Work together to solve all puzzles and challenges.
-Will you be able to prepare everthing for the arrival of humans?
+Will you be able to prepare everything, so humans can arrive on the planet? 
 <div align="center">
 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/71af7810-5927-4d05-be75-9ca37617c411" width=49%>
 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/779ec8f7-6e15-4e2c-b737-b1ad5477d9f2" width=49%>
@@ -24,26 +24,26 @@ Try out Mission to Teegarden b now for free and figure it out.
 
 ## Installation (Pc):
 
-Mission to Teegarden b is avaibale at the following repositories:
+Mission to Teegarden b is available at the following repositories:
 
 [![Packaging status][__link1]][__link2]
 
-Prebuild binarys can also been downloaded from the [Github release][__link3].
+Prebuild binaries can also be downloaded from the [GitHub release][__link3].
 
 
 #### Building from source:
 
 Alternative you can easily build Mission to Teegarden b  by yourself:
 
- - on Linux install the following development dependencies. At some distros (like Alpine and Debian) seperate development packages exist, regular suffixed with `-dev`. If this the case make sure that you have also installed the `*-dev` version.
+ - On Linux, install the following development dependencies. On some distros (like Alpine and Debian), separate development packages exist, regular suffixed with `-dev`. If this is the case, make sure that you have also installed the `*-dev` version.
 	 - [`alsa-lib`][__link4]
 	 - [`libudev`][__link5]
 	
 	
- - [install rust][__link6]
+ - [Install rust][__link6]
  - [Download][__link7] and unpack the source code.
- - run `cargo install --path pc --locked` inside the unpacked folder, to build and install the mission2teegarden-b. See the [rust book][__link8] for more information about cargo install.
- - make sure that `~/.cargo/bin` is listed at the `PATH` enviroment variable, otherwise the `mission2teegarden-b` executeable can not be found.
+ - Run `cargo install --path pc --locked` inside the unpacked folder, to build and install mission2teegarden-b. See the [rust book][__link8] for more information about cargo install.
+ - Make sure that `~/.cargo/bin` is listed in the `PATH` environment variable otherwise, the `mission2teegarden-b` executable can not be found.
 
 
 ## Flash Pybadge:
@@ -75,7 +75,7 @@ Alternative you can build m3 by yourself:
 Mission to Teegarden b allow creating custom maps/levels, by using the powerfull [Tiled Map editor][__link15]. See [here][__link16] for more information about creating maps.
 
 
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGxZ8633wCs_9GzKKlc-jeF26G4eLyZuq8IdiG7yPhHI4iD8_YXKEG5wC0M67U4JxGwuCiU6OYbNNGzwNpveyd3UwGzBE4TO3cXBzYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGxZ8633wCs_9GzKKlc-jeF26G4eLyZuq8IdiG7yPhHI4iD8_YXKEG_M0dvPsOYLyG9JLBsHN0vGVG_Z18kA3KHhXG9FzQkMf42SAYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
  [__link0]: https://www.adafruit.com/product/4200
  [__link1]: https://repology.org/badge/vertical-allrepos/mission2teegarden_b.svg
  [__link10]: https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v0.1.0

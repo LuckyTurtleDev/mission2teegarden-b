@@ -5,16 +5,16 @@
 
 //! Welcome to a journey to the unexplored planet Teegarden b,
 //! to find a new home for humanity.
-//! Robots where send to planets surface for explorations.
-//! Program the robots from the safety of your space ship,
+//! Robots were sent to the planet's surface for exploration.
+//! Program these robots from the safety of your spaceship,
 //! by using your [pybadge](https://www.adafruit.com/product/4200).
 //! <div align="center">
 //! 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/2a4af8f4-28a4-4589-99c3-2b18de4de267" width=60%>
 //! </div>
 //! What hazards await you on the planet?
-//! Face them with up to 4 players with up to 4 players.
+//! Face them with up to 4 players.
 //! Work together to solve all puzzles and challenges.
-//! Will you be able to prepare everthing for the arrival of humans?
+//! Will you be able to prepare everything, so humans can arrive on the planet?
 //! <div align="center">
 //! 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/71af7810-5927-4d05-be75-9ca37617c411" width=49%>
 //! 	<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/779ec8f7-6e15-4e2c-b737-b1ad5477d9f2" width=49%>
@@ -22,25 +22,25 @@
 //! Try out Mission to Teegarden b now for free and figure it out.
 //!
 //! # Installation (Pc):
-//! Mission to Teegarden b is avaibale at the following repositories:
+//! Mission to Teegarden b is available at the following repositories:
 //!
 //! [![Packaging status](https://repology.org/badge/vertical-allrepos/mission2teegarden_b.svg)](https://repology.org/project/mission2teegarden-b/versions)
 //!
-//! Prebuild binarys can also been downloaded from the
-#![doc=concat!("[Github release](https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v",env!("CARGO_PKG_VERSION"),").")]
+//! Prebuild binaries can also be downloaded from the
+#![doc=concat!("[GitHub release](https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v",env!("CARGO_PKG_VERSION"),").")]
 //! ### Building from source:
 //! Alternative you can easily build Mission to Teegarden b  by yourself:
-//! * on Linux install the following development dependencies.
-//! At some distros (like Alpine and Debian) seperate development packages exist, regular suffixed with `-dev`.
-//! If this the case make sure that you have also installed the `*-dev` version.
+//! * On Linux, install the following development dependencies.
+//! On some distros (like Alpine and Debian), separate development packages exist, regular suffixed with `-dev`.
+//! If this is the case, make sure that you have also installed the `*-dev` version.
 //!   * [`alsa-lib`](https://github.com/alsa-project/alsa-lib)
 //!   * [`libudev`](https://github.com/systemd/systemd)
-//! * [install rust](https://www.rust-lang.org/tools/install)
+//! * [Install rust](https://www.rust-lang.org/tools/install)
 #![doc=concat!("* [Download](https://github.com/LuckyTurtleDev/mission2teegarden_b/archive/refs/tags/v",env!("CARGO_PKG_VERSION"),".zip)")]
 //! and unpack the source code.
-//! * run `cargo install --path pc --locked` inside the unpacked folder, to build and install the mission2teegarden-b.
+//! * Run `cargo install --path pc --locked` inside the unpacked folder, to build and install mission2teegarden-b.
 //! See the [rust book](https://doc.rust-lang.org/cargo/commands/cargo-install.html) for more information about cargo install.
-//! * make sure that `~/.cargo/bin` is listed at the `PATH` enviroment variable, otherwise the `mission2teegarden-b` executeable can not be found.
+//! * Make sure that `~/.cargo/bin` is listed in the `PATH` environment variable otherwise, the `mission2teegarden-b` executable can not be found.
 //!
 //!
 //! # Flash Pybadge:
