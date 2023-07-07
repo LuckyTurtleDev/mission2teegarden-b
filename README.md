@@ -7,6 +7,8 @@
 [![Source Code Repository](https://img.shields.io/badge/Code-On%20GitHub-blue?logo=GitHub)](https://github.com/LuckyTurtleDev/mission2teegarden-b)
 ![Rust Version: ^1.70](https://img.shields.io/badge/rustc-%5E1.70-orange.svg)
 
+https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/da266148-9304-4b95-8758-61a0afb2b1da
+
 Welcome to a journey to the unexplored planet Teegarden b, to find a new home for humanity. Robots were sent to the planet’s surface for exploration. Program these robots from the safety of your spaceship, by using your [pybadge][__link0].
 
 <div align="center">
