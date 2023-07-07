@@ -1,13 +1,13 @@
 # 🪐 Mission to Teegarden b
 
 ![License: AGPL-3.0-or-later](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue)
-[![v0.1.0](https://img.shields.io/badge/version-v0.1.0-orange)](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v0.1.0)
+[![v](https://img.shields.io/badge/version-v-orange)](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v)
 [![GitHub tag (latest SemVer pre-release)](https://img.shields.io/github/v/tag/LuckyTurtleDev/mission2teegarden-b?label=latest&color=orange)](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/latest)
 [![Packaging status](https://repology.org/badge/tiny-repos/mission2teegarden-b.svg)](https://repology.org/project/mission2teegarden-b/versions)
 [![Source Code Repository](https://img.shields.io/badge/Code-On%20GitHub-blue?logo=GitHub)](https://github.com/LuckyTurtleDev/mission2teegarden-b)
 ![Rust Version: ^1.70](https://img.shields.io/badge/rustc-%5E1.70-orange.svg)
 
-https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/da266148-9304-4b95-8758-61a0afb2b1da
+![](https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/da266148-9304-4b95-8758-61a0afb2b1da)
 
 Welcome to a journey to the unexplored planet Teegarden b, to find a new home for humanity. Robots were sent to the planet’s surface for exploration. Program these robots from the safety of your spaceship, by using your [pybadge][__link0].
 
@@ -80,7 +80,7 @@ Mission to Teegarden b allow creating custom maps/levels, by using the powerfull
 		<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/68403ebd-ce64-4baa-bba2-b52962b89d5c" width=80%>
  </div>
 
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGyFeA8xDJNVnGxf23IOvNAysG80feHOCOwZiGzoQhbxoYmBeYXKEGxvALrpccUwnG3LtwJOv_IT2G96ptTVep6W9G7qKrdEKLREhYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEG94A-4ZKMnAlG1KuUqLwgp4HG3hp8fN066wwG2KrOzmkaRjEYXKEGxvALrpccUwnG3LtwJOv_IT2G96ptTVep6W9G7qKrdEKLREhYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
  [__link0]: https://www.adafruit.com/product/4200
  [__link1]: https://repology.org/badge/vertical-allrepos/mission2teegarden_b.svg
  [__link10]: https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v0.1.0
