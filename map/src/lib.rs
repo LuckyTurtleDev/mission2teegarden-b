@@ -92,6 +92,7 @@
 //! Executing one of the commands creates a file with the same basename as the original file and the extension `.m2tb_map` inside the current working directory.
 //! Since the map format is not stable yet and can not be editet after exporting, it is strongly recommanded to keep the original `.tmx` file
 
+use anyhow::{bail, Context};
 use basic_toml as toml;
 use log::debug;
 use mission2teegarden_b_models::AvailableCards;
@@ -102,6 +103,8 @@ use serde::{
 };
 use std::{
 	f32::consts::PI,
+	ffi::OsStr,
+	fs::read_to_string,
 	io, iter,
 	path::{Path, PathBuf}
 };
@@ -113,6 +116,8 @@ pub mod commands;
 pub mod story;
 pub mod tiles;
 use tiles::{InvalidTile, MapBaseTile, ObjectTile, Passable, PlayerTile, Tile};
+
+const MAP_FILE_EXTENSION: &str = "m2tb_map";
 
 /// allow Serialization of MapProporties
 struct PropertiesSerde(Properties);
@@ -450,6 +455,29 @@ impl Map {
 			cards,
 			story
 		})
+	}
+
+	/// load a map from file.
+	/// Can be at tiled map or a Misson to Teegarden b map.
+	pub fn load_from_file<P>(path: P) -> anyhow::Result<Self>
+	where
+		P: AsRef<Path>
+	{
+		let path = path.as_ref();
+		if path.extension() == Some(OsStr::new(MAP_FILE_EXTENSION)) {
+			let file = read_to_string(path)
+				.with_context(|| format!("failed to read file {path:?}"))?;
+			let map = Self::from_string(&file).with_context(|| "failed to prase file")?;
+			return Ok(map);
+		}
+		if path.extension() == Some(OsStr::new("tmx")) {
+			let map = Self::from_tmx(path)?;
+			return Ok(map);
+		}
+		bail!(
+			"unsupported file extension {:?}",
+			path.extension().unwrap_or_else(|| OsStr::new("None"))
+		)
 	}
 
 	pub fn iter_player(&self) -> impl Iterator<Item = &Player> {

@@ -73,6 +73,7 @@
 //!		<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/68403ebd-ce64-4baa-bba2-b52962b89d5c" width=80%>
 //! </div>
 
+use anyhow::Context;
 use assets::LEVELS;
 use clap::Parser;
 use keepawake::AwakeHandle;
@@ -83,7 +84,10 @@ use mission2teegarden_b_map::{Map, Orientation};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
 use sound::SoundPlayer;
-use std::{io::IsTerminal, process};
+use std::{
+	io::IsTerminal,
+	process::{self, exit}
+};
 
 mod assets;
 use assets::TEXTURES;
@@ -162,7 +166,7 @@ struct GameState {
 }
 
 impl GameState {
-	fn new() -> GameState {
+	fn new(level: Option<Map>) -> GameState {
 		let sound_player = sound::SoundPlayer::new();
 		Lazy::force(&TEXTURES);
 		let keep_awake = keepawake::Builder::new()
@@ -175,10 +179,19 @@ impl GameState {
 				warn!("{err:?}");
 			})
 			.ok();
+		let (game_run, activity) = if let Some(level) = level {
+			let game_state = GameRun {
+				level,
+				player_states: Default::default()
+			};
+			(Some(game_state), Activity::GameRound(Phase::Select))
+		} else {
+			(None, Activity::Menu)
+		};
 		GameState {
 			sound_player,
-			activity: Activity::Menu,
-			game_run: None,
+			activity,
+			game_run,
 			input_players: usb::Players::init(),
 			delta_time: 0.0,
 			movement_time: 0.5,
@@ -191,8 +204,20 @@ impl GameState {
 	}
 }
 
-async fn run_game() {
-	let mut game_state = GameState::new();
+async fn run_game(opt: OptPlay) {
+	let level = opt
+		.file
+		.map(|path| {
+			Map::load_from_file(path)
+				.with_context(|| "failed to load map")
+				.map_err(|err| {
+					error!("{err:?}");
+					exit(1)
+				})
+				.ok()
+		})
+		.flatten();
+	let mut game_state = GameState::new(level);
 	game_state.sound_player.play_driving_looped();
 	while game_state.running {
 		game_state.sound_player.poll();
@@ -319,7 +344,7 @@ fn main() {
 					fullscreen: true,
 					..Default::default()
 				},
-				run_game()
+				run_game(opt)
 			);
 			Ok(())
 		}
