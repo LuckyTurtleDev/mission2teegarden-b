@@ -1,4 +1,4 @@
-use crate::Map;
+use crate::{Map, MAP_FILE_EXTENSION};
 use anyhow::Context;
 use clap::Parser;
 use std::{fs::File, io::Write, path::PathBuf};
@@ -25,7 +25,7 @@ pub fn export(opt: OptExportMap) -> anyhow::Result<()> {
 	let path = PathBuf::from(opt.file);
 	let path = path.file_name().context("no filename at path")?;
 	let mut path = PathBuf::from(path);
-	path.set_extension("m2tb_map");
+	path.set_extension(MAP_FILE_EXTENSION);
 	println!("export map to {path:?}");
 	let mut file = File::create(&path)
 		.with_context(|| format!("failed to create file {:?}", path))?;
