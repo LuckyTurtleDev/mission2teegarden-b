@@ -1,4 +1,4 @@
-use crate::{Activity, GameState, Phase, LEVELS};
+use crate::{assets::TEXTURES, Activity, GameState, Phase, LEVELS};
 use mission2teegarden_b_models::{Key, ToPcGameEvent};
 
 use macroquad::{
@@ -88,9 +88,7 @@ fn evaluate_events(
 
 impl GameState {
 	pub(crate) async fn build_menu(&mut self) {
-		let background_texture = load_texture("assets/img/Menu/menu_background.png")
-			.await
-			.unwrap();
+		let background_texture = TEXTURES.title_background;
 		let mut button_focused_index = 0;
 		let mut enter_pressed = false;
 
@@ -181,9 +179,7 @@ impl GameState {
 	}
 
 	pub(crate) async fn build_level_menu(&mut self) {
-		let background_texture = load_texture("assets/img/Menu/menu_background.png")
-			.await
-			.unwrap();
+		let background_texture = TEXTURES.title_background;
 		let mut enter_pressed = false;
 		let mut button_focused_index = 0;
 
