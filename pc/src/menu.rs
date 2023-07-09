@@ -16,15 +16,6 @@ fn get_button_font_size(container_height: f32) -> u16 {
 	font_size * relative_width as u16
 }
 
-fn get_button_font_size(container_height: f32) -> u16 {
-	let font_size = 20;
-	let max_text = "###########";
-	let text_dim = measure_text(max_text, None, font_size, 1.0);
-	let relative_width =
-		(container_height * 0.75) / (text_dim.height + text_dim.offset_y);
-	font_size * relative_width as u16
-}
-
 fn get_button_skin(font_size: u16) -> Skin {
 	let window_style = root_ui()
 		.style_builder()
