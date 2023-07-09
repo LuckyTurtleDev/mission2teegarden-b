@@ -20,13 +20,14 @@ mission2teegarden-b-macro = { version = "0.1.0", path = "../macro" }
 mission2teegarden-b-map = { version = "0.1.0", path = "../map" }
 mission2teegarden-b-models = { version = "0.1.0", path = "../models" }
 macroquad = { version = "0.3.25", default-features = false, features = ["log-rs"] }
-macroquad-particles = { version = "0.1.1", git = "https://github.com/LuckyTurtleDev/macroquad.git", branch = "mission2teegarden-b" }
 my-env-logger-style = "0.1.0"
 num_enum = "0.6.1"
 once_cell = { version = "1.17.1", features = ["parking_lot"] }
 rand = "0.8.5"
 rodio = { version = "0.17.1", default-features = false, features = ["mp3"] }
 serialport = "4.2.0"
+macroquad-particles = "0.1.2"
+keepawake = "0.4.3"
 
 
 # Enable optimizations in debug mode for macroquad only (requires Rust 1.41):
