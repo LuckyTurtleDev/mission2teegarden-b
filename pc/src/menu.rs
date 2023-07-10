@@ -100,10 +100,6 @@ impl GameState {
 			let events = self.input_players.get_events();
 			let screen_width = screen_width();
 			let screen_height = screen_height();
-			/*let menu_position = vec2(
-				(screen_width - menu_size.x) / 2.0,
-				(screen_height - menu_size.y) / 2.0
-			);*/
 			let button_size = vec2(screen_width / 3.0, screen_height / 10.0);
 			let font_size = get_button_font_size(button_size.y);
 			let button_skin = get_button_skin(font_size);
@@ -193,16 +189,18 @@ impl GameState {
 			let events = self.input_players.get_events();
 			let screen_width = screen_width();
 			let screen_height = screen_height();
-			let button_size = vec2(screen_width / 3.0, screen_height / 10.0);
+			let button_size = vec2(screen_width / 3.0, screen_height / 12.0);
 			let font_size = get_button_font_size(button_size.y);
+			// "wrapper" which contains buttons, only for position and size
 			let level_wrapper_height = screen_height * 0.7;
-			let wrapper_offset = (screen_height - level_wrapper_height) / 2.0;
-			let button_offset = level_wrapper_height / (LEVELS.len() + 1) as f32;
+			let wrapper_offset_top_bottom = (screen_height - level_wrapper_height) / 2.0;
+			// distance between buttons
+			let button_offset = level_wrapper_height / (LEVELS.len() + 2) as f32;
 			let button_skin = get_button_skin(font_size);
 			let button_focused_skin = get_button_focused_skin(font_size);
 			button_focused_index = (button_focused_index
 				+ evaluate_events(&events, &mut enter_pressed))
-			.clamp(0, LEVELS.len() as i8);
+			.clamp(0, (LEVELS.len() + 1) as i8);
 			let relative_size = (screen_width / background_texture.width())
 				.max(screen_height / background_texture.height());
 			let background_dim = vec2(
@@ -245,7 +243,7 @@ impl GameState {
 							widgets::Button::new(format!("Level {}", i + 1))
 								.position(vec2(
 									(screen_width - button_size.x) / 2.0,
-									wrapper_offset + i as f32 * button_offset
+									wrapper_offset_top_bottom + i as f32 * button_offset
 								))
 								.size(button_size)
 								.ui(ui);
@@ -280,7 +278,8 @@ impl GameState {
 					let load_level_button = widgets::Button::new("Import Level")
 						.position(vec2(
 							(screen_width - button_size.x) / 2.0,
-							wrapper_offset + LEVELS.len() as f32 * button_offset
+							wrapper_offset_top_bottom
+								+ LEVELS.len() as f32 * button_offset
 						))
 						.size(button_size)
 						.ui(ui);
@@ -305,7 +304,8 @@ impl GameState {
 					let back_button = widgets::Button::new("Back")
 						.position(vec2(
 							(screen_width - button_size.x) / 2.0,
-							wrapper_offset + (LEVELS.len() + 1) as f32 * button_offset
+							wrapper_offset_top_bottom
+								+ (LEVELS.len() + 1) as f32 * button_offset
 						))
 						.size(button_size)
 						.ui(ui);
