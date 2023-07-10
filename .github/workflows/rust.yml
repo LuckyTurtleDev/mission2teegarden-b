@@ -217,8 +217,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y ${{ env.DEPS }}
+      - run: apk add --no-cache alsa-lib-dev libudev-zero-dev gtk+3.0-dev
       - uses: dtolnay/rust-toolchain@stable
       - uses: msrd0/cargo-publish-action@v1
         with: 
