@@ -205,7 +205,7 @@ jobs:
       image: ghcr.io/msrd0/cargo-doc2readme:nightly
     steps:
     - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y ${{ env.DEPS }}
+      run: apk add --no-cache alsa-lib-dev libudev-zero-dev gtk+3.0-dev
     - uses: actions/checkout@v3
     - run: cargo doc2readme --check --expand-macros
       working-directory: pc
@@ -217,7 +217,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: apk add --no-cache alsa-lib-dev libudev-zero-dev gtk+3.0-dev
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y ${{ env.DEPS }}
       - uses: dtolnay/rust-toolchain@stable
       - uses: msrd0/cargo-publish-action@v1
         with: 
