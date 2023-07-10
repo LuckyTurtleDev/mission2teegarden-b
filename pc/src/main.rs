@@ -226,17 +226,15 @@ impl GameState {
 }
 
 async fn run_game(opt: OptPlay) {
-	let level = opt
-		.file
-		.and_then(|path| {
-			Map::load_from_file(path)
-				.with_context(|| "failed to load map")
-				.map_err(|err| {
-					error!("{err:?}");
-					exit(1)
-				})
-				.ok()
-		});
+	let level = opt.file.and_then(|path| {
+		Map::load_from_file(path)
+			.with_context(|| "failed to load map")
+			.map_err(|err| {
+				error!("{err:?}");
+				exit(1)
+			})
+			.ok()
+	});
 	let mut game_state = GameState::new(level);
 	game_state.sound_player.play_driving_looped();
 	while game_state.running {
