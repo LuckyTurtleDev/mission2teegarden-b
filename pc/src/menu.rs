@@ -1,4 +1,4 @@
-use crate::{update::init_level, assets::TEXTURES, Activity, GameState, Phase, LEVELS};
+use crate::{assets::TEXTURES, update::init_level, Activity, GameState, Phase, LEVELS};
 use mission2teegarden_b_map::{Map, MAP_FILE_EXTENSION};
 use mission2teegarden_b_models::{Key, ToPcGameEvent};
 
