@@ -83,7 +83,7 @@ use log::info;
 use macroquad::{prelude::*, window, Window};
 use macroquad_particles::Emitter;
 use mission2teegarden_b_map::{Map, Orientation};
-use mission2teegarden_b_models::{Key, ToPcGameEvent};
+
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
 use sound::SoundPlayer;
@@ -228,7 +228,7 @@ impl GameState {
 async fn run_game(opt: OptPlay) {
 	let level = opt
 		.file
-		.map(|path| {
+		.and_then(|path| {
 			Map::load_from_file(path)
 				.with_context(|| "failed to load map")
 				.map_err(|err| {
@@ -236,8 +236,7 @@ async fn run_game(opt: OptPlay) {
 					exit(1)
 				})
 				.ok()
-		})
-		.flatten();
+		});
 	let mut game_state = GameState::new(level);
 	game_state.sound_player.play_driving_looped();
 	while game_state.running {

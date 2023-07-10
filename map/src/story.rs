@@ -52,7 +52,7 @@ mod tests {
 		text = "You have mastered the challenge!"
 		profil = "Captain"
 		"#;
-		let config: Story = toml::from_str(&toml).unwrap_or_else(|err| panic!("{}", err));
+		let config: Story = toml::from_str(toml).unwrap_or_else(|err| panic!("{}", err));
 		let control = Story {
 			pre_level: vec![
 				Speech {
