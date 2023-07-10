@@ -27,7 +27,7 @@ jobs:
           toolchain: ${{ matrix.rust_version }}
       - name: Install dependencies
         if:  ${{ matrix.os == 'ubuntu' }}
-        run: sudo apt-get update && sudo apt-get install -y ${{DEPS}}
+        run: sudo apt-get update && sudo apt-get install -y ${{ env.DEPS }}
       - uses: actions/cache@v3
         with:
           path: |
@@ -54,7 +54,7 @@ jobs:
         id: "rust-toolchain"
       - name: Install dependencies
         if:  ${{ matrix.os == 'ubuntu' }}
-        run: sudo apt-get update && sudo apt-get install -y ${{DEPS}}
+        run: sudo apt-get update && sudo apt-get install -y ${{ env.DEPS }}
       - uses: actions/cache@v3
         with:
           path: |
@@ -147,7 +147,7 @@ jobs:
     needs: [test_pc]
     steps:
         - name: Install dependencies
-          run: sudo apt-get update && sudo apt-get install -y ${{DEPS}}
+          run: sudo apt-get update && sudo apt-get install -y ${{ env.DEPS }}
         - uses: actions/checkout@v3
         - uses: dtolnay/rust-toolchain@stable
           id: "rust-toolchain"
@@ -170,7 +170,7 @@ jobs:
     needs: [check_pybadge]
     steps:
         - name: Install dependencies
-          run: sudo apt-get update && sudo apt-get install -y ${{DEPS}}
+          run: sudo apt-get update && sudo apt-get install -y ${{ env.DEPS }}
         - uses: actions/checkout@v2
         - uses: dtolnay/rust-toolchain@stable
           id: "rust-toolchain"
@@ -217,7 +217,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y ${{DEPS}}
+        run: sudo apt-get update && sudo apt-get install -y ${{ env.DEPS }}
       - uses: dtolnay/rust-toolchain@stable
       - uses: msrd0/cargo-publish-action@v1
         with: 
