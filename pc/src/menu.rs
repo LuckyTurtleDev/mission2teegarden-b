@@ -46,13 +46,6 @@ fn get_button_skin(font_size: u16) -> Skin {
 }
 
 fn get_button_focused_skin(font_size: u16) -> Skin {
-	let _button_style = root_ui()
-		.style_builder()
-		.background(Image::from_file_with_format(
-			include_bytes!("../assets/img/Menu/button_focused_background.png"),
-			None
-		))
-		.build();
 	let button_style = root_ui()
 		.style_builder()
 		.background(Image::from_file_with_format(
