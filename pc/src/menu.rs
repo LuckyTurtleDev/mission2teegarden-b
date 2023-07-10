@@ -52,13 +52,6 @@ fn get_button_focused_skin(font_size: u16) -> Skin {
 			include_bytes!("../assets/img/Menu/button_focused_background.png"),
 			None
 		))
-		.build();
-	let button_style = root_ui()
-		.style_builder()
-		.background(Image::from_file_with_format(
-			include_bytes!("../assets/img/Menu/button_focused_background.png"),
-			None
-		))
 		.background_margin(RectOffset::new(37.0, 37.0, 5.0, 5.0))
 		.margin(RectOffset::new(10.0, 10.0, 0.0, 0.0))
 		.text_color(Color::from_rgba(180, 180, 100, 255))
