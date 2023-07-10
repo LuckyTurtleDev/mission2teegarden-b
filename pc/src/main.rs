@@ -83,6 +83,7 @@ use log::info;
 use macroquad::{prelude::*, window, Window};
 use macroquad_particles::Emitter;
 use mission2teegarden_b_map::{Map, Orientation};
+use mission2teegarden_b_models::{Key, ToPcGameEvent};
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
 use sound::SoundPlayer;
@@ -102,7 +103,7 @@ mod sound;
 mod story_display;
 pub mod tiles;
 mod update;
-use update::{activate_players, init_level, setup_players};
+use update::{activate_players, setup_players};
 mod usb;
 use usb::Players;
 
@@ -115,7 +116,8 @@ enum Phase {
 	Introduction,
 	Select,
 	Drive,
-	Finish
+	Finish,
+	Pause
 }
 
 #[derive(PartialEq)]
@@ -147,6 +149,7 @@ struct PlayerState {
 }
 
 struct GameRun {
+	original_map: Map,
 	level: Map,
 	player_states: Vec<PlayerState>
 }
@@ -164,7 +167,9 @@ struct GameState {
 	animation_emitter: Option<Emitter>,
 	running: bool,
 	/// Supress standby while playing the game
-	_keep_awake: Option<AwakeHandle>
+	_keep_awake: Option<AwakeHandle>,
+	/// Index which button is currently focused in pause menu
+	button_focused_index: u8
 }
 
 impl GameState {
@@ -183,10 +188,23 @@ impl GameState {
 			.ok();
 		let (game_run, activity) = if let Some(level) = level {
 			let game_state = GameRun {
-				level,
-				player_states: Default::default()
+				original_map: level.clone(),
+				level: level.clone(),
+				player_states: level
+					.iter_player()
+					.map(|f| PlayerState {
+						position: f.position,
+						orientation: f.orientation,
+						next_action: None,
+						rotation: Rotation::NoRotation,
+						finished: false,
+						crashed: false,
+						out_of_map: false,
+						solution: None
+					})
+					.collect()
 			};
-			(Some(game_state), Activity::GameRound(Phase::Select))
+			(Some(game_state), Activity::GameRound(Phase::Introduction))
 		} else {
 			(None, Activity::Menu)
 		};
@@ -201,7 +219,8 @@ impl GameState {
 			level_num: 0,
 			animation_emitter: None,
 			running: true,
-			_keep_awake: keep_awake
+			_keep_awake: keep_awake,
+			button_focused_index: 0
 		}
 	}
 }
@@ -251,6 +270,7 @@ async fn run_game(opt: OptPlay) {
 		}
 		match game_state.activity {
 			Activity::GameRound(Phase::Introduction) => {
+				game_state.load_fire_emitter().await;
 				game_state
 					.display_speech(
 						&game_state
@@ -282,20 +302,28 @@ async fn run_game(opt: OptPlay) {
 				game_state.activity = Activity::SelectLevel;
 			},
 			Activity::GameRound(Phase::Select) => {
+				if game_state.pause_button_pressed() {
+					game_state.activity = Activity::GameRound(Phase::Pause);
+				}
 				game_state.draw().await;
 				setup_players(&mut game_state).await;
 			},
 			Activity::GameRound(Phase::Drive) => {
+				if game_state.pause_button_pressed() {
+					game_state.activity = Activity::GameRound(Phase::Pause);
+				}
 				game_state.update().await;
 				game_state.draw().await;
+			},
+			Activity::GameRound(Phase::Pause) => {
+				game_state.draw().await;
+				game_state.build_level_pause_menu().await;
 			},
 			Activity::Menu => {
 				game_state.build_menu().await;
 			},
 			Activity::SelectLevel => {
 				game_state.build_level_menu().await;
-				init_level(&mut game_state);
-				game_state.load_fire_emitter().await;
 			}
 		}
 		next_frame().await;

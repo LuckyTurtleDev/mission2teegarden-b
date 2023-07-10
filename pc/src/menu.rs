@@ -1,4 +1,8 @@
-use crate::{assets::TEXTURES, Activity, GameState, Phase, LEVELS};
+use crate::{
+	activate_players, assets::TEXTURES, update::init_level, Activity, GameState, Phase,
+	LEVELS
+};
+use mission2teegarden_b_map::{Map, MAP_FILE_EXTENSION};
 use mission2teegarden_b_models::{Key, ToPcGameEvent};
 
 use macroquad::{
@@ -6,6 +10,7 @@ use macroquad::{
 	prelude::*,
 	ui::{root_ui, widgets, Skin}
 };
+use rfd::FileDialog;
 
 fn get_button_font_size(container_height: f32) -> u16 {
 	let font_size = 20;
@@ -41,7 +46,7 @@ fn get_button_skin(font_size: u16) -> Skin {
 }
 
 fn get_button_focused_skin(font_size: u16) -> Skin {
-	let _button_style = root_ui()
+	let button_style = root_ui()
 		.style_builder()
 		.background(Image::from_file_with_format(
 			include_bytes!("../assets/img/Menu/button_focused_background.png"),
@@ -96,10 +101,6 @@ impl GameState {
 			let events = self.input_players.get_events();
 			let screen_width = screen_width();
 			let screen_height = screen_height();
-			/*let menu_position = vec2(
-				(screen_width - menu_size.x) / 2.0,
-				(screen_height - menu_size.y) / 2.0
-			);*/
 			let button_size = vec2(screen_width / 3.0, screen_height / 10.0);
 			let font_size = get_button_font_size(button_size.y);
 			let button_skin = get_button_skin(font_size);
@@ -187,16 +188,18 @@ impl GameState {
 			let events = self.input_players.get_events();
 			let screen_width = screen_width();
 			let screen_height = screen_height();
-			let button_size = vec2(screen_width / 3.0, screen_height / 10.0);
+			let button_size = vec2(screen_width / 3.0, screen_height / 12.0);
 			let font_size = get_button_font_size(button_size.y);
+			// "wrapper" which contains buttons, only for position and size
 			let level_wrapper_height = screen_height * 0.7;
-			let wrapper_offset = (screen_height - level_wrapper_height) / 2.0;
-			let button_offset = level_wrapper_height / (LEVELS.len() + 1) as f32;
+			let wrapper_offset_top_bottom = (screen_height - level_wrapper_height) / 2.0;
+			// distance between buttons
+			let button_offset = level_wrapper_height / (LEVELS.len() + 2) as f32;
 			let button_skin = get_button_skin(font_size);
 			let button_focused_skin = get_button_focused_skin(font_size);
 			button_focused_index = (button_focused_index
 				+ evaluate_events(&events, &mut enter_pressed))
-			.clamp(0, LEVELS.len() as i8);
+			.clamp(0, (LEVELS.len() + 1) as i8);
 			let relative_size = (screen_width / background_texture.width())
 				.max(screen_height / background_texture.height());
 			let background_dim = vec2(
@@ -224,6 +227,9 @@ impl GameState {
 							if enter_pressed {
 								self.level_num = i;
 								self.activity = Activity::GameRound(Phase::Introduction);
+								let level =
+									Map::from_string(LEVELS[self.level_num]).unwrap();
+								init_level(self, level);
 								self.sound_player.play_level_music();
 							}
 							let skin = &button_focused_skin.clone();
@@ -236,17 +242,34 @@ impl GameState {
 							widgets::Button::new(format!("Level {}", i + 1))
 								.position(vec2(
 									(screen_width - button_size.x) / 2.0,
-									wrapper_offset + i as f32 * button_offset
+									wrapper_offset_top_bottom + i as f32 * button_offset
 								))
 								.size(button_size)
 								.ui(ui);
 						if level_button {
 							self.activity = Activity::GameRound(Phase::Introduction);
+							let level = Map::from_string(LEVELS[self.level_num]).unwrap();
+							init_level(self, level);
+							self.sound_player.play_level_music();
 						}
 					}
+
+					ui.pop_skin();
 					if button_focused_index == LEVELS.len() as i8 {
 						if enter_pressed {
-							self.activity = Activity::Menu;
+							self.activity = Activity::GameRound(Phase::Introduction);
+							let file = FileDialog::new()
+								.add_filter("level", &["tmx", MAP_FILE_EXTENSION])
+								.pick_file()
+								.unwrap_or_default();
+							let level = Map::load_from_file(file);
+							match level {
+								Ok(level) => {
+									init_level(self, level);
+									self.sound_player.play_level_music();
+								},
+								Err(e) => panic!("Problem loading File: {:?}", e)
+							}
 						}
 						let skin = &button_focused_skin.clone();
 						ui.push_skin(skin);
@@ -254,9 +277,23 @@ impl GameState {
 						let skin = &button_skin.clone();
 						ui.push_skin(skin);
 					}
+					let load_level_button = widgets::Button::new("Import Level")
+						.position(vec2(
+							(screen_width - button_size.x) / 2.0,
+							wrapper_offset_top_bottom
+								+ LEVELS.len() as f32 * button_offset
+						))
+						.size(button_size)
+						.ui(ui);
+					if load_level_button {
+						self.activity = Activity::GameRound(Phase::Introduction);
+						let level = Map::from_string(LEVELS[self.level_num]).unwrap();
+						init_level(self, level);
+						self.sound_player.play_level_music();
+					}
 
 					ui.pop_skin();
-					if button_focused_index == LEVELS.len() as i8 {
+					if button_focused_index == (LEVELS.len() + 1) as i8 {
 						if enter_pressed {
 							self.activity = Activity::Menu;
 						}
@@ -269,7 +306,8 @@ impl GameState {
 					let back_button = widgets::Button::new("Back")
 						.position(vec2(
 							(screen_width - button_size.x) / 2.0,
-							wrapper_offset + LEVELS.len() as f32 * button_offset
+							wrapper_offset_top_bottom
+								+ (LEVELS.len() + 1) as f32 * button_offset
 						))
 						.size(button_size)
 						.ui(ui);
@@ -280,5 +318,107 @@ impl GameState {
 			);
 			next_frame().await;
 		}
+	}
+
+	pub(crate) async fn build_level_pause_menu(&mut self) {
+		let mut enter_pressed = false;
+
+		let events = self.input_players.get_events();
+		let screen_width = screen_width();
+		let screen_height = screen_height();
+		let button_size = vec2(screen_width / 3.0, screen_height / 10.0);
+		let font_size = get_button_font_size(button_size.y);
+		let button_skin = get_button_skin(font_size);
+		let button_focused_skin = get_button_focused_skin(font_size);
+		let mut skin_1 = &button_focused_skin;
+		let mut skin_2 = &button_skin;
+		let mut skin_3 = &button_skin;
+
+		draw_rectangle(
+			0.0,
+			0.0,
+			screen_width,
+			screen_height,
+			Color::new(255.0, 255.0, 255.0, 0.5)
+		);
+
+		// draw buttons
+		root_ui().push_skin(skin_1);
+		self.button_focused_index = (self.button_focused_index as i8
+			+ evaluate_events(&events, &mut enter_pressed))
+		.clamp(0, 2) as u8;
+		// It does not work when group has same size as screen
+		root_ui().group(
+			hash!(),
+			vec2(screen_width - 1.0, screen_height - 1.0),
+			|ui| {
+				ui.pop_skin();
+				if self.button_focused_index == 0 {
+					if enter_pressed {
+						self.activity = Activity::GameRound(Phase::Drive);
+					}
+					skin_1 = &button_focused_skin;
+					skin_2 = &button_skin;
+					skin_3 = &button_skin;
+				} else if self.button_focused_index == 1 {
+					if enter_pressed {
+						let level = &self.game_run.as_ref().unwrap().original_map;
+						init_level(self, level.clone());
+						activate_players(self, true);
+						self.activity = Activity::GameRound(Phase::Select);
+					}
+					skin_1 = &button_skin;
+					skin_2 = &button_focused_skin;
+					skin_3 = &button_skin;
+				} else {
+					if enter_pressed {
+						self.activity = Activity::SelectLevel;
+					}
+					skin_1 = &button_skin;
+					skin_2 = &button_skin;
+					skin_3 = &button_focused_skin;
+				}
+				ui.push_skin(skin_1);
+
+				let continue_button = widgets::Button::new("Continue")
+					.position(vec2(
+						(screen_width - button_size.x) / 2.0,
+						(screen_height - button_size.y) / 2.0 - button_size.y * 2.0
+					))
+					.size(button_size)
+					.ui(ui);
+				if continue_button {
+					self.activity = Activity::GameRound(Phase::Drive);
+				}
+
+				ui.pop_skin();
+				ui.push_skin(skin_2);
+				let retry_button = widgets::Button::new("Retry")
+					.position(vec2(
+						(screen_width - button_size.x) / 2.0,
+						(screen_height - button_size.y) / 2.0
+					))
+					.size(button_size)
+					.ui(ui);
+				if retry_button {
+					let level = &self.game_run.as_ref().unwrap().original_map;
+					init_level(self, level.clone());
+					activate_players(self, true);
+					self.activity = Activity::GameRound(Phase::Select);
+				}
+				ui.pop_skin();
+				ui.push_skin(skin_3);
+				let quit_button = widgets::Button::new("Return to Menu")
+					.position(vec2(
+						(screen_width - button_size.x) / 2.0,
+						(screen_height - button_size.y) / 2.0 + button_size.y * 2.0
+					))
+					.size(button_size)
+					.ui(ui);
+				if quit_button {
+					self.activity = Activity::SelectLevel;
+				}
+			}
+		);
 	}
 }

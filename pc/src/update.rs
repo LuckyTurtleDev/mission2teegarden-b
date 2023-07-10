@@ -8,17 +8,6 @@ use mission2teegarden_b_models::{
 	AvailableCards, GameOver, Key, NeoPixelColor, ToPcGameEvent, ToPypadeGameEvent
 };
 
-fn reset_button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
-	for player_events in events.iter().flatten() {
-		for event in player_events {
-			if let ToPcGameEvent::KeyPressed(key) = event {
-				return *key == Key::Select;
-			}
-		}
-	}
-	false
-}
-
 pub(crate) fn activate_players(game_state: &mut GameState, retry: bool) {
 	for (player_index, player) in game_state
 		.input_players
@@ -57,8 +46,8 @@ pub(crate) fn activate_player(
 	}
 }
 
-pub(crate) fn init_level(game_state: &mut GameState) {
-	let level = Map::from_string(LEVELS[game_state.level_num]).unwrap();
+pub(crate) fn init_level(game_state: &mut GameState, level: Map) {
+	//let level = Map::from_string(LEVELS[game_state.level_num]).unwrap();
 	let player_states = level
 		.iter_player()
 		.map(|f| PlayerState {
@@ -73,6 +62,7 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 		})
 		.collect();
 	let game_run = GameRun {
+		original_map: level.clone(),
 		level,
 		player_states
 	};
@@ -129,18 +119,23 @@ pub(crate) async fn setup_players(game_state: &mut GameState) {
 impl GameState {
 	/// update the current state.
 	pub(crate) async fn update(&mut self) {
-		let events = self.input_players.get_events();
-		if reset_button_pressed(&events) {
-			init_level(self);
-			activate_players(self, true);
-			self.activity = Activity::GameRound(Phase::Select);
-		} else {
-			if self.delta_time >= self.movement_time {
-				self.delta_time -= self.movement_time;
-				self.next_move();
-			}
-			self.delta_time += get_frame_time();
+		if self.delta_time >= self.movement_time {
+			self.delta_time -= self.movement_time;
+			self.next_move();
 		}
+		self.delta_time += get_frame_time();
+	}
+
+	pub(crate) fn pause_button_pressed(&mut self) -> bool {
+		let events = self.input_players.get_events();
+		for player_events in events.iter().flatten() {
+			for event in player_events {
+				if let ToPcGameEvent::KeyPressed(key) = event {
+					return *key == Key::Select;
+				}
+			}
+		}
+		false
 	}
 
 	/// calculate next moves
