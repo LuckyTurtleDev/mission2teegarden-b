@@ -2,6 +2,8 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
 #![deny(rustdoc::bare_urls, rustdoc::broken_intra_doc_links)]
 #![forbid(unused_must_use, unsafe_code)]
+// disable terminal popup on windows
+#![windows_subsystem = "windows"]
 
 //! Welcome to a journey to the unexplored planet Teegarden b,
 //! to find a new home for humanity.
