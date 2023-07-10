@@ -1,4 +1,5 @@
-use crate::{Activity, GameState, Phase, LEVELS};
+use crate::{update::init_level, Activity, GameState, Phase, LEVELS};
+use mission2teegarden_b_map::{Map, MAP_FILE_EXTENSION};
 use mission2teegarden_b_models::{Key, ToPcGameEvent};
 
 use macroquad::{
@@ -6,6 +7,7 @@ use macroquad::{
 	prelude::*,
 	ui::{root_ui, widgets, Skin}
 };
+use rfd::FileDialog;
 
 fn get_button_font_size(container_height: f32) -> u16 {
 	let font_size = 20;
@@ -228,6 +230,9 @@ impl GameState {
 							if enter_pressed {
 								self.level_num = i;
 								self.activity = Activity::GameRound(Phase::Introduction);
+								let level =
+									Map::from_string(LEVELS[self.level_num]).unwrap();
+								init_level(self, level);
 								self.sound_player.play_level_music();
 							}
 							let skin = &button_focused_skin.clone();
@@ -248,9 +253,23 @@ impl GameState {
 							self.activity = Activity::GameRound(Phase::Introduction);
 						}
 					}
+
+					ui.pop_skin();
 					if button_focused_index == LEVELS.len() as i8 {
 						if enter_pressed {
-							self.activity = Activity::Menu;
+							self.activity = Activity::GameRound(Phase::Introduction);
+							let file = FileDialog::new()
+								.add_filter("level", &["tmx", MAP_FILE_EXTENSION])
+								.pick_file()
+								.unwrap_or_default();
+							let level = Map::load_from_file(file);
+							match level {
+								Ok(level) => {
+									init_level(self, level);
+									self.sound_player.play_level_music();
+								},
+								Err(e) => panic!("Problem loading File: {:?}", e)
+							}
 						}
 						let skin = &button_focused_skin.clone();
 						ui.push_skin(skin);
@@ -258,9 +277,22 @@ impl GameState {
 						let skin = &button_skin.clone();
 						ui.push_skin(skin);
 					}
+					let load_level_button = widgets::Button::new("Import Level")
+						.position(vec2(
+							(screen_width - button_size.x) / 2.0,
+							wrapper_offset + LEVELS.len() as f32 * button_offset
+						))
+						.size(button_size)
+						.ui(ui);
+					if load_level_button {
+						self.activity = Activity::GameRound(Phase::Introduction);
+						let level = Map::from_string(LEVELS[self.level_num]).unwrap();
+						init_level(self, level);
+						self.sound_player.play_level_music();
+					}
 
 					ui.pop_skin();
-					if button_focused_index == LEVELS.len() as i8 {
+					if button_focused_index == (LEVELS.len() + 1) as i8 {
 						if enter_pressed {
 							self.activity = Activity::Menu;
 						}
@@ -273,7 +305,7 @@ impl GameState {
 					let back_button = widgets::Button::new("Back")
 						.position(vec2(
 							(screen_width - button_size.x) / 2.0,
-							wrapper_offset + LEVELS.len() as f32 * button_offset
+							wrapper_offset + (LEVELS.len() + 1) as f32 * button_offset
 						))
 						.size(button_size)
 						.ui(ui);

@@ -117,7 +117,7 @@ pub mod story;
 pub mod tiles;
 use tiles::{InvalidTile, MapBaseTile, ObjectTile, Passable, PlayerTile, Tile};
 
-const MAP_FILE_EXTENSION: &str = "m2tb_map";
+pub const MAP_FILE_EXTENSION: &str = "m2tb_map";
 
 /// allow Serialization of MapProporties
 struct PropertiesSerde(Properties);

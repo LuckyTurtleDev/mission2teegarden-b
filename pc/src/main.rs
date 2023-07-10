@@ -145,6 +145,7 @@ struct PlayerState {
 }
 
 struct GameRun {
+	original_map: Map,
 	level: Map,
 	player_states: Vec<PlayerState>
 }
@@ -181,10 +182,23 @@ impl GameState {
 			.ok();
 		let (game_run, activity) = if let Some(level) = level {
 			let game_state = GameRun {
-				level,
-				player_states: Default::default()
+				original_map: level.clone(),
+				level: level.clone(),
+				player_states: level
+					.iter_player()
+					.map(|f| PlayerState {
+						position: f.position,
+						orientation: f.orientation,
+						next_action: None,
+						rotation: Rotation::NoRotation,
+						finished: false,
+						crashed: false,
+						out_of_map: false,
+						solution: None
+					})
+					.collect()
 			};
-			(Some(game_state), Activity::GameRound(Phase::Select))
+			(Some(game_state), Activity::GameRound(Phase::Introduction))
 		} else {
 			(None, Activity::Menu)
 		};
@@ -249,6 +263,7 @@ async fn run_game(opt: OptPlay) {
 		}
 		match game_state.activity {
 			Activity::GameRound(Phase::Introduction) => {
+				game_state.load_fire_emitter().await;
 				game_state
 					.display_speech(
 						&game_state
@@ -292,8 +307,6 @@ async fn run_game(opt: OptPlay) {
 			},
 			Activity::SelectLevel => {
 				game_state.build_level_menu().await;
-				init_level(&mut game_state);
-				game_state.load_fire_emitter().await;
 			}
 		}
 		next_frame().await;

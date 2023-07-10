@@ -57,8 +57,8 @@ pub(crate) fn activate_player(
 	}
 }
 
-pub(crate) fn init_level(game_state: &mut GameState) {
-	let level = Map::from_string(LEVELS[game_state.level_num]).unwrap();
+pub(crate) fn init_level(game_state: &mut GameState, level: Map) {
+	//let level = Map::from_string(LEVELS[game_state.level_num]).unwrap();
 	let player_states = level
 		.iter_player()
 		.map(|f| PlayerState {
@@ -73,6 +73,7 @@ pub(crate) fn init_level(game_state: &mut GameState) {
 		})
 		.collect();
 	let game_run = GameRun {
+		original_map: level.clone(),
 		level,
 		player_states
 	};
@@ -131,7 +132,8 @@ impl GameState {
 	pub(crate) async fn update(&mut self) {
 		let events = self.input_players.get_events();
 		if reset_button_pressed(&events) {
-			init_level(self);
+			let level = &self.game_run.as_ref().unwrap().original_map;
+			init_level(self, level.clone());
 			activate_players(self, true);
 			self.activity = Activity::GameRound(Phase::Select);
 		} else {
