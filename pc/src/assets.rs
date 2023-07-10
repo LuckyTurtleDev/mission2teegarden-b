@@ -105,7 +105,8 @@ pub(crate) struct Textures {
 	pub(crate) player3_goal: Texture2D,
 	pub(crate) player4_goal: Texture2D,
 	pub(crate) captain: Texture2D,
-	pub(crate) outer_space: Texture2D
+	pub(crate) outer_space: Texture2D,
+	pub(crate) title_background: Texture2D
 }
 
 impl Textures {
@@ -178,6 +179,10 @@ impl Textures {
 			),
 			outer_space: Texture2D::from_file_with_format(
 				include_bytes!("../assets/img/Backgrounds/outer_space.png"),
+				Some(ImageFormat::Png)
+			),
+			title_background: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/Menu/menu_background.png"),
 				Some(ImageFormat::Png)
 			)
 		}
