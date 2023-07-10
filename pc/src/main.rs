@@ -325,7 +325,7 @@ impl Default for Opt {
 fn main() {
 	my_env_logger_style::set_timestamp_precision(TimestampPrecision::Disable);
 	my_env_logger_style::just_log();
-	info!("🚗 {CARGO_PKG_NAME}  v{CARGO_PKG_VERSION} 🚗");
+	info!("🪐 {CARGO_PKG_NAME}  v{CARGO_PKG_VERSION}  🪐");
 	let opt = if std::io::stdin().is_terminal() {
 		Opt::parse()
 	} else {

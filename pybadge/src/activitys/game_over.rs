@@ -13,9 +13,8 @@ pub(crate) fn init(
 		.draw(&mut state.display)
 		.unwrap();
 	let (text, x) = match game_over_type {
-		GameOver::DriveAway => (" You have moved into\n unknown terrain and\nwere never seen again", 20),
-		GameOver::TimeOut => ("You have not reach\nyour goal in time", 25),
-		GameOver::Crash => ("          Kaboom!\n\n      You have a crash\n      with you car.\n\nSomething smells burnt ...",2)
+		GameOver::DriveAway => ("You robot have moved\ninto unknown terrain\nand lost connection", 20),
+		GameOver::Crash => ("          Kaboom!\n\n  You robot have crashed!\n    Looks like it will\n     not work anymore",2)
 	};
 	Text::new(text, Point::new(x, 60), state.text_style)
 		.draw(&mut state.display)
