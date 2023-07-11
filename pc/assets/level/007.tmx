@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="256" tileheight="256" infinite="0" nextlayerid="4" nextobjectid="1">
+ <properties>
+  <property name="left" type="int" value="8"/>
+  <property name="motor_off" type="int" value="2"/>
+  <property name="motor_on" type="int" value="2"/>
+  <property name="right" type="int" value="8"/>
+  <property name="story">[[pre_level]]
+text = &quot;&quot;&quot;
+The have analysed the samples from your last mission and are ready for some further samples and tests. 
+According to our analysis of the samples, Teegarden-b's stones resemble the stones that we humans used to have on earth. They aren't exactly the same but close enough. 
+As to the grass and moss you collected. They actually seem to be a even mor nutrious version of the grass and moss we had on earth. Really makes one wonder why we haven't yet met any bigger life forms… Very interesint. On would assume that from these founds alone this plante should be home to some bigger species similar to those we sed to have on earth. 
+Back to our actual mission though. Maybe we'll find the reason or the missing life. Maybe we just haven't seen them so far.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+background = &quot;outerSpace&quot;
+
+[[pre_level]]
+text = &quot;&quot;&quot;
+This place looks complicated. Sadly the robots aren't at their meant position. We need some more samples, but not every robot is equipped with the same tools to collect the samples. So please just swap them around so that we have to correct robots at the correct place.  Sadly I needed to position the focus like that so you are able to see where you need to drive. That place is quite beautiful. A nice small, very rocky beach. Therefore we need water samples, further stone samples and some sand samples. 
+I hope you'll be able to navigate through here without problems.
+profil = &quot;Captain&quot;
+
+[[after_level]]
+text = &quot;&quot;&quot;
+Once again samples collected. Very well done. I'll tell you the resluts later. Until then, you may all may take a small break again.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+</property>
+  <property name="wait" type="int" value="60"/>
+ </properties>
+ <tileset firstgid="1" source="../../../../../Documents/Praktikum SS23/m3/mission2teegarden-b/pc/assets/img/BaseTiles/BaseTiles.tsx"/>
+ <tileset firstgid="1" source="../../../../../Documents/Praktikum SS23/m3/mission2teegarden-b/pc/assets/img/ObjectTiles/ObjectTiles.tsx"/>
+ <tileset firstgid="1" source="../../../../../Documents/Praktikum SS23/m3/mission2teegarden-b/pc/assets/img/Player/Player.tsx"/>
+ <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
+ <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
+ <tileset firstgid="16" source="../img/Player/Player.tsx"/>
+ <layer id="1" name="Base" width="16" height="9">
+  <data encoding="csv">
+1,1,1610612738,2684354565,5,2684354565,4,4,4,4,4,4,4,4,4,4,
+1,1,1,3221225475,1610612741,3221225477,4,4,4,4,4,4,4,4,4,4,
+1,1,1,1610612738,2684354565,4,4,4,4,4,4,4,4,4,4,4,
+1,1,1,1,1610612738,2684354565,4,4,4,4,4,4,4,4,4,4,
+1,1,1,1,1,3221225475,4,4,4,4,4,4,4,4,4,4,
+1,1,1,1,2,3221225477,4,4,4,4,4,4,4,4,4,4,
+1,1,1,2,3221225477,4,4,4,4,4,4,4,4,4,4,4,
+1,1,1,3221225475,5,2684354565,4,4,4,4,4,4,4,4,4,4,
+1,1,2,3221225477,1610612741,3221225477,4,4,4,4,4,4,4,4,4,4
+</data>
+ </layer>
+ <layer id="2" name="Objects" width="16" height="9">
+  <data encoding="csv">
+14,0,0,0,0,0,14,0,0,0,0,14,14,0,0,0,
+0,0,0,0,0,14,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,14,0,14,0,0,0,0,0,0,14,
+0,0,14,14,0,0,0,0,14,14,14,14,0,14,14,0,
+0,0,0,0,14,14,0,14,0,0,0,14,0,14,0,0,
+0,0,0,14,0,0,14,0,0,14,14,0,14,0,0,0,
+0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,0,
+14,0,0,0,0,0,0,0,14,14,14,14,0,0,0,0,
+0,14,0,0,0,0,0,0,0,0,0,0,0,0,0,14
+</data>
+ </layer>
+ <layer id="3" name="Player" width="16" height="9">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,3221225497,21,24,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,1610612762,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,3221225491,23,22,0,0,0,0,0,
+0,0,0,0,0,0,0,2684354576,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

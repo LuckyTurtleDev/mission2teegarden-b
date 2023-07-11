@@ -3,46 +3,60 @@
  <properties>
   <property name="story">[[pre_level]]
 text = &quot;&quot;&quot;
-	Dear crew after a long journey we have final reached SOMEPLANET.
-	This has taken us one step closer to create a new home for humankind.
-	Because the planet might be dangerous, we can not send humans to it yet.
-	So it is up to our scientist and programmers, 
-	with theire robots to explore the planet and build a first base. \
-       &quot;&quot;&quot;
+Dear crew, I welcome you to the orbit of Teegarden B. With this the next step of our mission begins.
+We will stay here in the orbit for the next couple of weeks, so that our programmers can do their work. 
+Programmers, please come to your terminals. You need to be properly connected to the terminals system to control your robots.
+Now then, I'll send your robots down in 3……
+2…..
+1…
+The robots are now on their way.
+&quot;&quot;&quot;
 profil = &quot;Captain&quot;
 background = &quot;OuterSpace&quot;
 
 [[pre_level]]
 text = &quot;&quot;&quot;
-	The robots have landed unharmed on the planet.
-	Since a long time, the robots are back in action.
-	We should ensure that you are still aware, of their handling.
-	You controll the robots with the same color as the light below your screen.
-	Due to electric interferences not every instruction is aviable in every level.
-	Also the data rate is limited. So you can only use each instruction a certain times.
-	The total count of instructions is also limited to 12.
-	Remender that the robot drives automatically.
-	At this level only three instructions are avaiable.
-	First the rotate right and left instructions (↱,↰).
-	Last the wait instruction (⌛).
-	This instruction means that no change to the state of your robot will perform.
-	So if it is currently dirving it will continue driving.
-	Move the cursor with 🠴 and 🠶 key and select an instruction with A.
-	B will remove the last instruction from your code.
-	Change with 🠵 and 🠷 the count of cycle you robot will wait.
-	Your goal at this training it to reach the flag with the color of your robot.
-	So take your programming termial and create instructions for your robot.\
-       &quot;&quot;&quot;
+I recieved a signal that all robots landed on the planet. As it seems, they are not harmed.
+But just to be sure we'll need to quickly test them out. 
+I hope you all still know how to operate the robots, but just in case…
+Where was that user handbook again…
+Hmm…..
+Ah there it is!
+Alright, programmers. On your terminal you should be able to see a couple of cards.
+Every card symbolises a specific action. Now the robots will move on their own once you put in your orders.
+Let's see. You can turn right or left, wait, …
+Oh! 
+As it seems the robots can't seem to recieve any of the others. We will have to fix that, but let's first test whether these three work.
+And just as a reminder: Don't forget that your the wait is meant to measure the time between one command and the next. So if u only want your robot to go straight and then turn, just tell it to wait for as many steps as you want it to and then the turn command.
+Understood?
+Now, how to select a card.
+Let's see…
+&quot;Move the cursor with the left and right arrow keys and select an instruction with 'A'.
+'B' will remove the last instruction from your code.
+Change with 🠵 and 🠷 the count of cycle you robot will wait.&quot;
+I hope that helps.
+Now then to your first mission. 
+The robots are a bit spaced out, could you please move them a bit closer together?
+Just get the robot of your color to the corresponding flag I marked on your map. 
+Which color you have should be shown by your terminals lights.
+Now, give it a try!
+&quot;&quot;&quot;
 profil = &quot;Captain&quot;
 
 [[after_level]]
+<<<<<<< Updated upstream
 text = &quot;You have mastered this first training. Looks like you still know what are you doing&quot;
 profil = &quot;Captain&quot;
 </property>
+=======
+text = &quot;Looks like you still know what are you doing. Good. &quot;
+profil = &quot;Captain&quot;</property>
+  <property name="wait" type="int" value="5"/>
+>>>>>>> Stashed changes
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
- <tileset firstgid="6" source="../img/ObjectTiles/ObjectTiles.tsx"/>
- <tileset firstgid="8" source="../img/Player/Player.tsx"/>
+ <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
+ <tileset firstgid="16" source="../img/Player/Player.tsx"/>
  <layer id="1" name="Base" width="16" height="9">
   <data encoding="csv">
 1,1,1,1,2,1610612739,2684354562,1,1,1,1,1,1,1,1,1,
@@ -72,13 +86,13 @@ profil = &quot;Captain&quot;
  <layer id="3" name="Player" width="16" height="9">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,3221225482,0,0,0,0,0,0,0,0,0,0,3221225481,0,0,
+0,0,3221225498,0,0,0,0,0,0,0,0,0,0,3221225497,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,15,0,0,0,0,0,0,14,0,0,0,0,
+0,0,0,0,23,0,0,0,0,0,0,22,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,13,0,0,0,0,0,0,16,0,0,0,0,
+0,0,0,0,21,0,0,0,0,0,0,24,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,8,0,0,0,0,0,0,0,0,0,0,11,0,0,
+0,0,16,0,0,0,0,0,0,0,0,0,0,19,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>

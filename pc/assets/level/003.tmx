@@ -1,8 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="256" tileheight="256" infinite="0" nextlayerid="4" nextobjectid="1">
+<<<<<<< Updated upstream
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
  <tileset firstgid="2" source="../img/ObjectTiles/ObjectTiles.tsx"/>
  <tileset firstgid="4" source="../img/Player/Player.tsx"/>
+=======
+ <properties>
+  <property name="left" type="int" value="4"/>
+  <property name="right" type="int" value="4"/>
+  <property name="story">[[pre_level]]
+text = &quot;&quot;&quot;
+Before we go on to our actual tasks, all of you still need a bit more practice. After all you are not in your home research center after all.
+My next assignment to you is a bit harder than the last two. Now look on your map!
+Once again you need to make your robots go to the flags of the same color. 
+They are all behind these stones, so be careful to not drive into them. We do not want the robots to be harmed after all.
+Please make use of what you practiced in the two test to get your robots safely to the other side.
+Oh and don't forget that sometimes teamwork is of great help to get to your goal. You are a team after all.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+
+[[after_level]]
+text = &quot;Very well done! Looks like you are getting used to it.&quot;
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+</property>
+  <property name="wait" type="int" value="6"/>
+ </properties>
+ <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
+ <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
+ <tileset firstgid="16" source="../img/Player/Player.tsx"/>
+>>>>>>> Stashed changes
  <layer id="1" name="Base" width="16" height="9">
   <data encoding="csv">
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -22,7 +49,11 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+<<<<<<< Updated upstream
 0,0,0,3,3,3,0,0,0,3,3,3,0,0,0,0,
+=======
+0,0,0,14,14,14,0,0,0,14,14,14,0,0,0,0,
+>>>>>>> Stashed changes
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -32,6 +63,7 @@
  <layer id="3" name="Player" width="16" height="9">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+<<<<<<< Updated upstream
 0,0,0,0,3221225478,0,0,0,0,0,3221225477,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,9,0,0,0,0,0,12,0,0,0,0,0,
@@ -39,6 +71,15 @@
 0,0,0,0,11,0,0,0,0,0,10,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,4,0,0,0,0,0,7,0,0,0,0,0,
+=======
+0,0,0,0,3221225498,0,0,0,0,0,3221225497,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,21,0,0,0,0,0,24,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,23,0,0,0,0,0,22,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,16,0,0,0,0,0,19,0,0,0,0,0,
+>>>>>>> Stashed changes
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="256" tileheight="256" infinite="0" nextlayerid="4" nextobjectid="1">
+ <properties>
+  <property name="left" type="int" value="12"/>
+  <property name="motor_off" type="int" value="5"/>
+  <property name="motor_on" type="int" value="5"/>
+  <property name="right" type="int" value="12"/>
+  <property name="story">[[pre_level]]
+text = &quot;&quot;&quot;
+Programmers, we will have to take a small break from our usual missions. We have got a very strange signal not too far away from your last mission. 
+The robots have already been dispatched. Please check it out immeadiately. Any further sample collecting will be put on hold for now.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+background = &quot;outerSpace&quot;
+
+[[pre_level]]
+text = &quot;&quot;&quot;
+Here is the map of our current place. Any closer to the weird signal wasn't possible as we don't know what landing closer to it could lead to. 
+Be careful. Those violet patches seem rather ominous but besides the different color they don't seem to be much different from normal grass.
+The path to the weird signals source seems to be somewhat complicated, but i am sure you will manage.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+
+[[after_level]]
+text = &quot;&quot;&quot;
+We have gotten closer to the source already. Our computers don't really seem to like that. Hmm… as it seems though, we don't really face any difficulties yet. 
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+</property>
+  <property name="wait" type="int" value="30"/>
+ </properties>
+ <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
+ <tileset firstgid="13" source="../img/Player/Player.tsx"/>
+ <tileset firstgid="24" source="../img/ObjectTiles/ObjectTiles.tsx"/>
+ <layer id="1" name="Base" width="16" height="9">
+  <data encoding="csv">
+1,1,1,1,1610612745,1610612748,3221225484,3221225481,1,1,9,2684354569,1,1610612745,1610612748,8,
+1,1,1,1,1,1610612745,3221225481,1,1,1,1610612745,3221225481,1,1,1610612745,1610612748,
+1,1,1,1,1,1,1,1,1,1,1,1,9,11,2684354569,1610612745,
+1,1,1,1,1,1,1,9,11,2684354569,1,9,12,8,2684354572,2684354569,
+1,1,1,1,1,1,1,1610612747,8,2684354571,1,1610612747,8,8,8,2684354571,
+1,1,1,1,1,1,1,1610612745,3221225483,3221225481,1,1610612745,1610612748,8,3221225484,3221225481,
+1,1,1,1,1,1,1,1,1,1,1,1,1610612745,3221225483,3221225481,9,
+1,1,1,1,1,9,2684354569,1,1,1,9,2684354569,1,1,9,12,
+1,1,1,1,9,12,2684354572,2684354569,1,1,1610612745,3221225481,1,9,12,8
+</data>
+ </layer>
+ <layer id="2" name="Objects" width="16" height="9">
+  <data encoding="csv">
+0,0,0,0,0,25,25,0,0,25,0,0,0,0,0,2684354585,
+25,0,0,0,0,0,0,25,0,0,2684354585,0,0,0,25,0,
+0,25,0,0,0,25,0,0,0,0,0,25,25,0,1610612761,0,
+0,0,25,0,0,0,25,0,25,0,0,25,0,0,3221225497,0,
+0,0,0,0,25,0,0,25,2684354585,25,0,0,0,25,0,1610612761,
+0,0,25,25,0,0,25,0,25,0,0,25,0,0,25,0,
+0,25,0,0,0,25,0,0,0,0,0,25,25,0,3221225497,0,
+25,0,0,0,0,0,0,0,25,0,25,0,0,0,0,0,
+0,0,0,0,0,25,25,0,0,25,0,0,0,0,0,1610612761
+</data>
+ </layer>
+ <layer id="3" name="Player" width="16" height="9">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,19,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,21,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

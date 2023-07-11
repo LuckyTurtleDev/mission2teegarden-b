@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="256" tileheight="256" infinite="0" nextlayerid="4" nextobjectid="1">
  <properties>
-  <property name="left" type="int" value="4"/>
-  <property name="right" type="int" value="4"/>
+  <property name="left" type="int" value="2"/>
+  <property name="motor_off" type="int" value="2"/>
+  <property name="motor_on" type="int" value="2"/>
+  <property name="right" type="int" value="2"/>
   <property name="story">[[pre_level]]
 text = &quot;&quot;&quot;
-This seems to be rather tricky, doesn't it? Well, please drive to your correct position, programmers.
-In the mean time I'll make sure the missing commands will be recovered… maybe those might help you solve problems like this. 
-Good luck, programmers!
+Hello back, programmers. Your Captain speaking. 
+I have just recieved good news from our engineers. The commands have been successfully recovered. They should work fine now.
+Let's go back to our last mission to try out your new cards.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+background = &quot;outerSpace&quot;
+
+[[pre_level]]
+text = &quot;&quot;&quot;
+Here we are again. Anyways, this time around it should be a lot easier for you to reach your goal without crashing.
+In your programming panel you'll now have the commands to turn your robots motor off and to turn the motor back on. 
+Of course the robots themselves will still be on during said period and therefore will still be able to follow your commands. 
+Turning the motor off simply means that the robot won't move anymore until the motor is turned on again. Very useful, isn't it?
+Well then, this should be easy to do now. Certainly no problem for you.
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;
 
 [[after_level]]
 text = &quot;&quot;&quot;
-You solved it?
-Well done! I see you are getting the hang of it.
+How do you like your new commands? Certainly useful, no? 
+Anyways let's actually do some proper missions now!
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;</property>
   <property name="wait" type="int" value="9"/>
