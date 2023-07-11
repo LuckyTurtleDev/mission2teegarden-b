@@ -1,4 +1,7 @@
-use macroquad::{prelude::ImageFormat, texture::Texture2D};
+use macroquad::{
+	prelude::ImageFormat,
+	texture::{Image, Texture2D}
+};
 use mission2teegarden_b_macro::include_map;
 use once_cell::sync::Lazy;
 
@@ -104,9 +107,12 @@ pub(crate) struct Textures {
 	pub(crate) player2_goal: Texture2D,
 	pub(crate) player3_goal: Texture2D,
 	pub(crate) player4_goal: Texture2D,
+	pub(crate) fire: Texture2D,
 	pub(crate) captain: Texture2D,
 	pub(crate) outer_space: Texture2D,
-	pub(crate) title_background: Texture2D
+	pub(crate) title_background: Texture2D,
+	pub(crate) button_background: Image,
+	pub(crate) button_focused_background: Image
 }
 
 impl Textures {
@@ -173,6 +179,10 @@ impl Textures {
 				include_bytes!("../assets/img/Player/player4_goal.png"),
 				Some(ImageFormat::Png)
 			),
+			fire: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/Animations/crash_fire_2.png"),
+				Some(ImageFormat::Png)
+			),
 			captain: Texture2D::from_file_with_format(
 				include_bytes!("../assets/img/Character/captain.png"),
 				Some(ImageFormat::Png)
@@ -183,6 +193,14 @@ impl Textures {
 			),
 			title_background: Texture2D::from_file_with_format(
 				include_bytes!("../assets/img/Menu/menu_background.png"),
+				Some(ImageFormat::Png)
+			),
+			button_background: Image::from_file_with_format(
+				include_bytes!("../assets/img/Menu/button_background.png"),
+				Some(ImageFormat::Png)
+			),
+			button_focused_background: Image::from_file_with_format(
+				include_bytes!("../assets/img/Menu/button_focused_background.png"),
 				Some(ImageFormat::Png)
 			)
 		}

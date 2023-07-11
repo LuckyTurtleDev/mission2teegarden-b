@@ -1,12 +1,9 @@
-use crate::GameState;
+use crate::{assets::TEXTURES, GameState};
 use macroquad::prelude::*;
 use macroquad_particles::{AtlasConfig, BlendMode, Emitter, EmitterConfig};
 
 impl GameState {
 	pub(crate) async fn load_fire_emitter(&mut self) {
-		let texture = load_texture("assets/img/Animations/crash_fire_2.png")
-			.await
-			.unwrap();
 		let size = ((screen_width()
 			/ self.game_run.as_ref().unwrap().level.width as f32)
 			.min(screen_height() / self.game_run.as_ref().unwrap().level.height as f32))
@@ -14,7 +11,7 @@ impl GameState {
 		debug!("screen_height: {:#?}", screen_height());
 		let emitter = Emitter::new(EmitterConfig {
 			local_coords: false,
-			texture: Some(texture),
+			texture: Some(TEXTURES.fire),
 			lifetime: 2.0,
 			lifetime_randomness: 0.7,
 			explosiveness: 0.95,
