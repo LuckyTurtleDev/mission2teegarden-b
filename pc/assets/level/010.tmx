@@ -5,7 +5,30 @@
   <property name="motor_off" type="int" value="2"/>
   <property name="motor_on" type="int" value="2"/>
   <property name="right" type="int" value="5"/>
-  <property name="story" value=""/>
+  <property name="story">[[pre_level]]
+text = &quot;&quot;&quot;
+See those weird violet stones there?
+That has to be where the weird signal comes from. I wonder why they produce such a weird signal. Go on, we need samples.
+It should be fine, at least getting closer to it didn't have any bad effects so far.
+Let's go.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+
+[[after_level]]
+text = &quot;&quot;&quot;
+Huh…?!
+We lost our connection to the robots. 
+This is not good.
+I'll have to notify the the main ship - the ark - immeadiately. 
+I'll try to recover the connection!
+…
+……
+………
+Not working.
+Until further notice, you won't be able to continue your mission…
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+Background = &quot;outerSpace&quot;</property>
   <property name="wait" type="int" value="15"/>
  </properties>
  <tileset firstgid="1" source="../../../../../Documents/Praktikum SS23/m3/mission2teegarden-b/pc/assets/img/Player/Player.tsx"/>
