@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="256" tileheight="256" infinite="0" nextlayerid="4" nextobjectid="1">
+ <properties>
+  <property name="left" type="int" value="3"/>
+  <property name="motor_off" type="int" value="2"/>
+  <property name="motor_on" type="int" value="2"/>
+  <property name="right" type="int" value="3"/>
+  <property name="story">[[pre_level]]
+text = &quot;&quot;&quot;
+For the first time we will now venture a bit away from our training grounds.
+But dont' be nervous, I picked out some easier missions first. Nothing to be nervous about.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+background = &quot;outerSpace&quot;
+
+[[pre_level]]
+text = &quot;&quot;&quot;
+Here we are! 
+Do you see your markers on the map?  We need some grass, moss and stone samples. The stones in the back seem a very good playe to gether all of these.
+That sand patch in the middle looks quite interesing too, but according to our scans the stones in the back should hold more minerals that we want to analyse.
+But that certainly is a nice stone formation, isn't it? 
+Anyways, please just drive around them for now.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+
+[[after_level]]
+text = &quot;&quot;&quot;
+Samples collected. We'll go right to analysing them. You may now take a small break.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;</property>
+  <property name="wait" type="int" value="25"/>
+ </properties>
+ <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
+ <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
+ <tileset firstgid="16" source="../img/Player/Player.tsx"/>
+ <layer id="1" name="Base" width="16" height="9">
+  <data encoding="csv">
+4,4,4,3,1,1,1,1,1,1,1,1,1,1,1,1,
+4,4,4,1610612741,1610612739,2684354562,1,1,1,1,1,1,1,1,1,1,
+4,4,4,4,5,3221225474,1,2,1610612739,2684354562,1,1,1,1,1,1,
+4,4,4,5,3221225474,1,2,3221225477,4,1610612741,2684354562,1,1,1,1,1,
+4,4,4,3,1,1,3221225475,4,4,4,3,1,1,1,1,1,
+4,4,4,1610612741,1610612739,2684354562,1610612738,2684354565,4,5,3221225474,1,1,1,1,1,
+4,4,4,4,4,3,1,1610612738,2684354563,3221225474,1,1,1,1,1,1,
+4,4,4,4,4,3,1,1,1,1,1,1,1,1,1,1,
+4,4,4,4,4,1610612741,2684354562,1,2,2684354562,1,1,1,1,1,1
+</data>
+ </layer>
+ <layer id="2" name="Objects" width="16" height="9">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,14,14,0,14,14,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,14,14,
+0,0,0,0,0,0,0,0,14,0,0,0,0,14,14,0,
+0,14,14,0,0,0,0,14,0,14,0,0,0,0,0,0,
+0,0,0,0,0,0,14,0,0,0,14,0,0,0,0,0,
+0,14,14,0,0,0,0,14,0,14,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,14,0,0,0,0,14,14,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,14,14,
+0,0,0,0,0,0,0,0,0,0,0,0,14,14,14,14
+</data>
+ </layer>
+ <layer id="3" name="Player" width="16" height="9">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,23,
+3221225501,0,0,0,0,0,0,0,0,0,0,0,0,0,22,0,
+0,2684354591,2684354592,0,0,0,0,0,0,0,0,0,0,0,0,0,
+30,0,0,0,0,0,0,0,0,0,0,0,0,0,21,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

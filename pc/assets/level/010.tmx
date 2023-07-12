@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="256" tileheight="256" infinite="0" nextlayerid="4" nextobjectid="1">
+ <properties>
+  <property name="left" type="int" value="5"/>
+  <property name="motor_off" type="int" value="2"/>
+  <property name="motor_on" type="int" value="2"/>
+  <property name="right" type="int" value="5"/>
+  <property name="story">[[pre_level]]
+text = &quot;&quot;&quot;
+See those weird violet stones there?
+That has to be where the weird signal comes from. I wonder why they produce such a weird signal. Go on, we need samples.
+It should be fine, at least getting closer to it didn't have any bad effects so far.
+Let's go.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+
+[[after_level]]
+text = &quot;&quot;&quot;
+Huh…?!
+We lost our connection to the robots. 
+This is not good.
+I'll have to notify the the main ship - the ark - immeadiately. 
+I'll try to recover the connection!
+…
+……
+………
+Not working.
+Until further notice, you won't be able to continue your mission…
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+background = &quot;outerSpace&quot;</property>
+  <property name="wait" type="int" value="15"/>
+ </properties>
+ <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
+ <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
+ <tileset firstgid="16" source="../img/Player/Player.tsx"/>
+ <layer id="1" name="Base" width="16" height="9">
+  <data encoding="csv">
+8,2684354571,2684354570,1610612747,8,8,3221225483,3221225482,11,8,8,8,2684354571,2684354569,1,1,
+8,8,2684354571,2684354570,3221225484,3221225484,3221225482,11,8,3221225483,3221225484,1610612747,8,2684354571,2684354569,1,
+8,8,8,2684354571,12,12,11,8,3221225483,10,12,2684354570,1610612747,8,2684354571,2684354569,
+8,3221225483,3221225484,1610612747,8,8,8,3221225483,10,11,8,2684354571,2684354570,1610612747,8,2684354571,
+8,2684354572,1,1610612748,8,8,8,2684354572,1610612748,8,8,8,2684354572,1610612748,8,8,
+8,2684354571,12,11,8,8,8,2684354571,1610612746,1610612747,8,3221225483,3221225482,11,8,3221225483,
+8,8,8,3221225483,3221225484,3221225484,1610612747,8,2684354571,1610612746,3221225484,3221225482,11,8,3221225483,3221225481,
+8,8,3221225483,3221225482,12,12,1610612746,1610612747,8,8,12,11,8,3221225483,3221225481,1,
+8,3221225483,3221225482,11,8,8,2684354571,1610612746,1610612747,8,8,8,3221225483,3221225481,1,1
+</data>
+ </layer>
+ <layer id="2" name="Objects" width="16" height="9">
+  <data encoding="csv">
+2684354592,0,0,14,0,0,14,0,0,14,0,14,0,14,0,0,
+14,14,0,0,14,14,0,0,14,15,0,15,14,0,14,0,
+14,0,0,0,0,0,0,14,0,0,0,0,0,14,0,14,
+2684354590,0,0,0,0,0,14,15,0,0,0,0,0,15,14,0,
+0,0,14,0,0,0,0,0,0,20,15,0,0,0,0,0,
+2684354589,0,0,0,0,0,14,15,0,0,0,0,0,15,14,0,
+14,0,0,0,0,0,0,14,0,0,0,0,0,14,0,14,
+14,14,0,0,14,14,0,0,14,15,0,15,14,0,14,0,
+2684354591,0,0,14,0,0,14,0,0,14,0,14,0,14,0,0
+</data>
+ </layer>
+ <layer id="3" name="Player" width="16" height="9">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

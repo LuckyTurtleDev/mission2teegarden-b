@@ -35,7 +35,7 @@ Now, how to select a card.
 Let's see…
 &quot;Move the cursor with the left and right arrow keys and select an instruction with 'A'.
 'B' will remove the last instruction from your code.
-Change with 🠵 and 🠷 the count of cycle you robot will wait.&quot;
+With your up and down arrow keys you can the count of turns you robot will wait.&quot;
 I hope that helps.
 Now then to your first mission. 
 The robots are a bit spaced out, could you please move them a bit closer together?
@@ -83,13 +83,13 @@ profil = &quot;Captain&quot;
  <layer id="3" name="Player" width="16" height="9">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,3221225498,0,0,0,0,0,0,0,0,0,0,3221225497,0,0,
+0,0,3221225502,0,0,0,0,0,0,0,0,0,0,3221225501,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,22,0,0,0,0,0,0,21,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,20,0,0,0,0,0,0,23,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,24,0,0,0,0,0,0,0,0,0,0,27,0,0,
+0,0,28,0,0,0,0,0,0,0,0,0,0,31,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>

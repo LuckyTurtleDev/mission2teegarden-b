@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="256" tileheight="256" infinite="0" nextlayerid="4" nextobjectid="1">
+ <properties>
+  <property name="left" type="int" value="6"/>
+  <property name="moto_off" type="int" value="3"/>
+  <property name="motor_on" type="int" value="3"/>
+  <property name="right" type="int" value="6"/>
+  <property name="story">[[pre_level]]
+text = &quot;&quot;&quot;
+Keep moving, you are nearly there. On the way there, maybe collect some of that violet grass. 
+If anything goes wrong down there I at least want the samples.
+But let's hope it will be alright.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+
+[[after_level]]
+text = &quot;&quot;&quot;
+Very good. The wierd signal is very close.
+Hmm…
+Ah, very good, we also just recieved the violet grass samples.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;</property>
+  <property name="wait" type="int" value="30"/>
+ </properties>
+ <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
+ <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
+ <tileset firstgid="16" source="../img/Player/Player.tsx"/>
+ <layer id="1" name="Base" width="16" height="9">
+  <data encoding="csv">
+8,3221225483,3221225481,1,1,1,1,1610612748,8,8,3221225483,1610612747,8,8,8,8,
+3221225483,3221225481,1,1,1,1,1,1610612745,3221225484,3221225484,3221225481,1610612745,1610612747,8,8,8,
+3221225481,1,1,9,2684354569,1,1,1,9,12,12,12,2684354570,1610612747,8,8,
+1,1,9,11,2684354571,2684354569,1,9,11,8,8,8,2684354571,2684354570,1610612747,8,
+1,1,1610612748,8,8,2684354572,1,1610612748,8,8,8,8,8,2684354572,1610612748,8,
+1,1,1610612745,1610612747,3221225483,3221225481,1,1610612745,1610612747,8,8,8,3221225483,3221225482,11,8,
+2684354569,1,1,1610612745,3221225481,1,1,1,1610612745,3221225484,3221225484,3221225484,3221225482,11,8,8,
+2684354571,2684354569,1,1,1,1,1,9,12,12,1,9,11,8,8,8,
+8,2684354571,2684354569,1,1,1,1,1610612748,8,8,2684354571,11,8,8,8,8
+</data>
+ </layer>
+ <layer id="2" name="Objects" width="16" height="9">
+  <data encoding="csv">
+14,14,0,14,14,0,0,0,0,0,14,0,0,0,0,0,
+14,0,0,0,0,0,0,0,0,14,0,0,14,14,14,14,
+0,0,0,0,0,0,0,0,0,0,0,0,14,0,0,0,
+0,0,0,14,14,0,0,0,0,0,0,0,0,0,14,0,
+14,14,14,14,14,14,14,14,14,0,14,14,14,14,14,14,
+0,0,0,14,14,0,0,0,0,0,0,0,0,0,14,0,
+0,0,0,0,0,0,0,0,0,0,0,0,14,0,0,0,
+14,0,0,0,0,0,0,0,0,14,0,0,14,14,14,14,
+14,14,0,14,14,0,0,0,0,0,14,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="3" name="Player" width="16" height="9">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+2684354591,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+2684354589,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+2684354590,0,0,0,0,0,0,0,0,0,0,0,0,0,0,21,
+2684354592,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,23
+</data>
+ </layer>
+</map>
