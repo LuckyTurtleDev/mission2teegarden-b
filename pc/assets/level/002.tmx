@@ -3,11 +3,23 @@
  <properties>
   <property name="left" type="int" value="2"/>
   <property name="right" type="int" value="2"/>
+  <property name="story">[[pre_level]]
+text = &quot;&quot;&quot;
+Sometimes all of you will need to be in one spot to do one of our tasks. To signifiy that I'll place one of these white flags on your map. This is just a easy little test to introduce you all to these. 
+With that, please drive to the flag.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+
+[[after_level]]
+text = &quot;Good job, programmers!&quot;
+
+profil = &quot;Captain&quot;
+</property>
   <property name="wait" type="int" value="4"/>
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
- <tileset firstgid="6" source="../img/ObjectTiles/ObjectTiles.tsx"/>
- <tileset firstgid="8" source="../img/Player/Player.tsx"/>
+ <tileset firstgid="12" source="../img/ObjectTiles/ObjectTiles.tsx"/>
+ <tileset firstgid="15" source="../img/Player/Player.tsx"/>
  <layer id="1" name="Base" width="16" height="9">
   <data encoding="csv">
 1,1,1,1,2,1610612739,2684354562,1,1,1,1,1,1,1,1,1,
@@ -37,13 +49,13 @@
  <layer id="3" name="Player" width="16" height="9">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,3221225482,0,0,0,0,0,0,0,0,0,0,3221225481,0,0,
+0,0,3221225489,0,0,0,0,0,0,0,0,0,0,3221225488,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,19,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,8,0,0,0,0,0,0,0,0,0,0,11,0,0,
+0,0,15,0,0,0,0,0,0,0,0,0,0,18,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
