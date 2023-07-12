@@ -84,8 +84,8 @@ impl<'a> TryFrom<&tiled::LayerTile<'a>> for MapBaseTile {
 #[repr(u8)]
 pub enum ObjectTile {
 	//numbers must match them from the Tiled tilesets
-	Stone = 1
-	StrangeStone = 2
+	Stone = 0,
+	StrangeStone = 1
 }
 
 impl Passable for ObjectTile {
