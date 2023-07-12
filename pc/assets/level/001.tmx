@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="256" tileheight="256" infinite="0" nextlayerid="4" nextobjectid="1">
  <properties>
+  <property name="left" type="int" value="2"/>
+  <property name="right" type="int" value="2"/>
   <property name="story">[[pre_level]]
 text = &quot;&quot;&quot;
 Dear crew, I welcome you to the orbit of Teegarden B. With this the next step of our mission begins.
@@ -41,18 +43,15 @@ Just get the robot of your color to the corresponding flag I marked on your map.
 Which color you have should be shown by your terminals lights.
 Now, give it a try!
 &quot;&quot;&quot;
+
 profil = &quot;Captain&quot;
 
 [[after_level]]
-<<<<<<< Updated upstream
 text = &quot;You have mastered this first training. Looks like you still know what are you doing&quot;
 profil = &quot;Captain&quot;
 </property>
-=======
-text = &quot;Looks like you still know what are you doing. Good. &quot;
-profil = &quot;Captain&quot;</property>
+
   <property name="wait" type="int" value="5"/>
->>>>>>> Stashed changes
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
  <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>

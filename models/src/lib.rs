@@ -1,4 +1,5 @@
 #![warn(rust_2018_idioms, unreachable_pub)]
+#![deny(rustdoc::bare_urls, rustdoc::broken_intra_doc_links)]
 #![forbid(unused_must_use, unsafe_code)]
 #![no_std]
 
@@ -32,8 +33,6 @@ pub use cards::*;
 pub enum GameOver {
 	/// Player has drive outside the map.
 	DriveAway,
-	/// Player has not reach goal in time.
-	TimeOut,
 	/// Player has crash.
 	Crash
 }

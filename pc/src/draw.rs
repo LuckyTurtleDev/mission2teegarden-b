@@ -41,6 +41,10 @@ impl GameState {
 				//draw players
 				let player_textures = TEXTURES.get_player_textures();
 				for (x, player) in game_run.level.iter_player().enumerate() {
+					debug!(
+						"Player is some: {}",
+						self.input_players.players[x].is_some()
+					);
 					if self.input_players.players[x].is_some()
 						&& !game_run.player_states[x].finished
 					{

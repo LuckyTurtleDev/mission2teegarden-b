@@ -5,6 +5,7 @@
   <property name="motor_off" type="int" value="2"/>
   <property name="motor_on" type="int" value="2"/>
   <property name="right" type="int" value="2"/>
+
   <property name="story">[[pre_level]]
 text = &quot;&quot;&quot;
 Hello back, programmers. Your Captain speaking. 
@@ -50,6 +51,7 @@ profil = &quot;Captain&quot;</property>
  </layer>
  <layer id="2" name="Objects" width="16" height="9">
   <data encoding="csv">
+
 0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,14,0,0,14,0,0,0,0,0,
 0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,0,
@@ -59,18 +61,23 @@ profil = &quot;Captain&quot;</property>
 0,0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,
 0,0,0,0,0,14,0,0,14,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,14,0,0,0,0,0,0,0
+
 </data>
  </layer>
  <layer id="3" name="Player" width="16" height="9">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+
 0,2684354576,0,22,0,0,0,0,0,0,0,0,23,0,1610612755,0,
+
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+
 0,2684354586,0,24,0,0,0,0,0,0,0,0,21,0,1610612761,0,
+
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>

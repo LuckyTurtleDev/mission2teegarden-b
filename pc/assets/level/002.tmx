@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="256" tileheight="256" infinite="0" nextlayerid="4" nextobjectid="1">
-<<<<<<< Updated upstream
-=======
+
  <properties>
   <property name="left" type="int" value="2"/>
   <property name="right" type="int" value="2"/>
@@ -18,7 +17,8 @@ text = &quot;Good job, programmers!&quot;
 profil = &quot;Captain&quot;</property>
   <property name="wait" type="int" value="4"/>
  </properties>
->>>>>>> Stashed changes
+
+
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
  <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
  <tileset firstgid="16" source="../img/Player/Player.tsx"/>
