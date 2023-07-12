@@ -253,7 +253,7 @@ pub enum MapError {
 	ToWidth,
 	#[error("Map is to hight. Max size is 255x255 tiles")]
 	ToHight,
-	#[error("Found invalid Tile at Layes {0}: {1}")]
+	#[error("Found invalid Tile at Layer {0}: {1}")]
 	InvalidTile(usize, InvalidTile),
 	#[error("Player is missing")]
 	PlayerMissing(usize),
