@@ -165,10 +165,6 @@ impl Textures {
 				include_bytes!("../assets/img/BaseTiles/strange_grass.png"),
 				Some(ImageFormat::Png)
 			),
-			strange_grass: Texture2D::from_file_with_format(
-				include_bytes!("../assets/img/BaseTiles/strange_grass.png"),
-				Some(ImageFormat::Png)
-			),
 			strange_grass_corner: Texture2D::from_file_with_format(
 				include_bytes!("../assets/img/BaseTiles/strange_grass_corner.png"),
 				Some(ImageFormat::Png)

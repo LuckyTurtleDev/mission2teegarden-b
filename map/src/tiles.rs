@@ -15,7 +15,7 @@ pub enum Tile {
 
 #[derive(Debug, Clone, Error)]
 pub enum InvalidTile {
-	#[error("invalid tiel id {0}")]
+	#[error("invalid tile id {0}")]
 	InvalidId(u32),
 	#[error("wrong Tile set. Found {0:?} expected {1:?}")]
 	WrongTileset(String, String)
@@ -33,7 +33,14 @@ pub enum MapBaseTile {
 	GrassCornerSand = 1,
 	HalfGrassSand = 2,
 	Sand = 3,
-	SandCornerGrass = 4
+	SandCornerGrass = 4,
+	SandDoubleCorner = 5,
+	GrassDoubleCorner = 6,
+	StrangeGrass = 7,
+	StrangeOuterCorner = 8,
+	StrangeInnerCorner = 9,
+	StrangeHalf = 10,
+	StrangeDoubleCorner = 11
 }
 
 impl Passable for MapBaseTile {
@@ -43,7 +50,14 @@ impl Passable for MapBaseTile {
 			Self::GrassCornerSand => true,
 			Self::HalfGrassSand => true,
 			Self::Sand => true,
-			Self::SandCornerGrass => true
+			Self::SandCornerGrass => true,
+			Self::SandDoubleCorner => true,
+			Self::GrassDoubleCorner => true,
+			Self::StrangeGrass => true,
+			Self::StrangeOuterCorner => true,
+			Self::StrangeInnerCorner => true,
+			Self::StrangeHalf => true,
+			Self::StrangeDoubleCorner => true
 		}
 	}
 }
@@ -70,13 +84,15 @@ impl<'a> TryFrom<&tiled::LayerTile<'a>> for MapBaseTile {
 #[repr(u8)]
 pub enum ObjectTile {
 	//numbers must match them from the Tiled tilesets
-	Stone = 1
+	Stone = 1,
+	StrangeStone = 2
 }
 
 impl Passable for ObjectTile {
 	fn passable(&self) -> bool {
 		match self {
-			Self::Stone => false
+			Self::Stone => false,
+			Self::StrangeStone => false
 		}
 	}
 }
