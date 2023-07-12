@@ -15,7 +15,7 @@ pub enum Tile {
 
 #[derive(Debug, Clone, Error)]
 pub enum InvalidTile {
-	#[error("invalid tiel id {0}")]
+	#[error("invalid tile id {0}")]
 	InvalidId(u32),
 	#[error("wrong Tile set. Found {0:?} expected {1:?}")]
 	WrongTileset(String, String)

@@ -52,8 +52,8 @@ profil = &quot;Captain&quot;
   <property name="wait" type="int" value="5"/>
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
- <tileset firstgid="12" source="../img/ObjectTiles/ObjectTiles.tsx"/>
- <tileset firstgid="15" source="../img/Player/Player.tsx"/>
+ <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
+ <tileset firstgid="16" source="../img/Player/Player.tsx"/>
  <layer id="1" name="Base" width="16" height="9">
   <data encoding="csv">
 1,1,1,1,2,1610612739,2684354562,1,1,1,1,1,1,1,1,1,
@@ -83,13 +83,13 @@ profil = &quot;Captain&quot;
  <layer id="3" name="Player" width="16" height="9">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,3221225502,0,0,0,0,0,0,0,0,0,0,3221225501,0,0,
+0,0,3221225503,0,0,0,0,0,0,0,0,0,0,3221225502,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,22,0,0,0,0,0,0,21,0,0,0,0,
+0,0,0,0,23,0,0,0,0,0,0,22,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,20,0,0,0,0,0,0,23,0,0,0,0,
+0,0,0,0,21,0,0,0,0,0,0,24,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,28,0,0,0,0,0,0,0,0,0,0,31,0,0,
+0,0,29,0,0,0,0,0,0,0,0,0,0,32,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
