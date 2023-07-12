@@ -138,6 +138,13 @@ impl GameState {
 		false
 	}
 
+	pub(crate) fn reset_pybadges(&self) {
+		for player in self.input_players.players.iter().flatten() {
+			todo!("s")
+			//player.send_events(ToPypadeGameEvent::Reset);
+		}
+	}
+
 	/// calculate next moves
 	pub(crate) fn next_move(&mut self) {
 		if let Some(ref mut game_run) = self.game_run {
