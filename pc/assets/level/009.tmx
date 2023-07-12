@@ -22,8 +22,6 @@ Ah, very good, we also just recieved the violet grass samples.
 profil = &quot;Captain&quot;</property>
   <property name="wait" type="int" value="30"/>
  </properties>
- <tileset firstgid="1" source="../../../../../Documents/Praktikum SS23/m3/mission2teegarden-b/pc/assets/img/ObjectTiles/ObjectTiles.tsx"/>
- <tileset firstgid="1" source="../../../../../Documents/Praktikum SS23/m3/mission2teegarden-b/pc/assets/img/Player/Player.tsx"/>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
  <tileset firstgid="13" source="../img/Player/Player.tsx"/>
  <tileset firstgid="24" source="../img/ObjectTiles/ObjectTiles.tsx"/>

@@ -30,9 +30,6 @@ Samples collected. We'll go right to analysing them. You may now take a small br
 profil = &quot;Captain&quot;</property>
   <property name="wait" type="int" value="25"/>
  </properties>
- <tileset firstgid="1" source="../../../../../Documents/Praktikum SS23/m3/mission2teegarden-b/pc/assets/img/BaseTiles/BaseTiles.tsx"/>
- <tileset firstgid="1" source="../../../../../Documents/Praktikum SS23/m3/mission2teegarden-b/pc/assets/img/ObjectTiles/ObjectTiles.tsx"/>
- <tileset firstgid="1" source="../../../../../Documents/Praktikum SS23/m3/mission2teegarden-b/pc/assets/img/Player/Player.tsx"/>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
  <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
  <tileset firstgid="16" source="../img/Player/Player.tsx"/>
