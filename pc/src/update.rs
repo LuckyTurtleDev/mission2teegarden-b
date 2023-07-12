@@ -1,6 +1,6 @@
 use crate::{
 	cards_ev::CarAction, evaluate_cards, usb::Player, Activity, GameRun, GameState, Map,
-	Phase, PlayerState, Rotation, LEVELS
+	Phase, PlayerState, Rotation
 };
 use macroquad::prelude::*;
 use mission2teegarden_b_map::Orientation;

@@ -16,6 +16,7 @@ use pybadge_high::{Color, Display};
 pub(crate) mod card_selecter;
 pub(crate) mod driving;
 pub(crate) mod game_over;
+pub(crate) mod waiting;
 
 /// count of cards per line
 const CARD_LINE_LENGTH: u8 = 6;

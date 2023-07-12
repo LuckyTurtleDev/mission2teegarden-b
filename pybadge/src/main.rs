@@ -124,7 +124,7 @@ impl State<'_> {
 	/// clear and draw the hole activity
 	fn init_activity(&mut self) {
 		match self.activity {
-			Activity::Waiting => {},
+			Activity::Waiting => activitys::waiting::init(self),
 			Activity::Selecter => activitys::card_selecter::init(self),
 			Activity::Driving => activitys::driving::init(self),
 			Activity::GameOver(game_over_type) => {
@@ -185,9 +185,6 @@ fn main() -> ! {
 	}
 	send_event(MessageToPc::Protocol(ToPcProtocol::ConnectionResponse));
 	display.clear(Color::BLACK).unwrap();
-	Text::new("look at the pc screen", Point::new(15, 50), text_style)
-		.draw(&mut display)
-		.ok();
 	let mut text_style_large = MonoTextStyle::new(&FONT_9X15, Color::WHITE);
 	text_style_large.set_background_color(Some(Color::BLACK));
 	let mut state = State {
@@ -208,6 +205,7 @@ fn main() -> ! {
 		text_style_large,
 		text_style_on_card: MonoTextStyle::new(&FONT_9X15, Color::BLACK)
 	};
+	//select some random activity unequal the start activity, to force activity init.
 	let mut last_activity =
 		Activity::GameOver(mission2teegarden_b_models::GameOver::Crash);
 	let mut timestamp;
