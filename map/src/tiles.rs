@@ -34,13 +34,13 @@ pub enum MapBaseTile {
 	HalfGrassSand = 2,
 	Sand = 3,
 	SandCornerGrass = 4,
-	SandDoubleCorner = 5,
-	GrassDoubleCorner = 6,
+	GrassDoubleCorner = 5,
+	SandDoubleCorner = 6,
 	StrangeGrass = 7,
 	StrangeOuterCorner = 8,
-	StrangeInnerCorner = 9,
+	StrangeDoubleCorner = 9,
 	StrangeHalf = 10,
-	StrangeDoubleCorner = 11
+	StrangeInnerCorner = 11
 }
 
 impl Passable for MapBaseTile {
