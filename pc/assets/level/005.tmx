@@ -7,8 +7,8 @@
   <property name="right" type="int" value="2"/>
   <property name="story">[[pre_level]]
 text = &quot;&quot;&quot;
-Hello back, programmers. Your Captain speaking. 
-I have just recieved good news from our engineers. The commands have been successfully recovered. They should work fine now.
+Hello back, programmers. Your captain is speaking.
+I have just received good news from our engineers. The commands have been successfully recovered. They should work fine now.
 Let's go back to our last mission to try out your new cards.
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;
@@ -16,18 +16,18 @@ background = &quot;OuterSpace&quot;
 
 [[pre_level]]
 text = &quot;&quot;&quot;
-Here we are again. Anyways, this time around it should be a lot easier for you to reach your goal without crashing.
-In your programming panel you'll now have the commands to turn your robots motor off and to turn the motor back on. 
-Of course the robots themselves will still be on during said period and therefore will still be able to follow your commands. 
-Turning the motor off simply means that the robot won't move anymore until the motor is turned on again. Very useful, isn't it?
-Well then, this should be easy to do now. Certainly no problem for you.
+Here we are again. Anyway, this time around, it should be a lot easier for you to reach your goal without crashing.
+In your programming panel, you'll now have the commands to turn your robot's motor off and back on.
+Of course, the robots themselves will still be on during said period and will therefore still be able to follow your commands.
+Turning the motor off simply means that the robot won't move anymore until the motor is turned on again. It's very useful, isn't it?
+Well, then, this should be easy to do now. There is certainly no problem for you.
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;
 
 [[after_level]]
 text = &quot;&quot;&quot;
-How do you like your new commands? Certainly useful, no? 
-Anyways let's actually do some proper missions now!
+How do you like your new commands? Certainly useful, no?
+Anyway, let's actually do some proper missions now!
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;</property>
   <property name="wait" type="int" value="9"/>

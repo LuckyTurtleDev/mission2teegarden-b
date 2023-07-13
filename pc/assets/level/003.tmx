@@ -5,19 +5,19 @@
   <property name="right" type="int" value="4"/>
   <property name="story">[[pre_level]]
 text = &quot;&quot;&quot;
-Before we go on to our actual tasks, all of you still need a bit more practice. After all you are not in your home research center after all.
-My next assignment to you is a bit harder than the last two. Now look on your map!
-Once again you need to make your robots go to the flags of the same color. 
-They are all behind these stones, so be careful to not drive into them. We do not want the robots to be harmed after all.
-Please make use of what you practiced in the two test to get your robots safely to the other side.
-Oh and don't forget that sometimes teamwork is of great help to get to your goal. You are a team after all.
+Before we go on to our actual tasks, all of you still need a bit more practice. After all, you are not in your home research center.
+My next assignment for you is a bit harder than the last two. Now look at your map!
+Once again, you need to make your robots go to the flags of the same color.
+They are all behind these stones, so be careful not to drive into them. We do not want the robots to be harmed after all.
+Please make use of what you practiced in the two tests to get your robots safely to the other side.
+Oh, and don't forget that sometimes teamwork is of great help in getting to your goal. You are a team, after all.
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;
 
 [[after_level]]
-text = &quot;Very well done! Looks like you are getting used to it.&quot;
-profil = &quot;Captain&quot;
-</property>
+text = &quot;Very well done! It looks like you are getting used to it.&quot;
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;</property>
   <property name="wait" type="int" value="6"/>
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>

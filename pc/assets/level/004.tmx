@@ -6,7 +6,7 @@
   <property name="story">[[pre_level]]
 text = &quot;&quot;&quot;
 This seems to be rather tricky, doesn't it? Well, please drive to your correct position, programmers.
-In the mean time I'll make sure the missing commands will be recovered… maybe those might help you solve problems like this. 
+In the mean time, I'll make sure the missing commands are recovered. Maybe those might help you solve problems like this.
 Good luck, programmers!
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;
@@ -14,7 +14,7 @@ profil = &quot;Captain&quot;
 [[after_level]]
 text = &quot;&quot;&quot;
 You solved it?
-Well done! I see you are getting the hang of it.
+Well done! I see you're getting the hang of it.
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;</property>
   <property name="wait" type="int" value="9"/>
