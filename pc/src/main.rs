@@ -284,6 +284,7 @@ async fn run_game(opt: OptPlay) {
 				game_state.activity = Activity::GameRound(Phase::Select);
 			},
 			Activity::GameRound(Phase::Finish) => {
+				game_state.reset_pybadges();
 				game_state
 					.display_speech(
 						&game_state
