@@ -30,7 +30,8 @@ impl GetTexture for ObjectTile {
 	///get Texture assioated with this Tile
 	fn texture(&self) -> Texture2D {
 		match self {
-			Self::Stone => TEXTURES.stone
+			Self::Stone => TEXTURES.stone,
+			Self::StrangeStone => TEXTURES.strange_stone
 		}
 	}
 }

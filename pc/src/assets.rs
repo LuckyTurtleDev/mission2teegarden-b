@@ -106,6 +106,7 @@ pub(crate) struct Textures {
 	pub(crate) strange_grass_half: Texture2D,
 	pub(crate) strange_grass_double_corner: Texture2D,
 	pub(crate) stone: Texture2D,
+	pub(crate) strange_stone: Texture2D,
 	pub(crate) player1_car: Texture2D,
 	pub(crate) player2_car: Texture2D,
 	pub(crate) player3_car: Texture2D,
@@ -177,6 +178,10 @@ impl Textures {
 			),
 			stone: Texture2D::from_file_with_format(
 				include_bytes!("../assets/img/ObjectTiles/stone.png"),
+				Some(ImageFormat::Png)
+			),
+			strange_stone: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/ObjectTiles/strange_stone.png"),
 				Some(ImageFormat::Png)
 			),
 			player1_car: Texture2D::from_file_with_format(

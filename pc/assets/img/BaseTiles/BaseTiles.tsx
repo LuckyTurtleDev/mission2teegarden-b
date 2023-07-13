@@ -17,24 +17,24 @@
   <image width="256" height="256" source="sand_corner_grass.png"/>
  </tile>
  <tile id="5">
-  <image width="256" height="256" source="../../../../../../mission2teegarden-b/pc/assets/img/BaseTiles/grass_double_corner_sand.png"/>
+  <image width="256" height="256" source="grass_double_corner_sand.png"/>
  </tile>
  <tile id="6">
   <image width="256" height="256" source="../../../../../../mission2teegarden-b/pc/assets/img/BaseTiles/sand_double_corner_grass.png"/>
  </tile>
  <tile id="7">
-  <image width="256" height="256" source="../../../../../../mission2teegarden-b/pc/assets/img/BaseTiles/strange_grass.png"/>
+  <image width="256" height="256" source="strange_grass.png"/>
  </tile>
  <tile id="8">
-  <image width="256" height="256" source="../../../../../../mission2teegarden-b/pc/assets/img/BaseTiles/strange_grass_corner.png"/>
+  <image width="256" height="256" source="strange_grass_corner.png"/>
  </tile>
  <tile id="9">
-  <image width="256" height="256" source="../../../../../../mission2teegarden-b/pc/assets/img/BaseTiles/strange_grass_double_corner.png"/>
+  <image width="256" height="256" source="strange_grass_double_corner.png"/>
  </tile>
  <tile id="10">
-  <image width="256" height="256" source="../../../../../../mission2teegarden-b/pc/assets/img/BaseTiles/strange_grass_half.png"/>
+  <image width="256" height="256" source="strange_grass_half.png"/>
  </tile>
  <tile id="11">
-  <image width="256" height="256" source="../../../../../../mission2teegarden-b/pc/assets/img/BaseTiles/strange_grass_inner_corner.png"/>
+  <image width="256" height="256" source="strange_grass_inner_corner.png"/>
  </tile>
 </tileset>
