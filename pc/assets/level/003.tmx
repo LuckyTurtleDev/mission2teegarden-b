@@ -3,8 +3,7 @@
  <properties>
   <property name="left" type="int" value="4"/>
   <property name="right" type="int" value="4"/>
-  <property name="story">Level 3
-[[pre_level]]
+  <property name="story">[[pre_level]]
 text = &quot;&quot;&quot;
 Before we go on to our actual tasks, all of you still need a bit more practice. After all you are not in your home research center after all.
 My next assignment to you is a bit harder than the last two. Now look on your map!

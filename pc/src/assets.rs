@@ -81,6 +81,10 @@ pub(crate) static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 		include_map!("pc/assets/level/004.tmx"),
 		include_map!("pc/assets/level/005.tmx"),
 		include_map!("pc/assets/level/006.tmx"),
+		include_map!("pc/assets/level/007.tmx"),
+		include_map!("pc/assets/level/008.tmx"),
+		include_map!("pc/assets/level/009.tmx"),
+		include_map!("pc/assets/level/010.tmx"),
 	]
 });
 

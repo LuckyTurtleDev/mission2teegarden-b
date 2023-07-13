@@ -12,7 +12,7 @@ I have just recieved good news from our engineers. The commands have been succes
 Let's go back to our last mission to try out your new cards.
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;
-background = &quot;outerSpace&quot;
+background = &quot;OuterSpace&quot;
 
 [[pre_level]]
 text = &quot;&quot;&quot;

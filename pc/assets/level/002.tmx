@@ -3,8 +3,7 @@
  <properties>
   <property name="left" type="int" value="2"/>
   <property name="right" type="int" value="2"/>
-  <property name="story">Level 2
-[[pre_level]]
+  <property name="story">[[pre_level]]
 text = &quot;&quot;&quot;
 Sometimes all of you will need to be in one spot to do one of our tasks. To signifiy that I'll place one of these white flags on your map. This is just a easy little test to introduce you all to these. 
 With that, please drive to the flag.
