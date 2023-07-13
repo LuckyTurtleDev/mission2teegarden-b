@@ -138,7 +138,7 @@ impl GameState {
 		false
 	}
 
-	pub(crate) fn reset_pybadges(&self) {
+	pub(crate) fn reset_pybadge_screens(&self) {
 		for player in self.input_players.players.iter().flatten() {
 			player.send_events(ToPypadeGameEvent::Wait);
 		}

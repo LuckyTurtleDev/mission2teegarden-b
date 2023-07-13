@@ -362,6 +362,7 @@ impl GameState {
 				// Go back to level menu
 				} else {
 					if enter_pressed {
+						self.reset_pybadge_screens();
 						self.activity = Activity::SelectLevel;
 					}
 					skin_1 = &button_skin;
@@ -406,7 +407,7 @@ impl GameState {
 					.size(button_size)
 					.ui(ui);
 				if quit_button {
-					self.reset_pybadges();
+					self.reset_pybadge_screens();
 					self.activity = Activity::SelectLevel;
 				}
 			}
