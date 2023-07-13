@@ -80,6 +80,11 @@ pub(crate) static LEVELS: Lazy<Vec<&str>> = Lazy::new(|| {
 		include_map!("pc/assets/level/003.tmx"),
 		include_map!("pc/assets/level/004.tmx"),
 		include_map!("pc/assets/level/005.tmx"),
+		include_map!("pc/assets/level/006.tmx"),
+		include_map!("pc/assets/level/007.tmx"),
+		include_map!("pc/assets/level/008.tmx"),
+		include_map!("pc/assets/level/009.tmx"),
+		include_map!("pc/assets/level/010.tmx"),
 	]
 });
 
@@ -97,7 +102,15 @@ pub(crate) struct Textures {
 	pub(crate) half_grass_sand: Texture2D,
 	pub(crate) sand: Texture2D,
 	pub(crate) sand_corner_grass: Texture2D,
+	pub(crate) sand_double_corner_grass: Texture2D,
+	pub(crate) grass_double_corner_sand: Texture2D,
+	pub(crate) strange_grass: Texture2D,
+	pub(crate) strange_grass_corner: Texture2D,
+	pub(crate) strange_grass_inner_corner: Texture2D,
+	pub(crate) strange_grass_half: Texture2D,
+	pub(crate) strange_grass_double_corner: Texture2D,
 	pub(crate) stone: Texture2D,
+	pub(crate) strange_stone: Texture2D,
 	pub(crate) player1_car: Texture2D,
 	pub(crate) player2_car: Texture2D,
 	pub(crate) player3_car: Texture2D,
@@ -139,8 +152,40 @@ impl Textures {
 				include_bytes!("../assets/img/BaseTiles/sand_corner_grass.png"),
 				Some(ImageFormat::Png)
 			),
+			sand_double_corner_grass: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/BaseTiles/sand_double_corner_grass.png"),
+				Some(ImageFormat::Png)
+			),
+			grass_double_corner_sand: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/BaseTiles/grass_double_corner_sand.png"),
+				Some(ImageFormat::Png)
+			),
+			strange_grass: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/BaseTiles/strange_grass.png"),
+				Some(ImageFormat::Png)
+			),
+			strange_grass_corner: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/BaseTiles/strange_grass_corner.png"),
+				Some(ImageFormat::Png)
+			),
+			strange_grass_inner_corner: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/BaseTiles/strange_grass_inner_corner.png"),
+				Some(ImageFormat::Png)
+			),
+			strange_grass_double_corner: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/BaseTiles/strange_grass_double_corner.png"),
+				Some(ImageFormat::Png)
+			),
+			strange_grass_half: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/BaseTiles/strange_grass_half.png"),
+				Some(ImageFormat::Png)
+			),
 			stone: Texture2D::from_file_with_format(
 				include_bytes!("../assets/img/ObjectTiles/stone.png"),
+				Some(ImageFormat::Png)
+			),
+			strange_stone: Texture2D::from_file_with_format(
+				include_bytes!("../assets/img/ObjectTiles/strange_stone.png"),
 				Some(ImageFormat::Png)
 			),
 			player1_car: Texture2D::from_file_with_format(
