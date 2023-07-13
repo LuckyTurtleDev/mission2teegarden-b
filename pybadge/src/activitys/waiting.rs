@@ -1,6 +1,6 @@
 use crate::State;
 use embedded_graphics::{prelude::*, text::Text};
-use mission2teegarden_b_models::GameOver;
+
 use pybadge_high::Color;
 
 pub(crate) fn init(state: &mut State<'_>) {
