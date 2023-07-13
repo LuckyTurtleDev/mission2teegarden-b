@@ -20,7 +20,7 @@
   <image width="256" height="256" source="grass_double_corner_sand.png"/>
  </tile>
  <tile id="6">
-  <image width="256" height="256" source="../../../../../../mission2teegarden-b/pc/assets/img/BaseTiles/sand_double_corner_grass.png"/>
+  <image width="256" height="256" source="sand_double_corner_grass.png"/>
  </tile>
  <tile id="7">
   <image width="256" height="256" source="strange_grass.png"/>
