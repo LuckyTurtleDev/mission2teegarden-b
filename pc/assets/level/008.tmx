@@ -1,72 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="256" tileheight="256" infinite="0" nextlayerid="4" nextobjectid="1">
  <properties>
-  <property name="left" type="int" value="12"/>
-  <property name="motor_off" type="int" value="5"/>
-  <property name="motor_on" type="int" value="5"/>
-  <property name="right" type="int" value="12"/>
+  <property name="left" type="int" value="5"/>
+  <property name="right" type="int" value="5"/>
   <property name="story">[[pre_level]]
-text = &quot;&quot;&quot;
-Programmers, we will have to take a small break from our usual missions. We have received a very strange signal not too far from your last mission.
-The robots have already been dispatched. Please check it out immediately. Any further sample collection will be put on hold for now.
-&quot;&quot;&quot;
-profil = &quot;Captain&quot;
-background = &quot;OuterSpace&quot;
 
-[[pre_level]]
 text = &quot;&quot;&quot;
-Here is the map of our current place. Any closer to the weird signal wasn't possible, as we don't know what landing closer to it could lead to.
-Be careful. Those violet patches seem rather ominous, but besides the different color, they don't seem to be much different from normal grass.
-The path to the weird signal source seems to be somewhat complicated, but I am sure you will manage.
+
+Haven't we seen something similar to this before? Hmm…
+
+Programmers, let's use this place to practice a bit again.
+
+But I give you one small restraint. You may not use your trusty &quot;Motor Off&quot; and &quot;Motor On&quot; Cards here.
+
+Good luck!
+
 &quot;&quot;&quot;
+
 profil = &quot;Captain&quot;
+
+
+
 
 [[after_level]]
+
 text = &quot;&quot;&quot;
-We have gotten closer to the source already. Our computers don't really seem to like that. Hmm… as it seems though, we don't really face any difficulties yet. 
+
+One more tricky situation is done. You all really are getting good at this.
+
 &quot;&quot;&quot;
-profil = &quot;Captain&quot;
-</property>
-  <property name="wait" type="int" value="30"/>
+
+profil = &quot;Captain&quot;</property>
+  <property name="wait" type="int" value="35"/>
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
  <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
  <tileset firstgid="17" source="../img/Player/Player.tsx"/>
  <layer id="1" name="Base" width="16" height="9">
   <data encoding="csv">
-2684354562,1,1,1,1610612745,1610612748,3221225484,3221225481,1,1,1,1,1,1610612745,1610612748,8,
-1610612741,2684354562,1,1,1,1610612745,3221225481,1,1,1,1,1,1,1,1610612745,1610612748,
-4,1610612741,2684354562,1,1,1,1,1,1,1,1,1,9,11,2684354569,1610612745,
-4,4,1610612741,2684354562,1,1,1,9,11,2684354569,1,9,12,8,2684354572,2684354569,
-4,4,4,3,1,1,1,1610612747,8,2684354571,1,1610612747,8,8,8,2684354571,
-4,4,5,3221225474,1,1,1,1610612745,3221225483,3221225481,1,1610612745,1610612748,8,3221225484,3221225481,
-4,5,3221225474,1,1,1,1,1,1,1,1,1,1610612745,3221225483,3221225481,9,
-5,3221225474,1,1,1,9,2684354569,1,1,1,1,1,1,1,9,12,
-3221225474,1,1,1,9,12,2684354572,2684354569,1,1,1,1,1,9,12,8
+4,4,4,4,4,4,5,3221225474,1,1,1,1,1,1,1,1,
+4,4,4,4,4,4,3,2,2684354562,1,1,1,1,1,1,1,
+4,4,4,4,4,4,3,1610612738,3221225474,1,1,1,1,1,1,1,
+4,4,4,4,4,4,1610612741,2684354562,1,1,1,1,1,1,1,1,
+4,4,4,4,4,4,4,3,1,1,1,1,1,1,1,1,
+4,4,4,4,4,4,4,1610612741,1610612739,2684354562,1,1,1,1,1,1,
+4,4,4,4,4,4,4,4,4,1610612741,2684354562,1,1,1,1,1,
+4,4,4,4,4,4,4,4,4,4,3,1,1,1,1,1,
+4,4,4,4,4,4,4,4,4,4,3,1,1,1,1,1
 </data>
  </layer>
  <layer id="2" name="Objects" width="16" height="9">
   <data encoding="csv">
-0,0,0,0,0,14,14,0,0,14,0,0,0,0,0,14,
-14,0,0,0,0,0,0,14,0,0,14,0,0,0,0,0,
-0,14,0,0,0,14,0,0,0,0,0,14,14,0,14,0,
-0,0,14,0,0,0,14,0,14,0,0,14,0,0,14,0,
-0,0,0,0,14,0,0,14,14,14,0,0,0,14,0,14,
-0,0,14,14,0,0,14,0,14,0,0,14,0,0,14,0,
-0,14,0,0,0,14,0,0,0,0,0,14,14,0,14,0,
-14,0,0,0,0,0,0,0,14,0,14,0,0,0,0,0,
-0,0,0,0,0,14,14,0,0,14,0,0,0,0,0,14
+0,0,0,0,0,0,0,0,0,0,14,0,0,14,14,14,
+0,0,0,0,14,0,0,0,0,14,0,0,0,0,14,14,
+0,0,0,14,14,14,14,14,14,14,14,0,0,0,0,14,
+0,0,0,0,14,14,14,14,14,14,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,14,14,14,14,14,14,0,0,0,0,0,0,
+0,0,0,14,14,14,14,14,14,14,14,0,0,0,0,14,
+0,0,0,0,14,0,0,0,0,14,0,0,0,0,14,14,
+0,0,0,0,0,0,0,0,0,0,14,0,0,14,14,0
 </data>
  </layer>
  <layer id="3" name="Player" width="16" height="9">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,
-2684354580,2684354579,2684354578,2684354577,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,23,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25,
+0,3221225492,23,0,0,0,0,0,0,0,0,24,3221225489,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,19,22,0,0,0,0,0,0,0,0,25,18,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
