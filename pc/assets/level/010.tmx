@@ -28,7 +28,7 @@ Not working.
 Until further notice, you won't be able to continue your mission.
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;
-Background = &quot;OuterSpace&quot;</property>
+background = &quot;OuterSpace&quot;</property>
   <property name="wait" type="int" value="0"/>
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>

@@ -19,6 +19,7 @@ background = &quot;OuterSpace&quot;
 text = &quot;&quot;&quot;
 This place looks complicated. Sadly, the robots aren't in their intended position. We need some more samples, but not every robot is equipped with the same tools to collect them. So please just swap them around so that we have to correct the robots at the correct place. Sadly, I needed to position the focus like that so you could see where you needed to go. That place is quite beautiful. A nice, small, very rocky beach. Therefore, we need water samples, further stone samples, and some sand samples.
 I hope you'll be able to navigate through here without problems.
+&quot;&quot;&quot;
 profil = &quot;Captain&quot;
 
 [[after_level]]

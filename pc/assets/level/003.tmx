@@ -16,7 +16,6 @@ profil = &quot;Captain&quot;
 
 [[after_level]]
 text = &quot;Very well done! It looks like you are getting used to it.&quot;
-&quot;&quot;&quot;
 profil = &quot;Captain&quot;</property>
   <property name="wait" type="int" value="6"/>
  </properties>
