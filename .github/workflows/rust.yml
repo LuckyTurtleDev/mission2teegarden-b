@@ -135,7 +135,7 @@ jobs:
         working-directory: pybadge
         env:
           RUST_BACKTRACE: 1
-      - run: arm-none-eabi-objcopy -O binary target/thumbv7em-none-eabihf/release/mission2teegarden-b-pybadge mission2teegarden-b-pybadge
+      - run: arm-none-eabi-objcopy -O elf target/thumbv7em-none-eabihf/release/mission2teegarden-b-pybadge mission2teegarden-b-pybadge
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
         with:
