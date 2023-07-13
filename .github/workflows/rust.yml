@@ -135,12 +135,13 @@ jobs:
         working-directory: pybadge
         env:
           RUST_BACKTRACE: 1
-      - run: arm-none-eabi-objcopy -O elf target/thumbv7em-none-eabihf/release/mission2teegarden-b-pybadge mission2teegarden-b-pybadge
+      #- run: arm-none-eabi-objcopy -O elf target/thumbv7em-none-eabihf/release/mission2teegarden-b-pybadge mission2teegarden-b-pybadge
+      - run: cp target/thumbv7em-none-eabihf/release/mission2teegarden-b-pybadge mission2teegarden-b-pybadge.elf
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
         with:
           name: "pybadge"
-          path: mission2teegarden-b-pybadge
+          path: mission2teegarden-b-pybadge.elf
   
   clippy_pc:
     runs-on: ubuntu-latest
