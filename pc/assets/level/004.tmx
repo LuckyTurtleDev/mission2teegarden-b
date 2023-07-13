@@ -3,11 +3,25 @@
  <properties>
   <property name="left" type="int" value="4"/>
   <property name="right" type="int" value="4"/>
+  <property name="story">[[pre_level]]
+text = &quot;&quot;&quot;
+This seems to be rather tricky, doesn't it? Well, please drive to your correct position, programmers.
+In the mean time I'll make sure the missing commands will be recovered… maybe those might help you solve problems like this. 
+Good luck, programmers!
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+
+[[after_level]]
+text = &quot;&quot;&quot;
+You solved it?
+Well done! I see you are getting the hang of it.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;</property>
   <property name="wait" type="int" value="9"/>
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
- <tileset firstgid="6" source="../img/ObjectTiles/ObjectTiles.tsx"/>
- <tileset firstgid="8" source="../img/Player/Player.tsx"/>
+ <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
+ <tileset firstgid="17" source="../img/Player/Player.tsx"/>
  <layer id="1" name="Base" width="16" height="9">
   <data encoding="csv">
 1,1,1,1,1,1,3221225475,4,3,1,1,1,3221225475,4,4,4,
@@ -23,27 +37,27 @@
  </layer>
  <layer id="2" name="Objects" width="16" height="9">
   <data encoding="csv">
-0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,7,0,0,7,0,0,0,0,0,
-0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,7,7,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,14,0,0,14,0,0,0,0,0,
+0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,14,14,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,7,7,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,
-0,0,0,0,0,7,0,0,7,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,14,14,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,
+0,0,0,0,0,14,0,0,14,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,14,0,0,0,0,0,0,0
 </data>
  </layer>
  <layer id="3" name="Player" width="16" height="9">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,2684354568,0,14,0,0,0,0,0,0,0,0,15,0,1610612747,0,
+0,2684354577,0,23,0,0,0,0,0,0,0,0,24,0,1610612756,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,2684354570,0,16,0,0,0,0,0,0,0,0,13,0,1610612745,0,
+0,2684354579,0,25,0,0,0,0,0,0,0,0,22,0,1610612754,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>

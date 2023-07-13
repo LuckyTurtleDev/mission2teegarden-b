@@ -185,19 +185,19 @@ impl Textures {
 				Some(ImageFormat::Png)
 			),
 			player1_car: Texture2D::from_file_with_format(
-				include_bytes!("../assets/img/Player/player1_car_new.png"),
+				include_bytes!("../assets/img/Player/player1_car.png"),
 				Some(ImageFormat::Png)
 			),
 			player2_car: Texture2D::from_file_with_format(
-				include_bytes!("../assets/img/Player/player2_car_new.png"),
+				include_bytes!("../assets/img/Player/player2_car.png"),
 				Some(ImageFormat::Png)
 			),
 			player3_car: Texture2D::from_file_with_format(
-				include_bytes!("../assets/img/Player/player3_car_new.png"),
+				include_bytes!("../assets/img/Player/player3_car.png"),
 				Some(ImageFormat::Png)
 			),
 			player4_car: Texture2D::from_file_with_format(
-				include_bytes!("../assets/img/Player/player4_car_new.png"),
+				include_bytes!("../assets/img/Player/player4_car.png"),
 				Some(ImageFormat::Png)
 			),
 			global_goal: Texture2D::from_file_with_format(

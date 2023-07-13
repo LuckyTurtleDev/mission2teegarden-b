@@ -3,11 +3,28 @@
  <properties>
   <property name="left" type="int" value="4"/>
   <property name="right" type="int" value="4"/>
+  <property name="story">Level 3
+[[pre_level]]
+text = &quot;&quot;&quot;
+Before we go on to our actual tasks, all of you still need a bit more practice. After all you are not in your home research center after all.
+My next assignment to you is a bit harder than the last two. Now look on your map!
+Once again you need to make your robots go to the flags of the same color. 
+They are all behind these stones, so be careful to not drive into them. We do not want the robots to be harmed after all.
+Please make use of what you practiced in the two test to get your robots safely to the other side.
+Oh and don't forget that sometimes teamwork is of great help to get to your goal. You are a team after all.
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+
+[[after_level]]
+text = &quot;Very well done! Looks like you are getting used to it.&quot;
+&quot;&quot;&quot;
+profil = &quot;Captain&quot;
+</property>
   <property name="wait" type="int" value="6"/>
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
- <tileset firstgid="6" source="../img/ObjectTiles/ObjectTiles.tsx"/>
- <tileset firstgid="8" source="../img/Player/Player.tsx"/>
+ <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
+ <tileset firstgid="17" source="../img/Player/Player.tsx"/>
  <layer id="1" name="Base" width="16" height="9">
   <data encoding="csv">
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -27,7 +44,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,7,7,7,0,0,0,7,7,7,0,0,0,0,
+0,0,0,14,14,14,0,0,0,14,14,14,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -37,13 +54,13 @@
  <layer id="3" name="Player" width="16" height="9">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,3221225482,0,0,0,0,0,3221225481,0,0,0,0,0,
+0,0,0,0,3221225491,0,0,0,0,0,3221225490,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,13,0,0,0,0,0,16,0,0,0,0,0,
+0,0,0,0,22,0,0,0,0,0,25,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,15,0,0,0,0,0,14,0,0,0,0,0,
+0,0,0,0,24,0,0,0,0,0,23,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,8,0,0,0,0,0,11,0,0,0,0,0,
+0,0,0,0,17,0,0,0,0,0,20,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
