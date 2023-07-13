@@ -14,7 +14,14 @@ impl GetTexture for MapBaseTile {
 			Self::GrassCornerSand => TEXTURES.grass_corner_sand,
 			Self::HalfGrassSand => TEXTURES.half_grass_sand,
 			Self::Sand => TEXTURES.sand,
-			Self::SandCornerGrass => TEXTURES.sand_corner_grass
+			Self::SandCornerGrass => TEXTURES.sand_corner_grass,
+			Self::SandDoubleCorner => TEXTURES.sand_double_corner_grass,
+			Self::GrassDoubleCorner => TEXTURES.grass_double_corner_sand,
+			Self::StrangeGrass => TEXTURES.strange_grass,
+			Self::StrangeOuterCorner => TEXTURES.strange_grass_corner,
+			Self::StrangeInnerCorner => TEXTURES.strange_grass_inner_corner,
+			Self::StrangeDoubleCorner => TEXTURES.strange_grass_double_corner,
+			Self::StrangeHalf => TEXTURES.strange_grass_half
 		}
 	}
 }

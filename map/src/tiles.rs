@@ -33,7 +33,14 @@ pub enum MapBaseTile {
 	GrassCornerSand = 1,
 	HalfGrassSand = 2,
 	Sand = 3,
-	SandCornerGrass = 4
+	SandCornerGrass = 4,
+	GrassDoubleCorner = 5,
+	SandDoubleCorner = 6,
+	StrangeGrass = 7,
+	StrangeOuterCorner = 8,
+	StrangeDoubleCorner = 9,
+	StrangeHalf = 10,
+	StrangeInnerCorner = 11
 }
 
 impl Passable for MapBaseTile {
@@ -43,7 +50,14 @@ impl Passable for MapBaseTile {
 			Self::GrassCornerSand => true,
 			Self::HalfGrassSand => true,
 			Self::Sand => true,
-			Self::SandCornerGrass => true
+			Self::SandCornerGrass => true,
+			Self::SandDoubleCorner => true,
+			Self::GrassDoubleCorner => true,
+			Self::StrangeGrass => true,
+			Self::StrangeOuterCorner => true,
+			Self::StrangeInnerCorner => true,
+			Self::StrangeHalf => true,
+			Self::StrangeDoubleCorner => true
 		}
 	}
 }
