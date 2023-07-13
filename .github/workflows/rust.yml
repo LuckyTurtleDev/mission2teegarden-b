@@ -34,6 +34,7 @@ jobs:
             ~/.cargo/git
             ~/.cargo/registry
             target
+            !target/doc
           key: "PC ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
       - run: cargo test --all-features -p mission2teegarden-b-models
       - run: cargo test --all-features -p mission2teegarden-b-map
@@ -94,6 +95,7 @@ jobs:
             ~/.cargo/git
             ~/.cargo/registry
             target
+            !target/thumbv7em-none-eabihf/doc
           key: "Pybadge ${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} Lock ${{hashFiles('Cargo.lock')}}"
       - name: cargo check models
         run: cargo check --all-features --target thumbv7em-none-eabihf -p mission2teegarden-b-models
