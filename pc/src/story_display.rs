@@ -1,7 +1,7 @@
 use crate::{assets::GetTexture, GameState};
 use macroquad::{
 	math::Vec2,
-	prelude::{draw_rectangle, screen_height, screen_width, Color, WHITE},
+	prelude::{draw_rectangle, screen_height, screen_width, vec2, Color, WHITE},
 	text::{draw_text_ex, measure_text, TextParams},
 	texture::{draw_texture_ex, DrawTextureParams},
 	window::next_frame
@@ -50,13 +50,20 @@ impl GameState {
 						let screen_height = screen_height();
 						if let Some(background) = &speech.background {
 							let background_texture = background.texture();
+							let relative_size = (screen_width
+								/ background_texture.width())
+							.max(screen_height / background_texture.height());
+							let background_dim = vec2(
+								relative_size * background_texture.width(),
+								relative_size * background_texture.height()
+							);
 							let draw_params = DrawTextureParams {
-								dest_size: Some(Vec2::new(screen_width, screen_height)),
+								dest_size: Some(background_dim),
 								..Default::default()
 							};
 							draw_texture_ex(
 								background_texture,
-								0.0,
+								-(background_dim.x - screen_width),
 								0.0,
 								WHITE,
 								draw_params
@@ -104,7 +111,6 @@ impl GameState {
 							text_box_height
 						);
 						for (x, line) in group.iter().enumerate() {
-							//let text_dim = measure_text(line, None, font_size, 1.0);
 							let max_text_dim =
 								measure_text(&speech.text, None, font_size, 1.0);
 							let text_params = TextParams {
