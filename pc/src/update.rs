@@ -138,6 +138,12 @@ impl GameState {
 		false
 	}
 
+	pub(crate) fn reset_pybadge_screens(&self) {
+		for player in self.input_players.players.iter().flatten() {
+			player.send_events(ToPypadeGameEvent::Wait);
+		}
+	}
+
 	/// calculate next moves
 	pub(crate) fn next_move(&mut self) {
 		if let Some(ref mut game_run) = self.game_run {
@@ -259,7 +265,9 @@ impl GameState {
 							.unwrap()
 							.send_events(ToPypadeGameEvent::GameOver(GameOver::Crash));
 						game_run.player_states[x].crashed = true;
+						game_run.player_states[x].rotation = Rotation::NoRotation;
 						game_run.player_states[y].crashed = true;
+						game_run.player_states[y].rotation = Rotation::NoRotation;
 						game_run.player_states[x].position =
 							game_run.level.iter_player().nth(x).unwrap().position;
 						game_run.player_states[y].position =

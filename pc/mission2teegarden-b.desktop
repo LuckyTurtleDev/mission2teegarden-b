@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Mission to Teegarden b
+Exec=mission2teegarden-b 
+Comment="a journey to the unexplored planet Teegarden b"
+Terminal=false
+Icon=mission2teegarden-b.png
+Type=Application
+Categories=Game;

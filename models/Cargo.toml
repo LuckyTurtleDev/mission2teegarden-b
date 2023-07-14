@@ -4,7 +4,8 @@ name = "mission2teegarden-b-models"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.70"
-publish = false
+description = "Private implementation detail of mission2teegarden-b"
+include = ["/src/**/*.rs", "/build.rs", "/LICENSE*", "/README.md"]
 repository = "https://github.com/LuckyTurtleDev/mission2teegarden-b"
 license = "AGPL-3.0-or-later"
 

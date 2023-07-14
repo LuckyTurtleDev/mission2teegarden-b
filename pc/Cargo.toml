@@ -27,9 +27,10 @@ rand = "0.8.5"
 rodio = { version = "0.17.1", default-features = false, features = ["mp3"] }
 serialport = "4.2.0"
 macroquad-particles = "0.1.2"
-keepawake = "0.4.3"
 rfd = "0.11.4"
 
+[target.'cfg(not(target_os = "macos"))'.dependencies]
+keepawake = "0.4.3"
 
 
 # Enable optimizations in debug mode for macroquad only (requires Rust 1.41):
