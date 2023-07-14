@@ -21,7 +21,7 @@ Hmm…
 Ah, very good; we also just received the violet grass samples.
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;</property>
-  <property name="wait" type="int" value="0"/>
+  <property name="wait" type="int" value="9"/>
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
  <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
@@ -44,9 +44,9 @@ profil = &quot;Captain&quot;</property>
 14,14,0,14,14,0,0,0,0,0,14,0,0,0,0,0,
 14,0,0,0,0,0,0,0,0,14,0,0,14,14,14,14,
 0,0,0,0,0,0,0,0,0,0,0,0,14,0,0,0,
-0,0,0,14,14,0,0,0,0,0,0,0,0,0,14,0,
-14,14,14,14,14,14,14,14,14,0,14,14,14,14,14,14,
-0,0,0,14,14,0,0,0,0,0,0,0,0,0,14,0,
+0,0,0,14,14,0,0,0,0,0,0,0,0,0,0,0,
+14,14,14,14,14,14,0,14,14,0,14,14,14,14,14,14,
+0,0,0,14,14,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,14,0,0,0,
 14,0,0,0,0,0,0,0,0,14,0,0,14,14,14,14,
 14,14,0,14,14,0,0,0,0,0,14,0,0,0,0,0

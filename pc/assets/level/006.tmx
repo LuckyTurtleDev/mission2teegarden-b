@@ -34,7 +34,7 @@ We'll go right to analyzing them. You may now take a small break.
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;
 </property>
-  <property name="wait" type="int" value="25"/>
+  <property name="wait" type="int" value="9"/>
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
  <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>

@@ -33,7 +33,7 @@ One more tricky situation is done. You all really are getting good at this.
 &quot;&quot;&quot;
 
 profil = &quot;Captain&quot;</property>
-  <property name="wait" type="int" value="35"/>
+  <property name="wait" type="int" value="9"/>
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
  <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
