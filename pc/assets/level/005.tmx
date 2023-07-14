@@ -18,11 +18,14 @@ background = &quot;OuterSpace&quot;
 [[pre_level]]
 text = &quot;&quot;&quot;
 Here we are again. 
-Anyway, this time around, it should be a lot easier for you to reach your goal without crashing.
-In your programming panel, you'll now have the commands to turn your robot's motor off and back on.
+Anyway, this time around, it should be a lot easier for you
+to reach your goal without crashing.
+In your programming panel, you'll now have the commands
+to turn your robot's motor off and back on.
 Of course, the robots themselves will still be on during said period.
 Therefore they will still be able to follow your commands.
-Turning the motor off simply means that the robot won't move anymore until the motor is turned on again. 
+Turning the motor off simply means that the robot won't move anymore
+until the motor is turned on again. 
 It's very useful, isn't it?
 Well, then, this should be easy to do now. 
 There is certainly no problem for you.

@@ -5,10 +5,13 @@
   <property name="right" type="int" value="2"/>
   <property name="story">[[pre_level]]
 text = &quot;&quot;&quot;
-Dear crew, I welcome you to the orbit of Teegarden B. With this, the next step of our mission begins.
-We will stay here in orbit for the next couple of weeks so that our programmers can do their work.
+Dear crew, I welcome you to the orbit of Teegarden B.
+With this, the next step of our mission begins.
+We will stay here in orbit for the next couple of weeks
+so that our programmers can do their work.
 Programmers, please come to your terminals. 
-You need to be properly connected to the terminal's system to control your robots.
+You need to be properly connected to the terminal's
+system to control your robots.
 Now then, I'll send your robots down in 3......
 2…..
 1…
@@ -24,29 +27,35 @@ As it seems, they are not harmed.
 But just to be sure, we'll need to quickly test them out.
 I hope you all still know how to operate the robots, but just in case...
 Where was that user handbook again?
-Hmm…..
+Hmm.....
 Ah, there it is!
-Alright, programmers. On your terminal, you should be able to see a couple of cards.
+Alright, programmers. On your terminal,
+you should be able to see a couple of cards.
 Every card symbolizes a specific action. 
 Now the robots will move on their own once you put in your orders.
 Let's see. You can turn right or left, wait,...
 Oh!
 As it seems, the robots can't seem to receive any of the others. 
 We will have to fix that, but let's first test whether these three work.
-And just as a reminder, 
-don't forget that your wait is meant to measure the time between one command and the next. 
+And just as a reminder, don't forget that your wait is meant to measure
+the time between one command and the next. 
 So if you only want your robot to go straight and then turn, 
-just tell it to wait for as many steps as you want it to and then give the turn command.
+just tell it to wait for as many steps as you want it to
+and then give the turn command.
 Understood?
 Now, how do I select a card?
-Let's see…
-&quot;Move the cursor with the left and right arrow keys and select an instruction with A.
+Let's see...
+&quot;Move the cursor with the left and right arrow keys
+and select an instruction with A.
 'B' will remove the last instruction from your code.
-You can change the count of cycles your robot will wait for with the up and down arrow keys.&quot;
+You can change the count of cycles your robot will wait for with the up
+and down arrow keys.&quot;
 I hope that helps.
 Now, then, to your first mission.
-The robots are a bit spaced out; could you please move them a bit closer together?
-Just get the robot of your color to the corresponding flag I marked on your map.
+The robots are a bit spaced out;
+could you please move them a bit closer together?
+Just get the robot of your color to the corresponding flag
+I marked on your map.
 Which color you have should be shown by your terminal's lights.
 Now, give it a try!
 &quot;&quot;&quot;
