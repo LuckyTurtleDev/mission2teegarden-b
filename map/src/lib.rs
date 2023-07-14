@@ -95,12 +95,11 @@
 //! ### Play Map
 //! To play a map start the game and navigate to
 //! `Play -> Import Level`.
-//! 
+//!
 //! Alternatvie the command line interface can be used:
 //! ```bash
 //! mission2teegarden-b play [FILE]
 //! ```
-
 
 use anyhow::{bail, Context};
 use basic_toml as toml;
