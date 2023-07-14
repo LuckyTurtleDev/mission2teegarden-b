@@ -212,41 +212,6 @@ impl GameState {
 				hash!(),
 				vec2(screen_width - 1.0, screen_height - 1.0),
 				|ui| {
-					// left list of levels
-					/*
-					for (i, _level) in LEVELS.clone().into_iter().take(6).enumerate() {
-						ui.pop_skin();
-						if button_focused_index == i as i8 {
-							if enter_pressed {
-								self.level_num = i;
-								self.activity = Activity::GameRound(Phase::Introduction);
-								let level =
-									Map::from_string(LEVELS[self.level_num]).unwrap();
-								init_level(self, level);
-								self.sound_player.play_level_music();
-							}
-							let skin = &button_focused_skin.clone();
-							ui.push_skin(skin);
-						} else {
-							let skin = &button_skin.clone();
-							ui.push_skin(skin);
-						}
-						let level_button =
-							widgets::Button::new(format!("Level {}", i + 1))
-								.position(vec2(
-									(screen_width - button_size.x) / 2.0,
-									wrapper_offset_top_bottom + i as f32 * button_offset
-								))
-								.size(button_size)
-								.ui(ui);
-						if level_button {
-							self.activity = Activity::GameRound(Phase::Introduction);
-							let level = Map::from_string(LEVELS[self.level_num]).unwrap();
-							init_level(self, level);
-							self.sound_player.play_level_music();
-						}
-					}*/
-					// right side of levels
 					for (i, _level) in LEVELS.clone().into_iter().enumerate() {
 						ui.pop_skin();
 						if button_focused_index == i as i8 {
@@ -283,7 +248,6 @@ impl GameState {
 					ui.pop_skin();
 					if button_focused_index == LEVELS.len() as i8 {
 						if enter_pressed {
-							self.activity = Activity::GameRound(Phase::Introduction);
 							let file = FileDialog::new()
 								.add_filter("level", &["tmx", MAP_FILE_EXTENSION])
 								.pick_file()
@@ -291,10 +255,15 @@ impl GameState {
 							let level = Map::load_from_file(file);
 							match level {
 								Ok(level) => {
+									self.activity =
+										Activity::GameRound(Phase::Introduction);
 									init_level(self, level);
 									self.sound_player.play_level_music();
 								},
-								Err(e) => panic!("Problem loading File: {:?}", e)
+								Err(e) => {
+									debug!("Not loaded: {}", e);
+									enter_pressed = false;
+								}
 							}
 						}
 						let skin = &button_focused_skin.clone();
