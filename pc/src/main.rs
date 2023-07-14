@@ -59,7 +59,7 @@
 //! ### Building from source:
 //! Alternative you can build m3 by yourself:
 //! * [Install rustup](https://www.rust-lang.org/tools/install)
-//! * Run `cargo install hf2-cli --locked` to build and install the [hf2-cli](https://crates.io/crates/hf2-cli) flasher.
+//! * Install [hf2-cli](https://crates.io/crates/hf2-cli) flasher.
 //! See the [rust book](https://doc.rust-lang.org/cargo/commands/cargo-install.html) for more information about cargo install.
 //! * Make sure that `~/.cargo/bin` is listed at the `PATH` environment variable, otherwise the executeable can not be found..
 //! * Install the rust `thumbv7em-none-eabihf` target (the architecture of the pybadge) by executing `rustup target install thumbv7em-none-eabihf`.
