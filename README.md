@@ -1,4 +1,3 @@
-
 # 🪐 Mission to Teegarden b
 
 ![License: AGPL-3.0-or-later](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue)
@@ -31,7 +30,7 @@ Mission to Teegarden b is available at the following repositories:
 
 [![Packaging status][__link1]][__link2]
 
-Prebuild binaries can also be downloaded from the [GitHub release][__link3]. On Linux the following dependencies are needed. Regular these are already installed.
+Prebuild binaries can also be downloaded from the [GitHub release][__link3]. On Unix system the binary must may be marked as executable by running `chmod u+x mission2teegarden-b` afer unpacking the zip archive. On Linux the following dependencies are needed. Regular these are already installed.
 
  - [`alsa-lib`][__link4]
  - [`gtk3`][__link5]
@@ -87,7 +86,7 @@ Mission to Teegarden b allow creating custom maps/levels, by using the powerfull
 		<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/68403ebd-ce64-4baa-bba2-b52962b89d5c" width=80%>
  </div>
 
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGyFeA8xDJNVnGxf23IOvNAysG80feHOCOwZiGzoQhbxoYmBeYXKEG8jHHlj7ZCOoG6iYL6YPpOO1G0OQMgmWRQmdG--4KafNqapQYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjIuMA
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEG725W3yS8k6LG7nRwoXetP2LG7u_zBaxX9sgG0s8Or3AFE-_YXKEG2UVQNayZiPaGzXCRQgvD7TDG-Ts4ECcFy6cG-HHtDuJfvRaYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjIuMA
  [__link0]: https://www.adafruit.com/product/4200
  [__link1]: https://repology.org/badge/vertical-allrepos/mission2teegarden-b.svg
  [__link10]: https://github.com/systemd/systemd

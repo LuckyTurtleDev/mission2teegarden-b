@@ -30,6 +30,7 @@
 //!
 //! Prebuild binaries can also be downloaded from the
 #![doc=concat!("[GitHub release](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v",env!("CARGO_PKG_VERSION"),").")]
+//! On Unix system the binary must may be marked as executable by running `chmod u+x mission2teegarden-b` afer unpacking the zip archive.
 //! On Linux the following dependencies are needed.
 //! Regular these are already installed.
 //! * [`alsa-lib`](https://github.com/alsa-project/alsa-lib)
