@@ -6,17 +6,11 @@
   <property name="story">[[pre_level]]
 
 text = &quot;&quot;&quot;
-
 Haven't we seen something similar to this before? Hmm…
-
 Programmers, let's use this place to practice a bit again.
-
 But I give you one small restraint. 
-
 You may not use your trusty &quot;Motor Off&quot; and &quot;Motor On&quot; Cards here.
-
 Good luck!
-
 &quot;&quot;&quot;
 
 profil = &quot;Captain&quot;
@@ -27,9 +21,8 @@ profil = &quot;Captain&quot;
 [[after_level]]
 
 text = &quot;&quot;&quot;
-
-One more tricky situation is done. You all really are getting good at this.
-
+One more tricky situation is done.
+You all really are getting good at this.
 &quot;&quot;&quot;
 
 profil = &quot;Captain&quot;</property>

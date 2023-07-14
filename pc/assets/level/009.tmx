@@ -8,7 +8,7 @@
   <property name="story">[[pre_level]]
 text = &quot;&quot;&quot;
 Programmers, we will have to take a small break from our usual missions. 
-We have received a very strange signal not too far from your last mission.
+We have received a strange signal not too far from your last mission.
 The robots have already been dispatched. Please check it out immediately. 
 Any further sample collection will be put on hold for now.
 &quot;&quot;&quot;
@@ -17,13 +17,15 @@ background = &quot;OuterSpace&quot;
 
 [[pre_level]]
 text = &quot;&quot;&quot;
-Here is the map of our current place. Any closer to the weird signal wasn't possible, 
+Here is the map of our current place.
+Any closer to the weird signal wasn't possible, 
 as we don't know what landing closer to it could lead to.
 Be careful!
 Those violet patches do seem more ominous than the rest.
 If our computers are correct, they shouldn't lead to problems.
 But we can't know for sure.
-The path to the weird signal source seems to be somewhat complicated, but I am sure you will manage.
+The path to the weird signal source seems to be somewhat complicated,
+but I am sure you will manage.
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;
 

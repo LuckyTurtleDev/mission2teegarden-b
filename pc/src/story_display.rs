@@ -1,7 +1,7 @@
 use crate::{assets::GetTexture, GameState};
 use macroquad::{
 	math::Vec2,
-	prelude::{draw_rectangle, screen_height, screen_width, Color, WHITE},
+	prelude::{draw_rectangle, screen_height, screen_width, vec2, Color, WHITE},
 	text::{draw_text_ex, measure_text, TextParams},
 	texture::{draw_texture_ex, DrawTextureParams},
 	window::next_frame
@@ -21,17 +21,17 @@ fn button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
 	false
 }
 
-/// Get the font size that will fit the longest line of text on the screen.
-fn get_font_size(text_lines: &Vec<&str>, screen_width: f32) -> u16 {
-	let font_size = 20;
-	let mut longest_line_width = 0.0;
-	for line in text_lines {
-		let text_dim = measure_text(line, None, font_size, 1.0);
-		if text_dim.width > longest_line_width {
-			longest_line_width = text_dim.width;
-		}
+/// Get the font size that will scale with size of screen.
+fn get_font_size(box_width: f32, box_height: f32) -> u16 {
+	let mut font_size = (box_height / 7.0) as u16;
+	let example_long_sentence =
+		"I hope you all still know how to operate the robots, but just in case...";
+	let ratio =
+		box_width / measure_text(example_long_sentence, None, font_size, 1.0).width;
+	if ratio < 1.0 {
+		font_size = (font_size as f32 * ratio) as u16;
 	}
-	(font_size as f32 * screen_width / longest_line_width) as u16
+	font_size
 }
 
 impl GameState {
@@ -50,13 +50,20 @@ impl GameState {
 						let screen_height = screen_height();
 						if let Some(background) = &speech.background {
 							let background_texture = background.texture();
+							let relative_size = (screen_width
+								/ background_texture.width())
+							.max(screen_height / background_texture.height());
+							let background_dim = vec2(
+								relative_size * background_texture.width(),
+								relative_size * background_texture.height()
+							);
 							let draw_params = DrawTextureParams {
-								dest_size: Some(Vec2::new(screen_width, screen_height)),
+								dest_size: Some(background_dim),
 								..Default::default()
 							};
 							draw_texture_ex(
 								background_texture,
-								0.0,
+								-(background_dim.x - screen_width),
 								0.0,
 								WHITE,
 								draw_params
@@ -100,11 +107,10 @@ impl GameState {
 						}
 						// draw text
 						let font_size = get_font_size(
-							group,
-							screen_width - profil_texture_width - 20.0
+							screen_width - profil_texture_width,
+							text_box_height
 						);
 						for (x, line) in group.iter().enumerate() {
-							//let text_dim = measure_text(line, None, font_size, 1.0);
 							let max_text_dim =
 								measure_text(&speech.text, None, font_size, 1.0);
 							let text_params = TextParams {

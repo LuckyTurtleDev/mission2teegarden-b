@@ -12,6 +12,7 @@ use macroquad::{
 };
 use rfd::FileDialog;
 
+/// determines the font size of button on basis of screen size
 fn get_button_font_size(container_height: f32) -> u16 {
 	let font_size = 20;
 	let max_text = "###########";
@@ -57,6 +58,7 @@ fn get_button_focused_skin(font_size: u16) -> Skin {
 	}
 }
 
+/// Sets the focus of button to the upper or lower on when the corresponding button is pressed and determines if enter is pressed
 fn evaluate_events(
 	events: &[Option<Vec<ToPcGameEvent>>; 4],
 	enter_pressed: &mut bool
@@ -79,6 +81,7 @@ fn evaluate_events(
 }
 
 impl GameState {
+	/// makes the main menu
 	pub(crate) async fn build_menu(&mut self) {
 		let background_texture = TEXTURES.title_background;
 		let mut button_focused_index = 0;
@@ -166,6 +169,7 @@ impl GameState {
 		}
 	}
 
+	/// makes a menu where you can choose a level
 	pub(crate) async fn build_level_menu(&mut self) {
 		let background_texture = TEXTURES.title_background;
 		let mut enter_pressed = false;
@@ -175,13 +179,13 @@ impl GameState {
 			let events = self.input_players.get_events();
 			let screen_width = screen_width();
 			let screen_height = screen_height();
-			let button_size = vec2(screen_width / 3.0, screen_height / 12.0);
+			let button_size = vec2(screen_width / 3.0, screen_height / 17.0);
 			let font_size = get_button_font_size(button_size.y);
-			// "wrapper" which contains buttons, only for position and size
-			let level_wrapper_height = screen_height * 0.7;
+			// "wrapper" which contains buttons, only important for position and size
+			let level_wrapper_height = screen_height * 0.9;
 			let wrapper_offset_top_bottom = (screen_height - level_wrapper_height) / 2.0;
 			// distance between buttons
-			let button_offset = level_wrapper_height / (LEVELS.len() + 2) as f32;
+			let button_offset = screen_height / 15.0 as f32;
 			let button_skin = get_button_skin(font_size);
 			let button_focused_skin = get_button_focused_skin(font_size);
 			button_focused_index = (button_focused_index
@@ -244,7 +248,6 @@ impl GameState {
 					ui.pop_skin();
 					if button_focused_index == LEVELS.len() as i8 {
 						if enter_pressed {
-							self.activity = Activity::GameRound(Phase::Introduction);
 							let file = FileDialog::new()
 								.add_filter("level", &["tmx", MAP_FILE_EXTENSION])
 								.pick_file()
@@ -252,10 +255,15 @@ impl GameState {
 							let level = Map::load_from_file(file);
 							match level {
 								Ok(level) => {
+									self.activity =
+										Activity::GameRound(Phase::Introduction);
 									init_level(self, level);
 									self.sound_player.play_level_music();
 								},
-								Err(e) => panic!("Problem loading File: {:?}", e)
+								Err(e) => {
+									debug!("Not loaded: {}", e);
+									enter_pressed = false;
+								}
 							}
 						}
 						let skin = &button_focused_skin.clone();
