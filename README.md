@@ -30,7 +30,7 @@ Mission to Teegarden b is available at the following repositories:
 
 Prebuild binaries can also be downloaded from the [GitHub release][__link3].
 
-Mission to Teegarden b was only tested on Arch Linux and Ubuntu. MacOs and Windows versions complie sucessfull but are untested. Supressing standby on MacOs is temporary disable, see [#157][__link4].
+Mission to Teegarden b is only tested on Arch Linux and Ubuntu. MacOs and Windows versions complie sucessfull but are untested. Supressing standby on MacOs is temporary disable, see [#157][__link4].
 
 
 #### Building from source:
@@ -80,7 +80,7 @@ Mission to Teegarden b allow creating custom maps/levels, by using the powerfull
 		<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/68403ebd-ce64-4baa-bba2-b52962b89d5c" width=80%>
  </div>
 
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGyFeA8xDJNVnGxf23IOvNAysG80feHOCOwZiGzoQhbxoYmBeYXKEG0hVFCbVwlFWG1ljgZNVs9KJG16CcBrUbHvTG26cHtrldV4lYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGyFeA8xDJNVnGxf23IOvNAysG80feHOCOwZiGzoQhbxoYmBeYXKEG75mhhnFHM0RG4Gtmsk0s6SEG5MP3B8ekkTDG17KfVk7DiEnYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
  [__link0]: https://www.adafruit.com/product/4200
  [__link1]: https://repology.org/badge/vertical-allrepos/mission2teegarden-b.svg
  [__link10]: https://crates.io/crates/hf2-cli

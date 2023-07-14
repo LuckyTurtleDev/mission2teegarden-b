@@ -31,7 +31,7 @@
 //! Prebuild binaries can also be downloaded from the
 #![doc=concat!("[GitHub release](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v",env!("CARGO_PKG_VERSION"),").")]
 //!
-//! Mission to Teegarden b was only tested on Arch Linux and Ubuntu.
+//! Mission to Teegarden b is only tested on Arch Linux and Ubuntu.
 //! MacOs and Windows versions complie sucessfull but are untested.
 //! Supressing standby on MacOs is temporary disable, see [#157](https://github.com/LuckyTurtleDev/mission2teegarden-b/issues/157).
 //! ### Building from source:
