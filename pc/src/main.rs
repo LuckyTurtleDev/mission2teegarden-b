@@ -78,12 +78,12 @@
 use anyhow::Context;
 use assets::LEVELS;
 use clap::Parser;
+#[cfg(not(target_os = "macos"))]
 use keepawake::AwakeHandle;
 use log::info;
 use macroquad::{prelude::*, window, Window};
 use macroquad_particles::Emitter;
 use mission2teegarden_b_map::{Map, Orientation};
-
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
 use sound::SoundPlayer;
@@ -166,6 +166,7 @@ struct GameState {
 	level_num: usize,
 	animation_emitter: Option<Emitter>,
 	running: bool,
+	#[cfg(not(target_os = "macos"))]
 	/// Supress standby while playing the game
 	_keep_awake: Option<AwakeHandle>,
 	/// Index which button is currently focused in pause menu
@@ -176,6 +177,7 @@ impl GameState {
 	fn new(level: Option<Map>) -> GameState {
 		let sound_player = sound::SoundPlayer::new();
 		Lazy::force(&TEXTURES);
+		#[cfg(not(target_os = "macos"))]
 		let keep_awake = keepawake::Builder::new()
 			.display(true)
 			.app_name(CARGO_PKG_NAME)
@@ -219,6 +221,7 @@ impl GameState {
 			level_num: 0,
 			animation_emitter: None,
 			running: true,
+			#[cfg(not(target_os = "macos"))]
 			_keep_awake: keep_awake,
 			button_focused_index: 0
 		}
