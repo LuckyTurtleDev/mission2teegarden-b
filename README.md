@@ -1,7 +1,7 @@
 # 🪐 Mission to Teegarden b
 
 ![License: AGPL-3.0-or-later](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue)
-[![v0.1.0](https://img.shields.io/badge/version-v0.1.0-orange)](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v0.1.0)
+[![v0.1.1](https://img.shields.io/badge/version-v0.1.1-orange)](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v0.1.1)
 [![GitHub tag (latest SemVer pre-release)](https://img.shields.io/github/v/tag/LuckyTurtleDev/mission2teegarden-b?label=latest&color=orange)](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/latest)
 [![Packaging status](https://repology.org/badge/tiny-repos/mission2teegarden-b.svg)](https://repology.org/project/mission2teegarden-b/versions)
 [![Source Code Repository](https://img.shields.io/badge/Code-On%20GitHub-blue?logo=GitHub)](https://github.com/LuckyTurtleDev/mission2teegarden-b)
@@ -80,22 +80,22 @@ Mission to Teegarden b allow creating custom maps/levels, by using the powerfull
 		<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/68403ebd-ce64-4baa-bba2-b52962b89d5c" width=80%>
  </div>
 
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGyFeA8xDJNVnGxf23IOvNAysG80feHOCOwZiGzoQhbxoYmBeYXKEG75mhhnFHM0RG4Gtmsk0s6SEG5MP3B8ekkTDG17KfVk7DiEnYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGyFeA8xDJNVnGxf23IOvNAysG80feHOCOwZiGzoQhbxoYmBeYXKEG1tEreA7FxpvGyHtavvqfRZRG9v8-ugLu_ZbG3O5RRE-EWOGYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjIuMA
  [__link0]: https://www.adafruit.com/product/4200
  [__link1]: https://repology.org/badge/vertical-allrepos/mission2teegarden-b.svg
  [__link10]: https://crates.io/crates/hf2-cli
- [__link11]: https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v0.1.0
+ [__link11]: https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v0.1.1
  [__link12]: https://www.rust-lang.org/tools/install
  [__link13]: https://crates.io/crates/hf2-cli
  [__link14]: https://doc.rust-lang.org/cargo/commands/cargo-install.html
- [__link15]: https://github.com/LuckyTurtleDev/mission2teegarden-b/archive/refs/tags/v0.1.0.zip
+ [__link15]: https://github.com/LuckyTurtleDev/mission2teegarden-b/archive/refs/tags/v0.1.1.zip
  [__link16]: https://www.mapeditor.org/
- [__link17]: https://docs.rs/mission2teegarden_b_map/0.1.0
+ [__link17]: https://docs.rs/mission2teegarden_b_map/0.2.0
  [__link2]: https://repology.org/project/mission2teegarden-b/versions
- [__link3]: https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v0.1.0
+ [__link3]: https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v0.1.1
  [__link4]: https://github.com/LuckyTurtleDev/mission2teegarden-b/issues/157
  [__link5]: https://github.com/alsa-project/alsa-lib
  [__link6]: https://github.com/systemd/systemd
  [__link7]: https://www.rust-lang.org/tools/install
- [__link8]: https://github.com/LuckyTurtleDev/mission2teegarden-b/archive/refs/tags/v0.1.0.zip
+ [__link8]: https://github.com/LuckyTurtleDev/mission2teegarden-b/archive/refs/tags/v0.1.1.zip
  [__link9]: https://doc.rust-lang.org/cargo/commands/cargo-install.html

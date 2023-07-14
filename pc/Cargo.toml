@@ -1,7 +1,7 @@
 [package]
 workspace = ".."
 name = "mission2teegarden-b"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 rust-version = "1.70"
 publish = false
@@ -16,9 +16,9 @@ anyhow = "1.0.71"
 bincode = { version = "2.0.0-rc.3", features = ["derive"] }
 clap = { version = "4.3.9", features = ["derive"] }
 log = "0.4.17"
-mission2teegarden-b-macro = { version = "0.1.0", path = "../macro" }
-mission2teegarden-b-map = { version = "0.1.0", path = "../map" }
-mission2teegarden-b-models = { version = "0.1.0", path = "../models" }
+mission2teegarden-b-macro = { version = "0.2.0", path = "../macro" }
+mission2teegarden-b-map = { version = "0.2.0", path = "../map" }
+mission2teegarden-b-models = { version = "0.2.0", path = "../models" }
 macroquad = { version = "0.3.25", default-features = false, features = ["log-rs"] }
 my-env-logger-style = "0.1.0"
 num_enum = "0.6.1"
