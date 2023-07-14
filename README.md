@@ -53,7 +53,7 @@ Alternative you can easily build Mission to Teegarden b  by yourself:
  - Install an UF2 flasher. I recommend using [hf2-cli][__link10].
  - Download and unpack Pybadge binary from [GitHub release][__link11].
  - Press the reset button of the pybdage twice, to enter the bootloader.
- - After this, execute `hf2 elf mission2teegarden-b-pybadge` (or the corresponding command of your flashing tool) to flash the binary to the pybadge.
+ - After this, execute `hf2 elf mission2teegarden-b-pybadge.elf` (or the corresponding command of your flashing tool) to flash the binary to the pybadge.
  - Press the reset button again.
 
 
@@ -80,7 +80,7 @@ Mission to Teegarden b allow creating custom maps/levels, by using the powerfull
 		<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/68403ebd-ce64-4baa-bba2-b52962b89d5c" width=80%>
  </div>
 
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGyFeA8xDJNVnGxf23IOvNAysG80feHOCOwZiGzoQhbxoYmBeYXKEG_LxxelcNx7CG-tzOQ53aSIlG_kvkd2dglRjG06f2PkseblNYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjIuMA
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGyFeA8xDJNVnGxf23IOvNAysG80feHOCOwZiGzoQhbxoYmBeYXKEG-Q65kb_9ke1G4j8A5TNemrlG2hghh9nGb_LG4IQYxqQa3tUYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjIuMA
  [__link0]: https://www.adafruit.com/product/4200
  [__link1]: https://repology.org/badge/vertical-allrepos/mission2teegarden-b.svg
  [__link10]: https://crates.io/crates/hf2-cli

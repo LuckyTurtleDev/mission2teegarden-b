@@ -54,7 +54,7 @@
 //! * Download and unpack Pybadge binary from
 #![doc=concat!("[GitHub release](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v",env!("CARGO_PKG_VERSION"),").")]
 //! * Press the reset button of the pybdage twice, to enter the bootloader.
-//! * After this, execute `hf2 elf mission2teegarden-b-pybadge` (or the corresponding command of your flashing tool) to flash the binary to the pybadge.
+//! * After this, execute `hf2 elf mission2teegarden-b-pybadge.elf` (or the corresponding command of your flashing tool) to flash the binary to the pybadge.
 //! * Press the reset button again.
 //! ### Building from source:
 //! Alternative you can build m3 by yourself:
