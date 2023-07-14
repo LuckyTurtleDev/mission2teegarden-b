@@ -31,10 +31,10 @@
 //! Prebuild binaries can also be downloaded from the
 #![doc=concat!("[GitHub release](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v",env!("CARGO_PKG_VERSION"),").")]
 //! On Linux the following dependencies are needed.
+//! Regular these are already installed.
 //! * [`alsa-lib`](https://github.com/alsa-project/alsa-lib)
 //! * [`gtk3`](https://gitlab.gnome.org/GNOME/gtk)
 //! * [`libudev`](https://github.com/systemd/systemd)
-//! Regular these are already installed.
 //!
 //! Mission to Teegarden b is only tested on Arch Linux and Ubuntu.
 //! MacOS and Windows versions complie sucessfull but are untested.
