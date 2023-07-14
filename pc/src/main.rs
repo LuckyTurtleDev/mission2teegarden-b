@@ -78,12 +78,12 @@
 use anyhow::Context;
 use assets::LEVELS;
 use clap::Parser;
+#[cfg(not(target_os = "macos"))]
 use keepawake::AwakeHandle;
 use log::info;
 use macroquad::{prelude::*, window, Window};
 use macroquad_particles::Emitter;
 use mission2teegarden_b_map::{Map, Orientation};
-
 use my_env_logger_style::TimestampPrecision;
 use once_cell::sync::Lazy;
 use sound::SoundPlayer;
