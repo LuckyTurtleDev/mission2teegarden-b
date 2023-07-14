@@ -12,6 +12,7 @@ use macroquad::{
 };
 use rfd::FileDialog;
 
+/// determines the font size of button on basis of screen size
 fn get_button_font_size(container_height: f32) -> u16 {
 	let font_size = 20;
 	let max_text = "###########";
@@ -57,6 +58,7 @@ fn get_button_focused_skin(font_size: u16) -> Skin {
 	}
 }
 
+/// Sets the focus of button to the upper or lower on when the corresponding button is pressed and determines if enter is pressed
 fn evaluate_events(
 	events: &[Option<Vec<ToPcGameEvent>>; 4],
 	enter_pressed: &mut bool
@@ -79,6 +81,7 @@ fn evaluate_events(
 }
 
 impl GameState {
+	/// makes the main menu
 	pub(crate) async fn build_menu(&mut self) {
 		let background_texture = TEXTURES.title_background;
 		let mut button_focused_index = 0;
@@ -166,6 +169,7 @@ impl GameState {
 		}
 	}
 
+	/// makes a menu where you can choose a level
 	pub(crate) async fn build_level_menu(&mut self) {
 		let background_texture = TEXTURES.title_background;
 		let mut enter_pressed = false;
@@ -175,13 +179,13 @@ impl GameState {
 			let events = self.input_players.get_events();
 			let screen_width = screen_width();
 			let screen_height = screen_height();
-			let button_size = vec2(screen_width / 3.0, screen_height / 12.0);
+			let button_size = vec2(screen_width / 3.0, screen_height / 17.0);
 			let font_size = get_button_font_size(button_size.y);
-			// "wrapper" which contains buttons, only for position and size
-			let level_wrapper_height = screen_height * 0.7;
+			// "wrapper" which contains buttons, only important for position and size
+			let level_wrapper_height = screen_height * 0.9;
 			let wrapper_offset_top_bottom = (screen_height - level_wrapper_height) / 2.0;
 			// distance between buttons
-			let button_offset = level_wrapper_height / (LEVELS.len() + 2) as f32;
+			let button_offset = screen_height / 15.0 as f32;
 			let button_skin = get_button_skin(font_size);
 			let button_focused_skin = get_button_focused_skin(font_size);
 			button_focused_index = (button_focused_index
@@ -208,6 +212,41 @@ impl GameState {
 				hash!(),
 				vec2(screen_width - 1.0, screen_height - 1.0),
 				|ui| {
+					// left list of levels
+					/*
+					for (i, _level) in LEVELS.clone().into_iter().take(6).enumerate() {
+						ui.pop_skin();
+						if button_focused_index == i as i8 {
+							if enter_pressed {
+								self.level_num = i;
+								self.activity = Activity::GameRound(Phase::Introduction);
+								let level =
+									Map::from_string(LEVELS[self.level_num]).unwrap();
+								init_level(self, level);
+								self.sound_player.play_level_music();
+							}
+							let skin = &button_focused_skin.clone();
+							ui.push_skin(skin);
+						} else {
+							let skin = &button_skin.clone();
+							ui.push_skin(skin);
+						}
+						let level_button =
+							widgets::Button::new(format!("Level {}", i + 1))
+								.position(vec2(
+									(screen_width - button_size.x) / 2.0,
+									wrapper_offset_top_bottom + i as f32 * button_offset
+								))
+								.size(button_size)
+								.ui(ui);
+						if level_button {
+							self.activity = Activity::GameRound(Phase::Introduction);
+							let level = Map::from_string(LEVELS[self.level_num]).unwrap();
+							init_level(self, level);
+							self.sound_player.play_level_music();
+						}
+					}*/
+					// right side of levels
 					for (i, _level) in LEVELS.clone().into_iter().enumerate() {
 						ui.pop_skin();
 						if button_focused_index == i as i8 {
