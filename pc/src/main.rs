@@ -30,16 +30,24 @@
 //!
 //! Prebuild binaries can also be downloaded from the
 #![doc=concat!("[GitHub release](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v",env!("CARGO_PKG_VERSION"),").")]
+//! On Linux the following dependencies are needed.
+//! * [`alsa-lib`](https://github.com/alsa-project/alsa-lib)
+//! * [`gtk3`](https://gitlab.gnome.org/GNOME/gtk)
+//! * [`libudev`](https://github.com/systemd/systemd)
+//! Regular these are already installed.
 //!
 //! Mission to Teegarden b is only tested on Arch Linux and Ubuntu.
 //! MacOS and Windows versions complie sucessfull but are untested.
 //! Supressing standby on MacOS is temporary disable, see [#157](https://github.com/LuckyTurtleDev/mission2teegarden-b/issues/157).
+//!
+//!
 //! ### Building from source:
 //! Alternative you can easily build Mission to Teegarden b  by yourself:
 //! * On Linux, install the following development dependencies.
 //! On some distros (like Alpine and Debian), separate development packages exist, regular suffixed with `-dev`.
 //! If this is the case, make sure that you have also installed the `*-dev` version.
 //!   * [`alsa-lib`](https://github.com/alsa-project/alsa-lib)
+//!   * [`gtk3`](https://gitlab.gnome.org/GNOME/gtk)
 //!   * [`libudev`](https://github.com/systemd/systemd)
 //! * [Install rust](https://www.rust-lang.org/tools/install)
 #![doc=concat!("* [Download](https://github.com/LuckyTurtleDev/mission2teegarden-b/archive/refs/tags/v",env!("CARGO_PKG_VERSION"),".zip)")]
