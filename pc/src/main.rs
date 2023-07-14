@@ -30,16 +30,25 @@
 //!
 //! Prebuild binaries can also be downloaded from the
 #![doc=concat!("[GitHub release](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v",env!("CARGO_PKG_VERSION"),").")]
+//! On Unix system the binary must may be marked as executable by running `chmod u+x mission2teegarden-b` afer unpacking the zip archive.
+//! On Linux the following dependencies are needed.
+//! Regular these are already installed.
+//! * [`alsa-lib`](https://github.com/alsa-project/alsa-lib)
+//! * [`gtk3`](https://gitlab.gnome.org/GNOME/gtk)
+//! * [`libudev`](https://github.com/systemd/systemd)
 //!
 //! Mission to Teegarden b is only tested on Arch Linux and Ubuntu.
-//! MacOs and Windows versions complie sucessfull but are untested.
-//! Supressing standby on MacOs is temporary disable, see [#157](https://github.com/LuckyTurtleDev/mission2teegarden-b/issues/157).
+//! MacOS and Windows versions complie sucessfull but are untested.
+//! Supressing standby on MacOS is temporary disable, see [#157](https://github.com/LuckyTurtleDev/mission2teegarden-b/issues/157).
+//!
+//!
 //! ### Building from source:
 //! Alternative you can easily build Mission to Teegarden b  by yourself:
 //! * On Linux, install the following development dependencies.
 //! On some distros (like Alpine and Debian), separate development packages exist, regular suffixed with `-dev`.
 //! If this is the case, make sure that you have also installed the `*-dev` version.
 //!   * [`alsa-lib`](https://github.com/alsa-project/alsa-lib)
+//!   * [`gtk3`](https://gitlab.gnome.org/GNOME/gtk)
 //!   * [`libudev`](https://github.com/systemd/systemd)
 //! * [Install rust](https://www.rust-lang.org/tools/install)
 #![doc=concat!("* [Download](https://github.com/LuckyTurtleDev/mission2teegarden-b/archive/refs/tags/v",env!("CARGO_PKG_VERSION"),".zip)")]
@@ -54,14 +63,12 @@
 //! * Download and unpack Pybadge binary from
 #![doc=concat!("[GitHub release](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v",env!("CARGO_PKG_VERSION"),").")]
 //! * Press the reset button of the pybdage twice, to enter the bootloader.
-//! * After this, execute `hf2 elf mission2teegarden-b-pybadge` (or the corresponding command of your flashing tool) to flash the binary to the pybadge.
+//! * After this, execute `hf2 elf mission2teegarden-b-pybadge.elf` (or the corresponding command of your flashing tool) to flash the binary to the pybadge.
 //! * Press the reset button again.
 //! ### Building from source:
 //! Alternative you can build m3 by yourself:
 //! * [Install rustup](https://www.rust-lang.org/tools/install)
-//! * Run `cargo install hf2-cli --locked` to build and install the [hf2-cli](https://crates.io/crates/hf2-cli) flasher.
-//! See the [rust book](https://doc.rust-lang.org/cargo/commands/cargo-install.html) for more information about cargo install.
-//! * Make sure that `~/.cargo/bin` is listed at the `PATH` environment variable, otherwise the executeable can not be found..
+//! * [Install hf2-cli](https://crates.io/crates/hf2-cli) flasher.
 //! * Install the rust `thumbv7em-none-eabihf` target (the architecture of the pybadge) by executing `rustup target install thumbv7em-none-eabihf`.
 //! * Optional: install nightly toolchain for better error messages at the pybadge. `rustup toolchain install nightly --target thumbv7em-none-eabihf`
 #![doc=concat!("* [Download](https://github.com/LuckyTurtleDev/mission2teegarden-b/archive/refs/tags/v",env!("CARGO_PKG_VERSION"),".zip)")]
