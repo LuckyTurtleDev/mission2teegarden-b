@@ -1,7 +1,7 @@
 # 🪐 Mission to Teegarden b
 
 ![License: AGPL-3.0-or-later](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue)
-[![v](https://img.shields.io/badge/version-v-orange)](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v)
+[![v0.1.1](https://img.shields.io/badge/version-v0.1.1-orange)](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v0.1.1)
 [![GitHub tag (latest SemVer pre-release)](https://img.shields.io/github/v/tag/LuckyTurtleDev/mission2teegarden-b?label=latest&color=orange)](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/latest)
 [![Packaging status](https://repology.org/badge/tiny-repos/mission2teegarden-b.svg)](https://repology.org/project/mission2teegarden-b/versions)
 [![Source Code Repository](https://img.shields.io/badge/Code-On%20GitHub-blue?logo=GitHub)](https://github.com/LuckyTurtleDev/mission2teegarden-b)
