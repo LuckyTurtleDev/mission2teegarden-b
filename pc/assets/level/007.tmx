@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="256" tileheight="256" infinite="0" nextlayerid="4" nextobjectid="1">
  <properties>
-  <property name="left" type="int" value="8"/>
+  <property name="left" type="int" value="9"/>
   <property name="motor_off" type="int" value="2"/>
   <property name="motor_on" type="int" value="2"/>
-  <property name="right" type="int" value="8"/>
+  <property name="right" type="int" value="9"/>
   <property name="story">[[pre_level]]
 text = &quot;&quot;&quot;
 They have analyzed the samples from your last mission and are ready for some further samples and tests.
@@ -44,7 +44,7 @@ Until then, you may all take a small break again.
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;
 </property>
-  <property name="wait" type="int" value="0"/>
+  <property name="wait" type="int" value="9"/>
  </properties>
  <tileset firstgid="1" source="../img/BaseTiles/BaseTiles.tsx"/>
  <tileset firstgid="13" source="../img/ObjectTiles/ObjectTiles.tsx"/>
@@ -64,14 +64,14 @@ profil = &quot;Captain&quot;
  </layer>
  <layer id="2" name="Objects" width="16" height="9">
   <data encoding="csv">
-14,0,0,0,0,0,14,0,0,0,0,14,14,0,0,0,
-0,0,0,0,0,14,0,0,0,0,0,0,0,0,0,0,
+14,0,0,0,0,0,14,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,14,0,0,0,0,14,0,0,0,0,0,
 0,0,0,0,0,0,14,0,14,0,0,0,0,0,0,14,
 0,0,14,14,0,0,0,0,14,14,14,14,0,14,14,0,
-0,0,0,0,14,14,0,14,0,0,0,14,0,14,0,0,
-0,0,0,14,0,0,14,0,0,14,14,0,14,0,0,0,
-0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,0,
-14,0,0,0,0,0,0,0,14,14,14,14,0,0,0,0,
+0,0,0,0,0,14,0,14,0,0,0,14,0,14,0,0,
+0,0,0,14,0,0,14,0,0,14,0,0,0,0,0,0,
+0,0,0,0,0,0,0,14,0,0,0,0,0,14,0,0,
+14,0,0,0,0,0,0,0,0,14,14,14,0,0,0,0,
 0,14,0,0,0,0,0,0,0,0,0,0,0,0,0,14
 </data>
  </layer>
@@ -81,9 +81,9 @@ profil = &quot;Captain&quot;
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1610612755,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,3221225492,24,23,0,0,0,0,0,
+0,0,0,0,0,0,0,0,3221225492,24,0,0,0,0,0,0,
 0,0,0,0,0,0,0,2684354577,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,23,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
