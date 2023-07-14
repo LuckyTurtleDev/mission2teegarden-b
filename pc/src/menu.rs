@@ -340,6 +340,7 @@ impl GameState {
 			vec2(screen_width - 1.0, screen_height - 1.0),
 			|ui| {
 				ui.pop_skin();
+				// Continue level
 				if self.button_focused_index == 0 {
 					if enter_pressed {
 						self.activity = Activity::GameRound(Phase::Drive);
@@ -347,6 +348,7 @@ impl GameState {
 					skin_1 = &button_focused_skin;
 					skin_2 = &button_skin;
 					skin_3 = &button_skin;
+				// Retry level
 				} else if self.button_focused_index == 1 {
 					if enter_pressed {
 						let level = &self.game_run.as_ref().unwrap().original_map;
@@ -357,16 +359,18 @@ impl GameState {
 					skin_1 = &button_skin;
 					skin_2 = &button_focused_skin;
 					skin_3 = &button_skin;
+				// Go back to level menu
 				} else {
 					if enter_pressed {
+						self.reset_pybadge_screens();
 						self.activity = Activity::SelectLevel;
 					}
 					skin_1 = &button_skin;
 					skin_2 = &button_skin;
 					skin_3 = &button_focused_skin;
 				}
+				// Draw buttons
 				ui.push_skin(skin_1);
-
 				let continue_button = widgets::Button::new("Continue")
 					.position(vec2(
 						(screen_width - button_size.x) / 2.0,
@@ -403,6 +407,7 @@ impl GameState {
 					.size(button_size)
 					.ui(ui);
 				if quit_button {
+					self.reset_pybadge_screens();
 					self.activity = Activity::SelectLevel;
 				}
 			}

@@ -246,6 +246,9 @@ fn main() -> ! {
 					},
 					ToPypadeGameEvent::CurrentCardIndex(i) => {
 						state.driving_state.active_card = i;
+					},
+					ToPypadeGameEvent::Wait => {
+						state.activity = Activity::Waiting;
 					}
 				}
 			}

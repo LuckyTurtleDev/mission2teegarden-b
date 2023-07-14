@@ -29,7 +29,7 @@
 //! [![Packaging status](https://repology.org/badge/vertical-allrepos/mission2teegarden_b.svg)](https://repology.org/project/mission2teegarden-b/versions)
 //!
 //! Prebuild binaries can also be downloaded from the
-#![doc=concat!("[GitHub release](https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v",env!("CARGO_PKG_VERSION"),").")]
+#![doc=concat!("[GitHub release](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v",env!("CARGO_PKG_VERSION"),").")]
 //! ### Building from source:
 //! Alternative you can easily build Mission to Teegarden b  by yourself:
 //! * On Linux, install the following development dependencies.
@@ -38,7 +38,7 @@
 //!   * [`alsa-lib`](https://github.com/alsa-project/alsa-lib)
 //!   * [`libudev`](https://github.com/systemd/systemd)
 //! * [Install rust](https://www.rust-lang.org/tools/install)
-#![doc=concat!("* [Download](https://github.com/LuckyTurtleDev/mission2teegarden_b/archive/refs/tags/v",env!("CARGO_PKG_VERSION"),".zip)")]
+#![doc=concat!("* [Download](https://github.com/LuckyTurtleDev/mission2teegarden-b/archive/refs/tags/v",env!("CARGO_PKG_VERSION"),".zip)")]
 //! and unpack the source code.
 //! * Run `cargo install --path pc --locked` inside the unpacked folder, to build and install mission2teegarden-b.
 //! See the [rust book](https://doc.rust-lang.org/cargo/commands/cargo-install.html) for more information about cargo install.
@@ -48,7 +48,7 @@
 //! # Flash Pybadge:
 //! * Install an UF2 flasher. I recommend using [hf2-cli](https://crates.io/crates/hf2-cli).
 //! * Download and unpack Pybadge binary from
-#![doc=concat!("[GitHub release](https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v",env!("CARGO_PKG_VERSION"),").")]
+#![doc=concat!("[GitHub release](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v",env!("CARGO_PKG_VERSION"),").")]
 //! * Press the reset button of the pybdage twice, to enter the bootloader.
 //! * After this, execute `hf2 elf mission2teegarden-b-pybadge` (or the corresponding command of your flashing tool) to flash the binary to the pybadge.
 //! * Press the reset button again.
@@ -60,7 +60,7 @@
 //! * Make sure that `~/.cargo/bin` is listed at the `PATH` environment variable, otherwise the executeable can not be found..
 //! * Install the rust `thumbv7em-none-eabihf` target (the architecture of the pybadge) by executing `rustup target install thumbv7em-none-eabihf`.
 //! * Optional: install nightly toolchain for better error messages at the pybadge. `rustup toolchain install nightly --target thumbv7em-none-eabihf`
-#![doc=concat!("* [Download](https://github.com/LuckyTurtleDev/mission2teegarden_b/archive/refs/tags/v",env!("CARGO_PKG_VERSION"),".zip)")]
+#![doc=concat!("* [Download](https://github.com/LuckyTurtleDev/mission2teegarden-b/archive/refs/tags/v",env!("CARGO_PKG_VERSION"),".zip)")]
 //! and unpack the source code (if not already done).
 //! * Press the reset button of the pybadge twice to enter bootloader
 //! * Compile and flash program by running `cargo +nightly run --release -locked` inside the downloaded `pybadge` folder.
@@ -284,6 +284,7 @@ async fn run_game(opt: OptPlay) {
 				game_state.activity = Activity::GameRound(Phase::Select);
 			},
 			Activity::GameRound(Phase::Finish) => {
+				game_state.reset_pybadge_screens();
 				game_state
 					.display_speech(
 						&game_state

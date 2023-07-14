@@ -78,21 +78,21 @@ Mission to Teegarden b allow creating custom maps/levels, by using the powerfull
 		<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/68403ebd-ce64-4baa-bba2-b52962b89d5c" width=80%>
  </div>
 
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGyFeA8xDJNVnGxf23IOvNAysG80feHOCOwZiGzoQhbxoYmBeYXKEGxvALrpccUwnG3LtwJOv_IT2G96ptTVep6W9G7qKrdEKLREhYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGyFeA8xDJNVnGxf23IOvNAysG80feHOCOwZiGzoQhbxoYmBeYXKEG6Y6L02UAHbSG6mLjAxtbc52GyZYWcevRYl9G48blqipB-b2YWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjEuMA
  [__link0]: https://www.adafruit.com/product/4200
  [__link1]: https://repology.org/badge/vertical-allrepos/mission2teegarden_b.svg
- [__link10]: https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v0.1.0
+ [__link10]: https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v0.1.0
  [__link11]: https://www.rust-lang.org/tools/install
  [__link12]: https://crates.io/crates/hf2-cli
  [__link13]: https://doc.rust-lang.org/cargo/commands/cargo-install.html
- [__link14]: https://github.com/LuckyTurtleDev/mission2teegarden_b/archive/refs/tags/v0.1.0.zip
+ [__link14]: https://github.com/LuckyTurtleDev/mission2teegarden-b/archive/refs/tags/v0.1.0.zip
  [__link15]: https://www.mapeditor.org/
  [__link16]: https://docs.rs/mission2teegarden_b_map/0.1.0
  [__link2]: https://repology.org/project/mission2teegarden-b/versions
- [__link3]: https://github.com/LuckyTurtleDev/mission2teegarden_b/releases/v0.1.0
+ [__link3]: https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v0.1.0
  [__link4]: https://github.com/alsa-project/alsa-lib
  [__link5]: https://github.com/systemd/systemd
  [__link6]: https://www.rust-lang.org/tools/install
- [__link7]: https://github.com/LuckyTurtleDev/mission2teegarden_b/archive/refs/tags/v0.1.0.zip
+ [__link7]: https://github.com/LuckyTurtleDev/mission2teegarden-b/archive/refs/tags/v0.1.0.zip
  [__link8]: https://doc.rust-lang.org/cargo/commands/cargo-install.html
  [__link9]: https://crates.io/crates/hf2-cli
