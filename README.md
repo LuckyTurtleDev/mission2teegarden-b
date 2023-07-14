@@ -62,7 +62,7 @@ Alternative you can easily build Mission to Teegarden b  by yourself:
 Alternative you can build m3 by yourself:
 
  - [Install rustup][__link12]
- - Install [hf2-cli][__link13] flasher.
+ - [Install hf2-cli][__link13] flasher.
  - Install the rust `thumbv7em-none-eabihf` target (the architecture of the pybadge) by executing `rustup target install thumbv7em-none-eabihf`.
  - Optional: install nightly toolchain for better error messages at the pybadge. `rustup toolchain install nightly --target thumbv7em-none-eabihf`
  - [Download][__link14] and unpack the source code (if not already done).
@@ -79,7 +79,7 @@ Mission to Teegarden b allow creating custom maps/levels, by using the powerfull
 		<img src="https://github.com/LuckyTurtleDev/mission2teegarden-b/assets/44570204/68403ebd-ce64-4baa-bba2-b52962b89d5c" width=80%>
  </div>
 
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGyFeA8xDJNVnGxf23IOvNAysG80feHOCOwZiGzoQhbxoYmBeYXKEGxBgEuASKstDG7dGdTqJZG_gG1HKR_-MsWVUG5sZ00UMbmcwYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjIuMA
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEGyFeA8xDJNVnGxf23IOvNAysG80feHOCOwZiGzoQhbxoYmBeYXKEG0J6UvjDlhG1GyyIrWtEg8jUG5LPoEVuYHO8G_Y2IEXIoG9MYWSBgndtaXNzaW9uMnRlZWdhcmRlbl9iX21hcGUwLjIuMA
  [__link0]: https://www.adafruit.com/product/4200
  [__link1]: https://repology.org/badge/vertical-allrepos/mission2teegarden-b.svg
  [__link10]: https://crates.io/crates/hf2-cli
