@@ -26,10 +26,14 @@
 //! # Installation (Pc):
 //! Mission to Teegarden b is available at the following repositories:
 //!
-//! [![Packaging status](https://repology.org/badge/vertical-allrepos/mission2teegarden_b.svg)](https://repology.org/project/mission2teegarden-b/versions)
+//! [![Packaging status](https://repology.org/badge/vertical-allrepos/mission2teegarden-b.svg)](https://repology.org/project/mission2teegarden-b/versions)
 //!
 //! Prebuild binaries can also be downloaded from the
 #![doc=concat!("[GitHub release](https://github.com/LuckyTurtleDev/mission2teegarden-b/releases/v",env!("CARGO_PKG_VERSION"),").")]
+//!
+//! Mission to Teegarden b was only tested on Arch Linux and Ubuntu.
+//! MacOs and Windows versions complie sucessfull but are untested.
+//! Supressing standby on MacOs is temporary disable, see [#157](https://github.com/LuckyTurtleDev/mission2teegarden-b/issues/157).
 //! ### Building from source:
 //! Alternative you can easily build Mission to Teegarden b  by yourself:
 //! * On Linux, install the following development dependencies.
