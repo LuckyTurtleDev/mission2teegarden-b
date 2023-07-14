@@ -60,8 +60,6 @@
 //! Alternative you can build m3 by yourself:
 //! * [Install rustup](https://www.rust-lang.org/tools/install)
 //! * Install [hf2-cli](https://crates.io/crates/hf2-cli) flasher.
-//! See the [rust book](https://doc.rust-lang.org/cargo/commands/cargo-install.html) for more information about cargo install.
-//! * Make sure that `~/.cargo/bin` is listed at the `PATH` environment variable, otherwise the executeable can not be found..
 //! * Install the rust `thumbv7em-none-eabihf` target (the architecture of the pybadge) by executing `rustup target install thumbv7em-none-eabihf`.
 //! * Optional: install nightly toolchain for better error messages at the pybadge. `rustup toolchain install nightly --target thumbv7em-none-eabihf`
 #![doc=concat!("* [Download](https://github.com/LuckyTurtleDev/mission2teegarden-b/archive/refs/tags/v",env!("CARGO_PKG_VERSION"),".zip)")]
