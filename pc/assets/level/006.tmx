@@ -8,7 +8,8 @@
   <property name="story">[[pre_level]]
 text = &quot;&quot;&quot;
 For the first time, we will now venture a bit away from our training grounds.
-But don't be nervous; I picked out some easier missions first. There's nothing to be nervous about.
+But don't be nervous; I picked out some easier missions first. 
+There's nothing to be nervous about.
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;
 background = &quot;OuterSpace&quot;
@@ -16,8 +17,11 @@ background = &quot;OuterSpace&quot;
 [[pre_level]]
 text = &quot;&quot;&quot;
 Here we are!
-Do you see your markers on the map? We need some grass, moss, and stone samples. The stones in the back seem like a very good place to get all of these.
-That sand patch in the middle looks quite interesting too, but according to our scans, the stones in the back should hold more minerals that we want to analyze.
+Do you see your markers on the map? 
+We need some grass, moss, and stone samples. 
+The stones in the back seem like a very good place to get all of these.
+That sand patch in the middle looks quite interesting too, but according to our scans, 
+the stones in the back should hold more minerals that we want to analyze.
 But that certainly is a nice stone formation, isn't it?
 Anyway, please just drive around them for now.
 &quot;&quot;&quot;
@@ -25,7 +29,8 @@ profil = &quot;Captain&quot;
 
 [[after_level]]
 text = &quot;&quot;&quot;
-Samples collected. We'll go right to analyzing them. You may now take a small break.
+Samples collected. 
+We'll go right to analyzing them. You may now take a small break.
 &quot;&quot;&quot;
 profil = &quot;Captain&quot;
 </property>
