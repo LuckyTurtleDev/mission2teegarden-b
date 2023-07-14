@@ -91,6 +91,16 @@
 //! ```
 //! Executing one of the commands creates a file with the same basename as the original file and the extension `.m2tb_map` inside the current working directory.
 //! Since the map format is not stable yet and can not be editet after exporting, it is strongly recommanded to keep the original `.tmx` file
+//!
+//! ### Play Map
+//! To play a map start the game and navigate to
+//! `Play -> Import Level`.
+//! 
+//! Alternatvie the command line interface can be used:
+//! ```bash
+//! mission2teegarden-b play [FILE]
+//! ```
+
 
 use anyhow::{bail, Context};
 use basic_toml as toml;
