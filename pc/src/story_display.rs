@@ -21,17 +21,17 @@ fn button_pressed(events: &[Option<Vec<ToPcGameEvent>>; 4]) -> bool {
 	false
 }
 
-/// Get the font size that will fit the longest line of text on the screen.
-fn get_font_size(text_lines: &Vec<&str>, screen_width: f32) -> u16 {
-	let font_size = 20;
-	let mut longest_line_width = 0.0;
-	for line in text_lines {
-		let text_dim = measure_text(line, None, font_size, 1.0);
-		if text_dim.width > longest_line_width {
-			longest_line_width = text_dim.width;
-		}
+/// Get the font size that will scale with size of screen.
+fn get_font_size(box_width: f32, box_height: f32) -> u16 {
+	let mut font_size = (box_height / 7.0) as u16;
+	let example_long_sentence =
+		"I hope you all still know how to operate the robots, but just in case...";
+	let ratio =
+		box_width / measure_text(example_long_sentence, None, font_size, 1.0).width;
+	if ratio < 1.0 {
+		font_size = (font_size as f32 * ratio) as u16;
 	}
-	(font_size as f32 * screen_width / longest_line_width) as u16
+	font_size
 }
 
 impl GameState {
@@ -100,8 +100,8 @@ impl GameState {
 						}
 						// draw text
 						let font_size = get_font_size(
-							group,
-							screen_width - profil_texture_width - 20.0
+							screen_width - profil_texture_width,
+							text_box_height
 						);
 						for (x, line) in group.iter().enumerate() {
 							//let text_dim = measure_text(line, None, font_size, 1.0);
